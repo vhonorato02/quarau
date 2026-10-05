@@ -25,9 +25,12 @@ scripts/deploy.sh <tag>`. O Traefik 3.5 não fala com o Docker 29 (API mínima 1
 
 ## Próximos passos
 
-1. Acompanhar o CI até ficar verde (ajustar o que o ambiente do GitHub revelar).
-2. Com o secret configurado: bootstrap da VPS, deploy, migração, admin, backup e teste de restore.
-3. Medir Lighthouse em produção e continuar otimizando o JS do cliente (meta: performance ≥ 95 no mobile).
+1. Confirmar o CI verde no commit mais recente (imagem endurecida; o run 10 já passou em tudo exceto Trivy, corrigido
+   em `ca7ef9a`). O push da imagem no GHCR acontece nesse run.
+2. Com o secret `VPS_SSH_KEY`: Actions → _VPS operations_ `audit` → `bootstrap` → re-run do CI (deploy) →
+   `migrate-content` → `create-admin <email>` → `backup` → `restore-test`. No `audit`, conferir a versão do Traefik
+   do Coolify (3.5 não conversa com Docker 29; se for o caso, atualizar o proxy pelo painel do Coolify).
+3. Medir performance em produção (meta ≥ 95; laboratório local hoje: 83–94).
 4. Resolver `[CONFIRMAR]` com o cliente (relatório final, §4).
 
 ## Ambiente local (resumo)
