@@ -15,7 +15,7 @@ export const toneField = (defaultValue: 'default' | 'alt' | 'brand' | 'dark' = '
 })
 
 export const sectionIntro: Field[] = [
-  { name: 'eyebrow', type: 'text', label: 'Chamada curta (acima do título)', localized: true, maxLength: 60 },
+  { name: 'eyebrow', type: 'text', label: 'Chamada curta (acima do título)', localized: true, maxLength: 90 },
   { name: 'heading', type: 'text', label: 'Título da seção', localized: true, maxLength: 140 },
 ]
 

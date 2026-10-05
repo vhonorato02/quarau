@@ -199,7 +199,7 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
               Assista
             </Heading>
             <VideoPlayer
-              src={project.video.url}
+              src={mediaUrl(project.video)!}
               title={`Vídeo: ${project.title}`}
               poster={mediaUrl(gallery[0] ?? project.coverImage, 'wide')}
             />

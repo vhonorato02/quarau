@@ -1,6 +1,6 @@
 import { Container, Section } from '@quarau/ui'
 
-import { isMedia, mediaUrl } from '@/components/Media'
+import { mediaUrl } from '@/components/Media'
 import type { VideoBlock as VideoBlockType } from '@/payload-types'
 
 import { SectionHeader, toneToSection } from './SectionHeader'
@@ -15,7 +15,7 @@ export function toEmbedUrl(url: string): string | null {
 }
 
 export function VideoBlock({ block }: { block: VideoBlockType }) {
-  const src = block.source === 'embed' ? (block.url ? toEmbedUrl(block.url) : null) : isMedia(block.file) ? block.file.url : null
+  const src = block.source === 'embed' ? (block.url ? toEmbedUrl(block.url) : null) : mediaUrl(block.file)
   if (!src) return null
   return (
     <Section tone={toneToSection(block.tone)} id={block.anchor ?? undefined}>

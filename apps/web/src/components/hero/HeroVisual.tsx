@@ -40,7 +40,7 @@ export function HeroVisual({ className }: { className?: string }) {
           ready ? 'opacity-0' : 'opacity-100',
         )}
       >
-        <LogoSymbol variant="white" alt="" className="w-full opacity-90" />
+        <LogoSymbol variant="white" alt="" className="w-full opacity-85 drop-shadow-[0_20px_60px_rgb(4_38_58/0.6)]" />
       </div>
       {enabled ? (
         <div className={cn('absolute inset-0 transition-opacity duration-1000', ready ? 'opacity-100' : 'opacity-0')}>

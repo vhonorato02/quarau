@@ -3,7 +3,7 @@ import type * as React from 'react'
 
 import { CMSLink, type LinkData } from '@/components/CMSLink'
 import { JsonLd } from '@/components/JsonLd'
-import { Media, isMedia } from '@/components/Media'
+import { Media, isMedia, toRelative } from '@/components/Media'
 import { RichText } from '@/components/RichText'
 import type { Locale } from '@/i18n/routing'
 import { listDocs } from '@/lib/queries'
@@ -55,12 +55,15 @@ export async function PartnersBlock({ block, locale }: { block: PartnersBlockTyp
           {partners.map((p, i) => {
             const logo = isMedia(p.logo) ? p.logo : null
             const content = logo ? (
-              <Media
-                media={logo}
-                alt={p.name}
-                sizes="200px"
-                className="max-h-16 w-auto object-contain grayscale transition-[filter,opacity] duration-500 group-hover:grayscale-0 group-hover:opacity-100 md:opacity-80"
-              />
+              <span className="relative block h-16 w-full max-w-[11rem]">
+                <Media
+                  media={logo}
+                  alt={p.fullName ?? p.name}
+                  fill
+                  sizes="176px"
+                  imgClassName="!object-contain grayscale transition-[filter,opacity] duration-500 group-hover:grayscale-0 group-hover:opacity-100 md:opacity-80"
+                />
+              </span>
             ) : (
               <span className="text-center font-semibold">{p.name}</span>
             )
@@ -73,7 +76,7 @@ export async function PartnersBlock({ block, locale }: { block: PartnersBlockTyp
                 title={p.fullName ?? p.name}
               >
                 {p.url ? (
-                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="grid place-items-center">
+                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="grid w-full place-items-center">
                     {content}
                     <span className="sr-only">{p.fullName ?? p.name} (abre em nova aba)</span>
                   </a>
@@ -159,7 +162,7 @@ export async function DownloadsBlock({ block, locale }: { block: DownloadsBlockT
           {docs.map((d) => (
             <li key={d.id}>
               <a
-                href={d.url ?? '#'}
+                href={toRelative(d.url) ?? '#'}
                 download
                 className="group flex items-center justify-between gap-6 py-6 transition-colors hover:text-blue-700"
               >

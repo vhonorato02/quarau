@@ -93,6 +93,8 @@ export default buildConfig({
     ? nodemailerAdapter({
         defaultFromAddress: env.EMAIL_FROM_ADDRESS ?? 'nao-responda@quarau.com.br',
         defaultFromName: env.EMAIL_FROM_NAME ?? 'Quarau',
+        // Never block startup on SMTP availability; delivery errors are handled per message.
+        skipVerify: true,
         transportOptions: {
           host: env.SMTP_HOST,
           port: Number(env.SMTP_PORT ?? 587),
