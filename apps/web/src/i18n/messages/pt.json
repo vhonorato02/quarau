@@ -1,0 +1,101 @@
+{
+  "common": {
+    "skipToContent": "Pular para o conteúdo",
+    "menu": "Menu",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu",
+    "mainNav": "Navegação principal",
+    "home": "Início",
+    "search": "Buscar",
+    "learnMore": "Saiba mais",
+    "seeAllProjects": "Ver todos os projetos",
+    "backToTop": "Voltar ao topo",
+    "contactCta": "Fale com a Quarau",
+    "readMore": "Ler mais",
+    "inProgress": "em andamento",
+    "loading": "Carregando…"
+  },
+  "footer": {
+    "contact": "Contato",
+    "follow": "Acompanhe",
+    "rights": "Todos os direitos reservados.",
+    "privacy": "Privacidade",
+    "cookies": "Preferências de cookies"
+  },
+  "projects": {
+    "title": "Projetos",
+    "client": "Realização",
+    "period": "Período",
+    "location": "Local",
+    "role": "Papel da Quarau",
+    "results": "Resultados",
+    "ods": "Objetivos de Desenvolvimento Sustentável",
+    "gallery": "Galeria",
+    "publications": "Publicações",
+    "related": "Outros projetos",
+    "partners": "Parceiros",
+    "areas": "Áreas de atuação",
+    "filterAll": "Todos",
+    "empty": "Nenhum projeto publicado ainda."
+  },
+  "news": {
+    "title": "Notícias",
+    "empty": "Em breve, novidades sobre os projetos da Quarau.",
+    "published": "Publicado em"
+  },
+  "jobs": {
+    "title": "Trabalhe conosco",
+    "empty": "No momento não há vagas abertas. Envie seu currículo pelo formulário de contato.",
+    "apply": "Candidatar-se",
+    "closing": "Inscrições até",
+    "open": "Inscrições abertas",
+    "closed": "Encerrada"
+  },
+  "search": {
+    "title": "Busca",
+    "label": "O que você procura?",
+    "placeholder": "Projetos, áreas, publicações…",
+    "submit": "Buscar",
+    "results": "{count, plural, =0 {Nenhum resultado} one {# resultado} other {# resultados}} para “{query}”",
+    "empty": "Digite um termo para buscar no site.",
+    "unavailable": "A busca está temporariamente indisponível.",
+    "collections": { "pages": "Página", "projects": "Projeto", "services": "Área de atuação", "news": "Notícia" }
+  },
+  "contact": {
+    "name": "Nome",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "organization": "Organização",
+    "subject": "Assunto",
+    "message": "Mensagem",
+    "consent": "Li e concordo com a <link>política de privacidade</link> e autorizo o uso dos meus dados para retorno deste contato.",
+    "submit": "Enviar mensagem",
+    "sending": "Enviando…",
+    "success": "Mensagem enviada. Obrigado! Responderemos em breve pelo e-mail informado.",
+    "error": "Não foi possível enviar agora. Tente novamente ou escreva para {email}.",
+    "rateLimited": "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente de novo.",
+    "invalid": "Revise os campos destacados.",
+    "required": "Campo obrigatório.",
+    "emailInvalid": "Informe um e-mail válido.",
+    "messageShort": "Escreva pelo menos 10 caracteres.",
+    "consentRequired": "É preciso concordar com a política de privacidade.",
+    "captcha": "Confirme que você não é um robô."
+  },
+  "cookies": {
+    "title": "Sua privacidade",
+    "text": "Usamos cookies essenciais para o funcionamento do site e, com sua permissão, medição de audiência anônima (sem rastreamento entre sites).",
+    "accept": "Aceitar medição",
+    "reject": "Somente essenciais",
+    "learnMore": "Saiba mais"
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "text": "O endereço pode ter mudado com o novo site. Use a busca ou volte para o início.",
+    "home": "Ir para o início"
+  },
+  "error": {
+    "title": "Algo saiu do esperado",
+    "text": "Tivemos um problema ao carregar esta página. Tente novamente em instantes.",
+    "retry": "Tentar novamente"
+  }
+}

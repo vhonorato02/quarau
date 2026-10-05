@@ -18,3 +18,4 @@ blob-report
 apps/web/media
 apps/web/.migrate-cache
 apps/web/tests/e2e/.auth
+.preview

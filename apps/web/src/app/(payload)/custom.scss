@@ -1,0 +1,48 @@
+// Quarau admin branding — brand colours applied to the Payload admin UI.
+:root {
+  --quarau-blue: #0089cf;
+  --quarau-blue-700: #006fa8;
+  --quarau-green: #39b54a;
+}
+
+.quarau-welcome {
+  margin-bottom: calc(var(--base) * 2);
+  padding: calc(var(--base) * 1.5) calc(var(--base) * 2);
+  border-left: 4px solid var(--quarau-green);
+  border-radius: 8px;
+  background: var(--theme-elevation-50);
+
+  h2 {
+    margin: 0 0 calc(var(--base) * 0.5);
+  }
+
+  ul {
+    margin: calc(var(--base) * 0.5) 0;
+    padding-left: 1.2em;
+  }
+
+  li {
+    margin-bottom: calc(var(--base) * 0.35);
+  }
+}
+
+.template-minimal--login,
+.login {
+  .login__brand,
+  .template-minimal__wrap {
+    img {
+      max-width: 320px;
+    }
+  }
+}
+
+.btn--style-primary {
+  --bg-color: var(--quarau-blue-700);
+  --hover-bg: #005c8c;
+  --color: #fff;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline-color: var(--quarau-blue-700);
+}
