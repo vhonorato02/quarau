@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { authorsCanCreateDrafts, authorsOwnDrafts, editors, publishedOrAuthenticated } from '../access'
+import { caseBlocks } from '../blocks'
 import { editor } from '../fields/richText'
 import { slugField } from '../fields/slug'
 import { setCreatedBy } from '../hooks/fields'
@@ -65,7 +66,39 @@ export const Projects: CollectionConfig = {
               label: 'ODS atendidos',
               options: Array.from({ length: 17 }, (_, i) => ({ label: `ODS ${i + 1}`, value: String(i + 1) })),
             },
-            { name: 'featured', type: 'checkbox', label: 'Destacar na home', defaultValue: false },
+            {
+              name: 'coordinates',
+              type: 'group',
+              label: 'Território (para o mapa de projetos)',
+              admin: { description: 'Opcional. Copie latitude e longitude do Google Maps (clique com o botão direito no local).' },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    { name: 'lat', type: 'number', label: 'Latitude', admin: { width: '50%' } },
+                    { name: 'lng', type: 'number', label: 'Longitude', admin: { width: '50%' } },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                { name: 'featured', type: 'checkbox', label: 'Destacar na home', defaultValue: false, admin: { width: '50%' } },
+                {
+                  name: 'accent',
+                  type: 'select',
+                  label: 'Cor de destaque da página',
+                  defaultValue: 'blue',
+                  options: [
+                    { label: 'Azul Quarau', value: 'blue' },
+                    { label: 'Verde Quarau', value: 'green' },
+                    { label: 'Azul-escuro', value: 'dark' },
+                  ],
+                  admin: { width: '50%' },
+                },
+              ],
+            },
           ],
         },
         {
@@ -89,6 +122,17 @@ export const Projects: CollectionConfig = {
               ],
             },
             { name: 'body', type: 'richText', label: 'Texto do projeto', editor, localized: true },
+            {
+              name: 'chapters',
+              type: 'blocks',
+              label: 'Capítulos da história (opcional)',
+              blocks: caseBlocks,
+              localized: true,
+              admin: {
+                initCollapsed: true,
+                description: 'Monte a narrativa do case intercalando textos, imagens, números, vídeos e citações.',
+              },
+            },
             {
               name: 'quote',
               type: 'group',

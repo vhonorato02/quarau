@@ -26,7 +26,7 @@ function revalidateForDoc(req: PayloadRequest, collection: string, slug?: string
   })
 }
 
-type WithSlug = { slug?: string | null; _status?: string | null }
+type WithSlug = { id: number | string; slug?: string | null; _status?: string | null }
 
 export const revalidateCollection =
   (collection: string): CollectionAfterChangeHook<WithSlug> =>

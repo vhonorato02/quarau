@@ -1,0 +1,143 @@
+@import '@quarau/ui/styles.css';
+
+@source '../../';
+
+@theme {
+  --font-sans: var(--font-barlow), 'Barlow', ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-barlow), 'Barlow', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Reveal-on-scroll (progressive enhancement: visible without JS) */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 2rem, 0);
+  transition:
+    opacity 0.9s var(--ease-brand),
+    transform 0.9s var(--ease-brand);
+  transition-delay: calc(var(--reveal-delay, 0) * 1ms);
+}
+.js [data-reveal='fade'] {
+  transform: none;
+}
+.js [data-reveal][data-revealed] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Image mask reveal */
+.js [data-reveal='mask'] {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(12% 0 0 0);
+  transition: clip-path 1.2s var(--ease-brand);
+}
+.js [data-reveal='mask'][data-revealed] {
+  clip-path: inset(0 0 0 0);
+}
+
+/* View transitions between pages */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--ease-in-out-brand);
+}
+::view-transition-old(root) {
+  animation-name: vt-out;
+}
+::view-transition-new(root) {
+  animation-name: vt-in;
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* Statement text highlight driven by scroll (GSAP sets --p per word) */
+.statement-word {
+  color: color-mix(in oklab, currentColor 22%, transparent);
+  transition: color 0.2s linear;
+}
+.statement-word[data-on] {
+  color: inherit;
+}
+
+/* Horizontal scroller (portfolio, gallery carousel) */
+.scroller {
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
+mark {
+  background: color-mix(in oklab, var(--color-brand-green) 28%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding-inline: 0.1em;
+}
+
+@keyframes word-up {
+  from {
+    transform: translate3d(0, 105%, 0);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+}
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.14);
+  }
+}
+@keyframes scroll-hint {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}

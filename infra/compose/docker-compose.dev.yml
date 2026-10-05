@@ -1,0 +1,41 @@
+# Local development / CI services. The app itself runs with `pnpm dev`.
+name: quarau-dev
+services:
+  postgres:
+    image: mirror.gcr.io/library/postgres:17-alpine
+    environment:
+      POSTGRES_USER: quarau
+      POSTGRES_PASSWORD: quarau
+      POSTGRES_DB: quarau
+    ports: ['5432:5432']
+    volumes: [pg:/var/lib/postgresql/data]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U quarau']
+      interval: 3s
+      retries: 20
+  valkey:
+    image: mirror.gcr.io/valkey/valkey:8-alpine
+    ports: ['6379:6379']
+  minio:
+    image: cgr.dev/chainguard/minio:latest
+    command: server /data --console-address :9001
+    environment:
+      MINIO_ROOT_USER: quarau
+      MINIO_ROOT_PASSWORD: quarau-dev-secret
+    ports: ['9000:9000', '9001:9001']
+    volumes: [minio:/data]
+  meilisearch:
+    image: mirror.gcr.io/getmeili/meilisearch:v1.16
+    environment:
+      MEILI_MASTER_KEY: dev-meili-master-key
+      MEILI_NO_ANALYTICS: 'true'
+      MEILI_ENV: development
+    ports: ['7700:7700']
+    volumes: [meili:/meili_data]
+  mailpit:
+    image: mirror.gcr.io/axllent/mailpit:latest
+    ports: ['1025:1025', '8025:8025']
+volumes:
+  pg: {}
+  minio: {}
+  meili: {}

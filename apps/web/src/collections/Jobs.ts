@@ -13,7 +13,7 @@ export const Jobs: CollectionConfig = {
   admin: {
     group: 'Conteúdo',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'type', 'status', '_status'],
+    defaultColumns: ['title', 'type', 'opening', '_status'],
     ...previewConfig('jobs'),
   },
   access: { read: publishedOrAuthenticated, create: editors, update: editors, delete: editors },
@@ -43,7 +43,7 @@ export const Jobs: CollectionConfig = {
         },
         { name: 'location', type: 'text', label: 'Local', localized: true, admin: { width: '33%' } },
         {
-          name: 'status',
+          name: 'opening',
           type: 'select',
           label: 'Situação',
           defaultValue: 'open',

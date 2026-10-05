@@ -430,3 +430,39 @@ export const pageBlocks: Block[] = [
   ContactFormBlock,
   CtaBlock,
 ]
+
+export const StatementBlock: Block = {
+  slug: 'statement',
+  interfaceName: 'StatementBlock',
+  labels: { singular: 'Frase de impacto', plural: 'Frases de impacto' },
+  fields: [
+    sectionIntro[0]!,
+    {
+      name: 'text',
+      type: 'textarea',
+      label: 'Frase',
+      required: true,
+      localized: true,
+      maxLength: 400,
+      admin: { description: 'Texto grande que se revela conforme a rolagem. Ideal para manifestos e missão.' },
+    },
+    links(1),
+    toneField(),
+    anchorField,
+  ],
+}
+
+pageBlocks.splice(1, 0, StatementBlock)
+
+/** Blocks available inside a project case study narrative. */
+export const caseBlocks: Block[] = [
+  ContentBlock,
+  MediaTextBlock,
+  StatementBlock,
+  StatsBlock,
+  GalleryBlock,
+  VideoBlock,
+  TimelineBlock,
+  TestimonialsBlock,
+  OdsBlock,
+]

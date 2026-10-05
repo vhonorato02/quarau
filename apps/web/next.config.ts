@@ -51,6 +51,7 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(dirname, '../../'),
   transpilePackages: ['@quarau/ui', '@quarau/emails'],
   poweredByHeader: false,
+  agentRules: false,
   reactStrictMode: true,
   compress: true,
   images: {
@@ -84,7 +85,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     const fromLegacy = legacy.redirects.flatMap(({ from, to }) => {
       const noSlash = from.length > 1 ? from.replace(/\/$/, '') : from
-      return Array.from(new Set([from, noSlash])).map((source) => ({ source, destination: to, permanent: true }))
+      return Array.from(new Set([from, noSlash]))
+        .filter((source) => source.replace(/\/$/, '') !== to.replace(/\/$/, ''))
+        .map((source) => ({ source, destination: to, permanent: true }))
     })
     const sitemaps = ['sitemap_index.xml', 'post-sitemap.xml', 'page-sitemap.xml', 'portfolio-sitemap.xml', 'category-sitemap.xml', 'wp-sitemap.xml'].map(
       (f) => ({ source: `/${f}`, destination: '/sitemap.xml', permanent: true }),
