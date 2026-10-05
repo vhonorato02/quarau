@@ -22,7 +22,7 @@ const sentryOrigin = process.env.NEXT_PUBLIC_SENTRY_ORIGIN ?? ''
  */
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com ${umamiOrigin}`.trim(),
+  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : ''} https://challenges.cloudflare.com ${umamiOrigin}`.trim(),
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://*.tile.openstreetmap.org",
   "font-src 'self' data:",
