@@ -80,6 +80,14 @@ simulada. O CI exige ≥ 80 e registra LCP/TBT como alerta. Plano para fechar a 
   **teste de restore semanal automático**.
 - Hardening: usuário `deploy`, fail2ban (22322), UFW (22322 liberada antes de ativar), atualizações automáticas,
   swap, sysctl e alertas por webhook.
+- Imagem de produção sem vulnerabilidades altas/críticas corrigíveis (Trivy): pacotes do Debian atualizados, sem
+  npm/corepack no runtime; dependências transitivas com falhas conhecidas fixadas (undici, nodemailer, dompurify).
+
+**Validação numa VPS simulada** (Traefik 3.6 na rede `coolify`, stack completa, scripts reais):
+deploy sob carga com **0 falhas em 1.338 requisições**; versão quebrada rejeitada com a anterior no ar; rollback;
+backup + cópia off-site; teste de restore; restore real (banco + mídias); alertas do healthwatch. Essa rodada
+encontrou e corrigiu 5 defeitos que só apareceriam em produção (ver histórico de commits `fix(infra)`), além de um
+no CMS: a primeira conta criada pelo `/admin` agora é sempre administradora.
 
 ## 3. Decisões tomadas (ADRs)
 

@@ -13,9 +13,15 @@
 
 ## Últimos passos concluídos
 
-- CI no GitHub: qualidade e integração verdes; job E2E (imagem + Playwright + Lighthouse + links + k6 + Trivy)
-  em validação no primeiro run.
-- Local: 30 unit, 8 integração, 90 E2E (desktop + mobile, axe WCAG 2.2 AA) passando.
+- CI no GitHub: qualidade, integração, E2E na imagem real, links, Lighthouse CI e k6 passando; Trivy corrigido
+  (imagem endurecida, 0 altas/críticas corrigíveis).
+- Infra validada numa VPS simulada (Traefik 3.6 + rede `coolify`): deploy sem downtime (drain), versão quebrada
+  rejeitada, rollback, backup + off-site, restore-test, restore real, healthwatch. Ver `docs/runbook.md`.
+- Local: 30 unit, 9 integração, 90 E2E (desktop + mobile, axe WCAG 2.2 AA) passando.
+
+Para repetir a simulação: crie a rede `coolify`, rode um `traefik:v3.6` nela (provider docker, entrypoints
+`http`/`https`), copie `infra/compose` + `infra/scripts` para um diretório e use `APP_DIR=<dir> SKIP_PULL=1
+scripts/deploy.sh <tag>`. O Traefik 3.5 não fala com o Docker 29 (API mínima 1.40): use 3.6+.
 
 ## Próximos passos
 
@@ -40,3 +46,6 @@ Armadilhas já resolvidas (não repetir):
 - `robots`, `sitemap` e `X-Robots-Tag` são runtime (não usar `headers()` do next.config para isso).
 - Standalone precisa de `HOSTNAME=0.0.0.0` (já no Dockerfile).
 - Não usar `pkill -f <padrão>` em comandos que contenham o próprio padrão (mata o shell).
+- Valores com parênteses/crases no `.env` (ex.: `TRAEFIK_RULE`) precisam de aspas simples: os scripts fazem `source`.
+- Requisições à API do Payload com cookie precisam do header `Origin` (proteção CSRF).
+- O banco de dev `quarau` tem drift de schema; testes de integração usam `quarau_test` (CI usa banco novo).
