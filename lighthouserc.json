@@ -9,7 +9,7 @@
         "http://localhost:3000/contato"
       ],
       "numberOfRuns": 3,
-      "settings": { "preset": "mobile", "chromeFlags": "--no-sandbox --headless=new" }
+      "settings": { "chromeFlags": "--no-sandbox --headless=new" }
     },
     "assert": {
       "assertions": {
