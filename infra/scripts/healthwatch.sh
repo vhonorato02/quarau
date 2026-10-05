@@ -6,8 +6,11 @@ load_env
 state_file="$APP_DIR/.healthwatch"
 problems=()
 
-code=$(curl -s -o /dev/null -w '%{http_code}' -m 15 "$SITE_URL/next/health" -u "${HEALTH_BASIC_AUTH:-}" || echo 000)
-[[ "$code" == 200 ]] || problems+=("site respondeu HTTP $code")
+probe() { curl -s -o /dev/null -w '%{http_code}' -m 15 "$SITE_URL/next/health" -u "${HEALTH_BASIC_AUTH:-}" || true; }
+code=$(probe)
+# One retry: a probe can land on a replica that a deploy is draining.
+[[ "$code" == 200 ]] || { sleep 10; code=$(probe); }
+[[ "$code" == 200 ]] || problems+=("site respondeu HTTP ${code:-000}")
 
 for svc in web postgres pgbouncer valkey minio meilisearch; do
   id=$("${COMPOSE[@]}" ps -q "$svc" | head -1)
