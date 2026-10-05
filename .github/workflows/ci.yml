@@ -168,14 +168,11 @@ jobs:
           retention-days: 7
 
       - name: Trivy (image vulnerabilities)
-        uses: aquasecurity/trivy-action@0.33.1
-        with:
-          image-ref: ${{ env.IMAGE }}:${{ github.sha }}
-          severity: CRITICAL
-          ignore-unfixed: true
-          exit-code: '1'
-          format: sarif
-          output: trivy.sarif
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/out" mirror.gcr.io/aquasec/trivy:latest \
+            image --quiet --severity CRITICAL --ignore-unfixed --format sarif --output /out/trivy.sarif "$IMAGE:${{ github.sha }}"
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock mirror.gcr.io/aquasec/trivy:latest \
+            image --quiet --severity CRITICAL --ignore-unfixed --exit-code 1 "$IMAGE:${{ github.sha }}"
       - uses: github/codeql-action/upload-sarif@v3
         if: always() && hashFiles('trivy.sarif') != ''
         with: { sarif_file: trivy.sarif, category: trivy }
