@@ -34,17 +34,17 @@ test('portfolio filters by practice area', async ({ page }) => {
 
 test('gallery lightbox opens and navigates with keyboard', async ({ page }) => {
   await page.goto('/projetos/programa-de-educacao-patrimonial')
-  await page
-    .getByRole('button', { name: /Ampliar imagem/ })
-    .first()
-    .click()
-  const dialog = page.getByRole('dialog')
+  const firstTile = page.getByRole('button', { name: /Ampliar imagem/ }).first()
+  await firstTile.click()
+  const dialog = page.getByRole('dialog', { name: /Imagem \d+ de/ })
   await expect(dialog).toBeVisible()
   await expect(dialog).toContainText('1 /')
   await page.keyboard.press('ArrowRight')
   await expect(dialog).toContainText('2 /')
   await page.keyboard.press('Escape')
   await expect(dialog).toBeHidden()
+  // Focus returns to the image that opened the viewer.
+  await expect(firstTile).toBeFocused()
 })
 
 test('skip link moves focus to main content', async ({ page, isMobile }) => {
