@@ -29,9 +29,12 @@ find "$dump_dir" -name '*.dump' -mtime +2 -delete
 
 if [[ -n "${RESTIC_REPOSITORY_OFFSITE:-}" ]]; then
   log "cópia off-site"
-  RESTIC_FROM_REPOSITORY="$RESTIC_REPOSITORY" RESTIC_FROM_PASSWORD="$RESTIC_PASSWORD" \
-    RESTIC_REPOSITORY="$RESTIC_REPOSITORY_OFFSITE" RESTIC_PASSWORD="${RESTIC_PASSWORD_OFFSITE:-$RESTIC_PASSWORD}" \
-    bash -c 'restic snapshots >/dev/null 2>&1 || restic init; restic copy --tag quarau latest'
+  offsite=(env RESTIC_FROM_REPOSITORY="$RESTIC_REPOSITORY" RESTIC_FROM_PASSWORD="$RESTIC_PASSWORD"
+    RESTIC_REPOSITORY="$RESTIC_REPOSITORY_OFFSITE" RESTIC_PASSWORD="${RESTIC_PASSWORD_OFFSITE:-$RESTIC_PASSWORD}")
+  # Same chunker parameters as the local repo, so copies deduplicate.
+  "${offsite[@]}" restic cat config >/dev/null 2>&1 || "${offsite[@]}" restic init --copy-chunker-params
+  "${offsite[@]}" restic copy --tag quarau latest
+  "${offsite[@]}" restic forget --tag quarau --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --prune
 fi
 
 log "backup ${stamp} concluído"
