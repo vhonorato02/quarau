@@ -3,6 +3,7 @@
 - **Status:** aceita · **Data:** 2026-10-05
 
 ## Decisão
+
 - Uploads no MinIO via `@payloadcms/storage-s3`, servidos por `/api/media/file/...` (respeita controle de acesso).
 - Payload gera WebP + tamanhos (`thumbnail`, `card`, `wide`, `og`) com Sharp, ponto focal e blur placeholder;
   o `next/image` entrega AVIF/WebP no tamanho exato.

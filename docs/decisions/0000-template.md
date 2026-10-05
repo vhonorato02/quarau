@@ -4,5 +4,7 @@
 - **Data:** AAAA-MM-DD
 
 ## Contexto
+
 ## Decisão
+
 ## Consequências
