@@ -6,10 +6,10 @@ import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import dynamic from 'next/dynamic'
 import { ViewTransition } from 'react'
 
 import { JsonLd } from '@/components/JsonLd'
+import { LivePreview } from '@/components/LivePreview'
 import { RevealObserver } from '@/components/motion/Reveal'
 import { SmoothScroll } from '@/components/motion/SmoothScroll'
 import { CookieConsent } from '@/components/privacy/CookieConsent'
@@ -19,10 +19,6 @@ import { barlow, barlowItalic } from '@/fonts'
 import { htmlLang, routing, type Locale } from '@/i18n/routing'
 import { getGlobal } from '@/lib/queries'
 import { organizationJsonLd } from '@/lib/seo'
-
-const LivePreviewListener = dynamic(() =>
-  import('@/components/LivePreviewListener').then((m) => m.LivePreviewListener),
-)
 
 export const dynamicParams = true
 
@@ -117,7 +113,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
         </NextIntlClientProvider>
         <RevealObserver />
         <SmoothScroll />
-        {draft ? <LivePreviewListener serverURL={siteUrl} /> : null}
+        {draft ? <LivePreview serverURL={siteUrl} /> : null}
         <JsonLd data={organizationJsonLd({ settings, contact, social })} />
       </body>
     </html>
