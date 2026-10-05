@@ -25,8 +25,10 @@ scripts/deploy.sh <tag>`. O Traefik 3.5 não fala com o Docker 29 (API mínima 1
 
 ## Próximos passos
 
-1. Confirmar o CI verde no commit mais recente (imagem endurecida; o run 10 já passou em tudo exceto Trivy, corrigido
-   em `ca7ef9a`). O push da imagem no GHCR acontece nesse run.
+1. CI no commit `66500e1` (run 37365106378): integração, imagem + E2E/axe, links, Lighthouse, k6 e Trivy **verdes** e
+   imagem publicada no GHCR. O job _Lint, typecheck, unit, Storybook_ ficou 4 vezes na fila por 15 min e foi
+   cancelado sem receber runner (problema do lado do GitHub; os mesmos passos passam localmente e passaram no run 10).
+   Verificar limites/cobrança de Actions da conta e re-executar só esse job.
 2. Com o secret `VPS_SSH_KEY`: Actions → _VPS operations_ `audit` → `bootstrap` → re-run do CI (deploy) →
    `migrate-content` → `create-admin <email>` → `backup` → `restore-test`. No `audit`, conferir a versão do Traefik
    do Coolify (3.5 não conversa com Docker 29; se for o caso, atualizar o proxy pelo painel do Coolify).
