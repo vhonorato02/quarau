@@ -22,13 +22,28 @@ Todas também estão no GitHub: **Actions → VPS operations** (rollback, backup
 2. O job _Deploy_ envia o compose/scripts, garante o `.env` e chama `deploy.sh <sha>`.
 3. `deploy.sh` sobe **uma segunda réplica** com a versão nova. Ela aplica as migrações do banco no boot
    (`prodMigrations`) e só fica _healthy_ quando `/next/health` responde com o banco ok.
-4. O Traefik passa a balancear entre as duas; a antiga é parada após 8 s (com 30 s para encerrar conexões).
+4. O Traefik passa a balancear entre as duas. A antiga é **drenada**: seu `/next/health` passa a responder 503, o
+   health check do Traefik (a cada 5 s) a tira do balanceamento e só então ela é parada (30 s para encerrar
+   conexões).
 5. Se o healthcheck falhar em até 5 minutos, a réplica nova é removida e **a antiga continua no ar**; o job falha e
    um alerta é enviado.
 6. O cache das páginas é aquecido a partir do sitemap.
 
+`SKIP_PULL=1 scripts/deploy.sh <tag>` usa uma imagem já presente no servidor (sem acessar o GHCR).
+
 **Regra para migrações:** sempre aditivas (nova coluna/tabela, nunca renomear/remover na mesma versão), porque as
 duas versões convivem por alguns segundos. Remoções vão num deploy seguinte.
+
+### Validação (simulação local da VPS, 2026-10-05)
+
+Traefik 3.6 numa rede `coolify`, stack de produção completa e os scripts reais:
+
+- deploy sob carga: **0 falhas em 1.338 requisições** (página e health);
+- versão quebrada: rejeitada em 5 s, versão anterior seguiu servindo;
+- `rollback.sh`: voltou para a tag anterior sem downtime;
+- `backup.sh` + cópia off-site, `restore-test.sh` (contagens e mídias conferidas) e `restore.sh` real
+  (banco e MinIO restaurados, busca reindexada);
+- `healthwatch.sh`: alerta único por problema e aviso de normalização.
 
 ## Rollback
 
