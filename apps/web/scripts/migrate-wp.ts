@@ -67,8 +67,24 @@ function altFor(url: string, context: string): { alt: string; reviewed: boolean 
 }
 
 // ---------- downloads ----------
+const OFFLINE = process.env.MIGRATE_OFFLINE === '1'
+
+/** Offline mode (CI/E2E): deterministic placeholder images instead of downloading from WordPress. */
+async function placeholder(url: string, file: string): Promise<string> {
+  const sharp = (await import('sharp')).default
+  let hash = 0
+  for (const ch of url) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0
+  const hue = hash % 360
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hue},45%,38%)"/><stop offset="1" stop-color="hsl(${(hue + 40) % 360},55%,22%)"/></linearGradient></defs><rect width="1600" height="1000" fill="url(#g)"/></svg>`
+  const out = file.replace(/\.(png|gif|jpeg|jpg|webp)$/i, '.jpg')
+  await mkdir(path.dirname(out), { recursive: true })
+  await sharp(Buffer.from(svg)).jpeg({ quality: 70 }).toFile(out)
+  return out
+}
+
 async function download(url: string): Promise<string> {
   const rel = url.replace(/^https?:\/\/[^/]+\/wp-content\/uploads\//, '')
+  if (OFFLINE) return placeholder(url, path.join(CACHE, 'offline', rel))
   const file = path.join(CACHE, 'uploads', rel)
   if (existsSync(file) && (await stat(file)).size > 0) return file
   await mkdir(path.dirname(file), { recursive: true })
@@ -165,7 +181,7 @@ async function ensureMedia(payload: Payload, url: string, context: string, opts:
     stats.mediaCreated++
     return null
   }
-  if (/\.(mp4|webm)$/i.test(url) && process.env.MIGRATE_SKIP_VIDEO === '1') {
+  if (/\.(mp4|webm)$/i.test(url) && (process.env.MIGRATE_SKIP_VIDEO === '1' || OFFLINE)) {
     stats.warnings.push(`vídeo adiado (MIGRATE_SKIP_VIDEO=1): ${path.basename(url)}`)
     return null
   }

@@ -3,7 +3,8 @@ import type { MetadataRoute } from 'next'
 import { getSitemapEntries } from '@/lib/queries'
 import { absoluteUrl, docPath } from '@/lib/urls'
 
-export const revalidate = 3600
+// Rendered per request; the underlying query is cached and invalidated on publish.
+export const dynamic = 'force-dynamic'
 
 const STATIC = ['/', '/projetos', '/atuacao', '/noticias', '/trabalhe-conosco']
 

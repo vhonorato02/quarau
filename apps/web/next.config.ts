@@ -66,11 +66,11 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['@quarau/ui', 'motion', 'gsap'],
   },
   async headers() {
-    const noindex = process.env.SITE_NOINDEX !== 'false'
+    // X-Robots-Tag is set at runtime in src/proxy.ts (SITE_NOINDEX can change without a rebuild).
     return [
       {
         source: '/:path*',
-        headers: [...securityHeaders, ...(noindex ? [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] : [])],
+        headers: securityHeaders,
       },
       {
         source: '/brand/:file*',

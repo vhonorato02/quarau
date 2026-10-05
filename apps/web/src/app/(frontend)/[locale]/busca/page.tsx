@@ -8,6 +8,8 @@ import type { Locale } from '@/i18n/routing'
 import { rateLimit } from '@/lib/rate-limit'
 import { search, type SearchHit } from '@/lib/search'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = { title: 'Busca', robots: { index: false, follow: true } }
 
 /** Escapes everything except the <mark> tags produced by Meilisearch highlighting. */

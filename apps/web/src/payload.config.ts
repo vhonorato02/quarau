@@ -15,6 +15,7 @@ import { editors } from './access'
 import { Documents, Jobs, Leads, Media, News, Pages, Partners, Projects, Services, Team, Users } from './collections'
 import { editor } from './fields/richText'
 import { globals } from './globals'
+import { migrations } from './migrations'
 import { revalidateCollection, revalidateCollectionDelete } from './hooks/revalidate'
 import { docPath, type RoutableCollection } from './lib/urls'
 import { truncate } from './utilities/lexical'
@@ -85,8 +86,9 @@ export default buildConfig({
       max: Number(env.DATABASE_POOL_MAX ?? 10),
     },
     migrationDir: path.resolve(dirname, 'migrations'),
-    // Schema changes in production only through committed migrations.
+    // Schema changes in production only through committed migrations, applied on boot.
     push: !isProd && env.PAYLOAD_DB_PUSH !== 'false',
+    prodMigrations: migrations,
   }),
 
   email: env.SMTP_HOST
