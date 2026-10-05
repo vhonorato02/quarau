@@ -11,6 +11,8 @@ const run = Date.now().toString(36)
 const ctx = () => ({ disableRevalidate: true })
 let mediaId: number
 let authorId: number
+/** Roles given to the very first account, when this run starts on an empty database (CI). */
+let firstAccountRoles: string[] | undefined
 
 async function tinyImage(): Promise<Buffer> {
   return sharp({ create: { width: 64, height: 40, channels: 3, background: '#0089cf' } })
@@ -28,6 +30,20 @@ beforeAll(async () => {
     context: ctx(),
   })
   mediaId = media.id
+  const { totalDocs } = await payload.count({ collection: 'users' })
+  if (totalDocs === 0) {
+    const first = await payload.create({
+      collection: 'users',
+      data: {
+        email: `primeiro-${run}@test.local`,
+        password: 'senha-forte-123',
+        name: 'Primeiro',
+        roles: ['author'],
+      },
+      context: ctx(),
+    })
+    firstAccountRoles = first.roles
+  }
   const author = await payload.create({
     collection: 'users',
     data: {
@@ -152,6 +168,14 @@ describe('projects', () => {
       expect(doc.url).toBe(`/projetos/indexado-${run}`)
     },
   )
+})
+
+describe('users', () => {
+  it('makes the first account an administrator and keeps later roles', async () => {
+    if (firstAccountRoles) expect(firstAccountRoles).toEqual(['admin'])
+    const author = await payload.findByID({ collection: 'users', id: authorId })
+    expect(author.roles).toEqual(['author'])
+  })
 })
 
 describe('leads', () => {
