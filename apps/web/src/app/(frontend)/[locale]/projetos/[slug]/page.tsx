@@ -1,4 +1,4 @@
-import { Breadcrumbs, Container, Eyebrow, Heading, OdsList, Quote, Section, cn } from '@quarau/ui'
+import { BrandDot, Breadcrumbs, Container, Heading, OdsList, Quote, Section, cn } from '@quarau/ui'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -204,7 +204,10 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
         <Section>
           <Container className="grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-4">
-              <Eyebrow className="lg:sticky lg:top-28">Sobre o projeto</Eyebrow>
+              <h2 className="text-eyebrow flex items-center gap-3 font-semibold tracking-(--text-eyebrow--letter-spacing) uppercase lg:sticky lg:top-28">
+                <BrandDot className="size-2 shrink-0" />
+                Sobre o projeto
+              </h2>
             </div>
             <div data-reveal className="lg:col-span-7 lg:col-start-6">
               <RichText data={project.body} className="text-[1.125rem] leading-[1.75]" />

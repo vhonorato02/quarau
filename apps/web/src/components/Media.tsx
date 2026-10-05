@@ -37,6 +37,8 @@ type Props = {
   priority?: boolean
   quality?: 60 | 75 | 85
   alt?: string
+  /** Show the blurred placeholder while loading (default: only for priority images). */
+  blur?: boolean
 }
 
 /**
@@ -52,6 +54,7 @@ export function Media({
   priority,
   quality = 75,
   alt,
+  blur,
 }: Props) {
   if (!isMedia(media) || !media.url) return null
   const src = toRelative(media.url)!
@@ -78,7 +81,8 @@ export function Media({
     priority,
     quality,
     unoptimized: isSvg,
-    placeholder: media.blurDataURL ? ('blur' as const) : ('empty' as const),
+    // Blur placeholders are SVG filters (costly to paint): keep them for above-the-fold images.
+    placeholder: media.blurDataURL && (blur ?? priority) ? ('blur' as const) : ('empty' as const),
     blurDataURL: media.blurDataURL ?? undefined,
     style: { objectPosition },
   }

@@ -14,7 +14,11 @@ export function StatementBlock({ block }: { block: StatementBlockType }) {
 
   useEffect(() => {
     const el = ref.current
-    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (
+      !el ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      window.matchMedia('(pointer: coarse)').matches
+    ) {
       el?.querySelectorAll('.statement-word').forEach((w) => w.setAttribute('data-on', ''))
       return
     }

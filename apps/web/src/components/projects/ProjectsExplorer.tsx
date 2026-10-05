@@ -71,7 +71,12 @@ export function ProjectsExplorer({
               data-reveal
               style={{ '--reveal-delay': (i % 3) * 80 } as React.CSSProperties}
             >
-              <ProjectCard project={p} size={wide ? 'feature' : 'default'} headingLevel="h2" />
+              <ProjectCard
+                project={p}
+                size={wide ? 'feature' : 'default'}
+                headingLevel="h2"
+                priority={i === 0}
+              />
             </li>
           )
         })}

@@ -274,6 +274,8 @@ export interface Media {
    */
   legacyUrl?: string | null;
   blurDataURL?: string | null;
+  prefix?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -1051,6 +1053,8 @@ export interface Document {
    * Números menores aparecem primeiro.
    */
   order?: number | null;
+  prefix?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -2103,6 +2107,8 @@ export interface MediaSelect<T extends boolean = true> {
   needsReview?: T;
   legacyUrl?: T;
   blurDataURL?: T;
+  prefix?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -2168,6 +2174,8 @@ export interface DocumentsSelect<T extends boolean = true> {
   description?: T;
   category?: T;
   order?: T;
+  prefix?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

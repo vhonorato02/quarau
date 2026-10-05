@@ -26,6 +26,7 @@ export function ProjectCard({
   className,
   headingLevel = 'h3',
   style,
+  priority = false,
 }: {
   project: Project
   size?: 'default' | 'feature' | 'compact'
@@ -33,6 +34,8 @@ export function ProjectCard({
   className?: string
   headingLevel?: 'h2' | 'h3'
   style?: React.CSSProperties
+  /** Eager-load the cover (first card above the fold). */
+  priority?: boolean
 }) {
   const H = headingLevel
   const period = projectPeriod(project)
@@ -51,6 +54,7 @@ export function ProjectCard({
         <Media
           media={project.coverImage}
           fill
+          priority={priority}
           sizes={
             size === 'feature'
               ? '(min-width: 1024px) 60vw, 100vw'

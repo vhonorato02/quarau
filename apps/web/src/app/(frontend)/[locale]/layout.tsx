@@ -6,19 +6,23 @@ import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
+import dynamic from 'next/dynamic'
 import { ViewTransition } from 'react'
 
 import { JsonLd } from '@/components/JsonLd'
-import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { RevealObserver } from '@/components/motion/Reveal'
 import { SmoothScroll } from '@/components/motion/SmoothScroll'
 import { CookieConsent } from '@/components/privacy/CookieConsent'
 import { Footer } from '@/components/site/Footer'
 import { Header } from '@/components/site/Header'
-import { barlow } from '@/fonts'
+import { barlow, barlowItalic } from '@/fonts'
 import { htmlLang, routing, type Locale } from '@/i18n/routing'
 import { getGlobal } from '@/lib/queries'
 import { organizationJsonLd } from '@/lib/seo'
+
+const LivePreviewListener = dynamic(() =>
+  import('@/components/LivePreviewListener').then((m) => m.LivePreviewListener),
+)
 
 export const dynamicParams = true
 
@@ -73,9 +77,22 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
   ])
 
   return (
-    <html lang={htmlLang[typedLocale]} className={barlow.variable} suppressHydrationWarning>
+    <html
+      lang={htmlLang[typedLocale]}
+      className={`${barlow.variable} ${barlowItalic.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Hides the (server-rendered) consent banner before paint when a choice was already made. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('quarau-consent-v1'))document.documentElement.dataset.consent='1'}catch(e){}",
+          }}
+        />
+      </head>
       <body className="bg-surface text-ink min-h-dvh font-sans antialiased">
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={{}}>
           <SkipLink>{tc('skipToContent')}</SkipLink>
           <Header locale={typedLocale} />
           <ViewTransition>

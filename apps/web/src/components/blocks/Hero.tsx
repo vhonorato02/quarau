@@ -27,8 +27,8 @@ function AnimatedHeading({
           className="inline-block overflow-hidden pb-[0.08em] align-bottom"
         >
           <span
-            className="inline-block motion-safe:animate-[word-up_1s_var(--ease-brand)_both]"
-            style={{ animationDelay: `${120 + i * 70}ms` }}
+            className="inline-block motion-safe:animate-[word-up_0.8s_var(--ease-brand)_both]"
+            style={{ animationDelay: `${i * 45}ms` }}
           >
             {w}
             {i < words.length - 1 ? ' ' : ''}

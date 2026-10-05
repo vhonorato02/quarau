@@ -38,7 +38,7 @@ export function OdsChip({ number, className }: { number: number; className?: str
     >
       <span
         aria-hidden="true"
-        className="grid w-9 shrink-0 place-items-center text-base font-bold"
+        className="grid w-9 shrink-0 place-items-center text-base font-semibold"
         style={{ backgroundColor: ods.color, color: readableOn(ods.color) }}
       >
         {number}

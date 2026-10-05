@@ -7,7 +7,13 @@ import type { MediaTextBlock as MediaTextBlockType } from '@/payload-types'
 
 import { isDarkTone, toneToSection } from './SectionHeader'
 
-export function MediaTextBlock({ block }: { block: MediaTextBlockType }) {
+export function MediaTextBlock({
+  block,
+  priority,
+}: {
+  block: MediaTextBlockType
+  priority?: boolean
+}) {
   const left = block.mediaPosition === 'left'
   const dark = isDarkTone(block.tone)
   return (
@@ -20,7 +26,12 @@ export function MediaTextBlock({ block }: { block: MediaTextBlockType }) {
             left ? 'lg:order-1' : 'lg:order-2',
           )}
         >
-          <Media media={block.media} fill sizes="(min-width: 1024px) 50vw, 100vw" />
+          <Media
+            media={block.media}
+            fill
+            priority={priority}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+          />
         </figure>
         <div
           className={cn(

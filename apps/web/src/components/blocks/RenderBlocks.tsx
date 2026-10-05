@@ -45,7 +45,7 @@ export function RenderBlocks({
           case 'content':
             return <ContentBlock key={key} block={block} />
           case 'mediaText':
-            return <MediaTextBlock key={key} block={block} />
+            return <MediaTextBlock key={key} block={block} priority={i <= 1} />
           case 'stats':
             return <StatsBlock key={key} block={block} />
           case 'timeline':

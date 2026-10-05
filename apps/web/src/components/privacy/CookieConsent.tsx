@@ -18,7 +18,8 @@ type Props = {
  */
 export function CookieConsent({ umami, labels }: Props) {
   const [consent, setConsent] = useState<Consent | null>(null)
-  const [open, setOpen] = useState(false)
+  // Rendered open on the server; a pre-paint script hides it when consent exists.
+  const [open, setOpen] = useState(true)
 
   useEffect(() => {
     const c = readConsent()
@@ -54,7 +55,7 @@ export function CookieConsent({ umami, labels }: Props) {
           role="dialog"
           aria-modal="false"
           aria-labelledby="consent-title"
-          className="border-line text-ink shadow-lift fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-xl border bg-white p-6 sm:inset-x-6 sm:bottom-6"
+          className="consent-banner border-line text-ink shadow-lift fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-xl border bg-white p-6 sm:inset-x-6 sm:bottom-6"
         >
           <h2 id="consent-title" className="text-lg font-semibold">
             {labels.title}
