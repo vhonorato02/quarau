@@ -30,7 +30,7 @@ done
 
 base="${domain#*.}"   # 177-107-94-44.sslip.io
 set_value SITE_URL "https://${domain}"
-set_value TRAEFIK_RULE "Host(\`${domain}\`)"
+set_value TRAEFIK_RULE "'Host(\`${domain}\`)'"
 set_value UMAMI_DOMAIN "stats.${base}"
 set_value STATUS_DOMAIN "status.${base}"
 

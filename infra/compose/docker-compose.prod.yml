@@ -75,7 +75,8 @@ services:
       traefik.http.routers.quarau.middlewares: ${TRAEFIK_MIDDLEWARES:-quarau-headers,quarau-compress}
       traefik.http.services.quarau.loadbalancer.server.port: '3000'
       traefik.http.services.quarau.loadbalancer.healthcheck.path: /next/health
-      traefik.http.services.quarau.loadbalancer.healthcheck.interval: 10s
+      traefik.http.services.quarau.loadbalancer.healthcheck.interval: 5s
+      traefik.http.services.quarau.loadbalancer.healthcheck.timeout: 3s
       traefik.http.middlewares.quarau-compress.compress: 'true'
       traefik.http.middlewares.quarau-headers.headers.stsSeconds: '63072000'
       traefik.http.middlewares.quarau-headers.headers.stsIncludeSubdomains: 'true'

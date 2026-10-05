@@ -30,7 +30,7 @@ hospedado junto com o WordPress, confirme com o provedor antes de mudar qualquer
 No servidor, edite `/srv/apps/quarau/.env`:
 
 ```env
-TRAEFIK_RULE=Host(`quarau.com.br`) || Host(`www.quarau.com.br`)
+TRAEFIK_RULE='Host(`quarau.com.br`) || Host(`www.quarau.com.br`)'
 TRAEFIK_MIDDLEWARES=quarau-headers,quarau-compress
 SITE_URL=https://quarau.com.br
 SITE_NOINDEX=false

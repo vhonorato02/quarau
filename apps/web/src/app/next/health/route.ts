@@ -1,9 +1,19 @@
+import { existsSync } from 'node:fs'
+
+import { logger } from '@/lib/logger'
 import { getPayload } from '@/lib/payload'
 
 export const dynamic = 'force-dynamic'
 
-/** Liveness/readiness probe used by Docker healthcheck, deploy script and Uptime Kuma. */
+/** Created by infra/scripts/deploy.sh in the outgoing replica so the proxy stops routing to it. */
+const DRAIN_FILE = '/tmp/quarau-drain'
+const noStore = { 'Cache-Control': 'no-store' }
+
+/** Liveness/readiness probe used by Docker healthcheck, Traefik, deploy script and Uptime Kuma. */
 export async function GET() {
+  if (existsSync(DRAIN_FILE)) {
+    return Response.json({ status: 'draining' }, { status: 503, headers: noStore })
+  }
   const started = Date.now()
   try {
     const payload = await getPayload()
@@ -15,16 +25,10 @@ export async function GET() {
         version: process.env.APP_VERSION ?? 'dev',
         latencyMs: Date.now() - started,
       },
-      { headers: { 'Cache-Control': 'no-store' } },
+      { headers: noStore },
     )
   } catch (err) {
-    return Response.json(
-      {
-        status: 'error',
-        db: 'unreachable',
-        message: err instanceof Error ? err.message : 'unknown',
-      },
-      { status: 503, headers: { 'Cache-Control': 'no-store' } },
-    )
+    logger.error({ err }, 'health check: database unreachable')
+    return Response.json({ status: 'error', db: 'unreachable' }, { status: 503, headers: noStore })
   }
 }

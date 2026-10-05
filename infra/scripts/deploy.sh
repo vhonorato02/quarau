@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Zero-downtime deploy of the web container.
-#   deploy.sh <image-tag>
+#   deploy.sh <image-tag>          (SKIP_PULL=1 uses an image already on the host)
 # 1. pulls the image, 2. starts a second replica next to the current one,
 # 3. waits for its healthcheck (DB migrations run on boot), 4. Traefik starts
 # routing to it, 5. removes the old replica. On failure the old one keeps serving.
@@ -21,8 +21,12 @@ if (( df_pct > 85 )); then
 fi
 
 export WEB_TAG="$TAG"
-log "puxando imagem ${WEB_IMAGE}:${TAG}"
-"${COMPOSE[@]}" pull web
+if [[ "${SKIP_PULL:-0}" == 1 ]]; then
+  log "usando imagem local ${WEB_IMAGE}:${TAG} (SKIP_PULL=1)"
+else
+  log "puxando imagem ${WEB_IMAGE}:${TAG}"
+  "${COMPOSE[@]}" pull web
+fi
 
 log "garantindo serviços de apoio"
 "${COMPOSE[@]}" up -d postgres pgbouncer valkey minio meilisearch
@@ -53,8 +57,15 @@ if [[ "$(container_health "$new_id")" != healthy ]]; then
 fi
 
 if [[ -n "$old_ids" ]]; then
-  # Give Traefik a moment to register the new backend before draining the old one.
-  sleep 8
+  # Give Traefik a moment to register the new backend, then drain the old one:
+  # its /next/health starts answering 503, Traefik's health check (5 s) takes it
+  # out of rotation, and only then is it stopped (in-flight requests finish).
+  sleep 5
+  for id in $old_ids; do
+    log "drenando réplica antiga ${id:0:12}"
+    docker exec "$id" touch /tmp/quarau-drain || true
+  done
+  sleep "${DRAIN_SECONDS:-12}"
   for id in $old_ids; do
     log "removendo réplica antiga ${id:0:12}"
     docker stop -t 30 "$id" >/dev/null && docker rm "$id" >/dev/null
