@@ -1,0 +1,241 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/quarau-web
+  NODE_VERSION: '22'
+
+jobs:
+  quality:
+    name: Lint, typecheck, unit, Storybook
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '${{ env.NODE_VERSION }}', cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm --filter @quarau/ui build-storybook
+      - uses: actions/upload-artifact@v4
+        with: { name: storybook, path: packages/ui/storybook-static, retention-days: 7 }
+
+  integration:
+    name: Payload integration (Postgres + Meilisearch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '${{ env.NODE_VERSION }}', cache: pnpm }
+      - run: docker compose -f infra/compose/docker-compose.dev.yml up -d --wait postgres meilisearch
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @quarau/web test:int
+        env:
+          DATABASE_URL: postgres://quarau:quarau@localhost:5432/quarau
+          PAYLOAD_SECRET: ci-secret-ci-secret-ci-secret
+          PAYLOAD_JOBS_AUTORUN: 'false'
+          MEILI_HOST: http://localhost:7700
+          MEILI_MASTER_KEY: dev-meili-master-key
+          MEILI_INDEX: quarau_ci
+
+  e2e:
+    name: Image + E2E, a11y, Lighthouse, links, load, security
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
+    env:
+      E2E_DB: quarau_e2e
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '${{ env.NODE_VERSION }}', cache: pnpm }
+
+      - uses: docker/setup-buildx-action@v3
+      - name: Build production image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: runner
+          load: true
+          tags: ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            APP_VERSION=${{ github.sha }}
+            NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ vars.TURNSTILE_SITE_KEY }}
+            NEXT_PUBLIC_UMAMI_ORIGIN=${{ vars.UMAMI_ORIGIN }}
+
+      - name: Start services
+        run: |
+          docker compose -f infra/compose/docker-compose.dev.yml up -d --wait
+          docker compose -f infra/compose/docker-compose.dev.yml exec -T postgres createdb -U quarau "$E2E_DB"
+
+      - name: Start web container
+        run: |
+          cat > e2e.env <<EOF
+          SITE_URL=http://localhost:3000
+          SITE_NOINDEX=false
+          DATABASE_URL=postgres://quarau:quarau@localhost:5432/${E2E_DB}
+          PAYLOAD_SECRET=e2e-secret-e2e-secret-e2e-secret
+          PREVIEW_SECRET=e2e-preview
+          REVALIDATE_SECRET=e2e-revalidate
+          S3_ENDPOINT=http://localhost:9000
+          S3_BUCKET=quarau-e2e
+          S3_ACCESS_KEY_ID=quarau
+          S3_SECRET_ACCESS_KEY=quarau-dev-secret
+          MEILI_HOST=http://localhost:7700
+          MEILI_MASTER_KEY=dev-meili-master-key
+          MEILI_INDEX=quarau_e2e
+          REDIS_URL=redis://localhost:6379
+          SMTP_HOST=localhost
+          SMTP_PORT=1025
+          EOF
+          docker run -d --name web --network host --env-file e2e.env "$IMAGE:${{ github.sha }}"
+          for i in $(seq 1 60); do
+            curl -fsS http://localhost:3000/next/health && break
+            sleep 2
+          done
+          curl -fsS http://localhost:3000/next/health
+
+      - run: pnpm install --frozen-lockfile
+      - name: Seed content (offline migration) and admin
+        working-directory: apps/web
+        env:
+          NODE_ENV: production
+          PAYLOAD_JOBS_AUTORUN: 'false'
+          MIGRATE_OFFLINE: '1'
+          ADMIN_EMAIL: e2e@quarau.local
+          ADMIN_PASSWORD: e2e-admin-password
+        run: |
+          set -a; source ../../e2e.env; set +a
+          pnpm migrate:wp
+          pnpm seed:admin
+
+      - name: Playwright E2E (routes, redirects, a11y, form, search, CMS)
+        working-directory: apps/web
+        env:
+          E2E_BASE_URL: http://localhost:3000
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          pnpm test:e2e
+
+      - name: Broken links (internal)
+        run: npx --yes linkinator@6 http://localhost:3000 --recurse --skip "^(?!http://localhost:3000)" --skip "/admin" --skip "/api/" --timeout 20000
+
+      - name: Lighthouse CI
+        run: |
+          export CHROME_PATH=$(find ~/.cache/ms-playwright -type f -name chrome -path '*chrome-linux*' | head -1)
+          pnpm exec lhci autorun
+
+      - name: Load test (k6)
+        run: docker run --rm --network host -v "$PWD/tests/k6:/scripts" mirror.gcr.io/grafana/k6:latest run -e BASE_URL=http://localhost:3000 /scripts/smoke.js
+
+      - name: Container logs
+        if: always()
+        run: docker logs web --tail 300 > web.log 2>&1 || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-reports
+          path: |
+            apps/web/playwright-report
+            apps/web/test-results
+            .lighthouseci
+            web.log
+          retention-days: 7
+
+      - name: Trivy (image vulnerabilities)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: ${{ env.IMAGE }}:${{ github.sha }}
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: '1'
+          format: sarif
+          output: trivy.sarif
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('trivy.sarif') != ''
+        with: { sarif_file: trivy.sarif, category: trivy }
+
+      - name: Push image to GHCR
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker tag "$IMAGE:${{ github.sha }}" "$IMAGE:latest"
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+
+  deploy:
+    name: Deploy to VPS
+    needs: [quality, integration, e2e]
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: https://${{ vars.TEMP_DOMAIN || 'quarau.177-107-94-44.sslip.io' }}
+    permissions:
+      contents: read
+      packages: read
+    env:
+      HAS_SSH: ${{ secrets.VPS_SSH_KEY != '' }}
+      VPS_HOST: ${{ secrets.VPS_HOST || '177.107.94.44' }}
+      VPS_PORT: ${{ secrets.VPS_PORT || '22322' }}
+      VPS_USER: ${{ secrets.VPS_USER || 'deploy' }}
+      TEMP_DOMAIN: ${{ vars.TEMP_DOMAIN || 'quarau.177-107-94-44.sslip.io' }}
+      APP_DIR: /srv/apps/quarau
+    steps:
+      - name: Skip when the VPS is not configured
+        if: env.HAS_SSH != 'true'
+        run: echo "::warning::Secret VPS_SSH_KEY ausente — deploy pulado. Veja docs/infra.md."
+      - uses: actions/checkout@v4
+        if: env.HAS_SSH == 'true'
+      - name: SSH setup
+        if: env.HAS_SSH == 'true'
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519 && chmod 600 ~/.ssh/id_ed25519
+          if [ -n "${{ secrets.VPS_KNOWN_HOSTS }}" ]; then printf '%s\n' "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          else ssh-keyscan -p "$VPS_PORT" "$VPS_HOST" > ~/.ssh/known_hosts; fi
+          echo "SSH=ssh -p $VPS_PORT -o BatchMode=yes $VPS_USER@$VPS_HOST" >> "$GITHUB_ENV"
+      - name: Upload stack files
+        if: env.HAS_SSH == 'true'
+        run: |
+          rsync -az -e "ssh -p $VPS_PORT" infra/compose/docker-compose.prod.yml "$VPS_USER@$VPS_HOST:$APP_DIR/docker-compose.yml"
+          rsync -az -e "ssh -p $VPS_PORT" infra/compose/.env.production.example "$VPS_USER@$VPS_HOST:$APP_DIR/"
+          rsync -az --delete -e "ssh -p $VPS_PORT" infra/compose/postgres-init/ "$VPS_USER@$VPS_HOST:$APP_DIR/postgres-init/"
+          rsync -az --delete -e "ssh -p $VPS_PORT" infra/scripts/ "$VPS_USER@$VPS_HOST:$APP_DIR/scripts/"
+      - name: Provision env (idempotent) and deploy
+        if: env.HAS_SSH == 'true'
+        run: |
+          $SSH "$APP_DIR/scripts/provision-env.sh '$TEMP_DOMAIN'"
+          $SSH "GHCR_USER='${{ github.actor }}' GHCR_TOKEN='${{ secrets.GITHUB_TOKEN }}' $APP_DIR/scripts/deploy.sh '${{ github.sha }}'"
+      - name: Smoke test (public URL)
+        if: env.HAS_SSH == 'true'
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' "https://$TEMP_DOMAIN/")
+          echo "HTTPS $TEMP_DOMAIN → $code (401 = protegido por basic auth, esperado no domínio temporário)"
+          [[ "$code" == 200 || "$code" == 401 ]]

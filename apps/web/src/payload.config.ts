@@ -27,6 +27,7 @@ import {
 } from './collections'
 import { editor } from './fields/richText'
 import { globals } from './globals'
+import { onInit } from './lib/bootstrap'
 import { migrations } from './migrations'
 import { revalidateCollection, revalidateCollectionDelete } from './hooks/revalidate'
 import { docPath, type RoutableCollection } from './lib/urls'
@@ -181,6 +182,7 @@ export default buildConfig({
     }),
   ],
 
+  onInit,
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
   graphQL: { disable: false, disablePlaygroundInProduction: true },
 })
