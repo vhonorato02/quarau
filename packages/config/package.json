@@ -1,0 +1,21 @@
+{
+  "name": "@quarau/config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./eslint": "./eslint.config.js",
+    "./tsconfig/react-library.json": "./tsconfig/react-library.json"
+  },
+  "dependencies": {
+    "@eslint/js": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "globals": "^16.4.0",
+    "typescript-eslint": "8.71.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=9"
+  }
+}

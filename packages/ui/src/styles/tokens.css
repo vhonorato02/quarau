@@ -1,0 +1,86 @@
+/*
+ * Quarau design tokens — Tailwind CSS v4 theme.
+ * Primary brand colours and typeface are taken verbatim from quarau.com.br (see docs/brand.md).
+ * Support colours only complement the brand (accessible text tones, neutrals, states).
+ */
+@theme {
+  /* Brand (non-negotiable) */
+  --color-brand-blue: #0089cf;
+  --color-brand-green: #39b54a;
+
+  /* Brand-derived support tones (WCAG AA text on white) */
+  --color-blue-50: #eef7fc;
+  --color-blue-100: #d6ecf8;
+  --color-blue-200: #a9d6ef;
+  --color-blue-300: #6fbbe4;
+  --color-blue-500: #0089cf;
+  --color-blue-700: #006fa8;
+  --color-blue-800: #005c8c;
+  --color-blue-900: #003a59;
+  --color-blue-950: #04263a;
+  --color-green-50: #eff8f0;
+  --color-green-100: #d8efdb;
+  --color-green-500: #39b54a;
+  --color-green-700: #24792f;
+  --color-green-800: #1f6b2a;
+
+  /* Neutrals */
+  --color-ink: #0e1a24;
+  --color-ink-muted: #4a5866;
+  --color-ink-subtle: #6b7885;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f4f7f9;
+  --color-surface-sunken: #e9eef2;
+  --color-line: #dce3e8;
+  --color-line-strong: #b9c4cc;
+
+  /* States */
+  --color-danger: #b42318;
+  --color-warning: #b54708;
+  --color-success: #24792f;
+
+  /* Typography */
+  --font-sans: 'Barlow', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+
+  --text-eyebrow: 0.8125rem;
+  --text-eyebrow--letter-spacing: 0.14em;
+  --text-display: clamp(3rem, 1.6rem + 6.2vw, 8.5rem);
+  --text-display--line-height: 0.92;
+  --text-display--letter-spacing: -0.035em;
+  --text-h1: clamp(2.5rem, 1.7rem + 3.6vw, 5.5rem);
+  --text-h1--line-height: 0.98;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h2: clamp(2rem, 1.5rem + 2.2vw, 3.75rem);
+  --text-h2--line-height: 1.04;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: clamp(1.5rem, 1.25rem + 1vw, 2.25rem);
+  --text-h3--line-height: 1.12;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h4: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  --text-h4--line-height: 1.25;
+  --text-lead: clamp(1.1875rem, 1.1rem + 0.45vw, 1.5rem);
+  --text-lead--line-height: 1.5;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+
+  /* Layout */
+  --spacing-gutter: clamp(1rem, 0.6rem + 1.8vw, 2.5rem);
+  --spacing-section: clamp(4.5rem, 3rem + 7vw, 11rem);
+  --container-site: 90rem;
+  --container-prose: 44rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.75rem;
+
+  /* Motion */
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-brand: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 160ms;
+  --duration-base: 320ms;
+  --duration-slow: 720ms;
+
+  --shadow-card: 0 1px 2px rgb(14 26 36 / 0.06), 0 12px 32px -12px rgb(14 26 36 / 0.18);
+  --shadow-lift: 0 2px 4px rgb(14 26 36 / 0.06), 0 28px 60px -24px rgb(14 26 36 / 0.32);
+}

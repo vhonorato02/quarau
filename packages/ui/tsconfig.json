@@ -1,0 +1,4 @@
+{
+  "extends": "@quarau/config/tsconfig/react-library.json",
+  "include": ["src", ".storybook", "vitest.config.ts"]
+}
