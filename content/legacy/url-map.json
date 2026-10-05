@@ -1,0 +1,32 @@
+{
+  "$comment": "Mapa de URLs do WordPress (quarau.com.br) para o site novo. Fonte: sitemaps Yoast + wp-json em 2026-10-05. Usado para gerar redirects 301 (seed do plugin de redirects) e nos testes E2E.",
+  "redirects": [
+    { "from": "/sobre-a-quarau/", "to": "/sobre" },
+    { "from": "/contato/", "to": "/contato" },
+    { "from": "/hello-world/", "to": "/noticias" },
+    { "from": "/category/uncategorized/", "to": "/noticias" },
+    { "from": "/author/fm_buenoyahoo-com-br/", "to": "/sobre" },
+    { "from": "/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/", "to": "/projetos/ecomuseu-dos-campos-de-sao-jose" },
+    { "from": "/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/", "to": "/projetos/inventario-cultural-e-dossie-de-registro" },
+    { "from": "/portfolio-item/programa-celeo-na-comunidade-projeto-ecoe/", "to": "/projetos/projeto-ecoe-verde" },
+    { "from": "/portfolio-item/programa-celeo-na-comunidade-projeto-quipa/", "to": "/projetos/projeto-quipa" },
+    { "from": "/portfolio-item/programa-de-educacao-patrimonial-da-fundacao-cassiano-ricardo/", "to": "/projetos/programa-de-educacao-patrimonial" },
+    { "from": "/portfolio-item/projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo/", "to": "/projetos/memoria-institucional-museu-do-folclore" },
+    { "from": "/portfolio/", "to": "/projetos" },
+    { "from": "/portfolio-item/", "to": "/projetos" },
+    { "from": "/feed/", "to": "/noticias" },
+    { "from": "/wp-admin/", "to": "/admin" },
+    { "from": "/wp-login.php", "to": "/admin" }
+  ],
+  "patterns": [
+    {
+      "from": "/wp-content/uploads/:path*",
+      "to": "resolvido em tempo de execução: procura a mídia migrada pelo campo legacyUrl e responde 301 para o arquivo novo"
+    },
+    { "from": "/sitemap_index.xml", "to": "/sitemap.xml" },
+    { "from": "/post-sitemap.xml", "to": "/sitemap.xml" },
+    { "from": "/page-sitemap.xml", "to": "/sitemap.xml" },
+    { "from": "/portfolio-sitemap.xml", "to": "/sitemap.xml" },
+    { "from": "/category-sitemap.xml", "to": "/sitemap.xml" }
+  ]
+}

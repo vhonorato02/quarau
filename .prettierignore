@@ -1,0 +1,12 @@
+pnpm-lock.yaml
+**/.next
+**/dist
+**/storybook-static
+**/payload-types.ts
+**/migrations/*.json
+apps/web/src/app/(payload)
+content/legacy
+coverage
+playwright-report
+test-results
+.turbo
