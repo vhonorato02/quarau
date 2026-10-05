@@ -33,7 +33,11 @@ ENV NODE_ENV=production APP_VERSION=${APP_VERSION} \
     # Build needs no database: pages render on first request (ISR).
     DATABASE_URL=postgres://build:build@127.0.0.1:1/build \
     PAYLOAD_SECRET=build-time-placeholder-secret
-RUN pnpm --filter @quarau/web build
+RUN pnpm --filter @quarau/web build \
+    # drizzle-kit (and the esbuild binary it pulls in) is only used for dev schema push and
+    # for generating migrations; production migrations run without it.
+    && cd apps/web/.next/standalone/node_modules/.pnpm \
+    && rm -rf drizzle-kit@* esbuild@* @esbuild+* esbuild-register@* @esbuild-kit+*
 
 # ---------- tools image (migrate:wp, reindex, admin seed) ----------
 FROM build AS tools
@@ -46,7 +50,11 @@ CMD ["pnpm", "migrate:wp"]
 FROM node:${NODE_VERSION}-bookworm-slim AS runner
 ARG APP_VERSION=dev
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0 APP_VERSION=${APP_VERSION}
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates tini && rm -rf /var/lib/apt/lists/* \
+# Security updates for the base image; npm/corepack are not needed at runtime (and bring their own CVEs).
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends curl ca-certificates tini \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+              /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /opt/yarn-* /usr/local/bin/yarn /usr/local/bin/yarnpkg \
     && groupadd --system --gid 1001 app && useradd --system --uid 1001 --gid app --home /app app
 WORKDIR /app
 COPY --from=build --chown=app:app /repo/apps/web/.next/standalone ./
