@@ -22,7 +22,7 @@ minio_src=$(find "$work" -type d -path '*_data' | head -1)
 log "parando web"
 "${COMPOSE[@]}" stop web
 log "restaurando Postgres"
-"${COMPOSE[@]}" exec -T postgres dropdb -U "$POSTGRES_USER" --if-exists "$POSTGRES_DB"
+"${COMPOSE[@]}" exec -T postgres dropdb -U "$POSTGRES_USER" --if-exists --force "$POSTGRES_DB"
 "${COMPOSE[@]}" exec -T postgres createdb -U "$POSTGRES_USER" "$POSTGRES_DB"
 "${COMPOSE[@]}" exec -T postgres pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" --no-owner < "$dump"
 if [[ -n "$minio_src" ]]; then
@@ -36,4 +36,5 @@ fi
 rm -rf "$work"
 sleep 20
 docker exec "$("${COMPOSE[@]}" ps -q web | head -1)" curl -fsS -X POST -H "authorization: Bearer ${REVALIDATE_SECRET}" http://127.0.0.1:3000/next/reindex || true
+echo
 log "restore concluído (busca reindexada)"
