@@ -8,6 +8,7 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { en } from '@payloadcms/translations/languages/en'
 import { pt } from '@payloadcms/translations/languages/pt'
+import { createTransport } from 'nodemailer'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
@@ -122,12 +123,12 @@ export default buildConfig({
         defaultFromName: env.EMAIL_FROM_NAME ?? 'Quarau',
         // Never block startup on SMTP availability; delivery errors are handled per message.
         skipVerify: true,
-        transportOptions: {
+        transport: createTransport({
           host: env.SMTP_HOST,
           port: Number(env.SMTP_PORT ?? 587),
           secure: env.SMTP_SECURE === 'true',
           auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: env.SMTP_PASS } : undefined,
-        },
+        }),
       })
     : undefined,
 
