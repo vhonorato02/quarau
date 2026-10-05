@@ -57,18 +57,21 @@ tudo roda pelos workflows: bootstrap, deploy, migração de conteúdo e criaçã
 
 ### Qualidade (resultados locais)
 
-| Suite                                                                                                      | Resultado                                                                          |
-| ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| ESLint + Prettier + typecheck (strict)                                                                     | ok                                                                                 |
-| Vitest (UI, e-mails, web)                                                                                  | 30 testes ok                                                                       |
-| Integração Payload (Postgres + Meilisearch)                                                                | 8 testes ok                                                                        |
-| Playwright E2E desktop + mobile (rotas, 301, navegação, formulário, busca, edição no CMS, axe WCAG 2.2 AA) | **90 testes ok**                                                                   |
-| Lighthouse mobile (lab, máquina de build)                                                                  | Acessibilidade 99–100 · Boas práticas 96–100 · SEO 100 · Performance 83–96 · CLS 0 |
+| Suite                                                                                                      | Resultado                                                                       |
+| ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| ESLint + Prettier + typecheck (strict)                                                                     | ok                                                                              |
+| Vitest (UI, e-mails, web)                                                                                  | 30 testes ok                                                                    |
+| Integração Payload (Postgres + Meilisearch)                                                                | 8 testes ok                                                                     |
+| Playwright E2E desktop + mobile (rotas, 301, navegação, formulário, busca, edição no CMS, axe WCAG 2.2 AA) | **90 testes ok**                                                                |
+| Lighthouse mobile (lab, máquina de build)                                                                  | Acessibilidade 100 · Boas práticas 96–100 · SEO 100 · Performance 83–94 · CLS 0 |
 
-O CI repete tudo isso na imagem Docker de produção e bloqueia o deploy se falhar. A meta de Performance ≥ 95 foi
-atingida na página de contato; nas demais (83–88 em laboratório) o limite é a hidratação do React em CPU móvel
-simulada. O CI exige ≥ 80 e registra LCP/TBT como alerta. Plano para fechar a diferença: medir em produção
-(rede/CPU reais) e, se necessário, reduzir ainda mais o JS do cliente.
+O CI repete tudo isso na imagem Docker de produção e bloqueia o deploy se falhar. A meta de Performance ≥ 95 ainda
+não é atingida de forma estável no laboratório (83–94 nas páginas principais, com variação de ±5 entre execuções).
+O que resta é o JavaScript do próprio React/Next.js (~115 KB comprimidos) disputando banda com a primeira pintura na
+simulação de 4G lento; o código do site em si já foi enxugado (galeria, preview do CMS, menu mobile e animações
+carregam sob demanda). O CI exige ≥ 80 e registra LCP/TBT como alerta. Próximo passo: medir em produção (dados reais
+de campo) antes de otimizações mais invasivas. Um experimento com `Suspense` por bloco reduziu o TBT, mas causou
+deslocamento de layout (CLS) e foi descartado.
 
 ### Infraestrutura
 
