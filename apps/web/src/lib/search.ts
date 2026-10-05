@@ -46,7 +46,16 @@ export async function ensureIndex(): Promise<void> {
       searchableAttributes: ['title', 'excerpt', 'body'],
       filterableAttributes: ['collection', 'locale'],
       sortableAttributes: ['publishedAt'],
-      displayedAttributes: ['id', 'collection', 'title', 'excerpt', 'url', 'image', 'locale', 'publishedAt'],
+      displayedAttributes: [
+        'id',
+        'collection',
+        'title',
+        'excerpt',
+        'url',
+        'image',
+        'locale',
+        'publishedAt',
+      ],
       typoTolerance: { minWordSizeForTypos: { oneTypo: 4, twoTypos: 8 } },
       localizedAttributes: [{ attributePatterns: ['title', 'excerpt', 'body'], locales: ['por'] }],
     })
@@ -67,9 +76,14 @@ export async function deleteDocuments(ids: string[]): Promise<void> {
   await idx.deleteDocuments(ids).waitTask()
 }
 
-export type SearchHit = Omit<SearchDoc, 'body'> & { _formatted?: Partial<Record<'title' | 'excerpt', string>> }
+export type SearchHit = Omit<SearchDoc, 'body'> & {
+  _formatted?: Partial<Record<'title' | 'excerpt', string>>
+}
 
-export async function search(query: string, { locale = 'pt', limit = 20 } = {}): Promise<{
+export async function search(
+  query: string,
+  { locale = 'pt', limit = 20 } = {},
+): Promise<{
   hits: SearchHit[]
   total: number
   available: boolean
@@ -87,5 +101,9 @@ export async function search(query: string, { locale = 'pt', limit = 20 } = {}):
     attributesToCrop: ['excerpt'],
     cropLength: 32,
   })
-  return { hits: res.hits as SearchHit[], total: res.estimatedTotalHits ?? res.hits.length, available: true }
+  return {
+    hits: res.hits as SearchHit[],
+    total: res.estimatedTotalHits ?? res.hits.length,
+    available: true,
+  }
 }

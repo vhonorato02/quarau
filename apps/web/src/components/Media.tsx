@@ -43,7 +43,16 @@ type Props = {
  * Responsive, optimized image for CMS media. Uses the editor-defined focal point
  * for cropping and the stored blur placeholder while loading.
  */
-export function Media({ media, className, imgClassName, fill, sizes = '100vw', priority, quality = 75, alt }: Props) {
+export function Media({
+  media,
+  className,
+  imgClassName,
+  fill,
+  sizes = '100vw',
+  priority,
+  quality = 75,
+  alt,
+}: Props) {
   if (!isMedia(media) || !media.url) return null
   const src = toRelative(media.url)!
   const isVideo = media.mimeType?.startsWith('video/')

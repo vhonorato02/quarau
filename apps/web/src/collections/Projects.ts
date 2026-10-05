@@ -1,13 +1,25 @@
 import type { CollectionConfig } from 'payload'
 
-import { authorsCanCreateDrafts, authorsOwnDrafts, editors, publishedOrAuthenticated } from '../access'
+import {
+  authorsCanCreateDrafts,
+  authorsOwnDrafts,
+  editors,
+  publishedOrAuthenticated,
+} from '../access'
 import { caseBlocks } from '../blocks'
 import { editor } from '../fields/richText'
 import { slugField } from '../fields/slug'
 import { setCreatedBy } from '../hooks/fields'
 import { revalidateCollection, revalidateCollectionDelete } from '../hooks/revalidate'
 import { removeFromSearch, syncSearch } from '../hooks/search'
-import { coverImageField, createdByField, previewConfig, publishedAtField, summaryField, versionsWithDrafts } from './shared'
+import {
+  coverImageField,
+  createdByField,
+  previewConfig,
+  publishedAtField,
+  summaryField,
+  versionsWithDrafts,
+} from './shared'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -19,7 +31,12 @@ export const Projects: CollectionConfig = {
     defaultColumns: ['title', 'client', 'startYear', 'featured', '_status'],
     ...previewConfig('projects'),
   },
-  access: { read: publishedOrAuthenticated, create: authorsCanCreateDrafts, update: authorsOwnDrafts, delete: editors },
+  access: {
+    read: publishedOrAuthenticated,
+    create: authorsCanCreateDrafts,
+    update: authorsOwnDrafts,
+    delete: editors,
+  },
   versions: versionsWithDrafts,
   hooks: {
     beforeChange: [setCreatedBy],
@@ -33,21 +50,48 @@ export const Projects: CollectionConfig = {
         {
           label: 'Resumo',
           fields: [
-            { name: 'title', type: 'text', label: 'Nome do projeto', required: true, localized: true },
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Nome do projeto',
+              required: true,
+              localized: true,
+            },
             summaryField,
             coverImageField('coverImage', true),
             {
               type: 'row',
               fields: [
-                { name: 'client', type: 'text', label: 'Cliente / realizador', admin: { width: '50%' } },
-                { name: 'location', type: 'text', label: 'Local', localized: true, admin: { width: '50%' } },
+                {
+                  name: 'client',
+                  type: 'text',
+                  label: 'Cliente / realizador',
+                  admin: { width: '50%' },
+                },
+                {
+                  name: 'location',
+                  type: 'text',
+                  label: 'Local',
+                  localized: true,
+                  admin: { width: '50%' },
+                },
               ],
             },
             {
               type: 'row',
               fields: [
-                { name: 'startYear', type: 'number', label: 'Ano de início', admin: { width: '33%' } },
-                { name: 'endYear', type: 'number', label: 'Ano de término', admin: { width: '33%', description: 'Vazio = em andamento' } },
+                {
+                  name: 'startYear',
+                  type: 'number',
+                  label: 'Ano de início',
+                  admin: { width: '33%' },
+                },
+                {
+                  name: 'endYear',
+                  type: 'number',
+                  label: 'Ano de término',
+                  admin: { width: '33%', description: 'Vazio = em andamento' },
+                },
                 {
                   name: 'role',
                   type: 'text',
@@ -57,20 +101,38 @@ export const Projects: CollectionConfig = {
                 },
               ],
             },
-            { name: 'partners', type: 'relationship', relationTo: 'partners', hasMany: true, label: 'Parceiros e financiadores' },
-            { name: 'services', type: 'relationship', relationTo: 'services', hasMany: true, label: 'Áreas de atuação' },
+            {
+              name: 'partners',
+              type: 'relationship',
+              relationTo: 'partners',
+              hasMany: true,
+              label: 'Parceiros e financiadores',
+            },
+            {
+              name: 'services',
+              type: 'relationship',
+              relationTo: 'services',
+              hasMany: true,
+              label: 'Áreas de atuação',
+            },
             {
               name: 'ods',
               type: 'select',
               hasMany: true,
               label: 'ODS atendidos',
-              options: Array.from({ length: 17 }, (_, i) => ({ label: `ODS ${i + 1}`, value: String(i + 1) })),
+              options: Array.from({ length: 17 }, (_, i) => ({
+                label: `ODS ${i + 1}`,
+                value: String(i + 1),
+              })),
             },
             {
               name: 'coordinates',
               type: 'group',
               label: 'Território (para o mapa de projetos)',
-              admin: { description: 'Opcional. Copie latitude e longitude do Google Maps (clique com o botão direito no local).' },
+              admin: {
+                description:
+                  'Opcional. Copie latitude e longitude do Google Maps (clique com o botão direito no local).',
+              },
               fields: [
                 {
                   type: 'row',
@@ -84,7 +146,13 @@ export const Projects: CollectionConfig = {
             {
               type: 'row',
               fields: [
-                { name: 'featured', type: 'checkbox', label: 'Destacar na home', defaultValue: false, admin: { width: '50%' } },
+                {
+                  name: 'featured',
+                  type: 'checkbox',
+                  label: 'Destacar na home',
+                  defaultValue: false,
+                  admin: { width: '50%' },
+                },
                 {
                   name: 'accent',
                   type: 'select',
@@ -110,13 +178,28 @@ export const Projects: CollectionConfig = {
               label: 'Resultados em números',
               maxRows: 4,
               labels: { singular: 'Resultado', plural: 'Resultados' },
-              admin: { description: 'Somente números comprovados (relatórios, prestação de contas).' },
+              admin: {
+                description: 'Somente números comprovados (relatórios, prestação de contas).',
+              },
               fields: [
                 {
                   type: 'row',
                   fields: [
-                    { name: 'value', type: 'text', label: 'Número', required: true, admin: { width: '30%' } },
-                    { name: 'label', type: 'text', label: 'Descrição', required: true, localized: true, admin: { width: '70%' } },
+                    {
+                      name: 'value',
+                      type: 'text',
+                      label: 'Número',
+                      required: true,
+                      admin: { width: '30%' },
+                    },
+                    {
+                      name: 'label',
+                      type: 'text',
+                      label: 'Descrição',
+                      required: true,
+                      localized: true,
+                      admin: { width: '70%' },
+                    },
                   ],
                 },
               ],
@@ -130,7 +213,8 @@ export const Projects: CollectionConfig = {
               localized: true,
               admin: {
                 initCollapsed: true,
-                description: 'Monte a narrativa do case intercalando textos, imagens, números, vídeos e citações.',
+                description:
+                  'Monte a narrativa do case intercalando textos, imagens, números, vídeos e citações.',
               },
             },
             {
@@ -165,7 +249,13 @@ export const Projects: CollectionConfig = {
               label: 'Vídeo',
               filterOptions: { mimeType: { contains: 'video' } },
             },
-            { name: 'gallery', type: 'upload', relationTo: 'media', hasMany: true, label: 'Galeria de fotos' },
+            {
+              name: 'gallery',
+              type: 'upload',
+              relationTo: 'media',
+              hasMany: true,
+              label: 'Galeria de fotos',
+            },
           ],
         },
       ],

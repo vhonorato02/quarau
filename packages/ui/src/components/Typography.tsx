@@ -19,7 +19,14 @@ export interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
   dot?: boolean
 }
 
-export function Heading({ as = 'h2', size = 'h2', dot = false, className, children, ...props }: HeadingProps) {
+export function Heading({
+  as = 'h2',
+  size = 'h2',
+  dot = false,
+  className,
+  children,
+  ...props
+}: HeadingProps) {
   const Comp = as
   return (
     <Comp className={cn(sizes[size], 'text-balance', className)} {...props}>
@@ -29,7 +36,11 @@ export function Heading({ as = 'h2', size = 'h2', dot = false, className, childr
   )
 }
 
-export function Eyebrow({ className, children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
+export function Eyebrow({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
       className={cn(
@@ -50,5 +61,5 @@ export function Lead({ className, ...props }: React.HTMLAttributes<HTMLParagraph
 
 /** The green dot from the Quarau logotype, used as a decorative brand motif. */
 export function BrandDot({ className }: { className?: string }) {
-  return <span aria-hidden="true" className={cn('rounded-full bg-brand-green', className)} />
+  return <span aria-hidden="true" className={cn('bg-brand-green rounded-full', className)} />
 }

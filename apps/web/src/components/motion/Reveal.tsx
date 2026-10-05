@@ -24,7 +24,9 @@ export function RevealObserver() {
       { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
     )
     const scan = () =>
-      document.querySelectorAll('[data-reveal]:not([data-revealed])').forEach((el) => io.observe(el))
+      document
+        .querySelectorAll('[data-reveal]:not([data-revealed])')
+        .forEach((el) => io.observe(el))
     scan()
     // Re-scan after client navigations.
     const mo = new MutationObserver(scan)

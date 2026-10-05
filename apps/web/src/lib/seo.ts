@@ -5,7 +5,10 @@ import type { Contact, Media, SiteSetting, Social } from '@/payload-types'
 
 import { absoluteUrl } from './urls'
 
-type Meta = { title?: string | null; description?: string | null; image?: number | Media | null } | null | undefined
+type Meta =
+  | { title?: string | null; description?: string | null; image?: number | Media | null }
+  | null
+  | undefined
 
 export function buildMetadata({
   title,
@@ -31,15 +34,17 @@ export function buildMetadata({
   settings?: SiteSetting | null
 }): Metadata {
   const finalTitle = meta?.title || title
-  const finalDescription = meta?.description || description || settings?.defaultDescription || undefined
-  const img = (typeof meta?.image === 'object' && meta.image) || (typeof image === 'object' && image) || null
+  const finalDescription =
+    meta?.description || description || settings?.defaultDescription || undefined
+  const img =
+    (typeof meta?.image === 'object' && meta.image) || (typeof image === 'object' && image) || null
   const ogImageUrl = img
     ? absoluteUrl(img.sizes?.og?.url ?? img.url ?? '')
     : absoluteUrl(`/next/og?title=${encodeURIComponent(finalTitle)}`)
   const canonical = absoluteUrl(path)
   const siteNoindex = process.env.SITE_NOINDEX !== 'false'
   return {
-    title: meta?.title ? { absolute: meta.title } : finalTitle,
+    title: meta?.title && /quarau/i.test(meta.title) ? { absolute: meta.title } : finalTitle,
     description: finalDescription,
     alternates: { canonical },
     openGraph: {
@@ -52,8 +57,14 @@ export function buildMetadata({
       images: [{ url: ogImageUrl, width: 1200, height: 630, alt: img?.alt ?? finalTitle }],
       ...(publishedTime ? { publishedTime } : {}),
     },
-    twitter: { card: 'summary_large_image', title: finalTitle, description: finalDescription, images: [ogImageUrl] },
-    robots: noindex || siteNoindex ? { index: false, follow: false } : { index: true, follow: true },
+    twitter: {
+      card: 'summary_large_image',
+      title: finalTitle,
+      description: finalDescription,
+      images: [ogImageUrl],
+    },
+    robots:
+      noindex || siteNoindex ? { index: false, follow: false } : { index: true, follow: true },
   }
 }
 
@@ -82,7 +93,9 @@ export function organizationJsonLd({
       'Consultoria em projetos educativos, culturais e socioambientais, da concepção à difusão de resultados.',
     email: contact?.email ?? undefined,
     telephone: contact?.phones?.[0]?.number ? `+55 ${contact.phones[0].number}` : undefined,
-    foundingDate: settings?.organization?.foundingYear ? String(settings.organization.foundingYear) : undefined,
+    foundingDate: settings?.organization?.foundingYear
+      ? String(settings.organization.foundingYear)
+      : undefined,
     areaServed: settings?.organization?.areaServed ?? 'Brasil',
     address: {
       '@type': 'PostalAddress',
@@ -92,7 +105,9 @@ export function organizationJsonLd({
       postalCode: address?.postalCode ?? undefined,
       addressCountry: 'BR',
     },
-    ...(address?.lat && address?.lng ? { geo: { '@type': 'GeoCoordinates', latitude: address.lat, longitude: address.lng } } : {}),
+    ...(address?.lat && address?.lng
+      ? { geo: { '@type': 'GeoCoordinates', latitude: address.lat, longitude: address.lng } }
+      : {}),
     sameAs: social?.profiles?.map((p) => p.url).filter(Boolean) ?? [],
   }
 }

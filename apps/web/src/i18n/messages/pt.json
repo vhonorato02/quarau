@@ -59,7 +59,12 @@
     "results": "{count, plural, =0 {Nenhum resultado} one {# resultado} other {# resultados}} para “{query}”",
     "empty": "Digite um termo para buscar no site.",
     "unavailable": "A busca está temporariamente indisponível.",
-    "collections": { "pages": "Página", "projects": "Projeto", "services": "Área de atuação", "news": "Notícia" }
+    "collections": {
+      "pages": "Página",
+      "projects": "Projeto",
+      "services": "Área de atuação",
+      "news": "Notícia"
+    }
   },
   "contact": {
     "name": "Nome",

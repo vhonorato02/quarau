@@ -23,7 +23,9 @@ export async function generateMetadata({ params }: PageProps<'/[locale]'>): Prom
       locale: locale as Locale,
       settings,
     }),
-    title: { absolute: page?.meta?.title || 'Quarau — Projetos Socioambientais, Educativos e Culturais' },
+    title: {
+      absolute: page?.meta?.title || 'Quarau — Projetos Socioambientais, Educativos e Culturais',
+    },
   }
 }
 

@@ -10,3 +10,9 @@ coverage
 playwright-report
 test-results
 .turbo
+apps/web/src/migrations
+apps/web/.migrate-cache
+docs/brand-assets
+.preview
+tools/brand
+**/next-env.d.ts

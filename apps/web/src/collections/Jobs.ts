@@ -41,7 +41,13 @@ export const Jobs: CollectionConfig = {
           ],
           admin: { width: '33%' },
         },
-        { name: 'location', type: 'text', label: 'Local', localized: true, admin: { width: '33%' } },
+        {
+          name: 'location',
+          type: 'text',
+          label: 'Local',
+          localized: true,
+          admin: { width: '33%' },
+        },
         {
           name: 'opening',
           type: 'select',
@@ -55,14 +61,29 @@ export const Jobs: CollectionConfig = {
         },
       ],
     },
-    { name: 'closingDate', type: 'date', label: 'Inscrições até', admin: { date: { displayFormat: 'dd/MM/yyyy' } } },
-    { name: 'description', type: 'richText', label: 'Descrição, requisitos e benefícios', editor, required: true, localized: true },
+    {
+      name: 'closingDate',
+      type: 'date',
+      label: 'Inscrições até',
+      admin: { date: { displayFormat: 'dd/MM/yyyy' } },
+    },
+    {
+      name: 'description',
+      type: 'richText',
+      label: 'Descrição, requisitos e benefícios',
+      editor,
+      required: true,
+      localized: true,
+    },
     {
       name: 'applyUrl',
       type: 'text',
       label: 'Como se candidatar (URL ou e-mail)',
       required: true,
-      admin: { description: 'Ex.: mailto:contato@quarau.com.br?subject=Vaga ou link de formulário externo.' },
+      admin: {
+        description:
+          'Ex.: mailto:contato@quarau.com.br?subject=Vaga ou link de formulário externo.',
+      },
     },
     slugField(),
     publishedAtField,

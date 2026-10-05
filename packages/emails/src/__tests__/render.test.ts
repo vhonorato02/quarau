@@ -17,7 +17,10 @@ describe('emails', () => {
   })
 
   it('greets with the first name', async () => {
-    const { text } = await renderLeadConfirmation({ siteUrl: 'https://quarau.com.br', name: 'Ana Paula Lima' })
+    const { text } = await renderLeadConfirmation({
+      siteUrl: 'https://quarau.com.br',
+      name: 'Ana Paula Lima',
+    })
     expect(text).toContain('Olá, Ana.')
   })
 })

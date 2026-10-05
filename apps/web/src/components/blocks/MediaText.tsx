@@ -15,11 +15,19 @@ export function MediaTextBlock({ block }: { block: MediaTextBlockType }) {
       <Container className="grid items-center gap-12 lg:grid-cols-12 lg:gap-20">
         <figure
           data-reveal="mask"
-          className={cn('relative aspect-[4/5] overflow-hidden rounded-lg lg:col-span-6', left ? 'lg:order-1' : 'lg:order-2')}
+          className={cn(
+            'relative aspect-[4/5] overflow-hidden rounded-lg lg:col-span-6',
+            left ? 'lg:order-1' : 'lg:order-2',
+          )}
         >
           <Media media={block.media} fill sizes="(min-width: 1024px) 50vw, 100vw" />
         </figure>
-        <div className={cn('flex flex-col gap-6 lg:col-span-5', left ? 'lg:order-2 lg:col-start-8' : 'lg:order-1')}>
+        <div
+          className={cn(
+            'flex flex-col gap-6 lg:col-span-5',
+            left ? 'lg:order-2 lg:col-start-8' : 'lg:order-1',
+          )}
+        >
           {block.eyebrow ? <Eyebrow data-reveal>{block.eyebrow}</Eyebrow> : null}
           {block.heading ? (
             <Heading size="h2" data-reveal>

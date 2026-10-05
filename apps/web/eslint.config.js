@@ -5,6 +5,9 @@ export default [
   ...createConfig({ ignores: ['src/app/(payload)/**', 'next-env.d.ts', 'src/migrations/**'] }),
   {
     plugins: { '@next/next': nextPlugin },
-    rules: { ...nextPlugin.configs.recommended.rules, ...nextPlugin.configs['core-web-vitals'].rules },
+    rules: {
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs['core-web-vitals'].rules,
+    },
   },
 ]

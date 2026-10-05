@@ -40,7 +40,8 @@ export async function Footer({ locale }: { locale: Locale }) {
       <Container className="relative">
         <div className="grid gap-10 border-b border-white/15 py-20 md:grid-cols-[1.4fr_1fr] md:items-end lg:py-28">
           <p className="text-h1 font-semibold text-balance">
-            Vamos tirar o seu projeto do papel<BrandDot className="ml-1 inline-block size-[0.16em]" />
+            Vamos tirar o seu projeto do papel
+            <BrandDot className="ml-1 inline-block size-[0.16em]" />
           </p>
           <div className="flex flex-col gap-6 md:items-end">
             <p className="max-w-sm text-lg text-white/75 md:text-right">
@@ -62,11 +63,17 @@ export async function Footer({ locale }: { locale: Locale }) {
           </div>
 
           <nav aria-label="Rodapé">
-            <h2 className="mb-5 text-eyebrow font-semibold tracking-(--text-eyebrow--letter-spacing) text-white/60 uppercase">Site</h2>
+            <h2 className="text-eyebrow mb-5 font-semibold tracking-(--text-eyebrow--letter-spacing) text-white/60 uppercase">
+              Site
+            </h2>
             <ul className="flex flex-col gap-3">
               {(footer?.columns?.[0]?.links?.length
                 ? footer.columns[0].links.map((l) => ({ ...(l as LinkData) }))
-                : DEFAULT_NAV.map((n) => ({ type: 'external' as const, url: n.href, label: n.label }))
+                : DEFAULT_NAV.map((n) => ({
+                    type: 'external' as const,
+                    url: n.href,
+                    label: n.label,
+                  }))
               ).map((l, i) => (
                 <li key={`${l.label}-${i}`}>
                   <CMSLink link={l} className="text-white/85 hover:text-white" />
@@ -76,17 +83,21 @@ export async function Footer({ locale }: { locale: Locale }) {
           </nav>
 
           <div>
-            <h2 className="mb-5 text-eyebrow font-semibold tracking-(--text-eyebrow--letter-spacing) text-white/60 uppercase">
+            <h2 className="text-eyebrow mb-5 font-semibold tracking-(--text-eyebrow--letter-spacing) text-white/60 uppercase">
               {t('contact')}
             </h2>
-            <address className="flex flex-col gap-3 not-italic text-white/85">
+            <address className="flex flex-col gap-3 text-white/85 not-italic">
               {contact?.email ? (
                 <a href={`mailto:${contact.email}`} className="hover:text-white hover:underline">
                   {contact.email}
                 </a>
               ) : null}
               {contact?.phones?.map((p) => (
-                <a key={p.number} href={p.whatsapp ? waHref(p.number) : telHref(p.number)} className="hover:text-white hover:underline">
+                <a
+                  key={p.number}
+                  href={p.whatsapp ? waHref(p.number) : telHref(p.number)}
+                  className="hover:text-white hover:underline"
+                >
                   {p.number}
                   {p.whatsapp ? <span className="text-white/50"> · WhatsApp</span> : null}
                 </a>
@@ -97,7 +108,7 @@ export async function Footer({ locale }: { locale: Locale }) {
           </div>
 
           <div>
-            <h2 className="mb-5 text-eyebrow font-semibold tracking-(--text-eyebrow--letter-spacing) text-white/60 uppercase">
+            <h2 className="text-eyebrow mb-5 font-semibold tracking-(--text-eyebrow--letter-spacing) text-white/60 uppercase">
               {t('follow')}
             </h2>
             <ul className="flex gap-3">
@@ -107,7 +118,7 @@ export async function Footer({ locale }: { locale: Locale }) {
                     href={p.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="grid size-12 place-items-center rounded-full border border-white/20 transition-colors hover:border-white hover:bg-white hover:text-ink"
+                    className="hover:text-ink grid size-12 place-items-center rounded-full border border-white/20 transition-colors hover:border-white hover:bg-white"
                   >
                     <SocialIcon network={p.network} className="size-5" />
                     <span className="sr-only">

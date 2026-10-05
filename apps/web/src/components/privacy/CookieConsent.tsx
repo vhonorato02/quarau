@@ -54,12 +54,12 @@ export function CookieConsent({ umami, labels }: Props) {
           role="dialog"
           aria-modal="false"
           aria-labelledby="consent-title"
-          className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-xl border border-line bg-white p-6 text-ink shadow-lift sm:inset-x-6 sm:bottom-6"
+          className="border-line text-ink shadow-lift fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-xl border bg-white p-6 sm:inset-x-6 sm:bottom-6"
         >
           <h2 id="consent-title" className="text-lg font-semibold">
             {labels.title}
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+          <p className="text-ink-muted mt-2 text-sm leading-relaxed">
             {labels.text}{' '}
             <Link href="/privacidade" className="text-blue-700 underline underline-offset-2">
               {labels.learnMore}

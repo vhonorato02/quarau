@@ -20,14 +20,24 @@ export function generateStaticParams() {
   return []
 }
 
-export async function generateMetadata({ params }: PageProps<'/[locale]/atuacao/[slug]'>): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/atuacao/[slug]'>): Promise<Metadata> {
   const { locale, slug } = await params
   const [s, settings] = await Promise.all([
     getDocBySlug('services', slug, locale as Locale).catch(() => null),
     getGlobal('site-settings', locale as Locale).catch(() => null),
   ])
   if (!s) return {}
-  return buildMetadata({ title: s.title, description: s.summary, path: docPath('services', slug), meta: s.meta, image: s.coverImage, locale: locale as Locale, settings })
+  return buildMetadata({
+    title: s.title,
+    description: s.summary,
+    path: docPath('services', slug),
+    meta: s.meta,
+    image: s.coverImage,
+    locale: locale as Locale,
+    settings,
+  })
 }
 
 export default async function ServicePage({ params }: PageProps<'/[locale]/atuacao/[slug]'>) {
@@ -38,16 +48,20 @@ export default async function ServicePage({ params }: PageProps<'/[locale]/atuac
     await applyCmsRedirect(`/atuacao/${slug}`)
     notFound()
   }
-  const projects = (await listDocs('projects', { locale: locale as Locale, sort: '-startYear', depth: 1 })).filter((p) =>
-    (p.services ?? []).some((s) => (typeof s === 'object' ? s.id : s) === service.id),
-  )
+  const projects = (
+    await listDocs('projects', { locale: locale as Locale, sort: '-startYear', depth: 1 })
+  ).filter((p) => (p.services ?? []).some((s) => (typeof s === 'object' ? s.id : s) === service.id))
   return (
     <>
       <PageHeader
         eyebrow="Área de atuação"
         title={service.title}
         lead={service.summary}
-        crumbs={[{ label: 'Início', href: '/' }, { label: 'Atuação', href: '/atuacao' }, { label: service.title }]}
+        crumbs={[
+          { label: 'Início', href: '/' },
+          { label: 'Atuação', href: '/atuacao' },
+          { label: service.title },
+        ]}
       >
         <ServiceIcon name={service.icon} className="size-14 text-blue-700" />
       </PageHeader>
@@ -59,11 +73,14 @@ export default async function ServicePage({ params }: PageProps<'/[locale]/atuac
             </div>
             {service.deliverables?.length ? (
               <aside data-reveal className="lg:col-span-4 lg:col-start-9">
-                <h2 className="mb-6 text-h4 font-semibold">O que entregamos</h2>
-                <ul className="flex flex-col divide-y divide-line border-y border-line">
+                <h2 className="text-h4 mb-6 font-semibold">O que entregamos</h2>
+                <ul className="divide-line border-line flex flex-col divide-y border-y">
                   {service.deliverables.map((d, i) => (
                     <li key={d.id ?? i} className="flex gap-4 py-4">
-                      <span aria-hidden="true" className="mt-2 size-2 shrink-0 rounded-full bg-brand-green" />
+                      <span
+                        aria-hidden="true"
+                        className="bg-brand-green mt-2 size-2 shrink-0 rounded-full"
+                      />
                       {d.item}
                     </li>
                   ))}
@@ -73,11 +90,25 @@ export default async function ServicePage({ params }: PageProps<'/[locale]/atuac
           </Container>
         </Section>
       ) : null}
-      {service.layout?.length ? <RenderBlocks blocks={service.layout as NonNullable<Page['layout']>} locale={locale as Locale} /> : null}
+      {service.layout?.length ? (
+        <RenderBlocks
+          blocks={service.layout as NonNullable<Page['layout']>}
+          locale={locale as Locale}
+        />
+      ) : null}
       {projects.length ? (
         <ProjectsBlock
           locale={locale as Locale}
-          block={{ blockType: 'projects', mode: 'selected', selected: projects, limit: 6, heading: 'Projetos nesta área', eyebrow: 'Cases', showAllLink: true, tone: 'default' }}
+          block={{
+            blockType: 'projects',
+            mode: 'selected',
+            selected: projects,
+            limit: 6,
+            heading: 'Projetos nesta área',
+            eyebrow: 'Cases',
+            showAllLink: true,
+            tone: 'default',
+          }}
         />
       ) : null}
       <JsonLd

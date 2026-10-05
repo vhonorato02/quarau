@@ -10,8 +10,17 @@ import { SectionHeader, toneToSection } from './SectionHeader'
 
 const waHref = (n: string) => `https://wa.me/55${n.replace(/\D/g, '')}`
 
-export async function ContactFormBlock({ block, locale }: { block: ContactFormBlockType; locale: Locale }) {
-  const [contact, t] = await Promise.all([getGlobal('contact', locale).catch(() => null), getTranslations('contact')])
+export async function ContactFormBlock({
+  block,
+  locale,
+}: {
+  block: ContactFormBlockType
+  locale: Locale
+}) {
+  const [contact, t] = await Promise.all([
+    getGlobal('contact', locale).catch(() => null),
+    getTranslations('contact'),
+  ])
   const subjects = contact?.formSubjects?.map((s) => s.label).filter(Boolean) ?? []
   const email = contact?.email ?? 'contato@quarau.com.br'
 
@@ -19,10 +28,15 @@ export async function ContactFormBlock({ block, locale }: { block: ContactFormBl
     <Section tone={toneToSection(block.tone)} id={block.anchor ?? 'contato'}>
       <Container className="grid gap-14 lg:grid-cols-12">
         <div className="flex flex-col gap-8 lg:col-span-5">
-          <SectionHeader eyebrow={block.eyebrow} heading={block.heading} intro={block.intro} className="mb-0 lg:mb-0" />
-          <dl className="grid gap-6 border-t border-line pt-8">
+          <SectionHeader
+            eyebrow={block.eyebrow}
+            heading={block.heading}
+            intro={block.intro}
+            className="mb-0 lg:mb-0"
+          />
+          <dl className="border-line grid gap-6 border-t pt-8">
             <div>
-              <dt className="text-sm font-semibold text-ink-muted">E-mail</dt>
+              <dt className="text-ink-muted text-sm font-semibold">E-mail</dt>
               <dd className="text-h4 font-medium">
                 <a href={`mailto:${email}`} className="hover:text-blue-700 hover:underline">
                   {email}
@@ -31,7 +45,7 @@ export async function ContactFormBlock({ block, locale }: { block: ContactFormBl
             </div>
             {contact?.phones?.length ? (
               <div>
-                <dt className="text-sm font-semibold text-ink-muted">Telefone / WhatsApp</dt>
+                <dt className="text-ink-muted text-sm font-semibold">Telefone / WhatsApp</dt>
                 {contact.phones.map((p) => (
                   <dd key={p.number} className="text-h4 font-medium">
                     <a
@@ -46,7 +60,7 @@ export async function ContactFormBlock({ block, locale }: { block: ContactFormBl
             ) : null}
             {contact?.address?.city ? (
               <div>
-                <dt className="text-sm font-semibold text-ink-muted">Localização</dt>
+                <dt className="text-ink-muted text-sm font-semibold">Localização</dt>
                 <dd className="text-h4 font-medium">
                   {contact.address.city} — {contact.address.state}
                 </dd>

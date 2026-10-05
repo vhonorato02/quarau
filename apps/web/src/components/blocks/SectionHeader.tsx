@@ -30,17 +30,26 @@ export function SectionHeader({
     >
       <div className={cn('flex max-w-3xl flex-col gap-5', align === 'center' && 'items-center')}>
         {eyebrow ? (
-          <Eyebrow data-reveal className="text-current opacity-80">
+          <Eyebrow data-reveal className="text-current">
             {eyebrow}
           </Eyebrow>
         ) : null}
         {heading ? (
-          <Heading as={as} size="h2" data-reveal style={{ '--reveal-delay': 80 } as React.CSSProperties}>
+          <Heading
+            as={as}
+            size="h2"
+            data-reveal
+            style={{ '--reveal-delay': 80 } as React.CSSProperties}
+          >
             {heading}
           </Heading>
         ) : null}
         {intro ? (
-          <p data-reveal className="text-lead text-pretty opacity-80" style={{ '--reveal-delay': 160 } as React.CSSProperties}>
+          <p
+            data-reveal
+            className="text-lead text-pretty opacity-90"
+            style={{ '--reveal-delay': 160 } as React.CSSProperties}
+          >
             {intro}
           </p>
         ) : null}
@@ -51,6 +60,7 @@ export function SectionHeader({
 }
 
 export const toneToSection = (tone?: string | null) =>
-  (tone === 'alt' || tone === 'brand' || tone === 'dark' ? tone : 'default') as 'default' | 'alt' | 'brand' | 'dark'
+  (tone === 'alt' || tone === 'brand' || tone === 'dark' ? tone : 'default') as
+    'default' | 'alt' | 'brand' | 'dark'
 
 export const isDarkTone = (tone?: string | null) => tone === 'brand' || tone === 'dark'

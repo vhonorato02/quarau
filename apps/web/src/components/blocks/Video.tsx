@@ -15,7 +15,8 @@ export function toEmbedUrl(url: string): string | null {
 }
 
 export function VideoBlock({ block }: { block: VideoBlockType }) {
-  const src = block.source === 'embed' ? (block.url ? toEmbedUrl(block.url) : null) : mediaUrl(block.file)
+  const src =
+    block.source === 'embed' ? (block.url ? toEmbedUrl(block.url) : null) : mediaUrl(block.file)
   if (!src) return null
   return (
     <Section tone={toneToSection(block.tone)} id={block.anchor ?? undefined}>

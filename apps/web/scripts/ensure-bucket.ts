@@ -4,7 +4,13 @@
  */
 import { CreateBucketCommand, HeadBucketCommand, S3Client } from '@aws-sdk/client-s3'
 
-const { S3_ENDPOINT, S3_BUCKET = 'quarau-media', S3_REGION = 'us-east-1', S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY } = process.env
+const {
+  S3_ENDPOINT,
+  S3_BUCKET = 'quarau-media',
+  S3_REGION = 'us-east-1',
+  S3_ACCESS_KEY_ID,
+  S3_SECRET_ACCESS_KEY,
+} = process.env
 
 async function main() {
   if (!S3_ENDPOINT || !S3_ACCESS_KEY_ID || !S3_SECRET_ACCESS_KEY) {

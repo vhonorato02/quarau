@@ -24,7 +24,9 @@ export function generateStaticParams() {
   return []
 }
 
-export async function generateMetadata({ params }: PageProps<'/[locale]/projetos/[slug]'>): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/projetos/[slug]'>): Promise<Metadata> {
   const { locale, slug } = await params
   const [project, settings] = await Promise.all([
     getDocBySlug('projects', slug, locale as Locale).catch(() => null),
@@ -45,7 +47,7 @@ export async function generateMetadata({ params }: PageProps<'/[locale]/projetos
 }
 
 const accents = {
-  blue: 'bg-brand-blue text-white',
+  blue: 'bg-blue-700 text-white',
   green: 'bg-brand-green text-ink',
   dark: 'bg-blue-950 text-white',
 } as const
@@ -83,7 +85,10 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
         ? services.map((s, i) => (
             <span key={s.id}>
               {i > 0 ? ' · ' : ''}
-              <Link href={docPath('services', s.slug)} className="underline-offset-4 hover:underline">
+              <Link
+                href={docPath('services', s.slug)}
+                className="underline-offset-4 hover:underline"
+              >
                 {s.title}
               </Link>
             </span>
@@ -95,24 +100,49 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
   return (
     <article>
       {/* Hero */}
-      <header data-hero-dark className="on-dark relative isolate flex min-h-[88svh] flex-col justify-end overflow-hidden bg-blue-950 text-white">
+      <header
+        data-hero-dark
+        className="on-dark relative isolate flex min-h-[88svh] flex-col justify-end overflow-hidden bg-blue-950 text-white"
+      >
         <div className="absolute inset-0 -z-10">
-          <Media media={project.coverImage} fill priority sizes="100vw" imgClassName="motion-safe:animate-[hero-zoom_14s_var(--ease-brand)_both]" />
+          <Media
+            media={project.coverImage}
+            fill
+            priority
+            sizes="100vw"
+            imgClassName="motion-safe:animate-[hero-zoom_14s_var(--ease-brand)_both]"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-blue-950 via-blue-950/55 to-blue-950/10" />
         </div>
         <Container className="flex flex-col gap-8 pt-[calc(var(--header-h)+3rem)] pb-[clamp(3rem,6vw,5.5rem)]">
           <Breadcrumbs
-            items={[{ label: 'Início', href: '/' }, { label: t('title'), href: '/projetos' }, { label: project.title }]}
+            items={[
+              { label: 'Início', href: '/' },
+              { label: t('title'), href: '/projetos' },
+              { label: project.title },
+            ]}
             className="text-white/80"
             renderLink={(c, children) => <Link href={c.href ?? '/'}>{children}</Link>}
           />
-          <h1 className="max-w-6xl text-h1 font-semibold text-balance motion-safe:animate-[fade-up_1s_var(--ease-brand)_both]">
+          <h1 className="text-h1 max-w-6xl font-semibold text-balance motion-safe:animate-[fade-up_1s_var(--ease-brand)_both]">
             {project.title}
           </h1>
           <div className="flex flex-wrap gap-3 text-sm font-medium motion-safe:animate-[fade-up_1s_var(--ease-brand)_200ms_both]">
-            {project.client ? <span className="rounded-full border border-white/30 px-4 py-2 backdrop-blur">{project.client}</span> : null}
-            {period ? <span className="rounded-full border border-white/30 px-4 py-2 tabular-nums backdrop-blur">{period}</span> : null}
-            {project.location ? <span className="rounded-full border border-white/30 px-4 py-2 backdrop-blur">{project.location}</span> : null}
+            {project.client ? (
+              <span className="rounded-full border border-white/30 px-4 py-2 backdrop-blur">
+                {project.client}
+              </span>
+            ) : null}
+            {period ? (
+              <span className="rounded-full border border-white/30 px-4 py-2 tabular-nums backdrop-blur">
+                {period}
+              </span>
+            ) : null}
+            {project.location ? (
+              <span className="rounded-full border border-white/30 px-4 py-2 backdrop-blur">
+                {project.location}
+              </span>
+            ) : null}
           </div>
         </Container>
       </header>
@@ -127,10 +157,15 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
               </p>
             ) : null}
           </div>
-          <dl data-reveal className="grid content-start gap-6 border-t border-line pt-6 sm:grid-cols-2 lg:col-span-4 lg:col-start-9 lg:grid-cols-1">
+          <dl
+            data-reveal
+            className="border-line grid content-start gap-6 border-t pt-6 sm:grid-cols-2 lg:col-span-4 lg:col-start-9 lg:grid-cols-1"
+          >
             {facts.map(([k, v]) => (
               <div key={k} className="flex flex-col gap-1">
-                <dt className="text-eyebrow font-semibold tracking-(--text-eyebrow--letter-spacing) text-ink-muted uppercase">{k}</dt>
+                <dt className="text-eyebrow text-ink-muted font-semibold tracking-(--text-eyebrow--letter-spacing) uppercase">
+                  {k}
+                </dt>
                 <dd className="text-lg font-medium">{v}</dd>
               </div>
             ))}
@@ -142,7 +177,7 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
       {project.highlights?.length ? (
         <section className={cn('on-dark py-[calc(var(--spacing-section)*0.6)]', accent)}>
           <Container>
-            <h2 className="mb-10 text-eyebrow font-semibold tracking-(--text-eyebrow--letter-spacing) uppercase opacity-80">
+            <h2 className="text-eyebrow mb-10 font-semibold tracking-(--text-eyebrow--letter-spacing) uppercase">
               {t('results')}
             </h2>
             <dl className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(14rem,1fr))]">
@@ -189,7 +224,10 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
       ) : null}
 
       {project.chapters?.length ? (
-        <RenderBlocks blocks={project.chapters as NonNullable<Page['layout']>} locale={locale as Locale} />
+        <RenderBlocks
+          blocks={project.chapters as NonNullable<Page['layout']>}
+          locale={locale as Locale}
+        />
       ) : null}
 
       {isMedia(project.video) && project.video.url ? (
@@ -225,7 +263,7 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
               <Heading size="h2" data-reveal>
                 {t('gallery')}
               </Heading>
-              <span className="text-sm text-ink-muted tabular-nums">{gallery.length} fotos</span>
+              <span className="text-ink-muted text-sm tabular-nums">{gallery.length} fotos</span>
             </div>
             <GalleryGrid images={gallery} />
           </Container>
@@ -240,15 +278,19 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
             </Heading>
             <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {project.publications.map((pub, i) => (
-                <li key={pub.id ?? i} data-reveal style={{ '--reveal-delay': i * 80 } as React.CSSProperties}>
+                <li
+                  key={pub.id ?? i}
+                  data-reveal
+                  style={{ '--reveal-delay': i * 80 } as React.CSSProperties}
+                >
                   <a
                     href={pub.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex h-full gap-5 rounded-lg border border-line p-5 transition-colors hover:border-blue-700"
+                    className="group border-line flex h-full gap-5 rounded-lg border p-5 transition-colors hover:border-blue-700"
                   >
                     {isMedia(pub.cover) ? (
-                      <span className="relative block aspect-[3/4] w-24 shrink-0 overflow-hidden rounded-sm bg-surface-sunken shadow-card">
+                      <span className="bg-surface-sunken shadow-card relative block aspect-[3/4] w-24 shrink-0 overflow-hidden rounded-sm">
                         <Media media={pub.cover} fill sizes="96px" />
                       </span>
                     ) : null}
@@ -256,8 +298,19 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
                       <span className="text-lg font-semibold text-balance">{pub.label}</span>
                       <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700">
                         Ler publicação
-                        <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                          <path d="M7 17 17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
+                        <svg
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={1.8}
+                        >
+                          <path
+                            d="M7 17 17 7M9 7h8v8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
                         </svg>
                         <span className="sr-only">(abre em nova aba)</span>
                       </span>
@@ -272,16 +325,30 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
 
       {/* Next project */}
       {next && next.id !== project.id ? (
-        <Link href={docPath('projects', next.slug)} className="group on-dark relative isolate block overflow-hidden bg-ink text-white">
+        <Link
+          href={docPath('projects', next.slug)}
+          className="group on-dark bg-ink relative isolate block overflow-hidden text-white"
+        >
           <div className="absolute inset-0 -z-10 opacity-40 transition-[opacity,transform] duration-1000 ease-(--ease-brand) group-hover:scale-105 group-hover:opacity-60">
             <Media media={next.coverImage} fill sizes="100vw" />
           </div>
           <Container className="flex min-h-[60svh] flex-col justify-end gap-6 py-20">
-            <span className="text-eyebrow font-semibold tracking-(--text-eyebrow--letter-spacing) uppercase opacity-80">Próximo projeto</span>
+            <span className="text-eyebrow font-semibold tracking-(--text-eyebrow--letter-spacing) uppercase opacity-80">
+              Próximo projeto
+            </span>
             <span className="flex items-end justify-between gap-8">
-              <span className="max-w-5xl text-h1 font-semibold text-balance">{next.title}</span>
-              <span aria-hidden="true" className="hidden size-20 shrink-0 place-items-center rounded-full bg-white text-ink transition-transform duration-500 group-hover:rotate-[-45deg] md:grid">
-                <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth={1.8}>
+              <span className="text-h1 max-w-5xl font-semibold text-balance">{next.title}</span>
+              <span
+                aria-hidden="true"
+                className="text-ink hidden size-20 shrink-0 place-items-center rounded-full bg-white transition-transform duration-500 group-hover:rotate-[-45deg] md:grid"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="size-7"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                >
                   <path d="M4 12h15M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
@@ -303,9 +370,13 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
             name: project.title,
             description: project.summary ?? undefined,
             url: absoluteUrl(docPath('projects', slug)),
-            image: mediaUrl(project.coverImage, 'og') ? absoluteUrl(mediaUrl(project.coverImage, 'og')!) : undefined,
+            image: mediaUrl(project.coverImage, 'og')
+              ? absoluteUrl(mediaUrl(project.coverImage, 'og')!)
+              : undefined,
             dateCreated: project.startYear ? String(project.startYear) : undefined,
-            locationCreated: project.location ? { '@type': 'Place', name: project.location } : undefined,
+            locationCreated: project.location
+              ? { '@type': 'Place', name: project.location }
+              : undefined,
             creator: { '@id': `${absoluteUrl('/')}#organization` },
             sponsor: partners.map((p) => ({ '@type': 'Organization', name: p.fullName ?? p.name })),
           },

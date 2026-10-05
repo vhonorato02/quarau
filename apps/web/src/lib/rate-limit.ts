@@ -8,7 +8,9 @@ const memory = new Map<string, { count: number; reset: number }>()
 function redis(): Redis | null {
   if (client !== undefined) return client
   const url = env().REDIS_URL
-  client = url ? new Redis(url, { maxRetriesPerRequest: 1, enableOfflineQueue: false, lazyConnect: false }) : null
+  client = url
+    ? new Redis(url, { maxRetriesPerRequest: 1, enableOfflineQueue: false, lazyConnect: false })
+    : null
   client?.on('error', () => {
     /* fall back to memory on connection errors */
   })
@@ -19,7 +21,11 @@ function redis(): Redis | null {
  * Fixed-window rate limiter backed by Valkey (shared across containers) with an
  * in-memory fallback so the site keeps working if Valkey is down.
  */
-export async function rateLimit(key: string, limit: number, windowSec: number): Promise<{ ok: boolean; remaining: number }> {
+export async function rateLimit(
+  key: string,
+  limit: number,
+  windowSec: number,
+): Promise<{ ok: boolean; remaining: number }> {
   const k = `rl:${key}`
   const r = redis()
   if (r && r.status === 'ready') {

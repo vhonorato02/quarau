@@ -17,14 +17,24 @@ export function generateStaticParams() {
   return []
 }
 
-export async function generateMetadata({ params }: PageProps<'/[locale]/trabalhe-conosco/[slug]'>): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/trabalhe-conosco/[slug]'>): Promise<Metadata> {
   const { locale, slug } = await params
   const [j, settings] = await Promise.all([
     getDocBySlug('jobs', slug, locale as Locale).catch(() => null),
     getGlobal('site-settings', locale as Locale).catch(() => null),
   ])
   if (!j) return {}
-  return buildMetadata({ title: j.title, description: j.summary, path: docPath('jobs', slug), meta: j.meta, locale: locale as Locale, settings, noindex: j.opening === 'closed' })
+  return buildMetadata({
+    title: j.title,
+    description: j.summary,
+    path: docPath('jobs', slug),
+    meta: j.meta,
+    locale: locale as Locale,
+    settings,
+    noindex: j.opening === 'closed',
+  })
 }
 
 export default async function JobPage({ params }: PageProps<'/[locale]/trabalhe-conosco/[slug]'>) {
@@ -40,7 +50,11 @@ export default async function JobPage({ params }: PageProps<'/[locale]/trabalhe-
         eyebrow={open ? t('open') : t('closed')}
         title={j.title}
         lead={j.summary}
-        crumbs={[{ label: 'Início', href: '/' }, { label: t('title'), href: '/trabalhe-conosco' }, { label: j.title }]}
+        crumbs={[
+          { label: 'Início', href: '/' },
+          { label: t('title'), href: '/trabalhe-conosco' },
+          { label: j.title },
+        ]}
       >
         <div className="flex flex-wrap gap-2">
           {j.location ? <Badge>{j.location}</Badge> : null}
@@ -73,9 +87,26 @@ export default async function JobPage({ params }: PageProps<'/[locale]/trabalhe-
             description: lexicalToText(j.description),
             datePosted: j.publishedAt ?? j.createdAt,
             validThrough: j.closingDate ?? undefined,
-            hiringOrganization: { '@type': 'Organization', name: 'Quarau', sameAs: process.env.SITE_URL },
-            jobLocation: { '@type': 'Place', address: { '@type': 'PostalAddress', addressLocality: j.location ?? 'São José dos Campos', addressRegion: 'SP', addressCountry: 'BR' } },
-            employmentType: { clt: 'FULL_TIME', pj: 'CONTRACTOR', estagio: 'INTERN', temporario: 'TEMPORARY' }[j.type ?? 'pj'],
+            hiringOrganization: {
+              '@type': 'Organization',
+              name: 'Quarau',
+              sameAs: process.env.SITE_URL,
+            },
+            jobLocation: {
+              '@type': 'Place',
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: j.location ?? 'São José dos Campos',
+                addressRegion: 'SP',
+                addressCountry: 'BR',
+              },
+            },
+            employmentType: {
+              clt: 'FULL_TIME',
+              pj: 'CONTRACTOR',
+              estagio: 'INTERN',
+              temporario: 'TEMPORARY',
+            }[j.type ?? 'pj'],
           }}
         />
       ) : null}

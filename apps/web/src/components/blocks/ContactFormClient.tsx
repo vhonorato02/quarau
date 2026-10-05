@@ -42,7 +42,9 @@ export function ContactFormClient({
   turnstileSiteKey: string | null
   labels: Labels
 }) {
-  const [state, action, pending] = useActionState<ContactState, FormData>(submitContact, { status: 'idle' })
+  const [state, action, pending] = useActionState<ContactState, FormData>(submitContact, {
+    status: 'idle',
+  })
   const pathname = usePathname()
   const statusRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -54,16 +56,22 @@ export function ContactFormClient({
     if (state.status !== 'idle') statusRef.current?.focus()
   }, [state])
 
-  const [consentBefore, consentLink = '', consentAfter = ''] = labels.consent.split(/<link>|<\/link>/)
+  const [consentBefore, consentLink = '', consentAfter = ''] =
+    labels.consent.split(/<link>|<\/link>/)
 
   return (
     <form ref={formRef} action={action} noValidate className="grid gap-6 sm:grid-cols-2">
       <div ref={statusRef} tabIndex={-1} aria-live="polite" className="outline-none sm:col-span-2">
         {state.status === 'success' ? (
-          <p className="rounded-md border border-success/30 bg-green-50 p-4 font-medium text-green-800">{labels.success}</p>
+          <p className="border-success/30 rounded-md border bg-green-50 p-4 font-medium text-green-800">
+            {labels.success}
+          </p>
         ) : null}
         {state.status === 'error' ? (
-          <p role="alert" className="rounded-md border border-danger/30 bg-red-50 p-4 font-medium text-danger">
+          <p
+            role="alert"
+            className="border-danger/30 text-danger rounded-md border bg-red-50 p-4 font-medium"
+          >
             {state.code === 'invalid'
               ? labels.invalid
               : state.code === 'rateLimited'
@@ -79,10 +87,21 @@ export function ContactFormClient({
         {(p) => <Input {...p} name="name" autoComplete="name" maxLength={120} />}
       </Field>
       <Field id="email" label={labels.email} required error={msg(errors.email)}>
-        {(p) => <Input {...p} name="email" type="email" autoComplete="email" inputMode="email" maxLength={200} />}
+        {(p) => (
+          <Input
+            {...p}
+            name="email"
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            maxLength={200}
+          />
+        )}
       </Field>
       <Field id="phone" label={labels.phone}>
-        {(p) => <Input {...p} name="phone" type="tel" autoComplete="tel" inputMode="tel" maxLength={40} />}
+        {(p) => (
+          <Input {...p} name="phone" type="tel" autoComplete="tel" inputMode="tel" maxLength={40} />
+        )}
       </Field>
       <Field id="organization" label={labels.organization}>
         {(p) => <Input {...p} name="organization" autoComplete="organization" maxLength={160} />}
@@ -103,7 +122,13 @@ export function ContactFormClient({
           )
         }
       </Field>
-      <Field id="message" label={labels.message} required error={msg(errors.message)} className="sm:col-span-2">
+      <Field
+        id="message"
+        label={labels.message}
+        required
+        error={msg(errors.message)}
+        className="sm:col-span-2"
+      >
         {(p) => <Textarea {...p} name="message" rows={6} maxLength={5000} />}
       </Field>
 
@@ -133,7 +158,7 @@ export function ContactFormClient({
           }
         />
         {errors.consent ? (
-          <p id="consent-error" className="mt-2 text-sm font-medium text-danger">
+          <p id="consent-error" className="text-danger mt-2 text-sm font-medium">
             {labels.consentRequired}
           </p>
         ) : null}
@@ -142,7 +167,11 @@ export function ContactFormClient({
       {turnstileSiteKey ? (
         <>
           <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
-          <div className="cf-turnstile sm:col-span-2" data-sitekey={turnstileSiteKey} data-language="pt-br" />
+          <div
+            className="cf-turnstile sm:col-span-2"
+            data-sitekey={turnstileSiteKey}
+            data-language="pt-br"
+          />
         </>
       ) : null}
 

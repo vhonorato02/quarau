@@ -31,7 +31,11 @@ export function TestimonialsBlock({ block }: { block: TestimonialsBlockType }) {
         <SectionHeader eyebrow={block.eyebrow} heading={block.heading} />
         <div className="grid gap-16 lg:grid-cols-2">
           {items.map((it, i) => (
-            <div key={it.id ?? i} data-reveal style={{ '--reveal-delay': i * 100 } as React.CSSProperties}>
+            <div
+              key={it.id ?? i}
+              data-reveal
+              style={{ '--reveal-delay': i * 100 } as React.CSSProperties}
+            >
               <Quote quote={it.quote} author={it.author ?? undefined} role={it.role ?? undefined} />
             </div>
           ))}
@@ -41,17 +45,25 @@ export function TestimonialsBlock({ block }: { block: TestimonialsBlockType }) {
   )
 }
 
-export async function PartnersBlock({ block, locale }: { block: PartnersBlockType; locale: Locale }) {
+export async function PartnersBlock({
+  block,
+  locale,
+}: {
+  block: PartnersBlockType
+  locale: Locale
+}) {
   const selected = (block.partners ?? []).filter((p): p is Partner => typeof p === 'object')
   const partners = selected.length
     ? selected
-    : (await listDocs('partners', { locale, sort: 'order', depth: 1 })).filter((p) => p.showOnHome !== false)
+    : (await listDocs('partners', { locale, sort: 'order', depth: 1 })).filter(
+        (p) => p.showOnHome !== false,
+      )
   if (!partners.length) return null
   return (
     <Section tone={toneToSection(block.tone)} id={block.anchor ?? undefined} spacing="tight">
       <Container>
         <SectionHeader eyebrow={block.eyebrow} heading={block.heading} />
-        <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3 lg:grid-cols-6">
+        <ul className="border-line bg-line grid grid-cols-2 gap-px overflow-hidden rounded-lg border sm:grid-cols-3 lg:grid-cols-6">
           {partners.map((p, i) => {
             const logo = isMedia(p.logo) ? p.logo : null
             const content = logo ? (
@@ -72,11 +84,16 @@ export async function PartnersBlock({ block, locale }: { block: PartnersBlockTyp
                 key={p.id}
                 data-reveal="fade"
                 style={{ '--reveal-delay': i * 60 } as React.CSSProperties}
-                className="group grid aspect-[3/2] place-items-center bg-surface p-6"
+                className="group bg-surface grid aspect-[3/2] place-items-center p-6"
                 title={p.fullName ?? p.name}
               >
                 {p.url ? (
-                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="grid w-full place-items-center">
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="grid w-full place-items-center"
+                  >
                     {content}
                     <span className="sr-only">{p.fullName ?? p.name} (abre em nova aba)</span>
                   </a>
@@ -111,7 +128,9 @@ export function OdsBlock({ block }: { block: OdsBlockType }) {
 
 export async function TeamBlock({ block, locale }: { block: TeamBlockType; locale: Locale }) {
   const selected = (block.members ?? []).filter((m): m is Team => typeof m === 'object')
-  const members = selected.length ? selected : await listDocs('team', { locale, sort: 'order', depth: 1 })
+  const members = selected.length
+    ? selected
+    : await listDocs('team', { locale, sort: 'order', depth: 1 })
   if (!members.length) return null
   return (
     <Section tone={toneToSection(block.tone)} id={block.anchor ?? undefined}>
@@ -119,9 +138,16 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
         <SectionHeader eyebrow={block.eyebrow} heading={block.heading} />
         <ul className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
           {members.map((m, i) => (
-            <li key={m.id} data-reveal style={{ '--reveal-delay': (i % 4) * 80 } as React.CSSProperties} className="flex flex-col gap-4">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-surface-sunken">
-                {m.photo ? <Media media={m.photo} fill sizes="(min-width: 1024px) 25vw, 50vw" alt={m.name} /> : null}
+            <li
+              key={m.id}
+              data-reveal
+              style={{ '--reveal-delay': (i % 4) * 80 } as React.CSSProperties}
+              className="flex flex-col gap-4"
+            >
+              <div className="bg-surface-sunken relative aspect-[4/5] overflow-hidden rounded-lg">
+                {m.photo ? (
+                  <Media media={m.photo} fill sizes="(min-width: 1024px) 25vw, 50vw" alt={m.name} />
+                ) : null}
               </div>
               <div>
                 <h3 className="text-h4 font-semibold">{m.name}</h3>
@@ -130,12 +156,22 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
               {m.bio ? <p className="text-sm text-pretty opacity-80">{m.bio}</p> : null}
               <div className="flex gap-4 text-sm font-semibold">
                 {m.linkedin ? (
-                  <a href={m.linkedin} target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:underline">
+                  <a
+                    href={m.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline-offset-4 hover:underline"
+                  >
                     LinkedIn<span className="sr-only"> de {m.name} (abre em nova aba)</span>
                   </a>
                 ) : null}
                 {m.lattes ? (
-                  <a href={m.lattes} target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:underline">
+                  <a
+                    href={m.lattes}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline-offset-4 hover:underline"
+                  >
                     Lattes<span className="sr-only"> de {m.name} (abre em nova aba)</span>
                   </a>
                 ) : null}
@@ -148,17 +184,26 @@ export async function TeamBlock({ block, locale }: { block: TeamBlockType; local
   )
 }
 
-const formatBytes = (n?: number | null) => (n ? `${(n / 1024 / 1024).toFixed(n > 1024 * 1024 ? 1 : 2)} MB` : '')
+const formatBytes = (n?: number | null) =>
+  n ? `${(n / 1024 / 1024).toFixed(n > 1024 * 1024 ? 1 : 2)} MB` : ''
 
-export async function DownloadsBlock({ block, locale }: { block: DownloadsBlockType; locale: Locale }) {
+export async function DownloadsBlock({
+  block,
+  locale,
+}: {
+  block: DownloadsBlockType
+  locale: Locale
+}) {
   const selected = (block.documents ?? []).filter((d): d is DocumentDoc => typeof d === 'object')
-  const docs = selected.length ? selected : await listDocs('documents', { locale, sort: 'order', depth: 0 })
+  const docs = selected.length
+    ? selected
+    : await listDocs('documents', { locale, sort: 'order', depth: 0 })
   if (!docs.length) return null
   return (
     <Section tone={toneToSection(block.tone)} id={block.anchor ?? undefined}>
       <Container>
         <SectionHeader eyebrow={block.eyebrow} heading={block.heading} />
-        <ul className="divide-y divide-line border-y border-line">
+        <ul className="divide-line border-line divide-y border-y">
           {docs.map((d) => (
             <li key={d.id}>
               <a
@@ -170,11 +215,22 @@ export async function DownloadsBlock({ block, locale }: { block: DownloadsBlockT
                   <span className="text-h4 font-semibold">{d.title}</span>
                   {d.description ? <span className="text-ink-muted">{d.description}</span> : null}
                 </span>
-                <span className="flex shrink-0 items-center gap-3 text-sm text-ink-muted">
+                <span className="text-ink-muted flex shrink-0 items-center gap-3 text-sm">
                   <span className="uppercase">{d.filename?.split('.').pop()}</span>
                   <span>{formatBytes(d.filesize)}</span>
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                    <path d="M12 4v12m0 0-5-5m5 5 5-5M5 20h14" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    className="size-5 transition-transform group-hover:translate-y-0.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.8}
+                  >
+                    <path
+                      d="M12 4v12m0 0-5-5m5 5 5-5M5 20h14"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </span>
               </a>
@@ -229,7 +285,7 @@ export function CtaBlock({ block }: { block: CtaBlockType }) {
             {block.heading}
           </Heading>
           {block.text ? (
-            <p data-reveal className="max-w-2xl text-lead text-pretty opacity-85">
+            <p data-reveal className="text-lead max-w-2xl text-pretty opacity-85">
               {block.text}
             </p>
           ) : null}

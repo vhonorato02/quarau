@@ -9,7 +9,11 @@ import { SectionHeader, toneToSection } from './SectionHeader'
 export function StatsBlock({ block }: { block: StatsBlockType }) {
   const items = block.items ?? []
   return (
-    <Section tone={toneToSection(block.tone)} id={block.anchor ?? undefined} className="overflow-hidden">
+    <Section
+      tone={toneToSection(block.tone)}
+      id={block.anchor ?? undefined}
+      className="overflow-hidden"
+    >
       <Container>
         <SectionHeader eyebrow={block.eyebrow} heading={block.heading} />
         <dl className="grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(14rem,1fr))]">
@@ -24,7 +28,7 @@ export function StatsBlock({ block }: { block: StatsBlockType }) {
               <dd className="order-1 text-[clamp(3rem,2rem+4vw,6rem)] leading-none font-semibold tracking-[-0.03em] tabular-nums">
                 <Counter value={it.value} />
               </dd>
-              {it.context ? <dd className="order-3 text-sm opacity-75">{it.context}</dd> : null}
+              {it.context ? <dd className="order-3 text-sm opacity-90">{it.context}</dd> : null}
             </div>
           ))}
         </dl>

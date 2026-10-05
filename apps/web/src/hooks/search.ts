@@ -20,7 +20,22 @@ export function extractText(doc: AnyDoc): string {
   const visit = (value: unknown, key?: string) => {
     if (!value) return
     if (typeof value === 'string') {
-      if (key && ['blockType', 'id', 'slug', 'url', 'tone', 'variant', 'layout', 'mode', '_status', 'blockName'].includes(key)) return
+      if (
+        key &&
+        [
+          'blockType',
+          'id',
+          'slug',
+          'url',
+          'tone',
+          'variant',
+          'layout',
+          'mode',
+          '_status',
+          'blockName',
+        ].includes(key)
+      )
+        return
       if (/^[a-f0-9-]{20,}$/i.test(value)) return
       parts.push(value)
       return
@@ -31,28 +46,45 @@ export function extractText(doc: AnyDoc): string {
       if ('root' in obj) return void parts.push(lexicalToText(obj))
       if ('mimeType' in obj || 'filename' in obj) return // populated uploads
       for (const [k, v] of Object.entries(obj)) {
-        if (['meta', 'createdBy', 'updatedAt', 'createdAt', 'publishedAt', 'gallery', 'related'].includes(k)) continue
+        if (
+          [
+            'meta',
+            'createdBy',
+            'updatedAt',
+            'createdAt',
+            'publishedAt',
+            'gallery',
+            'related',
+          ].includes(k)
+        )
+          continue
         visit(v, k)
       }
     }
   }
   for (const [k, v] of Object.entries(doc)) {
-    if (['title', 'slug', 'id', 'meta', '_status', 'createdBy', 'updatedAt', 'createdAt'].includes(k)) continue
+    if (
+      ['title', 'slug', 'id', 'meta', '_status', 'createdBy', 'updatedAt', 'createdAt'].includes(k)
+    )
+      continue
     visit(v, k)
   }
-  return parts.join('\n').replace(/\n{2,}/g, '\n').slice(0, 20_000)
+  return parts
+    .join('\n')
+    .replace(/\n{2,}/g, '\n')
+    .slice(0, 20_000)
 }
 
 function imageUrl(doc: AnyDoc): string | null {
   const candidate = (doc.heroImage ?? doc.coverImage ?? (doc.meta as AnyDoc | undefined)?.image) as
-    | { sizes?: { card?: { url?: string } }; url?: string }
-    | undefined
+    { sizes?: { card?: { url?: string } }; url?: string } | undefined
   return candidate?.sizes?.card?.url ?? candidate?.url ?? null
 }
 
 export function toSearchDoc(collection: Indexable, doc: AnyDoc, locale = 'pt'): SearchDoc {
   const body = extractText(doc)
-  const summary = (doc.summary ?? doc.excerpt ?? (doc.meta as AnyDoc | undefined)?.description) as string | undefined
+  const summary = (doc.summary ?? doc.excerpt ?? (doc.meta as AnyDoc | undefined)?.description) as
+    string | undefined
   return {
     id: `${collection}_${doc.id}_${locale}`,
     collection,
@@ -86,7 +118,10 @@ export const syncSearch =
         await deleteDocuments([`${collection}_${doc.id}_${locale}`])
       }
     } catch (err) {
-      req.payload.logger.warn({ err, collection, id: doc.id }, 'search sync failed (index may be stale)')
+      req.payload.logger.warn(
+        { err, collection, id: doc.id },
+        'search sync failed (index may be stale)',
+      )
     }
     return doc
   }

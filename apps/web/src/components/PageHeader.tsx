@@ -19,7 +19,12 @@ export function PageHeader({
   className?: string
 }) {
   return (
-    <section className={cn('bg-surface pt-[calc(var(--header-h)+clamp(2.5rem,7vw,6rem))] pb-[clamp(2.5rem,5vw,4.5rem)]', className)}>
+    <section
+      className={cn(
+        'bg-surface pt-[calc(var(--header-h)+clamp(2.5rem,7vw,6rem))] pb-[clamp(2.5rem,5vw,4.5rem)]',
+        className,
+      )}
+    >
       <Container className="flex flex-col gap-8">
         {crumbs ? (
           <Breadcrumbs
@@ -29,11 +34,11 @@ export function PageHeader({
           />
         ) : null}
         {eyebrow ? <Eyebrow className="text-blue-700">{eyebrow}</Eyebrow> : null}
-        <h1 className="max-w-5xl text-h1 font-semibold text-balance motion-safe:animate-[fade-up_0.9s_var(--ease-brand)_both]">
+        <h1 className="text-h1 max-w-5xl font-semibold text-balance motion-safe:animate-[fade-up_0.9s_var(--ease-brand)_both]">
           {title}
         </h1>
         {lead ? (
-          <p className="max-w-3xl text-lead text-pretty text-ink-muted motion-safe:animate-[fade-up_1s_var(--ease-brand)_150ms_both]">
+          <p className="text-lead text-ink-muted max-w-3xl text-pretty motion-safe:animate-[fade-up_1s_var(--ease-brand)_150ms_both]">
             {lead}
           </p>
         ) : null}

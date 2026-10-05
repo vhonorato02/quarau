@@ -14,7 +14,7 @@ export function Stat({ value, label, context, className }: StatProps) {
   return (
     <div className={cn('flex flex-col gap-3 border-t border-current/20 pt-6', className)}>
       <dt className="order-2 text-lg leading-snug font-medium text-pretty">{label}</dt>
-      <dd className="order-1 text-h1 font-semibold tabular-nums" data-stat-value={value}>
+      <dd className="text-h1 order-1 font-semibold tabular-nums" data-stat-value={value}>
         {value}
       </dd>
       {context ? <dd className="order-3 text-sm opacity-75">{context}</dd> : null}

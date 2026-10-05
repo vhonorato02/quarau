@@ -7,7 +7,15 @@ import { GalleryBlock } from './Gallery'
 import { HeroBlock } from './Hero'
 import { MapBlock } from './Map'
 import { MediaTextBlock } from './MediaText'
-import { CtaBlock, DownloadsBlock, FaqBlock, OdsBlock, PartnersBlock, TeamBlock, TestimonialsBlock } from './Misc'
+import {
+  CtaBlock,
+  DownloadsBlock,
+  FaqBlock,
+  OdsBlock,
+  PartnersBlock,
+  TeamBlock,
+  TestimonialsBlock,
+} from './Misc'
 import { ProjectsBlock } from './Projects'
 import { ServicesBlock } from './Services'
 import { StatementBlock } from './Statement'
@@ -17,7 +25,13 @@ import { VideoBlock } from './Video'
 
 type AnyBlock = NonNullable<Page['layout']>[number]
 
-export function RenderBlocks({ blocks, locale }: { blocks: AnyBlock[] | null | undefined; locale: Locale }) {
+export function RenderBlocks({
+  blocks,
+  locale,
+}: {
+  blocks: AnyBlock[] | null | undefined
+  locale: Locale
+}) {
   if (!blocks?.length) return null
   return (
     <>

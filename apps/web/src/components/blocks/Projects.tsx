@@ -10,7 +10,13 @@ import type { Project, ProjectsBlock as ProjectsBlockType } from '@/payload-type
 
 import { SectionHeader, toneToSection } from './SectionHeader'
 
-export async function ProjectsBlock({ block, locale }: { block: ProjectsBlockType; locale: Locale }) {
+export async function ProjectsBlock({
+  block,
+  locale,
+}: {
+  block: ProjectsBlockType
+  locale: Locale
+}) {
   const t = await getTranslations('common')
   const limit = block.limit ?? 6
   let projects: Project[]
@@ -18,7 +24,10 @@ export async function ProjectsBlock({ block, locale }: { block: ProjectsBlockTyp
     projects = (block.selected ?? []).filter((p): p is Project => typeof p === 'object')
   } else {
     const all = await listDocs('projects', { locale, sort: '-startYear', limit: 50, depth: 1 })
-    projects = block.mode === 'featured' ? [...all.filter((p) => p.featured), ...all.filter((p) => !p.featured)] : all
+    projects =
+      block.mode === 'featured'
+        ? [...all.filter((p) => p.featured), ...all.filter((p) => !p.featured)]
+        : all
   }
   projects = projects.slice(0, limit)
   if (!projects.length) return null
@@ -44,7 +53,12 @@ export async function ProjectsBlock({ block, locale }: { block: ProjectsBlockTyp
         />
         <div className="grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-12">
           {first ? (
-            <ProjectCard project={first} size="feature" index={0} className="md:col-span-2 lg:col-span-8" />
+            <ProjectCard
+              project={first}
+              size="feature"
+              index={0}
+              className="md:col-span-2 lg:col-span-8"
+            />
           ) : null}
           {rest.map((p, i) => (
             <ProjectCard

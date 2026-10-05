@@ -9,7 +9,8 @@ export async function GET(req: NextRequest) {
   if (secret !== (process.env.PREVIEW_SECRET ?? 'dev-preview-secret')) {
     return new Response('Invalid preview token', { status: 401 })
   }
-  if (!path.startsWith('/') || path.startsWith('//')) return new Response('Invalid path', { status: 400 })
+  if (!path.startsWith('/') || path.startsWith('//'))
+    return new Response('Invalid path', { status: 400 })
   ;(await draftMode()).enable()
   redirect(path)
 }

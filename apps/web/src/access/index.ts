@@ -9,7 +9,8 @@ export const hasRole = (user: UserLike, ...roles: Role[]): boolean =>
   Boolean(user?.roles?.some((r) => roles.includes(r)))
 
 export const isAdmin = (req: PayloadRequest): boolean => hasRole(req.user as UserLike, 'admin')
-export const isEditorOrAbove = (req: PayloadRequest): boolean => hasRole(req.user as UserLike, 'admin', 'editor')
+export const isEditorOrAbove = (req: PayloadRequest): boolean =>
+  hasRole(req.user as UserLike, 'admin', 'editor')
 
 export const authenticated: Access = ({ req }) => Boolean(req.user)
 export const admins: Access = ({ req }) => isAdmin(req)

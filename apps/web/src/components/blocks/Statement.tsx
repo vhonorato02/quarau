@@ -31,7 +31,9 @@ export function StatementBlock({ block }: { block: StatementBlockType }) {
         scrub: true,
         onUpdate: (self) => {
           const lit = Math.round(self.progress * words.length)
-          words.forEach((w, i) => (i < lit ? w.setAttribute('data-on', '') : w.removeAttribute('data-on')))
+          words.forEach((w, i) =>
+            i < lit ? w.setAttribute('data-on', '') : w.removeAttribute('data-on'),
+          )
         },
       })
       cleanup = () => st.kill()
@@ -47,9 +49,12 @@ export function StatementBlock({ block }: { block: StatementBlockType }) {
     <Section tone={toneToSection(block.tone)} id={block.anchor ?? undefined}>
       <Container className="flex flex-col gap-12">
         {block.eyebrow ? (
-          <p className="text-eyebrow font-semibold tracking-(--text-eyebrow--letter-spacing) uppercase opacity-70">{block.eyebrow}</p>
+          <p className="text-eyebrow font-semibold tracking-(--text-eyebrow--letter-spacing) uppercase opacity-70">
+            {block.eyebrow}
+          </p>
         ) : null}
-        <p ref={ref} className="max-w-6xl text-h2 leading-[1.12] font-medium text-balance" aria-label={block.text}>
+        <p ref={ref} className="text-h2 max-w-6xl leading-[1.12] font-medium text-balance">
+          <span className="sr-only">{block.text}</span>
           {words.map((w, i) => (
             <span key={i} aria-hidden="true" className="statement-word">
               {w}{' '}

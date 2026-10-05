@@ -3,7 +3,18 @@ import type { NextRequest } from 'next/server'
 
 import { tags } from '@/lib/cache-tags'
 
-const ALL = ['pages', 'projects', 'services', 'news', 'jobs', 'team', 'partners', 'documents', 'media', 'redirects']
+const ALL = [
+  'pages',
+  'projects',
+  'services',
+  'news',
+  'jobs',
+  'team',
+  'partners',
+  'documents',
+  'media',
+  'redirects',
+]
 const GLOBALS = ['navigation', 'footer', 'contact', 'social', 'site-settings']
 
 /**

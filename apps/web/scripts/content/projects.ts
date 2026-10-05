@@ -84,7 +84,8 @@ export const projects: ProjectSeed[] = [
     ],
   },
   {
-    legacySlug: 'inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional',
+    legacySlug:
+      'inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional',
     slug: 'inventario-cultural-e-dossie-de-registro',
     title: 'Inventário Cultural e Dossiê de Registro',
     summary:
@@ -103,7 +104,10 @@ export const projects: ProjectSeed[] = [
     body: doc(
       p(
         'A Quarau foi contratada pelo CECP para aplicar o ',
-        { text: 'Inventário Nacional de Referências Culturais (INRC) do Congado Paulista', bold: true },
+        {
+          text: 'Inventário Nacional de Referências Culturais (INRC) do Congado Paulista',
+          bold: true,
+        },
         ' (2015–2017) e para coordenar a pesquisa e elaborar o ',
         { text: 'Dossiê de Registro do Samba de Bumbo Paulista', bold: true },
         ' como Patrimônio Cultural Imaterial Brasileiro (2019–2023).',
@@ -119,11 +123,16 @@ export const projects: ProjectSeed[] = [
         heading: 'Duas pesquisas, um mesmo compromisso com o patrimônio imaterial',
         tone: 'alt',
         items: [
-          { period: '2015–2017', title: 'INRC do Congado Paulista', description: 'Aplicação do Inventário Nacional de Referências Culturais.' },
+          {
+            period: '2015–2017',
+            title: 'INRC do Congado Paulista',
+            description: 'Aplicação do Inventário Nacional de Referências Culturais.',
+          },
           {
             period: '2019–2023',
             title: 'Dossiê do Samba de Bumbo Paulista',
-            description: 'Coordenação da pesquisa e elaboração do dossiê de registro como Patrimônio Cultural Imaterial Brasileiro.',
+            description:
+              'Coordenação da pesquisa e elaboração do dossiê de registro como Patrimônio Cultural Imaterial Brasileiro.',
           },
         ],
       },
@@ -180,7 +189,9 @@ export const projects: ProjectSeed[] = [
       p(
         'O território é um dos atravessados pela linha de transmissão da Cantareira Transmissora de Energia. Com o projeto, um terreno inativo se tornou uma horta comunitária agroecológica e pedagógica e um ponto de cultura para toda a comunidade.',
       ),
-      p('Em apenas um ano, o projeto beneficiou diretamente 1.913 pessoas e impactou indiretamente cerca de 7.652.'),
+      p(
+        'Em apenas um ano, o projeto beneficiou diretamente 1.913 pessoas e impactou indiretamente cerca de 7.652.',
+      ),
     ),
     cover: `${U}2023/12/09_02_2023_Visita_Atibaia_Tati_2.jpg`,
     video: `${U}2023/12/ECOEVERDE_5MIN_LEG_PORT.mp4`,
@@ -342,7 +353,8 @@ export const projects: ProjectSeed[] = [
     ],
   },
   {
-    legacySlug: 'projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo',
+    legacySlug:
+      'projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo',
     slug: 'memoria-institucional-museu-do-folclore',
     title: 'Memória Institucional do Museu do Folclore de São José dos Campos',
     summary:
@@ -359,7 +371,9 @@ export const projects: ProjectSeed[] = [
     accent: 'green',
     coordinates: { lat: -23.1794, lng: -45.8869 },
     body: doc(
-      p('A Quarau desenvolveu pesquisas institucionais para o Museu do Folclore de São José dos Campos e para sua organização gestora, o CECP.'),
+      p(
+        'A Quarau desenvolveu pesquisas institucionais para o Museu do Folclore de São José dos Campos e para sua organização gestora, o CECP.',
+      ),
       p(
         'Em 2020, realizou a pesquisa sobre a memória institucional do museu, reunindo uma série diversificada de fontes documentais e fotografias. O trabalho resultou no livro ',
         { text: 'O Museu do Folclore de São José dos Campos: Uma Breve História', italic: true },
@@ -401,5 +415,8 @@ export const projects: ProjectSeed[] = [
 ]
 
 /** Legacy WP ODS badge images per project (kept in the media library for reference). */
-export const odsImages = [`${U}2023/12/Untitled-design.png`, `${U}2023/12/Untitled-design-1.png`, `${U}2023/12/Untitled-design-2.png`]
-
+export const odsImages = [
+  `${U}2023/12/Untitled-design.png`,
+  `${U}2023/12/Untitled-design-1.png`,
+  `${U}2023/12/Untitled-design-2.png`,
+]

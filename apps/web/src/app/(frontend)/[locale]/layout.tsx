@@ -24,14 +24,19 @@ export const dynamicParams = true
 
 /** Pages are rendered on first request and cached (ISR); the build needs no database. */
 export function generateStaticParams() {
-  return process.env.PRERENDER_AT_BUILD === 'true' ? routing.locales.map((locale) => ({ locale })) : []
+  return process.env.PRERENDER_AT_BUILD === 'true'
+    ? routing.locales.map((locale) => ({ locale }))
+    : []
 }
 
 const siteUrl = process.env.SITE_URL ?? 'http://localhost:3000'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: 'Quarau — Projetos Socioambientais, Educativos e Culturais', template: '%s — Quarau' },
+  title: {
+    default: 'Quarau — Projetos Socioambientais, Educativos e Culturais',
+    template: '%s — Quarau',
+  },
   description:
     'A Quarau é uma consultoria em projetos educativos, culturais e socioambientais, com atuação em todas as etapas: da concepção à difusão de resultados.',
   applicationName: 'Quarau',
@@ -69,7 +74,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
 
   return (
     <html lang={htmlLang[typedLocale]} className={barlow.variable} suppressHydrationWarning>
-      <body className="min-h-dvh bg-surface font-sans text-ink antialiased">
+      <body className="bg-surface text-ink min-h-dvh font-sans antialiased">
         <NextIntlClientProvider>
           <SkipLink>{tc('skipToContent')}</SkipLink>
           <Header locale={typedLocale} />
@@ -80,8 +85,17 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
           </ViewTransition>
           <Footer locale={typedLocale} />
           <CookieConsent
-            umami={{ websiteId: settings?.analytics?.umamiWebsiteId, scriptUrl: settings?.analytics?.umamiScriptUrl }}
-            labels={{ title: t('title'), text: t('text'), accept: t('accept'), reject: t('reject'), learnMore: t('learnMore') }}
+            umami={{
+              websiteId: settings?.analytics?.umamiWebsiteId,
+              scriptUrl: settings?.analytics?.umamiScriptUrl,
+            }}
+            labels={{
+              title: t('title'),
+              text: t('text'),
+              accept: t('accept'),
+              reject: t('reject'),
+              learnMore: t('learnMore'),
+            }}
           />
         </NextIntlClientProvider>
         <RevealObserver />

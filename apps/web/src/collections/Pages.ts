@@ -15,7 +15,8 @@ export const Pages: CollectionConfig = {
     group: 'Conteúdo',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
-    description: 'Páginas institucionais montadas com blocos. A página com endereço “inicio” é a home.',
+    description:
+      'Páginas institucionais montadas com blocos. A página com endereço “inicio” é a home.',
     ...previewConfig('pages'),
   },
   access: {

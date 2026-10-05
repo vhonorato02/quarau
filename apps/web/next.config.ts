@@ -10,7 +10,9 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 type LegacyMap = { redirects: Array<{ from: string; to: string }> }
-const legacy = JSON.parse(readFileSync(path.join(dirname, '../../content/legacy/url-map.json'), 'utf8')) as LegacyMap
+const legacy = JSON.parse(
+  readFileSync(path.join(dirname, '../../content/legacy/url-map.json'), 'utf8'),
+) as LegacyMap
 
 const umamiOrigin = process.env.NEXT_PUBLIC_UMAMI_ORIGIN ?? ''
 const sentryOrigin = process.env.NEXT_PUBLIC_SENTRY_ORIGIN ?? ''
@@ -42,7 +44,10 @@ const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), interest-cohort=(), browsing-topics=()' },
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=(), interest-cohort=(), browsing-topics=()',
+  },
   { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
 ]
 
@@ -60,7 +65,11 @@ const nextConfig: NextConfig = {
     deviceSizes: [360, 480, 640, 828, 1080, 1280, 1600, 1920, 2560, 3200],
     imageSizes: [64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 31,
-    localPatterns: [{ pathname: '/api/media/file/**' }, { pathname: '/brand/**' }, { pathname: '/media/**' }],
+    localPatterns: [
+      { pathname: '/api/media/file/**' },
+      { pathname: '/brand/**' },
+      { pathname: '/media/**' },
+    ],
   },
   experimental: {
     optimizePackageImports: ['@quarau/ui', 'motion', 'gsap'],
@@ -89,9 +98,14 @@ const nextConfig: NextConfig = {
         .filter((source) => source.replace(/\/$/, '') !== to.replace(/\/$/, ''))
         .map((source) => ({ source, destination: to, permanent: true }))
     })
-    const sitemaps = ['sitemap_index.xml', 'post-sitemap.xml', 'page-sitemap.xml', 'portfolio-sitemap.xml', 'category-sitemap.xml', 'wp-sitemap.xml'].map(
-      (f) => ({ source: `/${f}`, destination: '/sitemap.xml', permanent: true }),
-    )
+    const sitemaps = [
+      'sitemap_index.xml',
+      'post-sitemap.xml',
+      'page-sitemap.xml',
+      'portfolio-sitemap.xml',
+      'category-sitemap.xml',
+      'wp-sitemap.xml',
+    ].map((f) => ({ source: `/${f}`, destination: '/sitemap.xml', permanent: true }))
     return [...fromLegacy, ...sitemaps]
   },
 }

@@ -18,9 +18,14 @@ function AnimatedHeading({
 }) {
   const words = text.split(/\s+/)
   return (
-    <h1 className={cn(size, 'font-semibold text-balance', className)} aria-label={text}>
+    <h1 className={cn(size, 'font-semibold text-balance', className)}>
+      <span className="sr-only">{text}</span>
       {words.map((w, i) => (
-        <span key={i} aria-hidden="true" className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+        <span
+          key={i}
+          aria-hidden="true"
+          className="inline-block overflow-hidden pb-[0.08em] align-bottom"
+        >
           <span
             className="inline-block motion-safe:animate-[word-up_1s_var(--ease-brand)_both]"
             style={{ animationDelay: `${120 + i * 70}ms` }}
@@ -45,7 +50,7 @@ export function HeroBlock({ block, isFirst }: { block: HeroBlockType; isFirst?: 
           {block.eyebrow ? <Eyebrow className="text-blue-700">{block.eyebrow}</Eyebrow> : null}
           <AnimatedHeading text={block.heading} size="text-h1" className="max-w-5xl" />
           {block.lead ? (
-            <p className="max-w-2xl text-lead text-ink-muted motion-safe:animate-[fade-up_1s_var(--ease-brand)_400ms_both]">
+            <p className="text-lead text-ink-muted max-w-2xl motion-safe:animate-[fade-up_1s_var(--ease-brand)_400ms_both]">
               {block.lead}
             </p>
           ) : null}
@@ -75,7 +80,10 @@ export function HeroBlock({ block, isFirst }: { block: HeroBlockType; isFirst?: 
             priority={isFirst}
             sizes="100vw"
             quality={75}
-            imgClassName={cn('scale-105 motion-safe:animate-[hero-zoom_14s_var(--ease-brand)_both]', immersive && 'opacity-55')}
+            imgClassName={cn(
+              'scale-105 motion-safe:animate-[hero-zoom_14s_var(--ease-brand)_both]',
+              immersive && 'opacity-55',
+            )}
           />
           <div
             className={cn(
@@ -99,7 +107,9 @@ export function HeroBlock({ block, isFirst }: { block: HeroBlockType; isFirst?: 
       <Container className="relative pt-[calc(var(--header-h)+4rem)] pb-[clamp(3rem,7vw,6.5rem)]">
         <div className="flex max-w-6xl flex-col gap-8 md:max-w-[78%] lg:max-w-[72%]">
           {block.eyebrow ? (
-            <Eyebrow className="text-white/85 motion-safe:animate-[fade-up_0.9s_var(--ease-brand)_both]">{block.eyebrow}</Eyebrow>
+            <Eyebrow className="text-white/85 motion-safe:animate-[fade-up_0.9s_var(--ease-brand)_both]">
+              {block.eyebrow}
+            </Eyebrow>
           ) : null}
           <AnimatedHeading
             text={block.heading}
@@ -108,7 +118,7 @@ export function HeroBlock({ block, isFirst }: { block: HeroBlockType; isFirst?: 
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             {block.lead ? (
               <p
-                className="max-w-xl text-lead text-white/85 motion-safe:animate-[fade-up_1s_var(--ease-brand)_both]"
+                className="text-lead max-w-xl text-white/85 motion-safe:animate-[fade-up_1s_var(--ease-brand)_both]"
                 style={{ animationDelay: '500ms' } as React.CSSProperties}
               >
                 {block.lead}
@@ -128,9 +138,12 @@ export function HeroBlock({ block, isFirst }: { block: HeroBlockType; isFirst?: 
         </div>
       </Container>
 
-      <div aria-hidden="true" className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 md:block">
+      <div
+        aria-hidden="true"
+        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 md:block"
+      >
         <span className="block h-12 w-px overflow-hidden bg-white/20">
-          <span className="block h-1/2 w-px bg-brand-green motion-safe:animate-[scroll-hint_2s_var(--ease-in-out-brand)_infinite]" />
+          <span className="bg-brand-green block h-1/2 w-px motion-safe:animate-[scroll-hint_2s_var(--ease-in-out-brand)_infinite]" />
         </span>
       </div>
     </section>

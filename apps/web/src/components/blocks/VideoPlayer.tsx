@@ -24,7 +24,10 @@ export function VideoPlayer({
   const ref = useRef<HTMLVideoElement>(null)
 
   return (
-    <div data-reveal="mask" className={cn('relative aspect-video overflow-hidden rounded-lg bg-ink', className)}>
+    <div
+      data-reveal="mask"
+      className={cn('bg-ink relative aspect-video overflow-hidden rounded-lg', className)}
+    >
       {playing ? (
         embed ? (
           <iframe
@@ -35,7 +38,15 @@ export function VideoPlayer({
             allowFullScreen
           />
         ) : (
-          <video ref={ref} src={src} poster={poster ?? undefined} controls autoPlay playsInline className="absolute inset-0 size-full">
+          <video
+            ref={ref}
+            src={src}
+            poster={poster ?? undefined}
+            controls
+            autoPlay
+            playsInline
+            className="absolute inset-0 size-full"
+          >
             <track kind="captions" />
           </video>
         )
@@ -48,12 +59,24 @@ export function VideoPlayer({
         >
           {poster ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={poster} alt="" className="absolute inset-0 size-full object-cover opacity-80 transition-transform duration-1000 group-hover:scale-105" loading="lazy" />
+            <img
+              src={poster}
+              alt=""
+              className="absolute inset-0 size-full object-cover opacity-80 transition-transform duration-1000 group-hover:scale-105"
+              loading="lazy"
+            />
           ) : !embed ? (
-            <video src={`${src}#t=2`} preload="metadata" muted playsInline className="absolute inset-0 size-full object-cover opacity-80" aria-hidden="true" />
+            <video
+              src={`${src}#t=2`}
+              preload="metadata"
+              muted
+              playsInline
+              className="absolute inset-0 size-full object-cover opacity-80"
+              aria-hidden="true"
+            />
           ) : null}
-          <span className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
-          <span className="relative grid size-24 place-items-center rounded-full bg-white/95 text-blue-700 shadow-lift transition-transform duration-(--duration-base) group-hover:scale-110 md:size-28">
+          <span className="from-ink/70 absolute inset-0 bg-gradient-to-t to-transparent" />
+          <span className="shadow-lift relative grid size-24 place-items-center rounded-full bg-white/95 text-blue-700 transition-transform duration-(--duration-base) group-hover:scale-110 md:size-28">
             <svg aria-hidden="true" viewBox="0 0 24 24" className="ml-1 size-9" fill="currentColor">
               <path d="M7 4.5v15l13-7.5-13-7.5Z" />
             </svg>

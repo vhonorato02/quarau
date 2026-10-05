@@ -2,7 +2,13 @@ import type * as React from 'react'
 
 /** Line icons for the practice areas, drawn on the brand's stroke weight. */
 export function ServiceIcon({ name, className }: { name?: string | null; className?: string }) {
-  const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+  const common = {
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.6,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+  }
   const icons: Record<string, React.ReactNode> = {
     territory: (
       <>

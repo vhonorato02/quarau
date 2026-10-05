@@ -1,7 +1,10 @@
 import { env } from './env'
 
 /** Verifies a Cloudflare Turnstile token. Passes when Turnstile is not configured. */
-export async function verifyTurnstile(token: string | null | undefined, ip?: string): Promise<boolean> {
+export async function verifyTurnstile(
+  token: string | null | undefined,
+  ip?: string,
+): Promise<boolean> {
   const secret = env().TURNSTILE_SECRET_KEY
   if (!secret) return true
   if (!token) return false

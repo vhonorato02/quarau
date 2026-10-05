@@ -14,8 +14,14 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ pat
   for (const c of candidates) {
     const media = await getMediaByLegacyPath(`%/wp-content/uploads/${c}`).catch(() => null)
     if (media?.url) {
-      return new Response(null, { status: 301, headers: { Location: media.url, 'Cache-Control': 'public, max-age=86400' } })
+      return new Response(null, {
+        status: 301,
+        headers: { Location: media.url, 'Cache-Control': 'public, max-age=86400' },
+      })
     }
   }
-  return new Response('Not found', { status: 404, headers: { 'Cache-Control': 'public, max-age=3600' } })
+  return new Response('Not found', {
+    status: 404,
+    headers: { 'Cache-Control': 'public, max-age=3600' },
+  })
 }

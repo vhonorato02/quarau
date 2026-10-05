@@ -1,6 +1,16 @@
 'use client'
 
-import { ArrowIcon, Button, cn, Logotype, LogoSymbol, Sheet, SheetClose, SheetContent, SheetTrigger } from '@quarau/ui'
+import {
+  ArrowIcon,
+  Button,
+  cn,
+  Logotype,
+  LogoSymbol,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from '@quarau/ui'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -39,7 +49,8 @@ export function HeaderClient({
   }, [pathname])
 
   const dark = overDark && !scrolled
-  const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`))
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`)
 
   return (
     <header
@@ -47,13 +58,24 @@ export function HeaderClient({
         'fixed inset-x-0 top-0 z-40 transition-[transform,background-color,color,box-shadow] duration-(--duration-base) ease-(--ease-brand)',
         hidden ? '-translate-y-full' : 'translate-y-0',
         dark ? 'text-white' : 'text-ink',
-        scrolled && !overDark ? 'bg-white/90 shadow-[0_1px_0_var(--color-line)] backdrop-blur-xl' : '',
+        scrolled && !overDark
+          ? 'bg-white/90 shadow-[0_1px_0_var(--color-line)] backdrop-blur-xl'
+          : '',
         scrolled && overDark ? 'bg-blue-950/80 text-white backdrop-blur-xl' : '',
       )}
     >
       <div className="container-site flex h-(--header-h) items-center justify-between gap-6">
-        <Link href="/" aria-label={`Quarau — ${labels.home}`} className="relative z-10 flex shrink-0 items-center">
-          <LogoSymbol alt="" variant={dark || (scrolled && overDark) ? 'white' : 'color'} className="w-10 lg:hidden" priority />
+        <Link
+          href="/"
+          aria-label={`Quarau — ${labels.home}`}
+          className="relative z-10 flex shrink-0 items-center"
+        >
+          <LogoSymbol
+            alt=""
+            variant={dark || (scrolled && overDark) ? 'white' : 'color'}
+            className="w-10 lg:hidden"
+            priority
+          />
           <Logotype
             alt=""
             variant={dark || (scrolled && overDark) ? 'white' : 'color'}
@@ -75,8 +97,10 @@ export function HeaderClient({
                   <span
                     aria-hidden="true"
                     className={cn(
-                      'absolute bottom-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-brand-green transition-[opacity,transform] duration-(--duration-base)',
-                      isActive(item.href) ? 'scale-100 opacity-100' : 'scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100',
+                      'bg-brand-green absolute bottom-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full transition-[opacity,transform] duration-(--duration-base)',
+                      isActive(item.href)
+                        ? 'scale-100 opacity-100'
+                        : 'scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100',
                     )}
                   />
                 </Link>
@@ -91,7 +115,14 @@ export function HeaderClient({
             className="grid size-11 place-items-center rounded-full transition-colors hover:bg-current/10"
             aria-label={labels.search}
           >
-            <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={1.8}>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="size-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.8}
+            >
               <circle cx="10.5" cy="10.5" r="6.5" />
               <path d="m15.5 15.5 5 5" strokeLinecap="round" />
             </svg>
@@ -115,7 +146,14 @@ export function HeaderClient({
                 className="grid size-11 place-items-center rounded-full transition-colors hover:bg-current/10 lg:hidden"
                 aria-label={labels.openMenu}
               >
-                <svg aria-hidden="true" viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="size-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.8}
+                >
                   <path d="M4 8h16M4 16h16" strokeLinecap="round" />
                 </svg>
               </button>
@@ -129,13 +167,23 @@ export function HeaderClient({
                     className="grid size-11 place-items-center rounded-full hover:bg-white/10"
                     aria-label={labels.closeMenu}
                   >
-                    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 24 24"
+                      className="size-6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                    >
                       <path d="m6 6 12 12M18 6 6 18" strokeLinecap="round" />
                     </svg>
                   </button>
                 </SheetClose>
               </div>
-              <nav aria-label={labels.mainNav} className="flex flex-1 flex-col justify-between overflow-y-auto px-6 pt-6 pb-10">
+              <nav
+                aria-label={labels.mainNav}
+                className="flex flex-1 flex-col justify-between overflow-y-auto px-6 pt-6 pb-10"
+              >
                 <ul className="flex flex-col">
                   {[{ label: labels.home, href: '/' }, ...items].map((item, i) => (
                     <li key={item.href} className="border-b border-white/10">
@@ -143,11 +191,18 @@ export function HeaderClient({
                         <Link
                           href={item.href}
                           aria-current={isActive(item.href) ? 'page' : undefined}
-                          className="flex items-center justify-between py-4 text-h3 font-medium"
-                          style={{ animation: `slide-in-right 600ms var(--ease-brand) ${80 + i * 40}ms both` }}
+                          className="text-h3 flex items-center justify-between py-4 font-medium"
+                          style={{
+                            animation: `slide-in-right 600ms var(--ease-brand) ${80 + i * 40}ms both`,
+                          }}
                         >
                           {item.label}
-                          {isActive(item.href) ? <span className="size-2.5 rounded-full bg-brand-green" aria-hidden="true" /> : null}
+                          {isActive(item.href) ? (
+                            <span
+                              className="bg-brand-green size-2.5 rounded-full"
+                              aria-hidden="true"
+                            />
+                          ) : null}
                         </Link>
                       </SheetClose>
                     </li>

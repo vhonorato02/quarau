@@ -19,4 +19,8 @@ export type ContactInput = z.infer<typeof contactSchema>
 export type ContactState =
   | { status: 'idle' }
   | { status: 'success' }
-  | { status: 'error'; code: 'invalid' | 'rateLimited' | 'captcha' | 'server'; fieldErrors?: Record<string, string> }
+  | {
+      status: 'error'
+      code: 'invalid' | 'rateLimited' | 'captcha' | 'server'
+      fieldErrors?: Record<string, string>
+    }

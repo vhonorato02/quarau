@@ -17,7 +17,8 @@ export function Counter({ value }: { value: string }) {
     const [, prefix = '', num = '', suffix = ''] = match
     const target = Number(num.replace(/\./g, ''))
     if (!Number.isFinite(target) || target === 0) return
-    const fmt = (n: number) => (num.includes('.') ? Math.round(n).toLocaleString('pt-BR') : String(Math.round(n)))
+    const fmt = (n: number) =>
+      num.includes('.') ? Math.round(n).toLocaleString('pt-BR') : String(Math.round(n))
     let raf = 0
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -45,7 +46,8 @@ export function Counter({ value }: { value: string }) {
   }, [value])
 
   return (
-    <span ref={ref} aria-label={value}>
+    <span ref={ref}>
+      <span className="sr-only">{value}</span>
       <span aria-hidden="true">{display}</span>
     </span>
   )

@@ -18,14 +18,26 @@ export function generateStaticParams() {
   return []
 }
 
-export async function generateMetadata({ params }: PageProps<'/[locale]/noticias/[slug]'>): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/noticias/[slug]'>): Promise<Metadata> {
   const { locale, slug } = await params
   const [n, settings] = await Promise.all([
     getDocBySlug('news', slug, locale as Locale).catch(() => null),
     getGlobal('site-settings', locale as Locale).catch(() => null),
   ])
   if (!n) return {}
-  return buildMetadata({ title: n.title, description: n.summary, path: docPath('news', slug), meta: n.meta, image: n.coverImage, type: 'article', publishedTime: n.publishedAt, locale: locale as Locale, settings })
+  return buildMetadata({
+    title: n.title,
+    description: n.summary,
+    path: docPath('news', slug),
+    meta: n.meta,
+    image: n.coverImage,
+    type: 'article',
+    publishedTime: n.publishedAt,
+    locale: locale as Locale,
+    settings,
+  })
 }
 
 export default async function NewsArticle({ params }: PageProps<'/[locale]/noticias/[slug]'>) {
@@ -41,7 +53,11 @@ export default async function NewsArticle({ params }: PageProps<'/[locale]/notic
     <article className="pt-[calc(var(--header-h)+clamp(2.5rem,6vw,5rem))]">
       <Container className="flex max-w-5xl flex-col gap-8">
         <Breadcrumbs
-          items={[{ label: 'Início', href: '/' }, { label: 'Notícias', href: '/noticias' }, { label: n.title }]}
+          items={[
+            { label: 'Início', href: '/' },
+            { label: 'Notícias', href: '/noticias' },
+            { label: n.title },
+          ]}
           className="text-ink-muted"
           renderLink={(c, children) => <Link href={c.href ?? '/'}>{children}</Link>}
         />
@@ -73,8 +89,12 @@ export default async function NewsArticle({ params }: PageProps<'/[locale]/notic
             description: n.summary ?? undefined,
             datePublished: n.publishedAt ?? undefined,
             dateModified: n.updatedAt,
-            image: mediaUrl(n.coverImage, 'og') ? [absoluteUrl(mediaUrl(n.coverImage, 'og')!)] : undefined,
-            author: author ? { '@type': 'Person', name: author } : { '@id': `${absoluteUrl('/')}#organization` },
+            image: mediaUrl(n.coverImage, 'og')
+              ? [absoluteUrl(mediaUrl(n.coverImage, 'og')!)]
+              : undefined,
+            author: author
+              ? { '@type': 'Person', name: author }
+              : { '@id': `${absoluteUrl('/')}#organization` },
             publisher: { '@id': `${absoluteUrl('/')}#organization` },
             mainEntityOfPage: absoluteUrl(docPath('news', slug)),
           },

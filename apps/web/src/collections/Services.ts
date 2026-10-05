@@ -7,7 +7,15 @@ import { slugField } from '../fields/slug'
 import { setCreatedBy } from '../hooks/fields'
 import { revalidateCollection, revalidateCollectionDelete } from '../hooks/revalidate'
 import { removeFromSearch, syncSearch } from '../hooks/search'
-import { coverImageField, createdByField, orderField, previewConfig, publishedAtField, summaryField, versionsWithDrafts } from './shared'
+import {
+  coverImageField,
+  createdByField,
+  orderField,
+  previewConfig,
+  publishedAtField,
+  summaryField,
+  versionsWithDrafts,
+} from './shared'
 
 export const Services: CollectionConfig = {
   slug: 'services',
@@ -51,7 +59,14 @@ export const Services: CollectionConfig = {
       fields: [{ name: 'item', type: 'text', label: 'Entrega', required: true, localized: true }],
     },
     { name: 'body', type: 'richText', label: 'Descrição completa', editor, localized: true },
-    { name: 'layout', type: 'blocks', label: 'Blocos adicionais', blocks: pageBlocks, localized: true, admin: { initCollapsed: true } },
+    {
+      name: 'layout',
+      type: 'blocks',
+      label: 'Blocos adicionais',
+      blocks: pageBlocks,
+      localized: true,
+      admin: { initCollapsed: true },
+    },
     slugField(),
     orderField,
     publishedAtField,

@@ -12,7 +12,19 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
 import { editors } from './access'
-import { Documents, Jobs, Leads, Media, News, Pages, Partners, Projects, Services, Team, Users } from './collections'
+import {
+  Documents,
+  Jobs,
+  Leads,
+  Media,
+  News,
+  Pages,
+  Partners,
+  Projects,
+  Services,
+  Team,
+  Users,
+} from './collections'
 import { editor } from './fields/richText'
 import { globals } from './globals'
 import { migrations } from './migrations'
@@ -77,7 +89,19 @@ export default buildConfig({
     fallback: true,
   },
 
-  collections: [Pages, Services, Projects, News, Jobs, Team, Partners, Media, Documents, Leads, Users],
+  collections: [
+    Pages,
+    Services,
+    Projects,
+    News,
+    Jobs,
+    Team,
+    Partners,
+    Media,
+    Documents,
+    Leads,
+    Users,
+  ],
   globals,
 
   db: postgresAdapter({
@@ -132,7 +156,8 @@ export default buildConfig({
       uploadsCollection: 'media',
       tabbedUI: true,
       generateTitle: ({ doc }) => `${(doc as { title?: string }).title ?? 'Quarau'} — Quarau`,
-      generateDescription: ({ doc }) => truncate(String((doc as { summary?: string }).summary ?? ''), 160),
+      generateDescription: ({ doc }) =>
+        truncate(String((doc as { summary?: string }).summary ?? ''), 160),
       generateImage: ({ doc }) => {
         const d = doc as { coverImage?: number | { id: number } }
         return typeof d.coverImage === 'object' ? d.coverImage.id : (d.coverImage ?? '')

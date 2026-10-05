@@ -10,7 +10,10 @@ export const Team: CollectionConfig = {
   defaultSort: 'order',
   admin: { group: 'Institucional', useAsTitle: 'name', defaultColumns: ['name', 'role', 'order'] },
   access: { read: anyone, create: editors, update: editors, delete: editors },
-  hooks: { afterChange: [revalidateCollection('team')], afterDelete: [revalidateCollectionDelete('team')] },
+  hooks: {
+    afterChange: [revalidateCollection('team')],
+    afterDelete: [revalidateCollectionDelete('team')],
+  },
   fields: [
     { name: 'name', type: 'text', label: 'Nome', required: true },
     { name: 'role', type: 'text', label: 'Cargo / função', required: true, localized: true },

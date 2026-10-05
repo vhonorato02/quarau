@@ -15,15 +15,32 @@ async function main() {
   const name = process.env.ADMIN_NAME ?? 'Administrador'
   const password = process.env.ADMIN_PASSWORD ?? randomBytes(18).toString('base64url')
   const payload = await getPayload({ config })
-  const found = await payload.find({ collection: 'users', where: { email: { equals: email } }, limit: 1, depth: 0 })
+  const found = await payload.find({
+    collection: 'users',
+    where: { email: { equals: email } },
+    limit: 1,
+    depth: 0,
+  })
   if (found.docs[0]) {
-    await payload.update({ collection: 'users', id: found.docs[0].id, data: { password, roles: ['admin'] }, context: {} })
+    await payload.update({
+      collection: 'users',
+      id: found.docs[0].id,
+      data: { password, roles: ['admin'] },
+      context: {},
+    })
     console.info(`[admin] senha redefinida para ${email}`)
   } else {
-    await payload.create({ collection: 'users', data: { email, name, password, roles: ['admin'] }, context: {} })
+    await payload.create({
+      collection: 'users',
+      data: { email, name, password, roles: ['admin'] },
+      context: {},
+    })
     console.info(`[admin] administrador criado: ${email}`)
   }
-  if (!process.env.ADMIN_PASSWORD) console.info(`[admin] senha gerada (guarde em local seguro, não será exibida de novo): ${password}`)
+  if (!process.env.ADMIN_PASSWORD)
+    console.info(
+      `[admin] senha gerada (guarde em local seguro, não será exibida de novo): ${password}`,
+    )
   process.exit(0)
 }
 

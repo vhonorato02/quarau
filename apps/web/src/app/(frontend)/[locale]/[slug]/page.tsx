@@ -13,14 +13,22 @@ export function generateStaticParams() {
   return []
 }
 
-export async function generateMetadata({ params }: PageProps<'/[locale]/[slug]'>): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/[slug]'>): Promise<Metadata> {
   const { locale, slug } = await params
   const [page, settings] = await Promise.all([
     getDocBySlug('pages', slug, locale as Locale).catch(() => null),
     getGlobal('site-settings', locale as Locale).catch(() => null),
   ])
   if (!page) return {}
-  return buildMetadata({ title: page.title, path: `/${slug}`, meta: page.meta, locale: locale as Locale, settings })
+  return buildMetadata({
+    title: page.title,
+    path: `/${slug}`,
+    meta: page.meta,
+    locale: locale as Locale,
+    settings,
+  })
 }
 
 export default async function CmsPage({ params }: PageProps<'/[locale]/[slug]'>) {

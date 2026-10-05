@@ -11,13 +11,23 @@ import { ProjectCard } from './ProjectCard'
 type Area = { id: number; title: string }
 
 /** Portfolio grid with accessible area filters (buttons with aria-pressed). */
-export function ProjectsExplorer({ projects, areas, allLabel }: { projects: Project[]; areas: Area[]; allLabel: string }) {
+export function ProjectsExplorer({
+  projects,
+  areas,
+  allLabel,
+}: {
+  projects: Project[]
+  areas: Area[]
+  allLabel: string
+}) {
   const [active, setActive] = useState<number | null>(null)
   const filtered = useMemo(
     () =>
       active === null
         ? projects
-        : projects.filter((p) => (p.services ?? []).some((s) => (typeof s === 'object' ? s.id : s) === active)),
+        : projects.filter((p) =>
+            (p.services ?? []).some((s) => (typeof s === 'object' ? s.id : s) === active),
+          ),
     [active, projects],
   )
 
@@ -33,7 +43,9 @@ export function ProjectsExplorer({ projects, areas, allLabel }: { projects: Proj
               onClick={() => setActive(a.id)}
               className={cn(
                 'h-11 rounded-full border px-5 text-sm font-medium transition-colors',
-                active === a.id ? 'border-ink bg-ink text-white' : 'border-line-strong hover:border-ink',
+                active === a.id
+                  ? 'border-ink bg-ink text-white'
+                  : 'border-line-strong hover:border-ink',
               )}
             >
               {a.title}
@@ -51,7 +63,11 @@ export function ProjectsExplorer({ projects, areas, allLabel }: { projects: Proj
           return (
             <li
               key={p.id}
-              className={cn(wide ? 'md:col-span-2 lg:col-span-8' : 'lg:col-span-4', !wide && i % 3 === 1 && 'lg:mt-28', i % 6 === 3 && 'lg:col-start-5')}
+              className={cn(
+                wide ? 'md:col-span-2 lg:col-span-8' : 'lg:col-span-4',
+                !wide && i % 3 === 1 && 'lg:mt-28',
+                i % 6 === 3 && 'lg:col-start-5',
+              )}
               data-reveal
               style={{ '--reveal-delay': (i % 3) * 80 } as React.CSSProperties}
             >

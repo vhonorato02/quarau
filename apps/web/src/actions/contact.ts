@@ -12,7 +12,10 @@ import { getPayload } from '@/lib/payload'
 import { rateLimit } from '@/lib/rate-limit'
 import { verifyTurnstile } from '@/lib/turnstile'
 
-export async function submitContact(_prev: ContactState, formData: FormData): Promise<ContactState> {
+export async function submitContact(
+  _prev: ContactState,
+  formData: FormData,
+): Promise<ContactState> {
   const raw = Object.fromEntries(formData.entries())
   const parsed = contactSchema.safeParse(raw)
   if (!parsed.success) {
@@ -28,14 +31,22 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
   const data = parsed.data
 
   const h = await headers()
-  const ip = (h.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || h.get('x-real-ip') || 'unknown'
-  const ipHash = createHash('sha256').update(`${ip}:${env().PAYLOAD_SECRET}`).digest('hex').slice(0, 32)
+  const ip =
+    (h.get('x-forwarded-for') ?? '').split(',')[0]?.trim() || h.get('x-real-ip') || 'unknown'
+  const ipHash = createHash('sha256')
+    .update(`${ip}:${env().PAYLOAD_SECRET}`)
+    .digest('hex')
+    .slice(0, 32)
 
-  const [perMinute, perDay] = await Promise.all([rateLimit(`contact:m:${ipHash}`, 3, 60), rateLimit(`contact:d:${ipHash}`, 20, 86_400)])
+  const [perMinute, perDay] = await Promise.all([
+    rateLimit(`contact:m:${ipHash}`, 3, 60),
+    rateLimit(`contact:d:${ipHash}`, 20, 86_400),
+  ])
   if (!perMinute.ok || !perDay.ok) return { status: 'error', code: 'rateLimited' }
 
   const token = formData.get('cf-turnstile-response')
-  if (!(await verifyTurnstile(typeof token === 'string' ? token : null, ip))) return { status: 'error', code: 'captcha' }
+  if (!(await verifyTurnstile(typeof token === 'string' ? token : null, ip)))
+    return { status: 'error', code: 'captcha' }
 
   try {
     const payload = await getPayload()
@@ -99,7 +110,12 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
       logger.error({ err, leadId: lead.id }, 'contact email delivery failed')
     }
     if (delivered) {
-      await payload.update({ collection: 'leads', id: lead.id, overrideAccess: true, data: { meta: { ...lead.meta, emailDelivered: true } } })
+      await payload.update({
+        collection: 'leads',
+        id: lead.id,
+        overrideAccess: true,
+        data: { meta: { ...lead.meta, emailDelivered: true } },
+      })
     }
     return { status: 'success' }
   } catch (err) {

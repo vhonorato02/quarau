@@ -1,12 +1,24 @@
 import type { CollectionConfig } from 'payload'
 
-import { authorsCanCreateDrafts, authorsOwnDrafts, editors, publishedOrAuthenticated } from '../access'
+import {
+  authorsCanCreateDrafts,
+  authorsOwnDrafts,
+  editors,
+  publishedOrAuthenticated,
+} from '../access'
 import { editor } from '../fields/richText'
 import { slugField } from '../fields/slug'
 import { setCreatedBy } from '../hooks/fields'
 import { revalidateCollection, revalidateCollectionDelete } from '../hooks/revalidate'
 import { removeFromSearch, syncSearch } from '../hooks/search'
-import { coverImageField, createdByField, previewConfig, publishedAtField, summaryField, versionsWithDrafts } from './shared'
+import {
+  coverImageField,
+  createdByField,
+  previewConfig,
+  publishedAtField,
+  summaryField,
+  versionsWithDrafts,
+} from './shared'
 
 export const News: CollectionConfig = {
   slug: 'news',
@@ -18,7 +30,12 @@ export const News: CollectionConfig = {
     defaultColumns: ['title', 'category', 'publishedAt', '_status'],
     ...previewConfig('news'),
   },
-  access: { read: publishedOrAuthenticated, create: authorsCanCreateDrafts, update: authorsOwnDrafts, delete: editors },
+  access: {
+    read: publishedOrAuthenticated,
+    create: authorsCanCreateDrafts,
+    update: authorsOwnDrafts,
+    delete: editors,
+  },
   versions: versionsWithDrafts,
   hooks: {
     beforeChange: [setCreatedBy],
@@ -42,7 +59,13 @@ export const News: CollectionConfig = {
       ],
     },
     { name: 'body', type: 'richText', label: 'Texto', editor, required: true, localized: true },
-    { name: 'relatedProjects', type: 'relationship', relationTo: 'projects', hasMany: true, label: 'Projetos relacionados' },
+    {
+      name: 'relatedProjects',
+      type: 'relationship',
+      relationTo: 'projects',
+      hasMany: true,
+      label: 'Projetos relacionados',
+    },
     slugField(),
     publishedAtField,
     createdByField,

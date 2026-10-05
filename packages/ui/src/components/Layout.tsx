@@ -13,7 +13,8 @@ export function Container({ as = 'div', className, ...props }: BoxProps) {
 const tones = {
   default: 'bg-surface text-ink',
   alt: 'bg-surface-alt text-ink',
-  brand: 'on-dark bg-brand-blue text-white',
+  /** Brand blue surface in its accessible tone (white text ≥ 4.5:1). See docs/brand.md. */
+  brand: 'on-dark bg-blue-700 text-white',
   dark: 'on-dark bg-blue-950 text-white',
   ink: 'on-dark bg-ink text-white',
 } as const

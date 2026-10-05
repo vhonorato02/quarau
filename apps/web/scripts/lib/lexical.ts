@@ -16,15 +16,30 @@ const text = (s: Seg) => {
 
 const base = { format: '', indent: 0, version: 1, direction: 'ltr' as const }
 
-export const p = (...segs: Seg[]) => ({ type: 'paragraph', ...base, textFormat: 0, children: segs.map(text) })
-export const h = (tag: 'h2' | 'h3' | 'h4', s: string) => ({ type: 'heading', tag, ...base, children: [text(s)] })
+export const p = (...segs: Seg[]) => ({
+  type: 'paragraph',
+  ...base,
+  textFormat: 0,
+  children: segs.map(text),
+})
+export const h = (tag: 'h2' | 'h3' | 'h4', s: string) => ({
+  type: 'heading',
+  tag,
+  ...base,
+  children: [text(s)],
+})
 export const ul = (items: Seg[][]) => ({
   type: 'list',
   listType: 'bullet',
   tag: 'ul',
   start: 1,
   ...base,
-  children: items.map((segs, i) => ({ type: 'listitem', value: i + 1, ...base, children: segs.map(text) })),
+  children: items.map((segs, i) => ({
+    type: 'listitem',
+    value: i + 1,
+    ...base,
+    children: segs.map(text),
+  })),
 })
 export const quote = (s: string) => ({ type: 'quote', ...base, children: [text(s)] })
 

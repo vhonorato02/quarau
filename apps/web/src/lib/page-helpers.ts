@@ -12,8 +12,15 @@ export async function applyCmsRedirect(path: string): Promise<void> {
   const match = redirects.find((r) => (r.from.replace(/\/$/, '') || '/') === normalized)
   if (!match) return
   let to: string | null = null
-  if (match.to?.type === 'reference' && match.to.reference && typeof match.to.reference.value === 'object') {
-    to = docPath(match.to.reference.relationTo as RoutableCollection, (match.to.reference.value as { slug?: string }).slug)
+  if (
+    match.to?.type === 'reference' &&
+    match.to.reference &&
+    typeof match.to.reference.value === 'object'
+  ) {
+    to = docPath(
+      match.to.reference.relationTo as RoutableCollection,
+      (match.to.reference.value as { slug?: string }).slug,
+    )
   } else if (match.to?.url) {
     to = match.to.url
   }

@@ -35,7 +35,10 @@ export const linkFields = ({
     relationTo: [...LINKABLE],
     maxDepth: 1,
     admin: { condition: (_, s) => s?.type !== 'external' },
-    validate: (val: unknown, { siblingData }: { siblingData: { type?: string; label?: string } }) =>
+    validate: (
+      val: unknown,
+      { siblingData }: { siblingData: { type?: string; label?: string } },
+    ) =>
       siblingData?.type === 'external' || val || (optional && !siblingData?.label)
         ? true
         : 'Escolha o conteúdo de destino.',
@@ -45,7 +48,10 @@ export const linkFields = ({
     type: 'text',
     label: 'URL',
     admin: { condition: (_, s) => s?.type === 'external' },
-    validate: (val: unknown, { siblingData }: { siblingData: { type?: string; label?: string } }) => {
+    validate: (
+      val: unknown,
+      { siblingData }: { siblingData: { type?: string; label?: string } },
+    ) => {
       if (siblingData?.type !== 'external') return true
       if (optional && !siblingData?.label) return true
       return typeof val === 'string' && /^(https?:\/\/|mailto:|tel:|\/)/.test(val)

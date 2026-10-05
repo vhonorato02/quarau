@@ -15,7 +15,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const push = (path: string, lastModified?: string, priority = 0.6) => {
     if (seen.has(path)) return
     seen.add(path)
-    out.push({ url: absoluteUrl(path), lastModified: lastModified ? new Date(lastModified) : undefined, priority })
+    out.push({
+      url: absoluteUrl(path),
+      lastModified: lastModified ? new Date(lastModified) : undefined,
+      priority,
+    })
   }
   STATIC.forEach((p) => push(p, undefined, p === '/' ? 1 : 0.8))
   for (const e of entries) {

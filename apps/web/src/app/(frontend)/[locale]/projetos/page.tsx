@@ -12,10 +12,18 @@ import { buildMetadata } from '@/lib/seo'
 const LEAD =
   'Projetos educativos, culturais e socioambientais que a Quarau concebeu, gerenciou ou apoiou — com resultados medidos e presença no território.'
 
-export async function generateMetadata({ params }: PageProps<'/[locale]/projetos'>): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/projetos'>): Promise<Metadata> {
   const { locale } = await params
   const settings = await getGlobal('site-settings', locale as Locale).catch(() => null)
-  return buildMetadata({ title: 'Projetos', description: LEAD, path: '/projetos', locale: locale as Locale, settings })
+  return buildMetadata({
+    title: 'Projetos',
+    description: LEAD,
+    path: '/projetos',
+    locale: locale as Locale,
+    settings,
+  })
 }
 
 export default async function ProjectsPage({ params }: PageProps<'/[locale]/projetos'>) {
@@ -28,8 +36,12 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
     // Optional editable page "projetos" lets editors add blocks below the grid.
     getDocBySlug('pages', 'projetos', locale as Locale).catch(() => null),
   ])
-  const usedAreaIds = new Set(projects.flatMap((p) => (p.services ?? []).map((s) => (typeof s === 'object' ? s.id : s))))
-  const areas = services.filter((s) => usedAreaIds.has(s.id)).map((s) => ({ id: s.id, title: s.title }))
+  const usedAreaIds = new Set(
+    projects.flatMap((p) => (p.services ?? []).map((s) => (typeof s === 'object' ? s.id : s))),
+  )
+  const areas = services
+    .filter((s) => usedAreaIds.has(s.id))
+    .map((s) => ({ id: s.id, title: s.title }))
 
   return (
     <>
@@ -48,7 +60,9 @@ export default async function ProjectsPage({ params }: PageProps<'/[locale]/proj
           )}
         </Container>
       </section>
-      {intro?.layout?.length ? <RenderBlocks blocks={intro.layout} locale={locale as Locale} /> : null}
+      {intro?.layout?.length ? (
+        <RenderBlocks blocks={intro.layout} locale={locale as Locale} />
+      ) : null}
     </>
   )
 }

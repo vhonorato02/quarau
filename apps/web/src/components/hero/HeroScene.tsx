@@ -15,7 +15,8 @@ function Symbol3D() {
   const svg = useLoader(SVGLoader, '/brand/quarau-simbolo.svg')
 
   const meshes = useMemo(() => {
-    const items: Array<{ geometry: THREE.ExtrudeGeometry; material: THREE.Material; z: number }> = []
+    const items: Array<{ geometry: THREE.ExtrudeGeometry; material: THREE.Material; z: number }> =
+      []
     for (const path of svg.paths) {
       const color = path.color.clone()
       const isAccent = color.g > color.b // green dot
@@ -54,8 +55,18 @@ function Symbol3D() {
     const g = group.current
     if (!g) return
     const t = state.clock.elapsedTime
-    g.rotation.y = THREE.MathUtils.damp(g.rotation.y, pointer.x * 0.45 + Math.sin(t * 0.3) * 0.18, 2.2, delta)
-    g.rotation.x = THREE.MathUtils.damp(g.rotation.x, -pointer.y * 0.3 + Math.cos(t * 0.25) * 0.06, 2.2, delta)
+    g.rotation.y = THREE.MathUtils.damp(
+      g.rotation.y,
+      pointer.x * 0.45 + Math.sin(t * 0.3) * 0.18,
+      2.2,
+      delta,
+    )
+    g.rotation.x = THREE.MathUtils.damp(
+      g.rotation.x,
+      -pointer.y * 0.3 + Math.cos(t * 0.25) * 0.06,
+      2.2,
+      delta,
+    )
     g.position.y = Math.sin(t * 0.6) * 0.05
   })
 

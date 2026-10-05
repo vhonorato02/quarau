@@ -35,7 +35,7 @@ function BrandPage() {
         <Heading size="h3">Cores</Heading>
         <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {swatches.map(([name, hex, use]) => (
-            <li key={name} className="overflow-hidden rounded-lg border border-line">
+            <li key={name} className="border-line overflow-hidden rounded-lg border">
               <div className="h-24" style={{ background: hex }} />
               <div className="p-4 text-sm">
                 <strong className="block">{name}</strong>
@@ -51,11 +51,15 @@ function BrandPage() {
         <Heading as="p" size="display" dot>
           Quarau
         </Heading>
-        <Heading as="p" size="h1">Projetos que transformam territórios</Heading>
-        <Heading as="p" size="h2">Educativos, culturais e socioambientais</Heading>
+        <Heading as="p" size="h1">
+          Projetos que transformam territórios
+        </Heading>
+        <Heading as="p" size="h2">
+          Educativos, culturais e socioambientais
+        </Heading>
         <p className="max-w-prose">
-          Texto corrido em Barlow 400, 17 px, entrelinha 1,65. A Quarau elabora, junto aos seus parceiros, projetos que
-          beneficiam territórios urbanos e rurais.
+          Texto corrido em Barlow 400, 17 px, entrelinha 1,65. A Quarau elabora, junto aos seus
+          parceiros, projetos que beneficiam territórios urbanos e rurais.
         </p>
       </section>
     </div>

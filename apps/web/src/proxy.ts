@@ -14,5 +14,7 @@ export default function proxy(req: NextRequest) {
 
 export const config = {
   // Skip Payload (admin/api), Next internals, route handlers under /next, static files and legacy WP paths.
-  matcher: ['/((?!api|admin|next|_next|_vercel|brand|fonts|media|stats|wp-content|monitoring|.*\\..*).*)'],
+  matcher: [
+    '/((?!api|admin|next|_next|_vercel|brand|fonts|media|stats|wp-content|monitoring|.*\\..*).*)',
+  ],
 }
