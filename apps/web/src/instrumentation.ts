@@ -3,6 +3,8 @@
  * - OpenTelemetry traces via @vercel/otel (exported when OTEL_EXPORTER_OTLP_ENDPOINT is set)
  * - Error tracking via Sentry SDK, compatible with self-hosted GlitchTip (when SENTRY_DSN is set)
  */
+import type { captureRequestError } from '@sentry/nextjs'
+
 export async function register() {
   if (process.env.NEXT_RUNTIME !== 'nodejs') return
   const { registerOTel } = await import('@vercel/otel')
@@ -19,9 +21,7 @@ export async function register() {
   }
 }
 
-export async function onRequestError(
-  ...args: Parameters<typeof import('@sentry/nextjs').captureRequestError>
-) {
+export async function onRequestError(...args: Parameters<typeof captureRequestError>) {
   if (!process.env.SENTRY_DSN) return
   const Sentry = await import('@sentry/nextjs')
   Sentry.captureRequestError(...args)
