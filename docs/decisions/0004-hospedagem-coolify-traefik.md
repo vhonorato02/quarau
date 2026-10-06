@@ -1,6 +1,6 @@
 # 0004 — Hospedagem na VPS com o Traefik do Coolify + deploy via SSH
 
-- **Status:** aceita · **Data:** 2026-10-05
+- **Status:** substituída pela [0013](0013-plataforma-vps-traefik-sem-painel.md) · **Data:** 2026-10-05
 
 ## Contexto
 
