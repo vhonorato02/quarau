@@ -63,7 +63,8 @@ export async function PartnersBlock({
     <Section tone={toneToSection(block.tone)} id={block.anchor ?? undefined} spacing="tight">
       <Container>
         <SectionHeader eyebrow={block.eyebrow} heading={block.heading} />
-        <ul className="border-line bg-line grid grid-cols-2 gap-px overflow-hidden rounded-lg border sm:grid-cols-3 lg:grid-cols-6">
+        {/* Centered wrapping row: any number of partners fills it without empty cells. */}
+        <ul className="flex flex-wrap justify-center gap-x-6 gap-y-4 md:gap-x-10">
           {partners.map((p, i) => {
             const logo = isMedia(p.logo) ? p.logo : null
             const content = logo ? (
@@ -84,7 +85,7 @@ export async function PartnersBlock({
                 key={p.id}
                 data-reveal="fade"
                 style={{ '--reveal-delay': i * 60 } as React.CSSProperties}
-                className="group bg-surface grid aspect-[3/2] place-items-center p-6"
+                className="group grid h-24 w-[calc(50%-0.75rem)] place-items-center px-4 sm:w-44"
                 title={p.fullName ?? p.name}
               >
                 {p.url ? (

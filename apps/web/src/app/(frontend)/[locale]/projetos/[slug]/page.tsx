@@ -201,7 +201,8 @@ export default async function ProjectPage({ params }: PageProps<'/[locale]/proje
 
       {/* Story */}
       {project.body ? (
-        <Section>
+        // Without the numbers band, this follows the white summary directly: avoid doubled spacing.
+        <Section className={cn(!project.highlights?.length && 'pt-0')}>
           <Container className="grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-4">
               <h2 className="text-eyebrow flex items-center gap-3 font-semibold tracking-(--text-eyebrow--letter-spacing) uppercase lg:sticky lg:top-28">
