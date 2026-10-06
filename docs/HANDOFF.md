@@ -2,14 +2,13 @@
 
 > Atualizado continuamente. Se uma sessão for interrompida, comece por aqui.
 
-## Onde estamos (2026-10-05)
+## Onde estamos (2026-10-06)
 
 - Branch única: `main` (pedido do cliente: sem branches, tudo direto na main, deploy automático).
 - Produto completo no repositório: site + CMS + migração + testes + CI/CD + infra + documentação.
   Ver [relatorio-final.md](relatorio-final.md).
-- **Bloqueio para estar no ar:** falta o secret `VPS_SSH_KEY` no GitHub (o ambiente de construção não tem SSH).
-  Depois disso, rodar em Actions → _VPS operations_: `audit` → `bootstrap` → (push/re-run CI = deploy) →
-  `migrate-content` → `create-admin <email>` → `backup` → `restore-test`.
+- **Para estar no ar:** abrir uma sessão do Claude Code na própria VPS (ver "Trabalho direto na VPS"); o cliente
+  preferiu não operar o servidor pelo GitHub Actions.
 
 ## Últimos passos concluídos
 
@@ -22,6 +21,52 @@
 Para repetir a simulação: crie a rede `coolify`, rode um `traefik:v3.6` nela (provider docker, entrypoints
 `http`/`https`), copie `infra/compose` + `infra/scripts` para um diretório e use `APP_DIR=<dir> SKIP_PULL=1
 scripts/deploy.sh <tag>`. O Traefik 3.5 não fala com o Docker 29 (API mínima 1.40): use 3.6+.
+
+## Trabalho direto na VPS (decisão do cliente em 2026-10-06: sem GitHub Actions para operar o servidor)
+
+A sessão de nuvem não alcança a VPS (só sai por proxy HTTP), então o trabalho no servidor é feito por uma
+sessão do Claude Code **rodando na própria VPS**. Para abrir essa sessão (o cliente faz uma vez):
+
+```bash
+ssh -p 22322 zewithane@177.107.94.44
+tmux new -s quarau                                   # sobrevive a desconexões
+curl -fsSL https://claude.ai/install.sh | bash        # instala o Claude Code
+git clone https://github.com/vhonorato02/quarau.git ~/quarau   # pede login do GitHub (token)
+cd ~/quarau && claude remote-control                  # aparece no app do Claude Code
+```
+
+Regras invioláveis (do documento de acesso do cliente), valem para tudo abaixo:
+
+- Nunca editar `/etc/ssh/sshd_config` nem a porta **22322**. Firewall: só com 22322/tcp liberada antes.
+- Disco de 30 GB: `df -h /` antes de build/pull; `docker system prune -f` se precisar; nunca chegar a 100%.
+- Nunca parar `coolify`, `coolify-db`, `coolify-proxy`. **Outros sites dividem esta VPS.**
+- Usar `zewithane`; `sudo` só quando necessário. Copiar `.bak-$(date +%Y%m%d)` antes de mudar configs no ar.
+
+Roteiro no servidor (a partir de `~/quarau`):
+
+1. **Auditoria (somente leitura):** `sudo bash infra/scripts/bootstrap.sh audit`. Conferir versão do Traefik do
+   Coolify (3.5 não conversa com Docker 29), rede `coolify`, memória, disco e o que mais roda na máquina.
+2. **Preparação:** `sudo APPLY=1 bash infra/scripts/bootstrap.sh apply` (usuário `deploy`, swap, fail2ban,
+   atualizações, cron de backup/monitor). Não ativa nem muda o UFW sem `APPLY_UFW=1`.
+3. **Stack:** `sudo install -d -o deploy -g deploy /srv/apps/quarau` e copiar `infra/compose/docker-compose.prod.yml`
+   (como `docker-compose.yml`), `infra/compose/.env.production.example`, `infra/compose/postgres-init/` e
+   `infra/scripts/` para lá (dono `deploy`). Depois
+   `sudo -u deploy /srv/apps/quarau/scripts/provision-env.sh quarau.177-107-94-44.sslip.io`.
+4. **Imagem:** a mais simples é construir na própria VPS (precisa de ~6 GB livres; 4 GB de RAM + swap bastam):
+   `docker build --target runner -t ghcr.io/vhonorato02/quarau-web:$(git rev-parse --short HEAD) .` e
+   `sudo -u deploy SKIP_PULL=1 /srv/apps/quarau/scripts/deploy.sh $(git rev-parse --short HEAD)`.
+   (Alternativa: `docker login ghcr.io` com token `read:packages` e deploy da tag do GHCR.)
+5. **Conteúdo:** `docker build --target tools -t quarau-tools .` e rodar `pnpm migrate:wp` nesse container na rede
+   `quarau_internal`, com `DATABASE_URL=postgres://quarau:<senha>@postgres:5432/quarau`, `S3_ENDPOINT=http://minio:9000`,
+   `MEILI_HOST=http://meilisearch:7700`, `PAYLOAD_JOBS_AUTORUN=false` e os segredos do `.env` (`--env-file`).
+   No fim: `/next/revalidate` e `/next/reindex` (ver runbook).
+6. **Admin:** mesmo container, `pnpm seed:admin` com `ADMIN_EMAIL`/`ADMIN_PASSWORD`; guardar a senha só em
+   `/srv/apps/quarau/CREDENCIAIS.txt` (`chmod 600`).
+7. **Backup e restore:** `sudo /srv/apps/quarau/scripts/backup.sh` e `sudo /srv/apps/quarau/scripts/restore-test.sh`.
+8. **QA no ar** (domínio temporário com basic auth em `CREDENCIAIS.txt`): todas as rotas e redirecionamentos 301,
+   cabeçalhos (HSTS, CSP, `X-Robots-Tag: noindex`), HTTPS/HTTP3, sitemap/robots, busca, formulário (SMTP e
+   Turnstile reais), CMS completo (login, criar projeto com fotos, rascunho, live preview, publicar, agendar,
+   versões, papéis), Lighthouse e axe no celular, e a suíte E2E apontando para a URL real.
 
 ## Próximos passos
 
