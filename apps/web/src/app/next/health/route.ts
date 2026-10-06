@@ -5,7 +5,7 @@ import { getPayload } from '@/lib/payload'
 
 export const dynamic = 'force-dynamic'
 
-/** Created by infra/scripts/deploy.sh in the outgoing replica so the proxy stops routing to it. */
+/** Created by the platform deploy (DRAIN_FILE in /srv/sites/quarau/.env) in the outgoing replica before it stops. */
 const DRAIN_FILE = '/tmp/quarau-drain'
 const noStore = { 'Cache-Control': 'no-store' }
 
