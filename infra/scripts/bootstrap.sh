@@ -6,7 +6,8 @@
 #
 # Inviolable rules from the server owner (docs/ACESSO rules) are enforced here:
 #   * /etc/ssh/sshd_config is NEVER edited and the SSH port (22322) is NEVER changed.
-#   * UFW is only enabled after 22322/tcp is explicitly allowed (verified).
+#   * UFW is only enabled on request (APPLY_UFW=1) and after 22322/tcp is allowed (verified);
+#     an active firewall keeps its default policy (other sites share this VPS).
 #   * Coolify containers are never stopped; Docker is never restarted.
 #   * Every config file touched gets a .bak-YYYYMMDD copy first.
 # Optional, opt-in only: APPLY_SSH_HARDENING=1 adds a drop-in in sshd_config.d
@@ -125,17 +126,27 @@ systemctl enable --now fail2ban >/dev/null 2>&1 && systemctl reload fail2ban || 
 
 # ---------------------------------------------------------------- firewall (guarded)
 say "UFW"
-ufw allow "$SSH_PORT/tcp" comment 'SSH (porta oficial)' >/dev/null
-ufw status | grep -qE "^$SSH_PORT/tcp +ALLOW" || ufw show added | grep -q "$SSH_PORT/tcp" || { echo "regra $SSH_PORT não confirmada — abortando ativação do UFW"; exit 1; }
-ufw allow 80/tcp comment 'HTTP' >/dev/null
-ufw allow 443/tcp comment 'HTTPS' >/dev/null
-ufw allow 443/udp comment 'HTTP/3' >/dev/null
-ufw default deny incoming >/dev/null
-ufw default allow outgoing >/dev/null
-if ! ufw status | grep -q 'Status: active'; then
-  ufw show added | grep -q "$SSH_PORT/tcp" && ufw --force enable
+# The VPS hosts other sites: never change the default policy of an active firewall, and only
+# turn an inactive one on when explicitly asked (APPLY_UFW=1) after reviewing the audit.
+if ufw status | grep -q 'Status: active'; then
+  ufw allow "$SSH_PORT/tcp" comment 'SSH (porta oficial)' >/dev/null
+  ufw allow 80/tcp comment 'HTTP' >/dev/null
+  ufw allow 443/tcp comment 'HTTPS' >/dev/null
+  ufw allow 443/udp comment 'HTTP/3' >/dev/null
+  echo "UFW já ativo: regras 22322/80/443 garantidas (política padrão inalterada)"
+elif [[ "${APPLY_UFW:-0}" == 1 ]]; then
+  ufw allow "$SSH_PORT/tcp" comment 'SSH (porta oficial)' >/dev/null
+  ufw show added | grep -q "$SSH_PORT/tcp" || { echo "regra $SSH_PORT não confirmada — abortando ativação do UFW"; exit 1; }
+  ufw allow 80/tcp comment 'HTTP' >/dev/null
+  ufw allow 443/tcp comment 'HTTPS' >/dev/null
+  ufw allow 443/udp comment 'HTTP/3' >/dev/null
+  ufw default deny incoming >/dev/null
+  ufw default allow outgoing >/dev/null
+  ufw --force enable
+else
+  echo "UFW inativo: mantido assim (outros serviços na VPS). Para ativar: APPLY_UFW=1 após revisar o audit."
 fi
-ufw status | grep -E "Status|$SSH_PORT"
+ufw status | grep -E "Status|$SSH_PORT" || true
 
 # ---------------------------------------------------------------- optional SSH drop-in (opt-in)
 if [[ "${APPLY_SSH_HARDENING:-0}" == 1 ]]; then
