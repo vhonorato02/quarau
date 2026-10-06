@@ -6,7 +6,6 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { s3Storage } from '@payloadcms/storage-s3'
-import { en } from '@payloadcms/translations/languages/en'
 import { pt } from '@payloadcms/translations/languages/pt'
 import { createTransport } from 'nodemailer'
 import { buildConfig } from 'payload'
@@ -52,6 +51,8 @@ export default buildConfig({
 
   admin: {
     user: Users.slug,
+    // Built-in avatar: Gravatar is blocked by the CSP and would receive a hash of each editor's e-mail.
+    avatar: 'default',
     importMap: { baseDir: path.resolve(dirname) },
     meta: {
       titleSuffix: ' — Quarau CMS',
@@ -77,7 +78,8 @@ export default buildConfig({
   },
 
   i18n: {
-    supportedLanguages: { pt, en },
+    // The team works in Portuguese: the panel is always pt-BR, whatever the browser language.
+    supportedLanguages: { pt },
     fallbackLanguage: 'pt',
   },
 
