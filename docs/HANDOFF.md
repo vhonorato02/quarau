@@ -22,6 +22,19 @@ Para repetir a simulação: crie a rede `coolify`, rode um `traefik:v3.6` nela (
 `http`/`https`), copie `infra/compose` + `infra/scripts` para um diretório e use `APP_DIR=<dir> SKIP_PULL=1
 scripts/deploy.sh <tag>`. O Traefik 3.5 não fala com o Docker 29 (API mínima 1.40): use 3.6+.
 
+## QA local com conteúdo real (2026-10-06)
+
+- Site: todas as rotas principais em desktop e celular, 0 erros de console, 0 imagens quebradas. Corrigidos: grade
+  de parceiros com células vazias e espaço duplo na página de projeto sem números.
+- CMS (fluxo de editor real): login, criar projeto, capa da biblioteca, publicar, aparecer no site e no portfólio,
+  versões, excluir. Corrigidos: painel meio em inglês (agora sempre pt-BR), avatar do Gravatar (bloqueado pela CSP e
+  vazava hash de e-mail) e "Local: undefined" no painel inicial.
+- Formulário: mensagem salva em _Contatos recebidos_, e-mail para a equipe e confirmação para o visitante
+  (conferidos no Mailpit). O Turnstile só não carrega dentro do sandbox; no CI passa.
+- E2E 90/90 (desktop + mobile, axe WCAG 2.2 AA) no build de produção.
+- Pendente de decisão do cliente: o símbolo da marca no hero fica sobre a cabeça da pessoa da foto.
+- Ponto de atenção: abrir "Criar novo" já grava um rascunho (salvamento automático do Payload).
+
 ## Trabalho direto na VPS (decisão do cliente em 2026-10-06: sem GitHub Actions para operar o servidor)
 
 A sessão de nuvem não alcança a VPS (só sai por proxy HTTP), então o trabalho no servidor é feito por uma
