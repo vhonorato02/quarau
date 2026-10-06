@@ -16,9 +16,25 @@ exemplar.
 - Estrutura **mais enxuta possível**, com qualidade, performance e segurança extremas.
 - Deploy fácil e repetível para cada novo site; **sem briga de domínio** (um proxy único com TLS automático e roteamento
   por domínio; cada site isolado no seu diretório/compose, rede e banco).
-- Antes de remover qualquer coisa: auditar o que roda hoje (Coolify e os 11 containers, o menu `vps` e o painel
-  `https://zewithane.vps.brz.dev.br`, que parecem ser ferramentas próprias do dono), fazer backup e **perguntar ao dono**
-  antes de parar ou apagar algo que não seja nosso. Documentar a arquitetura escolhida em um ADR.
+- **Autorização do dono (2026-10-06): pode limpar TUDO da VPS, como uma formatação completa** (Coolify, os 11
+  containers, o menu `vps`, o painel atual). Ele não é técnico e quer que firewall, proxy, DNS, SSH e o resto sejam
+  resolvidos por nós. Objetivo dele, nas palavras dele: ser a sua própria "Hostinger/GitHub/Vercel", funcional de
+  verdade, para hospedar serviços dos clientes dele.
+- Mesmo autorizado: antes de apagar, listar o que existe e guardar um `pg_dump`/tar só do que tiver dados (barato e
+  reversível). **Nunca perder o acesso SSH:** mudanças de SSH/firewall testadas numa segunda sessão aberta antes de
+  fechar a primeira; a porta 22322 continua sendo a oficial.
+- Documentar a arquitetura escolhida em um ADR e um guia simples para o dono ("como pôr um site novo no ar").
+
+**DNS curinga já funciona:** `*.zewithane.vps.brz.dev.br` aponta para 177.107.94.31 (testado). Cada site ganha
+`<site>.zewithane.vps.brz.dev.br` com HTTPS automático, sem tocar em DNS; o Quarau temporário pode ser
+`quarau.zewithane.vps.brz.dev.br` (melhor que sslip.io). Domínio de cliente: registro A → 177.107.94.31.
+
+**Direção sugerida para a arquitetura (confirmar na auditoria):** com 2 GB, nada de painel pesado. Um proxy de borda
+único com TLS automático e HTTP/3 (ex.: Caddy), roteando por domínio; cada site em `/srv/sites/<site>` com seu compose,
+rede e limites de memória; um Postgres compartilhado com banco e usuário por site (economiza RAM); imagens construídas no
+GitHub Actions e publicadas no GHCR (o servidor só faz pull, nunca build pesado); um comando de deploy por site (pull +
+troca sem downtime + rollback), disparável pelo CI a cada push; backups restic de todos os sites; monitor leve com
+alerta. Avaliar Dokku/Kamal contra essa opção e registrar a escolha no ADR.
 
 **Fase 2 — concluir o site Quarau:** não é "subir como está": é rodar uma versão plenamente estável, sem bugs, testada
 ao extremo (visualmente, interagindo, no navegador, desktop e celular), CMS incluso.
