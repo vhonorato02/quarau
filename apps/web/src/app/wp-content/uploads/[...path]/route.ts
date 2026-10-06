@@ -9,6 +9,10 @@ import { getMediaByLegacyPath } from '@/lib/queries'
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { path } = await params
   const rel = path.join('/')
+  // Real upload paths only: no traversal and no LIKE wildcard such as % in the lookup.
+  if (!/^[\w./-]+$/.test(rel) || rel.includes('..')) {
+    return new Response('Not found', { status: 404 })
+  }
   const original = rel.replace(/-\d+x\d+(?=\.\w+$)/, '')
   const candidates = Array.from(new Set([rel, original, original.replace(/-scaled(?=\.\w+$)/, '')]))
   for (const c of candidates) {

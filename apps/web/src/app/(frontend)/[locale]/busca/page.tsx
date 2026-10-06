@@ -6,7 +6,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { PageHeader } from '@/components/PageHeader'
 import type { Locale } from '@/i18n/routing'
 import { rateLimit } from '@/lib/rate-limit'
-import { search, type SearchHit } from '@/lib/search'
+import { search, searchClient, type SearchHit } from '@/lib/search'
+import { searchDatabase } from '@/lib/search-fallback'
 
 export const dynamic = 'force-dynamic'
 
@@ -36,8 +37,10 @@ export default async function SearchPage({ params, searchParams }: PageProps<'/[
   }
   if (q) {
     const rl = await rateLimit('search:global', 600, 60)
+    // Meilisearch when deployed; otherwise (small servers) a plain database search.
+    const run = searchClient() ? search : searchDatabase
     results = rl.ok
-      ? await search(q, { locale: locale as Locale }).catch(() => ({
+      ? await run(q, { locale: locale as Locale }).catch(() => ({
           hits: [],
           total: 0,
           available: false,

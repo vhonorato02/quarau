@@ -4,7 +4,7 @@ import { deleteDocuments, upsertDocuments, type SearchDoc } from '../lib/search'
 import { docPath, type RoutableCollection } from '../lib/urls'
 import { lexicalToText, truncate } from '../utilities/lexical'
 
-type Indexable = 'pages' | 'projects' | 'services' | 'news'
+export type Indexable = 'pages' | 'projects' | 'services' | 'news'
 
 type AnyDoc = Record<string, unknown> & {
   id: number | string

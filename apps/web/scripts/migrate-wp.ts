@@ -96,10 +96,23 @@ async function placeholder(url: string, file: string): Promise<string> {
   return out
 }
 
+/** Only the old site is downloaded from; anything else in the content is an error, not a fetch. */
+const SOURCE_HOSTS = new Set(['quarau.com.br', 'www.quarau.com.br'])
+
+/** Local cache path for a source URL, guaranteed to stay inside CACHE/<dir>. */
+function cachePath(url: string, dir: string): string {
+  const u = new URL(url)
+  if (!SOURCE_HOSTS.has(u.hostname)) throw new Error(`host não permitido: ${u.hostname}`)
+  const rel = decodeURIComponent(u.pathname).replace(/^\/wp-content\/uploads\//, '')
+  const base = path.resolve(CACHE, dir)
+  const file = path.resolve(base, rel)
+  if (!file.startsWith(base + path.sep)) throw new Error(`caminho inválido: ${url}`)
+  return file
+}
+
 async function download(url: string): Promise<string> {
-  const rel = url.replace(/^https?:\/\/[^/]+\/wp-content\/uploads\//, '')
-  if (OFFLINE) return placeholder(url, path.join(CACHE, 'offline', rel))
-  const file = path.join(CACHE, 'uploads', rel)
+  if (OFFLINE) return placeholder(url, cachePath(url, 'offline'))
+  const file = cachePath(url, 'uploads')
   if (existsSync(file) && (await stat(file)).size > 0) return file
   await mkdir(path.dirname(file), { recursive: true })
   for (let attempt = 1; attempt <= 4; attempt++) {
@@ -126,7 +139,7 @@ function hasFfmpeg(): boolean {
 }
 
 async function prepareVideo(url: string): Promise<string> {
-  const name = path.basename(url)
+  const name = path.basename(cachePath(url, 'video'))
   const out = path.join(CACHE, 'video', name)
   if (existsSync(out) && (await stat(out)).size > 0) return out
   const src = await download(url)

@@ -9,8 +9,11 @@ export async function GET(req: NextRequest) {
   if (secret !== (process.env.PREVIEW_SECRET ?? 'dev-preview-secret')) {
     return new Response('Invalid preview token', { status: 401 })
   }
-  if (!path.startsWith('/') || path.startsWith('//'))
+  // Same-origin paths only: resolving against a dummy origin catches //host, /\\host and the like.
+  const target = new URL(path, 'http://preview.invalid')
+  if (target.origin !== 'http://preview.invalid' || !path.startsWith('/')) {
     return new Response('Invalid path', { status: 400 })
+  }
   ;(await draftMode()).enable()
-  redirect(path)
+  redirect(`${target.pathname}${target.search}${target.hash}`)
 }
