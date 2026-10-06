@@ -37,7 +37,8 @@ scripts/deploy.sh <tag>`. O Traefik 3.5 não fala com o Docker 29 (API mínima 1
 
 ## Trabalho direto na VPS (decisão do cliente em 2026-10-06: sem GitHub Actions para operar o servidor)
 
-A sessão de nuvem não alcança a VPS (só sai por proxy HTTP), então o trabalho no servidor é feito por uma
+Sem SSH, use o console web do provedor: blocos prontos em [console.md](console.md) (diagnóstico/correção do SSH
+e instalação completa com `infra/scripts/console-install.sh`). Com SSH funcionando, a alternativa é
 sessão do Claude Code **rodando na própria VPS**. Para abrir essa sessão (o cliente faz uma vez):
 
 ```bash
