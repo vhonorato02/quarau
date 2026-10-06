@@ -2,6 +2,42 @@
 
 > Atualizado continuamente. Se uma sessão for interrompida, comece por aqui.
 
+## Missão atual (2026-10-06) — leia antes de tudo
+
+O dono decidiu: **primeiro a VPS, depois o site.** A próxima sessão roda **dentro da VPS** (Claude Code + Remote
+Control) e faz tudo por lá.
+
+**Propósito da VPS:** laboratório/host do dono para vários produtos ("SaaS"): este site com CMS é o primeiro; virão
+outros (ex.: um SaaS de mecânica). É também **portfólio padrão ouro** de VPS + site com CMS: a stack precisa ser
+exemplar.
+
+**Fase 1 — VPS pronta para N sites** (sem Coolify, se a auditoria confirmar que ele não compensa):
+
+- Estrutura **mais enxuta possível**, com qualidade, performance e segurança extremas.
+- Deploy fácil e repetível para cada novo site; **sem briga de domínio** (um proxy único com TLS automático e roteamento
+  por domínio; cada site isolado no seu diretório/compose, rede e banco).
+- Antes de remover qualquer coisa: auditar o que roda hoje (Coolify e os 11 containers, o menu `vps` e o painel
+  `https://zewithane.vps.brz.dev.br`, que parecem ser ferramentas próprias do dono), fazer backup e **perguntar ao dono**
+  antes de parar ou apagar algo que não seja nosso. Documentar a arquitetura escolhida em um ADR.
+
+**Fase 2 — concluir o site Quarau:** não é "subir como está": é rodar uma versão plenamente estável, sem bugs, testada
+ao extremo (visualmente, interagindo, no navegador, desktop e celular), CMS incluso.
+
+**Fatos da VPS (confirmados em 2026-10-06):**
+
+- IP real **177.107.94.31** (o `177.107.94.44` do documento antigo está errado; corrigir no repositório, inclusive o
+  domínio temporário `quarau.177-107-94-31.sslip.io`). Hostname `zewithane.vps.brz.dev.br`.
+- **2 GB de RAM** (885 MB em uso), disco 28 GB (12 GB usados), 11 containers. Não dá para buildar Next.js lá sem
+  arriscar os outros serviços: imagens vêm prontas do CI (GHCR) ou o build é feito com limite e swap.
+- SSH ok nas portas 22 e 22322 (usuário `zewithane`, senha; sudo pode pedir senha). O dono alterou a porta do servidor
+  "localhost" no banco do Coolify para 22322.
+- Com 2 GB, a stack do Quarau precisa da versão enxuta: web + Postgres; mídias em volume local (sem MinIO); busca no
+  banco (sem Meilisearch, já suportado); rate limit em memória (sem Valkey).
+- Regras do dono continuam valendo (porta 22322, `sshd_config`, firewall, disco). Ver "Trabalho direto na VPS".
+
+**Pendências conhecidas:** o dono colou um token do GitHub na conversa: ele deve ser revogado. O PR #1 (`main` →
+`claude/compassionate-cori-qu1ioj`) foi aberto pelo dono; a branch antiga pode ser apagada quando ele quiser.
+
 ## Onde estamos (2026-10-06)
 
 - Branch única: `main` (pedido do cliente: sem branches, tudo direto na main, deploy automático).
