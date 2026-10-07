@@ -16,13 +16,13 @@ backups testados, monitor leve com alerta e operação simples para quem não é
 
 ## Opções avaliadas
 
-| Opção | RAM fixa | Prós | Contras |
-| --- | --- | --- | --- |
-| Coolify (manter) | ~700 MB | painel visual | metade da RAM só para o painel; expõe a porta 8000; estado escondido num banco próprio |
-| Dokku | ~100 MB | `git push` para publicar | builda no servidor (Next.js não cabe em 2 GB); o modelo de buildpack não combina com imagens do GHCR |
-| Kamal 2 | ~30 MB (kamal-proxy) | zero downtime nativo, imagens prontas | opera a partir da máquina do desenvolvedor (Ruby + SSH); o dono não tem esse ambiente |
-| Caddy + compose | ~30 MB | TLS automático simples | rotas num Caddyfile central; zero downtime exige reescrever upstreams do mesmo jeito |
-| **Traefik (provedor de arquivos) + compose + `site`** | **~35 MB** | HTTP/3, ACME, health check por serviço, troca de rota atômica; nenhum acesso ao Docker | scripts próprios (bash, ~400 linhas, testados) |
+| Opção                                                 | RAM fixa             | Prós                                                                                   | Contras                                                                                              |
+| ----------------------------------------------------- | -------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Coolify (manter)                                      | ~700 MB              | painel visual                                                                          | metade da RAM só para o painel; expõe a porta 8000; estado escondido num banco próprio               |
+| Dokku                                                 | ~100 MB              | `git push` para publicar                                                               | builda no servidor (Next.js não cabe em 2 GB); o modelo de buildpack não combina com imagens do GHCR |
+| Kamal 2                                               | ~30 MB (kamal-proxy) | zero downtime nativo, imagens prontas                                                  | opera a partir da máquina do desenvolvedor (Ruby + SSH); o dono não tem esse ambiente                |
+| Caddy + compose                                       | ~30 MB               | TLS automático simples                                                                 | rotas num Caddyfile central; zero downtime exige reescrever upstreams do mesmo jeito                 |
+| **Traefik (provedor de arquivos) + compose + `site`** | **~35 MB**           | HTTP/3, ACME, health check por serviço, troca de rota atômica; nenhum acesso ao Docker | scripts próprios (bash, ~400 linhas, testados)                                                       |
 
 ## Decisão
 

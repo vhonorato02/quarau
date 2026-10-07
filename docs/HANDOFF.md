@@ -39,7 +39,6 @@ corrigir a 1ª linha do `~/.bashrc` (uma aspa solta quebra o `PATH`).
   rejeitada, rollback, backup + off-site, restore-test, restore real, healthwatch. Ver `docs/runbook.md`.
 - Local: 30 unit, 9 integração, 90 E2E (desktop + mobile, axe WCAG 2.2 AA) passando.
 
-
 ## QA local com conteúdo real (2026-10-06)
 
 - Site: todas as rotas principais em desktop e celular, 0 erros de console, 0 imagens quebradas. Corrigidos: grade

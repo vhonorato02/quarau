@@ -24,10 +24,10 @@ Internet ──► Traefik v3.6 (:80 → :443, HTTP/3, Let's Encrypt, cabeçalho
 
 ### Memória (medida em 2026-10-06)
 
-| Componente | Uso | Limite |
-| --- | --- | --- |
-| Traefik | ~32 MB | 128 MB |
-| Postgres | ~95 MB | 448 MB |
+| Componente | Uso     | Limite |
+| ---------- | ------- | ------ |
+| Traefik    | ~32 MB  | 128 MB |
+| Postgres   | ~95 MB  | 448 MB |
 | quarau-web | ~210 MB | 768 MB |
 
 Versão enxuta da stack: sem MinIO, Meilisearch, Valkey, pgBouncer, Umami nem Uptime Kuma (o código já degrada
@@ -36,11 +36,11 @@ para mídia local, busca no banco e rate limit em memória). Se a VPS crescer, c
 
 ## Pipeline (GitHub Actions)
 
-| Workflow | Quando | O quê |
-| --- | --- | --- |
-| [CI/CD](../.github/workflows/ci.yml) | push na `main` e PRs | format, lint, typecheck, unit, Storybook · integração Payload · **imagem Docker + E2E/axe na imagem real**, links, Lighthouse, k6, Trivy · push no GHCR (`:<sha>` e `:latest`) |
-| [CodeQL](../.github/workflows/codeql.yml) | push/PR/semanal | Análise de segurança do código |
-| Renovate | segunda-feira | Atualizações de dependências |
+| Workflow                                  | Quando               | O quê                                                                                                                                                                          |
+| ----------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [CI/CD](../.github/workflows/ci.yml)      | push na `main` e PRs | format, lint, typecheck, unit, Storybook · integração Payload · **imagem Docker + E2E/axe na imagem real**, links, Lighthouse, k6, Trivy · push no GHCR (`:<sha>` e `:latest`) |
+| [CodeQL](../.github/workflows/codeql.yml) | push/PR/semanal      | Análise de segurança do código                                                                                                                                                 |
+| Renovate                                  | segunda-feira        | Atualizações de dependências                                                                                                                                                   |
 
 Qualquer falha bloqueia a publicação da imagem. **O deploy é puxado pela VPS** (timer de 2 min que observa o
 `:latest`), então o GitHub não guarda nenhuma chave de acesso ao servidor.

@@ -8,7 +8,7 @@ simples para a equipe.
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Stack**     | Next.js 16 (App Router, RSC, View Transitions) · Payload CMS 3.90 · PostgreSQL 17 + pgBouncer · Valkey · MinIO · Meilisearch · Tailwind CSS v4 · Radix · GSAP/Lenis · React Three Fiber · next-intl · React Email |
 | **Qualidade** | TypeScript strict · ESLint/Prettier · Vitest · Payload integration tests · Playwright E2E + axe (WCAG 2.2 AA) · visual regression · Lighthouse CI · links · k6 · Trivy · CodeQL · Renovate                        |
-| **Infra**     | Docker (GHCR) · VPS própria: Traefik (HTTPS/HTTP3) + Postgres compartilhado · auto-deploy sem downtime · restic · alertas ntfy · Sentry                                                                                      |
+| **Infra**     | Docker (GHCR) · VPS própria: Traefik (HTTPS/HTTP3) + Postgres compartilhado · auto-deploy sem downtime · restic · alertas ntfy · Sentry                                                                           |
 
 ## Estrutura
 

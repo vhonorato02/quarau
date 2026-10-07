@@ -3,18 +3,18 @@
 O site roda na plataforma da VPS ([guia](vps-guia.md), [ADR 0013](decisions/0013-plataforma-vps-traefik-sem-painel.md)).
 Tudo é feito com o comando `site`, no servidor (`ssh -p 22322 zewithane@177.107.94.31`).
 
-| Tarefa | Comando |
-| --- | --- |
-| Estado de todos os sites | `site lista` · `site saude` |
-| Publicar uma versão | `site deploy quarau <sha>` (sem `<sha>`: a mais nova; com auto-deploy ligado, é automático) |
-| **Rollback** | `site rollback quarau` (volta para a anterior e pausa o auto-deploy) |
-| Histórico | `site versoes quarau` |
-| Logs | `site logs quarau` |
-| Variáveis/segredos | `site config quarau` (aplica sem downtime) |
-| Banco | `site banco quarau` |
-| Backup agora | `site backup` |
-| Teste de restore | `sudo /srv/platform/bin/restore-test.sh` |
-| Limpar cache do site | `docker exec quarau-web-1 sh -c 'curl -fsS -X POST -H "authorization: Bearer $REVALIDATE_SECRET" -d "{\"all\":true}" http://127.0.0.1:3000/next/revalidate'` |
+| Tarefa                   | Comando                                                                                                                                                      |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Estado de todos os sites | `site lista` · `site saude`                                                                                                                                  |
+| Publicar uma versão      | `site deploy quarau <sha>` (sem `<sha>`: a mais nova; com auto-deploy ligado, é automático)                                                                  |
+| **Rollback**             | `site rollback quarau` (volta para a anterior e pausa o auto-deploy)                                                                                         |
+| Histórico                | `site versoes quarau`                                                                                                                                        |
+| Logs                     | `site logs quarau`                                                                                                                                           |
+| Variáveis/segredos       | `site config quarau` (aplica sem downtime)                                                                                                                   |
+| Banco                    | `site banco quarau`                                                                                                                                          |
+| Backup agora             | `site backup`                                                                                                                                                |
+| Teste de restore         | `sudo /srv/platform/bin/restore-test.sh`                                                                                                                     |
+| Limpar cache do site     | `docker exec quarau-web-1 sh -c 'curl -fsS -X POST -H "authorization: Bearer $REVALIDATE_SECRET" -d "{\"all\":true}" http://127.0.0.1:3000/next/revalidate'` |
 
 (Depois de um deploy, o container pode se chamar `quarau-web-2`: veja o nome com `docker ps`.)
 
@@ -60,15 +60,15 @@ A senha gerada fica só em `/srv/sites/quarau/CREDENCIAIS.txt` (`chmod 600`).
 
 ## Incidentes comuns
 
-| Sintoma | Verificar / agir |
-| --- | --- |
-| Site fora (502/504) | `site lista`; `site logs quarau`; se a versão nova quebrou → `site rollback quarau` |
-| `/next/health` = 503 | `docker ps` (Postgres `platform-postgres-1` saudável?); disco cheio? `site saude` |
-| Disco > 85% | `docker system df`; `docker image prune -af --filter until=168h`; `sudo du -sh /srv/backups` |
-| Imagens não carregam | `sudo ls /srv/sites/quarau/data/media` (dono deve ser 1001) |
-| Formulário não envia e-mail | SMTP em `site config quarau`; as mensagens continuam salvas em _Contatos recebidos_ |
-| Certificado HTTPS | `docker logs platform-traefik-1 \| grep -i acme`; o DNS aponta para 177.107.94.31? |
-| Publicação não aparece | Foi publicada (não só rascunho)? Limpe o cache do site (tabela acima) |
+| Sintoma                     | Verificar / agir                                                                             |
+| --------------------------- | -------------------------------------------------------------------------------------------- |
+| Site fora (502/504)         | `site lista`; `site logs quarau`; se a versão nova quebrou → `site rollback quarau`          |
+| `/next/health` = 503        | `docker ps` (Postgres `platform-postgres-1` saudável?); disco cheio? `site saude`            |
+| Disco > 85%                 | `docker system df`; `docker image prune -af --filter until=168h`; `sudo du -sh /srv/backups` |
+| Imagens não carregam        | `sudo ls /srv/sites/quarau/data/media` (dono deve ser 1001)                                  |
+| Formulário não envia e-mail | SMTP em `site config quarau`; as mensagens continuam salvas em _Contatos recebidos_          |
+| Certificado HTTPS           | `docker logs platform-traefik-1 \| grep -i acme`; o DNS aponta para 177.107.94.31?           |
+| Publicação não aparece      | Foi publicada (não só rascunho)? Limpe o cache do site (tabela acima)                        |
 
 ## Atualizar dependências / Payload
 

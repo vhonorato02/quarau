@@ -60,7 +60,7 @@ Cada app ganha automaticamente **um banco de dados só dele**, que outros sites 
 1. No painel onde o domínio foi comprado (Registro.br, GoDaddy, Cloudflare…), crie dois registros:
    - tipo **A**, nome **@**, valor **177.107.94.31**
    - tipo **A**, nome **www**, valor **177.107.94.31**
-   (Na Cloudflare, deixe a nuvem **cinza**, sem proxy, pelo menos até o certificado sair.)
+     (Na Cloudflare, deixe a nuvem **cinza**, sem proxy, pelo menos até o certificado sair.)
 2. Espere alguns minutos e rode:
 
 ```bash
@@ -71,16 +71,16 @@ O comando avisa se o DNS ainda não estiver apontando. O certificado HTTPS é em
 
 ## Publicar, voltar atrás, acompanhar
 
-| Quero… | Comando |
-| --- | --- |
-| publicar a versão mais nova agora | `site deploy oficina` |
-| voltar para a versão anterior (deu problema) | `site rollback oficina` |
-| ver o histórico de versões | `site versoes oficina` |
-| ver o que o app está registrando | `site logs oficina` (Ctrl+C para sair) |
-| reiniciar | `site reiniciar oficina` |
-| mudar senhas/variáveis do app | `site config oficina` |
-| mexer no banco direto | `site banco oficina` |
-| apagar um site | `site remover oficina` (guarda uma cópia final em `/srv/backups/removidos/`) |
+| Quero…                                       | Comando                                                                      |
+| -------------------------------------------- | ---------------------------------------------------------------------------- |
+| publicar a versão mais nova agora            | `site deploy oficina`                                                        |
+| voltar para a versão anterior (deu problema) | `site rollback oficina`                                                      |
+| ver o histórico de versões                   | `site versoes oficina`                                                       |
+| ver o que o app está registrando             | `site logs oficina` (Ctrl+C para sair)                                       |
+| reiniciar                                    | `site reiniciar oficina`                                                     |
+| mudar senhas/variáveis do app                | `site config oficina`                                                        |
+| mexer no banco direto                        | `site banco oficina`                                                         |
+| apagar um site                               | `site remover oficina` (guarda uma cópia final em `/srv/backups/removidos/`) |
 
 Publicar **nunca tira o site do ar**: a versão nova sobe ao lado da antiga e só recebe visitas depois de provar
 que está saudável. Se ela falhar, a antiga continua no ar e você recebe um alerta.
@@ -101,7 +101,7 @@ novo quando tudo volta ao normal.
 - Todo domingo o servidor **testa a restauração** sozinho e avisa se algo estiver errado.
 - `site backup` faz um backup na hora.
 - **Importante:** guarde num gerenciador de senhas o valor de `RESTIC_PASSWORD` (`sudo grep RESTIC_PASSWORD
-  /srv/platform/.env`). Sem ele, os backups não podem ser lidos.
+/srv/platform/.env`). Sem ele, os backups não podem ser lidos.
 - **Recomendado:** uma cópia fora do servidor (se a VPS sumir, o backup local some junto). Crie um bucket no
   Backblaze B2 (10 GB grátis) e preencha `RESTIC_REPOSITORY_OFFSITE`, `AWS_ACCESS_KEY_ID` e
   `AWS_SECRET_ACCESS_KEY` em `/srv/platform/.env`. O backup diário passa a enviar a cópia sozinho.
