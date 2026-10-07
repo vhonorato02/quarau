@@ -6,6 +6,7 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { pt } from '@payloadcms/translations/languages/pt'
 import { createTransport } from 'nodemailer'
 import { buildConfig } from 'payload'
@@ -39,6 +40,28 @@ const dirname = path.dirname(filename)
 const env = process.env
 const siteUrl = env.SITE_URL ?? 'http://localhost:3000'
 const isProd = env.NODE_ENV === 'production'
+/**
+ * Outgoing e-mail: any SMTP server, or Resend (free tier) when its API key is present
+ * (the Vercel ↔ Resend integration sets RESEND_API_KEY).
+ */
+const smtpTransport = env.SMTP_HOST
+  ? createTransport({
+      host: env.SMTP_HOST,
+      port: Number(env.SMTP_PORT ?? 587),
+      secure: env.SMTP_SECURE === 'true',
+      auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: env.SMTP_PASS } : undefined,
+    })
+  : env.RESEND_API_KEY
+    ? createTransport({
+        host: 'smtp.resend.com',
+        port: 465,
+        secure: true,
+        auth: { user: 'resend', pass: env.RESEND_API_KEY },
+      })
+    : undefined
+
+/** Running on Vercel (serverless): small DB pool, Blob storage, cron-driven jobs. */
+const onVercel = Boolean(env.VERCEL)
 
 export default buildConfig({
   serverURL: siteUrl,
@@ -111,7 +134,7 @@ export default buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: env.DATABASE_URL || 'postgres://quarau:quarau@localhost:5432/quarau',
-      max: Number(env.DATABASE_POOL_MAX ?? 10),
+      max: Number(env.DATABASE_POOL_MAX ?? (onVercel ? 3 : 10)),
     },
     migrationDir: path.resolve(dirname, 'migrations'),
     // Schema changes in production only through committed migrations, applied on boot.
@@ -119,26 +142,28 @@ export default buildConfig({
     prodMigrations: migrations,
   }),
 
-  email: env.SMTP_HOST
+  email: smtpTransport
     ? nodemailerAdapter({
         defaultFromAddress: env.EMAIL_FROM_ADDRESS ?? 'nao-responda@quarau.com.br',
         defaultFromName: env.EMAIL_FROM_NAME ?? 'Quarau',
         // Never block startup on SMTP availability; delivery errors are handled per message.
         skipVerify: true,
-        transport: createTransport({
-          host: env.SMTP_HOST,
-          port: Number(env.SMTP_PORT ?? 587),
-          secure: env.SMTP_SECURE === 'true',
-          auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: env.SMTP_PASS } : undefined,
-        }),
+        transport: smtpTransport,
       })
     : undefined,
 
   jobs: {
     // Scheduled publish/unpublish runs through the jobs queue.
+    // Long-running servers poll every minute; on Vercel the cron in vercel.json calls
+    // /api/payload-jobs/run with the CRON_SECRET bearer token instead.
     autoRun: [{ cron: '* * * * *', limit: 20, queue: 'default' }],
-    shouldAutoRun: () => env.PAYLOAD_JOBS_AUTORUN !== 'false',
-    access: { run: ({ req }) => Boolean(req.user) },
+    shouldAutoRun: () => !onVercel && env.PAYLOAD_JOBS_AUTORUN !== 'false',
+    access: {
+      run: ({ req }) =>
+        Boolean(req.user) ||
+        (Boolean(env.CRON_SECRET) &&
+          req.headers.get('authorization') === `Bearer ${env.CRON_SECRET}`),
+    },
   },
 
   plugins: [
@@ -168,6 +193,13 @@ export default buildConfig({
       },
       generateURL: ({ doc, collectionConfig }) =>
         `${siteUrl}${docPath((collectionConfig?.slug ?? 'pages') as RoutableCollection, (doc as { slug?: string }).slug)}`,
+    }),
+    vercelBlobStorage({
+      enabled: Boolean(env.BLOB_READ_WRITE_TOKEN),
+      collections: { media: { prefix: 'media' }, documents: { prefix: 'documents' } },
+      token: env.BLOB_READ_WRITE_TOKEN ?? '',
+      // Browser uploads straight to Blob: no 4.5 MB request limit for large photos and PDFs.
+      clientUploads: true,
     }),
     s3Storage({
       enabled: Boolean(env.S3_ENDPOINT && env.S3_ACCESS_KEY_ID),

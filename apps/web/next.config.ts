@@ -52,7 +52,10 @@ const securityHeaders = [
 ]
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  // Docker/VPS builds ship the standalone server; Vercel uses its own output.
+  output: process.env.VERCEL ? undefined : 'standalone',
+  // The OG image route reads the Barlow files at runtime.
+  outputFileTracingIncludes: { '/next/og': ['./src/fonts/**/*'] },
   outputFileTracingRoot: path.join(dirname, '../../'),
   transpilePackages: ['@quarau/ui', '@quarau/emails'],
   poweredByHeader: false,

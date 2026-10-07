@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:vercel": "PAYLOAD_DB_PUSH=false NODE_OPTIONS=--max-old-space-size=6144 tsx scripts/vercel-build.ts",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "next typegen > /dev/null && tsc --noEmit",
@@ -35,6 +36,7 @@
     "@payloadcms/plugin-seo": "3.90.2",
     "@payloadcms/richtext-lexical": "3.90.2",
     "@payloadcms/storage-s3": "3.90.2",
+    "@payloadcms/storage-vercel-blob": "3.90.2",
     "@payloadcms/translations": "3.90.2",
     "@payloadcms/ui": "3.90.2",
     "@quarau/emails": "workspace:*",
