@@ -1,0 +1,28 @@
+# Configuração comum a todos os sites (aplicada no entrypoint https).
+http:
+  middlewares:
+    defaults:
+      chain:
+        middlewares: [secure-headers, compress, retry]
+    secure-headers:
+      headers:
+        stsSeconds: 63072000
+        contentTypeNosniff: true
+        referrerPolicy: strict-origin-when-cross-origin
+        customFrameOptionsValue: SAMEORIGIN
+        customResponseHeaders:
+          Server: ''
+          X-Powered-By: ''
+    compress:
+      compress:
+        encodings: [zstd, br, gzip]
+    # Só repete quando o container não respondeu (ex.: réplica saindo no deploy).
+    retry:
+      retry:
+        attempts: 2
+        initialInterval: 100ms
+
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12

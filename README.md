@@ -8,7 +8,7 @@ simples para a equipe.
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Stack**     | Next.js 16 (App Router, RSC, View Transitions) · Payload CMS 3.90 · PostgreSQL 17 + pgBouncer · Valkey · MinIO · Meilisearch · Tailwind CSS v4 · Radix · GSAP/Lenis · React Three Fiber · next-intl · React Email |
 | **Qualidade** | TypeScript strict · ESLint/Prettier · Vitest · Payload integration tests · Playwright E2E + axe (WCAG 2.2 AA) · visual regression · Lighthouse CI · links · k6 · Trivy · CodeQL · Renovate                        |
-| **Infra**     | Docker (GHCR) · Traefik do Coolify (HTTPS/HTTP3) · deploy sem downtime por SSH · restic · Uptime Kuma · OpenTelemetry/Sentry                                                                                      |
+| **Infra**     | Docker (GHCR) · VPS própria: Traefik (HTTPS/HTTP3) + Postgres compartilhado · auto-deploy sem downtime · restic · alertas ntfy · Sentry                                                                                      |
 
 ## Estrutura
 
@@ -47,11 +47,12 @@ Scripts úteis: `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm --filter
 - [docs/brand.md](docs/brand.md): regras da marca (logo, cores, tipografia)
 - [docs/cms.md](docs/cms.md): guia do painel para quem edita o site
 - [docs/infra.md](docs/infra.md): infraestrutura, CI/CD, segredos, backups, monitoramento
-- [docs/runbook.md](docs/runbook.md): deploy, rollback e incidentes
+- [docs/vps-guia.md](docs/vps-guia.md): guia da VPS (como pôr qualquer site no ar)
+- [docs/runbook.md](docs/runbook.md): deploy, rollback e incidentes do Quarau
 - [docs/go-live.md](docs/go-live.md): checklist da troca para quarau.com.br
 - [docs/inventario.md](docs/inventario.md): inventário do site antigo
 - [docs/decisions/](docs/decisions): ADRs
 - [docs/HANDOFF.md](docs/HANDOFF.md): estado atual do trabalho
 
 Fluxo de trabalho: commits pequenos no padrão Conventional Commits diretamente na `main`. Cada push roda o CI
-completo e, se tudo passar, faz o deploy automático na VPS.
+completo e, se tudo passar, publica a imagem; a VPS a coloca no ar sozinha em até 2 minutos.

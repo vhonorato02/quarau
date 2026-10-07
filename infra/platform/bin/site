@@ -1,0 +1,266 @@
+#!/usr/bin/env bash
+# site — gerencia os sites hospedados nesta VPS. Rode "site ajuda".
+[[ $EUID -eq 0 ]] || exec sudo -E "$0" "$@"
+source "$(dirname "$(readlink -f "$0")")/lib.sh"
+load_platform_env
+
+usage() {
+  cat <<EOF
+${B}site${N} — seus sites nesta VPS
+
+${B}Criar${N}
+  site novo <nome> <imagem>       site/app a partir de uma imagem Docker (ex.: ghcr.io/voce/app)
+  site novo <nome> --estatico     site estático (HTML/CSS/JS): você envia os arquivos para public/
+    opções: --dominio a.com,www.a.com   (padrão: <nome>.${BASE_DOMAIN})
+            --porta 3000  --saude /health  --memoria 512m  --sem-banco  --sem-autodeploy
+
+${B}Publicar${N}
+  site deploy <nome> [versão]     publica sem tirar do ar (padrão: a mais nova da imagem)
+  site rollback <nome>            volta para a versão anterior
+  site versoes <nome>             histórico de publicações
+
+${B}Acompanhar${N}
+  site lista                      todos os sites e se estão no ar
+  site logs <nome> [linhas]       registros do site (Ctrl+C para sair)
+  site reiniciar <nome>
+
+${B}Configurar${N}
+  site dominio <nome> <a.com,www.a.com>   troca os domínios (aponte o DNS antes: A → ${SERVER_IP})
+  site config <nome>              edita as variáveis do app (senhas, e-mail…) e reinicia
+  site banco <nome>               abre o banco de dados do site (psql)
+
+${B}Manutenção${N}
+  site backup                     backup completo agora (roda sozinho todo dia às 03:17)
+  site saude                      checa tudo agora (roda sozinho a cada 5 min)
+  site remover <nome>             apaga o site (pede confirmação)
+EOF
+}
+
+# ---------------------------------------------------------------- novo
+cmd_novo() {
+  local site="${1:-}"; shift || true
+  [[ -n "$site" ]] || die "uso: site novo <nome> <imagem|--estatico> [opções]"
+  valid_site "$site"
+  site_exists "$site" && die "o site '$site' já existe"
+  local image='' static=0 domains="${site}.${BASE_DOMAIN}" port=3000 health='' memory=512m with_db=1 autodeploy=1
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --estatico) static=1 ;;
+      --dominio) domains="$2"; shift ;;
+      --porta) port="$2"; shift ;;
+      --saude) health="$2"; shift ;;
+      --memoria) memory="$2"; shift ;;
+      --sem-banco) with_db=0 ;;
+      --sem-autodeploy) autodeploy=0 ;;
+      -*) die "opção desconhecida: $1" ;;
+      *) image="$1" ;;
+    esac
+    shift
+  done
+  if (( static )); then image='nginxinc/nginx-unprivileged'; port=8080; memory=32m; with_db=0; autodeploy=0; fi
+  [[ -n "$image" ]] || die "informe a imagem (ex.: ghcr.io/voce/app) ou --estatico"
+  image="${image%%:*}"
+
+  local dir; dir=$(site_dir "$site")
+  install -d -m 750 "$dir" "$dir/data"
+  local tag=latest; (( static )) && tag=alpine
+  {
+    echo "# Configuração da plataforma para o site '$site' (variáveis do app ficam em app.env)"
+    echo "SITE=$site"
+    echo "IMAGE=$image"
+    echo "TAG=$tag"
+    echo "DOMAINS=$domains"
+    echo "PORT=$port"
+    echo "HEALTH_PATH=$health"
+    echo "AUTODEPLOY_TAG=$( (( autodeploy )) && echo latest)"
+    echo "DRAIN_FILE="
+  } > "$dir/.env"
+  : > "$dir/app.env"
+  chmod 600 "$dir/.env" "$dir/app.env"
+
+  local volumes="      - ./data:/data"
+  if (( static )); then
+    install -d -m 755 -o "${SUDO_USER:-root}" -g "${SUDO_USER:-root}" "$dir/public"
+    chmod 755 "$dir"
+    [[ -f "$dir/public/index.html" ]] || printf '<!doctype html><meta charset="utf-8"><title>%s</title><h1>%s está no ar</h1>\n' "$site" "$site" > "$dir/public/index.html"
+    volumes="      - ./public:/usr/share/nginx/html:ro"
+  fi
+
+  cat > "$dir/compose.yml" <<EOF
+# Site "$site" — gerado por "site novo". Pode editar; publique com "site deploy $site".
+name: $site
+
+services:
+  web:
+    image: \${IMAGE}:\${TAG}
+    restart: unless-stopped
+    env_file: app.env
+    volumes:
+$volumes
+    networks: [proxy$( (( with_db )) && echo ', db')]
+    security_opt: ['no-new-privileges:true']
+    deploy:
+      resources:
+        limits: { memory: $memory }
+
+networks:
+  proxy: { external: true }
+$( (( with_db )) && echo '  db: { external: true }')
+EOF
+  sed -i '/^$/N;/^\n$/D' "$dir/compose.yml"
+
+  if (( with_db )); then
+    local db pass; db=$(db_name "$site"); pass=$(rand 32)
+    psql_admin <<SQL
+CREATE ROLE "$db" LOGIN PASSWORD '$pass';
+CREATE DATABASE "$db" OWNER "$db";
+REVOKE ALL ON DATABASE "$db" FROM PUBLIC;
+SQL
+    echo "DATABASE_URL=postgres://${db}:${pass}@postgres:5432/${db}" >> "$dir/app.env"
+    ok "banco '$db' criado (DATABASE_URL já está em app.env)"
+  fi
+  ok "site '$site' criado em $dir"
+  if (( static )); then
+    cmd_deploy "$site"
+    echo "Envie os arquivos para ${B}$dir/public/${N} (ex.: scp -P 22322 -r ./* ${SUDO_USER:-zewithane}@${SERVER_IP}:$dir/public/)"
+  else
+    echo "Próximos passos: ${B}site config $site${N} (variáveis do app) e ${B}site deploy $site${N}"
+  fi
+}
+
+# ---------------------------------------------------------------- deploy
+cmd_deploy() {
+  local site="${1:-}"; need_site "$site"
+  "$PLATFORM_DIR/bin/deploy.sh" "$site" "${2:-}"
+}
+
+cmd_rollback() {
+  local site="${1:-}"; need_site "$site"
+  local cur prev
+  cur=$(site_get "$site" TAG)
+  prev=$(awk '{print $2}' "$(site_dir "$site")/releases.log" 2>/dev/null | grep -vxF "$cur" | tail -1 || true)
+  [[ -n "$prev" ]] || die "não há versão anterior registrada para '$site'"
+  log "voltando '$site' de $cur para $prev"
+  SKIP_PULL="${SKIP_PULL:-0}" "$PLATFORM_DIR/bin/deploy.sh" "$site" "$prev"
+  # Sem isso o auto-deploy republicaria a versão ruim em 2 minutos.
+  if [[ -n "$(site_get "$site" AUTODEPLOY_TAG)" ]]; then
+    site_set "$site" AUTODEPLOY_TAG ''
+    warn "auto-deploy pausado para '$site'. Corrija e reative com: site autodeploy $site on"
+  fi
+}
+
+cmd_autodeploy() {
+  local site="${1:-}" mode="${2:-}"; need_site "$site"
+  case "$mode" in
+    on) site_set "$site" AUTODEPLOY_TAG latest; ok "auto-deploy ligado: cada nova imagem :latest é publicada sozinha" ;;
+    off) site_set "$site" AUTODEPLOY_TAG ''; ok "auto-deploy desligado" ;;
+    *) echo "auto-deploy de '$site': $( [[ -n "$(site_get "$site" AUTODEPLOY_TAG)" ]] && echo ligado || echo desligado)" ;;
+  esac
+}
+
+cmd_versoes() {
+  local site="${1:-}"; need_site "$site"
+  echo "atual: $(site_get "$site" TAG)"
+  tail -n 15 "$(site_dir "$site")/releases.log" 2>/dev/null || echo "(nenhuma publicação ainda)"
+}
+
+# ---------------------------------------------------------------- acompanhar
+cmd_lista() {
+  local d site
+  printf '%s%-16s %-10s %-14s %s%s\n' "$B" SITE ESTADO VERSÃO ENDEREÇO "$N"
+  for d in "$SITES_DIR"/*/; do
+    [[ -f "$d/compose.yml" ]] || continue
+    site=$(basename "$d")
+    local ids state='parado' color="$R"
+    ids=$(compose "$site" ps -q web 2>/dev/null || true)
+    if [[ -n "$ids" ]]; then
+      state=$(container_health "$(head -1 <<< "$ids")")
+      [[ "$state" == healthy || "$state" == running ]] && { state='no ar'; color="$G"; }
+    fi
+    local dom; dom=$(site_get "$site" DOMAINS); dom="${dom%%,*}"
+    printf '%-16s %s%-10s%s %-14s https://%s\n' "$site" "$color" "$state" "$N" "$(site_get "$site" TAG | cut -c1-12)" "$dom"
+  done
+  echo
+  free -h | awk '/Mem:/{printf "memória: %s livres de %s   ", $7, $2}'
+  df -h / | awk 'NR==2{printf "disco: %s livres de %s (%s usado)\n", $4, $2, $5}'
+}
+
+cmd_logs() {
+  local site="${1:-}"; need_site "$site"
+  compose "$site" logs -f --tail "${2:-100}"
+}
+
+cmd_reiniciar() {
+  local site="${1:-}"; need_site "$site"
+  compose "$site" restart && ok "'$site' reiniciado"
+}
+
+# ---------------------------------------------------------------- configurar
+cmd_dominio() {
+  local site="${1:-}" domains="${2:-}"; need_site "$site"
+  [[ -n "$domains" ]] || die "uso: site dominio <nome> <a.com,www.a.com>"
+  local d ip
+  IFS=',' read -ra ds <<< "$domains"
+  for d in "${ds[@]}"; do
+    ip=$(getent ahostsv4 "$d" | awk 'NR==1{print $1}' || true)
+    [[ "$ip" == "$SERVER_IP" ]] || warn "$d aponta para '${ip:-nada}', não para $SERVER_IP: o HTTPS só funciona depois de corrigir o DNS"
+  done
+  site_set "$site" DOMAINS "$domains"
+  local names
+  names=$(compose "$site" ps --format '{{.Name}}' web)
+  # shellcheck disable=SC2086
+  write_route "$site" $names
+  ok "domínios de '$site': $domains (o certificado HTTPS sai sozinho em ~1 min)"
+}
+
+cmd_config() {
+  local site="${1:-}"; need_site "$site"
+  local f; f="$(site_dir "$site")/app.env"
+  "${EDITOR:-nano}" "$f"
+  chmod 600 "$f"
+  log "aplicando (publicação sem tirar do ar)"
+  SKIP_PULL=1 "$PLATFORM_DIR/bin/deploy.sh" "$site" "$(site_get "$site" TAG)"
+}
+
+cmd_banco() {
+  local site="${1:-}"; need_site "$site"
+  docker exec -it "$PG_CONTAINER" psql -U postgres -d "$(db_name "$site")"
+}
+
+# ---------------------------------------------------------------- manutenção
+cmd_remover() {
+  local site="${1:-}"; need_site "$site"
+  read -r -p "Digite o nome do site para confirmar a remoção de '$site': " answer
+  [[ "$answer" == "$site" ]] || die "cancelado"
+  compose "$site" down --remove-orphans || true
+  local db; db=$(db_name "$site")
+  if psql_admin -c "SELECT 1 FROM pg_database WHERE datname='$db'" | grep -q 1; then
+    install -d -m 700 "$BACKUP_DIR/removidos"
+    docker exec "$PG_CONTAINER" pg_dump -U postgres -Fc "$db" > "$BACKUP_DIR/removidos/${db}-$(date +%F).dump"
+    psql_admin -c "DROP DATABASE \"$db\" WITH (FORCE)" -c "DROP ROLE IF EXISTS \"$db\""
+  fi
+  tar -C "$SITES_DIR" -czf "$BACKUP_DIR/removidos/${site}-$(date +%F).tar.gz" "$site"
+  write_route "$site"
+  rm -rf "$(site_dir "$site")"
+  ok "'$site' removido (cópia final em $BACKUP_DIR/removidos/)"
+}
+
+cmd="${1:-ajuda}"; shift || true
+case "$cmd" in
+  novo|new) cmd_novo "$@" ;;
+  deploy|publicar) cmd_deploy "$@" ;;
+  rollback|voltar) cmd_rollback "$@" ;;
+  autodeploy) cmd_autodeploy "$@" ;;
+  versoes|versões|releases) cmd_versoes "$@" ;;
+  lista|list|ls|status) cmd_lista ;;
+  logs) cmd_logs "$@" ;;
+  reiniciar|restart) cmd_reiniciar "$@" ;;
+  dominio|domínio|domain) cmd_dominio "$@" ;;
+  config|env) cmd_config "$@" ;;
+  banco|db) cmd_banco "$@" ;;
+  backup) "$PLATFORM_DIR/bin/backup.sh" ;;
+  saude|saúde|health) "$PLATFORM_DIR/bin/healthwatch.sh" --verbose ;;
+  remover|remove|rm) cmd_remover "$@" ;;
+  ajuda|help|-h|--help) usage ;;
+  *) usage; exit 1 ;;
+esac

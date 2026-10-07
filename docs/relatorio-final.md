@@ -142,7 +142,7 @@ ficou vazio ou oculto.
 Resumo. O detalhado está em [go-live.md](go-live.md).
 
 1. Resolver os `[CONFIRMAR]` críticos (3, 4, 18) e configurar SMTP, Turnstile, backup off-site e alertas.
-2. DNS: `A @ → 177.107.94.44`, `A www → 177.107.94.44` (TTL 300). Não mexer em MX/SPF/DKIM.
+2. DNS: `A @ → 177.107.94.31`, `A www → 177.107.94.31` (TTL 300). Não mexer em MX/SPF/DKIM.
 3. No `.env` da VPS: `TRAEFIK_RULE` com `quarau.com.br`/`www`, `TRAEFIK_MIDDLEWARES=quarau-headers,quarau-compress`
    (remove basic auth e noindex), `SITE_URL=https://quarau.com.br`, `SITE_NOINDEX=false`; redeploy e limpeza de cache.
 4. Verificar HTTPS, robots, redirects 301, formulário e `/admin`.
@@ -154,6 +154,6 @@ Resumo. O detalhado está em [go-live.md](go-live.md).
    `ssh-keygen -t ed25519 -f quarau-deploy -C quarau-deploy`, e adicione `quarau-deploy.pub` em
    `~zewithane/.ssh/authorized_keys` na VPS.
 2. GitHub → Settings → Secrets and variables → Actions → **New secret** `VPS_SSH_KEY` com o conteúdo de
-   `quarau-deploy` (privada). Opcional: `VPS_KNOWN_HOSTS` com `ssh-keyscan -p 22322 177.107.94.44`.
+   `quarau-deploy` (privada). Opcional: `VPS_KNOWN_HOSTS` com `ssh-keyscan -p 22322 177.107.94.31`.
 3. Me avise. Eu disparo, em ordem: `audit` → `bootstrap` → deploy → `migrate-content` → `create-admin`, valido em
-   `https://quarau.177-107-94-44.sslip.io` (basic auth em `/srv/apps/quarau/CREDENCIAIS.txt`) e rodo backup + teste de restore.
+   `https://quarau.177-107-94-31.sslip.io` (basic auth em `/srv/apps/quarau/CREDENCIAIS.txt`) e rodo backup + teste de restore.
