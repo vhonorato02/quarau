@@ -7,7 +7,15 @@ import { execFileSync } from 'node:child_process'
 
 import { getPayload } from 'payload'
 
+import { databaseUrl } from '../src/lib/platform-env'
 import config from '../src/payload.config'
+
+if (!databaseUrl()) {
+  console.error(
+    '[vercel-build] no database: connect a Postgres store (Vercel → Storage → Neon, free) to this project',
+  )
+  process.exit(1)
+}
 
 const run = (args: string[], extraEnv: Record<string, string> = {}) =>
   execFileSync('pnpm', args, { stdio: 'inherit', env: { ...process.env, ...extraEnv } })

@@ -561,7 +561,10 @@ async function migrateGlobals(payload: Payload) {
 
 /** Ask the running site (if any) to drop its caches so migrated content shows up at once. */
 async function revalidateSite() {
-  const url = process.env.SITE_URL
+  const url =
+    process.env.SITE_URL ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL &&
+      `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`)
   const secret = process.env.REVALIDATE_SECRET
   if (DRY || !url || !secret) return
   try {

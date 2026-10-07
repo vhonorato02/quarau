@@ -8,6 +8,7 @@ import { formatDate } from '@/components/news/NewsCard'
 import { PageHeader } from '@/components/PageHeader'
 import { RichText } from '@/components/RichText'
 import type { Locale } from '@/i18n/routing'
+import { siteUrl as resolveSiteUrl } from '@/lib/platform-env'
 import { getDocBySlug, getGlobal } from '@/lib/queries'
 import { buildMetadata } from '@/lib/seo'
 import { docPath } from '@/lib/urls'
@@ -90,7 +91,7 @@ export default async function JobPage({ params }: PageProps<'/[locale]/trabalhe-
             hiringOrganization: {
               '@type': 'Organization',
               name: 'Quarau',
-              sameAs: process.env.SITE_URL,
+              sameAs: resolveSiteUrl(),
             },
             jobLocation: {
               '@type': 'Place',

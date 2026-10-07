@@ -2,30 +2,25 @@
 
 > Atualizado continuamente. Se uma sessão for interrompida, comece por aqui.
 
-## Estado da VPS (2026-10-06) — leia antes de tudo
+## Estado atual (2026-10-07) — leia antes de tudo
 
-**Fase 1 concluída: a VPS virou a plataforma de hospedagem do dono** ([ADR 0013](decisions/0013-plataforma-vps-traefik-sem-painel.md),
-[guia para o dono](vps-guia.md)).
+**O site saiu da VPS e vai para a Vercel, só com planos gratuitos** ([ADR 0014](decisions/0014-vercel-free-tier.md)).
 
-- Coolify, os 11 containers, volumes, imagens, `/data` e o menu `vps` foram removidos (sem backup, por decisão do
-  dono). O script do provedor `/usr/local/bin/autostart.sh` + `/etc/cron.d/autoboot` (registro de IP) **fica**.
-- Plataforma em `/srv/platform` (instalada de `infra/platform/` com `sudo infra/platform/install.sh`):
-  Traefik v3.6 com rotas em arquivo (sem acesso ao Docker), Postgres 17 compartilhado, comando `site`, timers
-  systemd `platform-{autodeploy,health,backup,restore-test}`. Sites em `/srv/sites/<site>`.
-- Host: UFW 22322/80/443tcp/443udp (regras 10.0.0.0/8 do Coolify removidas); SSH com root só por chave e
-  `MaxAuthTries 5` (backup `00-vps.conf.bak-20261006`); Docker com `live-restore` e redes 172.20.0.0/14.
-- Sites no ar: `teste` (estático, pode ser removido com `site remover teste`) e `quarau`
-  (https://quarau.zewithane.vps.brz.dev.br).
-- IP real: **177.107.94.31** (corrigido no repositório).
+- Projeto Vercel `quarau` (time `jose-victors-projects-5cc9abbe`), raiz `apps/web`, região `gru1`, ligado ao
+  repositório: cada push na `main` publica em produção. Proteção por login só nos previews.
+- Já configurado: `PAYLOAD_SECRET`, `PREVIEW_SECRET`, `REVALIDATE_SECRET`, `CRON_SECRET` (sensíveis),
+  `PAYLOAD_DB_PUSH=false`, `SITE_NOINDEX=true`, `NEXT_PUBLIC_ENABLED_LOCALES=pt`, `CONTACT_RECIPIENT`, Blob
+  `quarau-media` (`BLOB_READ_WRITE_TOKEN`).
+- **Falta (dono, 1 minuto):** criar o banco Neon Free em Vercel → projeto quarau → Storage → Create Database →
+  Neon → região São Paulo → conectar ao projeto. Sem ele o build para com a mensagem "no database".
+- Depois: primeiro deploy (importa o conteúdo sozinho), criar o admin em `/admin`, QA no domínio `*.vercel.app`.
+- VPS: abandonada. A limpeza dela fica com o dono ou com a sessão que roda lá dentro; nada do site depende dela.
+- `infra/platform`, `docs/vps-guia.md` e a ADR 0013 ficam como referência caso um dia volte para servidor próprio.
 
-**Pendências do dono:** revogar o token do GitHub colado numa conversa antiga; dar a este servidor credencial de
-push no GitHub (`gh auth login` ou chave de deploy com escrita) para os commits feitos aqui subirem; assinar o
-tópico ntfy de `ALERT_URL`; guardar `RESTIC_PASSWORD` fora do servidor; configurar um destino off-site (B2);
-corrigir a 1ª linha do `~/.bashrc` (uma aspa solta quebra o `PATH`).
+**Pendências do dono:** revogar o token do GitHub colado numa conversa antiga; trocar a senha da VPS; verificar o
+domínio quarau.com.br no Resend para os e-mails saírem do domínio.
 
-**Fase 2 (site Quarau): em andamento.** Ver "Onde estamos".
-
-## Onde estamos (2026-10-06)
+## Onde estamos (2026-10-07)
 
 - Branch única: `main` (pedido do cliente: sem branches, tudo direto na main, deploy automático).
 - Produto completo no repositório: site + CMS + migração + testes + CI/CD + infra + documentação.
@@ -58,7 +53,7 @@ corrigir a 1ª linha do `~/.bashrc` (uma aspa solta quebra o `PATH`).
    imagem publicada no GHCR. O job _Lint, typecheck, unit, Storybook_ ficou 4 vezes na fila por 15 min e foi
    cancelado sem receber runner (problema do lado do GitHub; os mesmos passos passam localmente e passaram no run 10).
    Verificar limites/cobrança de Actions da conta e re-executar só esse job.
-2. Deploy: a VPS puxa o `:latest` do GHCR sozinha (`site autodeploy quarau on`); não há mais deploy por SSH.
+2. Deploy: push na `main` publica na Vercel (build `pnpm build:vercel`); a VPS não é mais usada.
 3. Medir performance em produção (meta ≥ 95; laboratório local hoje: 83–94).
 4. Resolver `[CONFIRMAR]` com o cliente (relatório final, §4).
 

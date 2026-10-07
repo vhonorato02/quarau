@@ -29,6 +29,7 @@ import {
 import { editor } from './fields/richText'
 import { globals } from './globals'
 import { onInit } from './lib/bootstrap'
+import { databaseUrl, siteUrl as resolveSiteUrl } from './lib/platform-env'
 import { migrations } from './migrations'
 import { revalidateCollection, revalidateCollectionDelete } from './hooks/revalidate'
 import { docPath, type RoutableCollection } from './lib/urls'
@@ -38,7 +39,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 const env = process.env
-const siteUrl = env.SITE_URL ?? 'http://localhost:3000'
+const siteUrl = resolveSiteUrl()
 const isProd = env.NODE_ENV === 'production'
 /**
  * Outgoing e-mail: any SMTP server, or Resend (free tier) when its API key is present
@@ -133,7 +134,7 @@ export default buildConfig({
 
   db: postgresAdapter({
     pool: {
-      connectionString: env.DATABASE_URL || 'postgres://quarau:quarau@localhost:5432/quarau',
+      connectionString: databaseUrl() ?? 'postgres://quarau:quarau@localhost:5432/quarau',
       max: Number(env.DATABASE_POOL_MAX ?? (onVercel ? 3 : 10)),
     },
     migrationDir: path.resolve(dirname, 'migrations'),

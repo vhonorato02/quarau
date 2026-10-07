@@ -1,9 +1,10 @@
 import type { CollectionConfig, Field } from 'payload'
 
 import { populatePublishedAt } from '../hooks/fields'
+import { siteUrl as resolveSiteUrl } from '../lib/platform-env'
 import { docPath, type RoutableCollection } from '../lib/urls'
 
-const siteUrl = () => process.env.SITE_URL ?? 'http://localhost:3000'
+const siteUrl = resolveSiteUrl
 
 /** Live preview + preview button pointing at the Next.js draft-mode route. */
 export function previewConfig(

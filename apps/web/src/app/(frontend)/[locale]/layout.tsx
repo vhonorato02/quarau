@@ -17,6 +17,7 @@ import { Footer } from '@/components/site/Footer'
 import { Header } from '@/components/site/Header'
 import { barlow, barlowItalic } from '@/fonts'
 import { htmlLang, routing, type Locale } from '@/i18n/routing'
+import { siteUrl as resolveSiteUrl } from '@/lib/platform-env'
 import { getGlobal } from '@/lib/queries'
 import { organizationJsonLd } from '@/lib/seo'
 
@@ -29,7 +30,7 @@ export function generateStaticParams() {
     : []
 }
 
-const siteUrl = process.env.SITE_URL ?? 'http://localhost:3000'
+const siteUrl = resolveSiteUrl()
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
