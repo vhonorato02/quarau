@@ -17,10 +17,7 @@ export function docPath(collection: RoutableCollection, slug: string | null | un
   return `${COLLECTION_BASE[collection]}/${slug}`
 }
 
-export function absoluteUrl(
-  path: string,
-  siteUrl = resolveSiteUrl(),
-): string {
+export function absoluteUrl(path: string, siteUrl = resolveSiteUrl()): string {
   return new URL(path, siteUrl.endsWith('/') ? siteUrl : `${siteUrl}/`).toString()
 }
 

@@ -16,6 +16,10 @@ const legacy = JSON.parse(
 
 const umamiOrigin = process.env.NEXT_PUBLIC_UMAMI_ORIGIN ?? ''
 const sentryOrigin = process.env.NEXT_PUBLIC_SENTRY_ORIGIN ?? ''
+// CMS uploads go straight from the browser to Vercel Blob (clientUploads) when it is configured.
+const blobOrigins = process.env.BLOB_READ_WRITE_TOKEN
+  ? 'https://vercel.com https://*.blob.vercel-storage.com'
+  : ''
 
 /**
  * Content-Security-Policy. Script nonces would force every page to render
@@ -29,7 +33,9 @@ const csp = [
   "img-src 'self' data: blob: https://*.tile.openstreetmap.org",
   "font-src 'self' data:",
   "media-src 'self' blob:",
-  `connect-src 'self' https://challenges.cloudflare.com ${umamiOrigin} ${sentryOrigin}`.trim(),
+  `connect-src 'self' https://challenges.cloudflare.com ${umamiOrigin} ${sentryOrigin} ${blobOrigins}`
+    .replace(/\s+/g, ' ')
+    .trim(),
   'frame-src https://challenges.cloudflare.com https://www.youtube-nocookie.com https://player.vimeo.com https://www.openstreetmap.org',
   "frame-ancestors 'self'",
   "form-action 'self'",
