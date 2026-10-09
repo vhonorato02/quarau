@@ -38,13 +38,17 @@ Você é o único responsável por concluir e publicar este site. Trabalhe sozin
    subagentes e sem branches. Não mexa no domínio quarau.com.br nem no WordPress.
 5. Só me chame nos momentos 🔑 do plano (login na Vercel, login do GitHub no primeiro push,
    chave da Resend opcional). Nesses momentos, diga exatamente o que eu devo clicar ou digitar.
-6. Nada está pronto sem prova no ar: rode o QA visual em https://quarau.vercel.app, olhe as
-   capturas de desktop e celular, corrija e repita até não haver nada quebrado nem feio.
+6. Nada está pronto sem prova no ar: siga as 5 camadas de docs/QA.md (CI, pós-deploy e
+   jornadas reais com o Playwright MCP em https://quarau.vercel.app), olhe as capturas de
+   desktop e celular, corrija e repita até não haver nada quebrado nem feio. No fim, me peça o aceite.
 7. No fim, me entregue em português simples: a URL do site, a URL do admin, onde está o
    ACESSO-ADMIN.txt e a lista do que eu preciso confirmar com o cliente.
 ```
 
 ## Durante
+
+- **Ao abrir o Claude Code pela primeira vez:** se ele perguntar sobre os servidores MCP do projeto (playwright, vercel, context7), aprove.
+- **Autenticar a Vercel no Claude Code:** quando o agente pedir, digite `/mcp`, escolha **vercel** → **Authenticate** e confirme no navegador.
 
 - **Login na Vercel:** ele vai pedir para você abrir um link e confirmar. Entre com o GitHub `vhonorato02`.
 - **Login do GitHub:** no primeiro envio pode abrir uma janela de login do GitHub. Autorize.

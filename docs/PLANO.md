@@ -50,7 +50,20 @@ O computador pode estar sem nada. Detecte o sistema (`uname -a` ou `$env:OS`). N
   - Windows: `winget install -e --id Gyan.FFmpeg` (reabra o terminal depois);
   - macOS: `brew install ffmpeg`.
 
-**Pronto quando:** `node -v`, `pnpm -v`, `vercel --version` e `ffmpeg -version` respondem; `pnpm typecheck` passa.
+**Ferramentas do agente (MCP).** O `.mcp.json` do projeto já traz três:
+
+| Servidor   | Para quê                                                                                               | Login             |
+| ---------- | ------------------------------------------------------------------------------------------------------ | ----------------- |
+| playwright | navegar no site e no admin como uma pessoa (clicar, digitar, redimensionar, ver console) — QA camada 4 | não               |
+| vercel     | deploys, logs de build e de execução, variáveis, domínios                                              | 🔑 OAuth, uma vez |
+| context7   | documentação atual de Next.js 16, Payload 3, Tailwind 4 (evita código de versão antiga)                | não               |
+
+- 🔑 Ao abrir o Claude Code pela primeira vez, ele pergunta se aprova os servidores MCP do projeto: **o dono aprova**.
+- 🔑 Depois o agente pede: digite `/mcp`, escolha **vercel** → **Authenticate** e confirme no navegador.
+- O `playwright` está configurado para o Edge, que já vem no Windows (`cmd /c npx …`). Em macOS/Linux, o agente troca para `"command": "npx"` sem o `cmd /c` e `--browser chromium`. 🔑 Nesse caso, o dono reinicia o Claude Code.
+- Se um MCP não funcionar, siga pela CLI equivalente (`vercel …`, `tests/qa/screens.mjs`) e anote em PROGRESSO. Não trave por isso.
+
+**Pronto quando:** `node -v`, `pnpm -v`, `vercel --version` e `ffmpeg -version` respondem; `pnpm typecheck` passa; `/mcp` mostra os três servidores conectados.
 
 ## Fase 1 — Contas, banco e variáveis
 
@@ -108,10 +121,11 @@ O objetivo é menos peças. Cada remoção precisa deixar lint, tipos e testes v
    - `docs/{infra,runbook,go-live,vps-guia}.md`.
    - Na pasta de ADRs, as ADRs 0004, 0005, 0010 e 0013 passam a "substituída pela 0014".
    - Remover as rotas e scripts que só existiam para a VPS:
-     - `app/next/health` se ninguém usar;
      - `app/next/reindex` (Meilisearch);
      - o drain file.
-2. **Remover serviços opcionais que a Vercel não usa** (B5): Meilisearch (`src/lib/search.ts`, hooks de indexação, `ensureIndex`), Valkey/Redis, S3/MinIO (`@payloadcms/storage-s3`, `ensureBucket`), Mailpit e Sentry/Umami se não estiverem configurados.
+2. **Remover serviços opcionais que a Vercel não usa** (B5): Meilisearch (`src/lib/search.ts`, hooks de indexação, `ensureIndex`), Valkey/Redis, S3/MinIO (`@payloadcms/storage-s3`, `ensureBucket`), Mailpit e Umami.
+   - **Fica:** `app/next/health` (o monitor de disponibilidade usa) e o SDK do Sentry (liga sozinho quando houver `SENTRY_DSN`, Fase 9).
+   - **Analytics e velocidade real:** `@vercel/analytics` e `@vercel/speed-insights`, carregados só após o consentimento de cookies. Ativar com `vercel project web-analytics` e `vercel project speed-insights`.
    - **Busca:** fica só a do Postgres. Ela deve **ignorar acentos e maiúsculas** (O5).
    - Crie um campo oculto `searchText` (título + resumo, minúsculo e sem acentos) preenchido num `beforeChange`.
    - A busca normaliza o termo do mesmo jeito e consulta `like` nesse campo.
@@ -134,8 +148,15 @@ O objetivo é menos peças. Cada remoção precisa deixar lint, tipos e testes v
    - **quality:** format, lint, typecheck e unit;
    - **e2e:** serviço Postgres do GitHub, `payload migrate`, `MIGRATE_OFFLINE=1 pnpm migrate:wp`, `next build`, `next start` e Playwright.
    - Remover imagem Docker, GHCR, Trivy, k6, Lighthouse CI e Storybook do CI.
-   - Remover `@lhci/cli` e `lighthouse` das dependências (B11).
+   - Remover `@lhci/cli` e `lighthouse` das dependências (B11). O orçamento de performance roda com `npx @lhci/cli` no pós-deploy, sem dependência.
    - CodeQL pode ficar.
+   - **Matriz de navegadores** em `playwright.config.ts`: `desktop-chrome`, `desktop-safari` (WebKit), `iphone` (WebKit, iPhone 14), `android` (Pixel 7) e `tablet` (iPad Mini). Hoje só há Chromium, e **o Safari do iPhone nunca foi testado**.
+   - Marcar com `@smoke` os testes só de leitura que podem rodar contra produção.
+   - **Novo `.github/workflows/pos-deploy.yml`:** no evento `deployment_status` (Production, `success`), roda contra a URL publicada:
+     - smoke E2E;
+     - links (`linkinator`);
+     - cabeçalhos de segurança;
+     - `npx @lhci/cli autorun` com as metas de [QA.md](QA.md) (camada 3).
 7. **Scripts que funcionem no Windows:** nada de `VAR=x comando` no `package.json`. Use o `--env-file` do tsx/node, ou defina a variável dentro do script.
 8. **Housekeeping:**
    - `.env.example` só com o que existe (tirar `NEXT_PUBLIC_SITE_URL`, que não é usado);
@@ -332,12 +353,12 @@ Marca: Barlow, azul `#0089CF` (texto azul sobre branco: `#006FA8`), verde `#39B5
 3. **Admin de produção:**
    - criar com `seed:admin` usando o e-mail de `git config user.email` (ou o da conta Vercel) e uma senha forte gerada;
    - gravar e-mail + senha em `ACESSO-ADMIN.txt` na raiz (no `.gitignore`).
-4. **QA no ar (obrigatório):**
+4. **QA no ar (obrigatório), seguindo as 5 camadas de [QA.md](QA.md):**
    - `pnpm --filter @quarau/web exec node tests/qa/screens.mjs https://quarau.vercel.app`;
    - **olhar todas as capturas** (desktop e celular);
    - corrigir, publicar, repetir até zero problemas e nada feio.
    - Copiar 1 captura por página para `docs/qa/` (JPEG ≤ 150 KB).
-5. **Fluxos no ar** (Playwright ou à mão, com capturas):
+5. **Jornadas no ar com o Playwright MCP** (as 10 de visitante e as 8 de editor de [QA.md](QA.md), com capturas). No mínimo:
    - login no admin;
    - criar projeto com **upload de imagem** (testa o upload direto para o Blob e a CSP);
    - publicar → aparece no site;
@@ -349,6 +370,8 @@ Marca: Barlow, azul `#0089CF` (texto azul sobre branco: `#006FA8`), verde `#39B5
    - vídeo toca;
    - lightbox abre e fecha no teclado.
 6. **Lighthouse mobile no ar** (metas da Fase 4) e registrar os números em PROGRESSO.
+7. **pos-deploy.yml verde** no último deploy.
+8. **Aceite:** gerar `docs/qa/ACEITE.md` (link + captura de cada página + `[CONFIRMAR]`) e pedir ao dono que navegue e responda. Ajustar até ele escrever "aprovado".
 
 ## Fase 8 — Entrega
 
@@ -365,6 +388,18 @@ Marca: Barlow, azul `#0089CF` (texto azul sobre branco: `#006FA8`), verde `#39B5
     - Hobby é para uso não comercial;
     - publicação agendada roda 1×/dia;
     - Blob de 1 GB.
+
+## Fase 9 — Operação contínua (gratuito; cada item é opcional e leva ~5 min do dono)
+
+1. 🔑 **Erros em produção (Sentry):**
+   - Vercel → Integrations → **Sentry** → instalar no projeto `quarau` (plano Developer, grátis);
+   - isso injeta `SENTRY_DSN`/`NEXT_PUBLIC_SENTRY_DSN`;
+   - o agente confirma que um erro de teste aparece no Sentry e remove o teste.
+2. 🔑 **Site fora do ar (UptimeRobot):**
+   - o dono cria conta grátis em uptimerobot.com;
+   - o agente diz o que preencher: monitor HTTP(s) em `https://quarau.vercel.app/next/health`, a cada 5 min, alerta para o e-mail do dono.
+3. **Velocidade e visitas reais:** conferir no painel da Vercel (Speed Insights e Analytics) uma semana depois do ar.
+4. **Dependências:** o Renovate abre PRs mensais. O agente de manutenção revisa, roda o CI e faz merge na `main`.
 
 ## Referências rápidas
 

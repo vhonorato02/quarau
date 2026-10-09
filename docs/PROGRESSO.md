@@ -14,6 +14,7 @@
 - [ ] Node 22, pnpm 10.28, Vercel CLI instalados
 - [ ] `pnpm install` e Chromium do Playwright
 - [ ] `pnpm typecheck` passa
+- [ ] MCPs aprovados e conectados (playwright, vercel, context7)
 
 ## Fase 1 — Contas, banco e variáveis
 
@@ -30,7 +31,9 @@
 - [ ] i18n removido; migração inicial recriada
 - [ ] Mídia direto do Blob (CSP + remotePatterns)
 - [ ] `vercel-build` só migra e compila
-- [ ] CI enxuto (quality + e2e)
+- [ ] CI enxuto (quality + e2e) com matriz Chrome/Safari/iPhone/Android/iPad
+- [ ] pos-deploy.yml (smoke, links, cabeçalhos, Lighthouse no ar)
+- [ ] Vercel Analytics + Speed Insights (após consentimento)
 - [ ] Scripts compatíveis com Windows; `.env.example` e README
 
 ## Fase 3 — Conteúdo e mídias
@@ -68,13 +71,21 @@
 - [ ] Conteúdo + mídias em produção
 - [ ] Admin de produção (`ACESSO-ADMIN.txt`)
 - [ ] QA visual no ar sem problemas (capturas em `docs/qa/`)
-- [ ] Fluxos no ar (upload, publicar, formulário, busca, 301, vídeo)
+- [ ] Jornadas no ar: 10 de visitante + 8 de editor (QA.md, camada 4)
+- [ ] pos-deploy.yml verde no último deploy
+- [ ] Aceite do dono (`docs/qa/ACEITE.md`)
 - [ ] Lighthouse mobile: Perf ___ · A11y ___ · BP ___ · SEO ___
 
 ## Fase 8 — Entrega
 
 - [ ] relatorio-final.md, cms.md, README
 - [ ] Mensagem final ao dono
+
+## Fase 9 — Operação (opcional)
+
+- [ ] Sentry
+- [ ] UptimeRobot
+- [ ] Speed Insights/Analytics conferidos
 
 ## Decisões e problemas
 

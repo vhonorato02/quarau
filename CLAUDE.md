@@ -30,11 +30,20 @@ Executar [docs/PLANO.md](docs/PLANO.md) do começo ao fim, na ordem.
   - Variáveis ficam na Vercel e em `apps/web/.env.local` (fora do git).
   - Credenciais do admin vão para `ACESSO-ADMIN.txt` (fora do git).
 - **Dados:** só o que o site antigo publicava ou o dono informou. O resto fica vazio/oculto e entra como `[CONFIRMAR]` em PROGRESSO.md.
-- **Não perguntar ao dono** o que o plano já decide. Pare só nos 🔑 MOMENTOS DO DONO do plano (login na Vercel, login do GitHub no primeiro push, chave da Resend opcional).
+- **Não perguntar ao dono** o que o plano já decide. Pare só nos 🔑 MOMENTOS DO DONO do plano (autenticar o MCP da Vercel, login na Vercel, login do GitHub no primeiro push, chave da Resend e contas de monitoramento opcionais).
 - **Computador cru.**
   - Instale só o necessário: Node 22, pnpm via corepack, Vercel CLI, ffmpeg e o Chromium do Playwright.
   - **Sem Docker:** o banco de desenvolvimento é um Neon na nuvem.
   - No Windows, use o Git Bash.
+
+## Ferramentas (MCP, em `.mcp.json`) e QA
+
+- **playwright**: use para o QA de verdade.
+  - Navegue no site e no admin no ar como uma pessoa: clique, preencha, redimensione para 390 px e 1440 px, leia o console.
+  - As jornadas obrigatórias estão em [docs/QA.md](docs/QA.md).
+- **vercel**: deploys, logs de build e de execução, variáveis. A CLI `vercel` é o plano B.
+- **context7**: consulte a documentação atual antes de usar APIs de Next.js 16, Payload 3 ou Tailwind 4. As versões são mais novas que o seu treinamento.
+- O QA tem 5 camadas (local, CI, pós-deploy, exploratório com MCP e aceite do dono). Leia [docs/QA.md](docs/QA.md) antes da Fase 2.
 
 ## Mapa do código
 
