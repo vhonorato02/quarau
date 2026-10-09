@@ -154,6 +154,10 @@ O cache em `apps/web/.migrate-cache/` (fora do git, veio no zip) tem:
 
 Ignore os `.mp4` originais de `uploads/`; se existirem, são enormes.
 
+> Se o projeto veio do zip **sem mídias** (sem `apps/web/.migrate-cache/`), o script baixa tudo do WordPress
+> (que continua no ar). Os vídeos então precisam do ffmpeg para virar 720p: `winget install Gyan.FFmpeg` /
+> `brew install ffmpeg`. Sem ffmpeg, importe só as imagens e deixe os vídeos para depois (anote em PROGRESSO).
+
 1. **Importar a biblioteca inteira** (C2). Em `scripts/migrate-wp.ts`, depois do conteúdo:
    - percorrer `media.json` e importar todo item ainda sem `legacyUrl` correspondente;
    - alt text = `alt_text`, ou senão o título do WP, ou senão um alt contextual;
