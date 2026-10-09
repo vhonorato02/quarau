@@ -46,8 +46,11 @@ O computador pode estar sem nada. Detecte o sistema (`uname -a` ou `$env:OS`). N
 - **Vercel CLI:** `npm i -g vercel@latest`.
 - **Dependências:** na raiz do projeto, `pnpm install`.
 - **Navegador de teste:** `pnpm --filter @quarau/web exec playwright install chromium`.
+- **ffmpeg**, para converter os 3 vídeos do site antigo para 720p na Fase 3:
+  - Windows: `winget install -e --id Gyan.FFmpeg` (reabra o terminal depois);
+  - macOS: `brew install ffmpeg`.
 
-**Pronto quando:** `node -v`, `pnpm -v`, `vercel --version` respondem; `pnpm typecheck` passa.
+**Pronto quando:** `node -v`, `pnpm -v`, `vercel --version` e `ffmpeg -version` respondem; `pnpm typecheck` passa.
 
 ## Fase 1 — Contas, banco e variáveis
 
@@ -147,16 +150,12 @@ O objetivo é menos peças. Cada remoção precisa deixar lint, tipos e testes v
 
 ## Fase 3 — Conteúdo e TODAS as mídias
 
-O cache em `apps/web/.migrate-cache/` (fora do git, veio no zip) tem:
-
-- `uploads/`: as **265 mídias** da biblioteca do WordPress (`content/legacy/wp-json/media.json`) mais logos e arquivos usados no conteúdo;
-- `video/`: 3 vídeos **já convertidos** para 720p (dispensa ffmpeg).
-
-Ignore os `.mp4` originais de `uploads/`; se existirem, são enormes.
-
-> Se o projeto veio do zip **sem mídias** (sem `apps/web/.migrate-cache/`), o script baixa tudo do WordPress
-> (que continua no ar). Os vídeos então precisam do ffmpeg para virar 720p: `winget install Gyan.FFmpeg` /
-> `brew install ffmpeg`. Sem ffmpeg, importe só as imagens e deixe os vídeos para depois (anote em PROGRESSO).
+- As mídias **não vêm no zip** (limite de tamanho).
+- O `scripts/migrate-wp.ts` baixa cada arquivo do WordPress, que continua no ar, e guarda em
+  `apps/web/.migrate-cache/` (fora do git). Rodadas seguintes reaproveitam o cache.
+- Os vídeos (≈1,1 GB originais) são convertidos para 720p com ffmpeg (≈223 MB no total) em `.migrate-cache/video/`.
+- A duplicata `QUIPA_LEG_PORT-1.mp4` é ignorada.
+- A lista completa da biblioteca está em `content/legacy/wp-json/media.json`: 265 itens (232 JPEG, 31 PNG, 2 GIF) + 4 MP4.
 
 1. **Importar a biblioteca inteira** (C2). Em `scripts/migrate-wp.ts`, depois do conteúdo:
    - percorrer `media.json` e importar todo item ainda sem `legacyUrl` correspondente;

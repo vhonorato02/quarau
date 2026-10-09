@@ -11,7 +11,7 @@
    irm https://claude.ai/install.ps1 | iex
    ```
 
-3. Descompacte o `quarau.zip` em **`C:\quarau`**.
+3. Clique com o botão direito no `quarau.zip` → **Extrair tudo…** → escolha **`C:\`**. Isso cria a pasta **`C:\quarau`**.
    - Fora da Área de Trabalho e de Documentos, que costumam sincronizar com o OneDrive e travam o projeto.
 4. No PowerShell:
 
@@ -22,7 +22,7 @@
 
    Faça login na sua conta Claude quando ele pedir.
 
-**Mac:** `curl -fsSL https://claude.ai/install.sh | bash`, descompacte em `~/quarau`, depois `cd ~/quarau && claude`.
+**Mac:** `curl -fsSL https://claude.ai/install.sh | bash`, descompacte o zip na sua pasta pessoal (cria `~/quarau`), depois `cd ~/quarau && claude`.
 
 ## O prompt (copie e cole tudo de uma vez)
 

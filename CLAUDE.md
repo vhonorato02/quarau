@@ -32,7 +32,7 @@ Executar [docs/PLANO.md](docs/PLANO.md) do começo ao fim, na ordem.
 - **Dados:** só o que o site antigo publicava ou o dono informou. O resto fica vazio/oculto e entra como `[CONFIRMAR]` em PROGRESSO.md.
 - **Não perguntar ao dono** o que o plano já decide. Pare só nos 🔑 MOMENTOS DO DONO do plano (login na Vercel, login do GitHub no primeiro push, chave da Resend opcional).
 - **Computador cru.**
-  - Instale só o necessário: Node 22, pnpm via corepack, Vercel CLI e o Chromium do Playwright.
+  - Instale só o necessário: Node 22, pnpm via corepack, Vercel CLI, ffmpeg e o Chromium do Playwright.
   - **Sem Docker:** o banco de desenvolvimento é um Neon na nuvem.
   - No Windows, use o Git Bash.
 
@@ -52,7 +52,7 @@ apps/web/                         Next.js + Payload (site, /admin, /api)
   tests/{unit,int,e2e}            Vitest, integração Payload, Playwright
   tests/qa/screens.mjs            QA visual (capturas + relatório) contra qualquer URL
   vercel.json                     build, região gru1, cron diário
-  .migrate-cache/                 (fora do git, veio no zip) 265 mídias do WP + 3 vídeos 720p
+  .migrate-cache/                 (fora do git) cache das mídias baixadas do WP e vídeos 720p
 packages/ui/                      design system (tokens da marca, componentes)
 packages/emails/                  e-mails (React Email)
 content/legacy/                   snapshot do site antigo (wp-json, url-map para 301)
