@@ -7,12 +7,43 @@
  * - Para cada rota: uma captura por "tela" ao rolar (o que a pessoa realmente vê) e um
  *   relatório com status HTTP, erros de console, imagens quebradas e rolagem horizontal.
  * - Rotas: as do sitemap.xml + busca + 404.
+ * - Para cada rota e tela, uma folha-resumo `folha-<tela>-<rota>.jpg` com todas as capturas reduzidas lado a lado:
+ *   olhe as folhas primeiro (1 imagem por página, barato) e abra a captura cheia só onde houver suspeita.
  * Saída padrão: test-results/qa/<data>/ (fora do git). Copie as relevantes para docs/qa/.
  */
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 import { chromium } from '@playwright/test'
+import sharp from 'sharp'
+
+/** Puts a page's frames side by side, scaled down, in one JPEG (cheap to review). */
+async function contactSheet(files, target, frameWidth) {
+  if (!files.length) return
+  const frames = await Promise.all(
+    files.map((f) => sharp(f).resize({ width: frameWidth }).toBuffer({ resolveWithObject: true })),
+  )
+  const cols = Math.min(frames.length, frameWidth > 300 ? 4 : 8)
+  const h = Math.max(...frames.map((f) => f.info.height))
+  const rows = Math.ceil(frames.length / cols)
+  await sharp({
+    create: {
+      width: cols * (frameWidth + 6),
+      height: rows * (h + 6),
+      channels: 3,
+      background: '#d946ef',
+    },
+  })
+    .composite(
+      frames.map((f, i) => ({
+        input: f.data,
+        left: (i % cols) * (frameWidth + 6),
+        top: Math.floor(i / cols) * (h + 6),
+      })),
+    )
+    .jpeg({ quality: 70 })
+    .toFile(target)
+}
 
 const base = (process.argv[2] ?? 'http://localhost:3000').replace(/\/$/, '')
 const out = path.resolve(
@@ -54,14 +85,15 @@ for (const [name, viewport] of viewports) {
       await page.waitForTimeout(1000)
       const height = await page.evaluate(() => document.body.scrollHeight)
       let frame = 0
+      const shots = []
       for (let y = 0; y < height && frame < 20; y += viewport.height - 100) {
         await page.evaluate((top) => window.scrollTo({ top, behavior: 'instant' }), y)
         await page.waitForTimeout(700)
-        await page.screenshot({
-          path: `${out}/${name}-${slug}-${String(frame++).padStart(2, '0')}.png`,
-          timeout: 60_000,
-        })
+        const shot = `${out}/${name}-${slug}-${String(frame++).padStart(2, '0')}.png`
+        await page.screenshot({ path: shot, timeout: 60_000 })
+        shots.push(shot)
       }
+      await contactSheet(shots, `${out}/folha-${name}-${slug}.jpg`, mobile ? 195 : 480)
       const info = await page.evaluate(() => ({
         overflowX: document.documentElement.scrollWidth > window.innerWidth,
         brokenImages: [...document.images]
