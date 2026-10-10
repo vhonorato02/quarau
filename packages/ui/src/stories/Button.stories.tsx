@@ -7,7 +7,10 @@ const meta = {
   component: Button,
   args: { children: 'Fale com a Quarau' },
   argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary', 'ghost', 'inverse', 'outline-inverse', 'link'] },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'ghost', 'inverse', 'outline-inverse', 'link'],
+    },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
   },
 } satisfies Meta<typeof Button>

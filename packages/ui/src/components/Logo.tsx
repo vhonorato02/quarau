@@ -13,7 +13,13 @@ type LogoProps = {
 }
 
 /** Official Quarau symbol (magnifier "Q" + green dot). Aspect ratio 863 × 714. */
-export function LogoSymbol({ basePath = '/brand', variant = 'color', className, alt = 'Quarau', priority }: LogoProps) {
+export function LogoSymbol({
+  basePath = '/brand',
+  variant = 'color',
+  className,
+  alt = 'Quarau',
+  priority,
+}: LogoProps) {
   return (
     <img
       src={`${basePath}/quarau-simbolo${variant === 'white' ? '-branco' : ''}.svg`}

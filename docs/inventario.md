@@ -6,30 +6,30 @@ em [`content/legacy/`](../content/legacy).
 
 ## 1. Stack do site antigo
 
-| Item          | Valor                                                                          |
-| ------------- | ------------------------------------------------------------------------------ |
-| CMS           | WordPress, tema **BeTheme** (Muffin Builder) e Slider Revolution 6.6           |
+| Item           | Valor                                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------------------------ |
+| CMS            | WordPress, tema **BeTheme** (Muffin Builder) e Slider Revolution 6.6                                         |
 | Plugins vistos | Yoast SEO, LiteSpeed Cache, Smush, Contact Form 7, WPForms, MonsterInsights, Site Kit, WP Mail SMTP, Akismet |
-| Analytics     | Google Analytics (gtag via MonsterInsights/Site Kit)                           |
-| Formulário    | Contact Form 7: nome, e-mail, assunto e mensagem                               |
-| Idioma        | pt-BR                                                                          |
+| Analytics      | Google Analytics (gtag via MonsterInsights/Site Kit)                                                         |
+| Formulário     | Contact Form 7: nome, e-mail, assunto e mensagem                                                             |
+| Idioma         | pt-BR                                                                                                        |
 
 ## 2. Páginas e URLs (base dos redirects 301)
 
-| URL antiga                                      | Tipo      | Conteúdo                                       | URL nova                                         |
-| ----------------------------------------------- | --------- | ---------------------------------------------- | ------------------------------------------------ |
-| `/`                                             | página    | O que é / O que faz a Quarau, galeria e logos de parceiros | `/`                                     |
-| `/sobre-a-quarau/`                              | página    | Missão, Visão, Valores, projetos e formulário  | `/sobre`                                         |
-| `/contato/`                                     | página    | Formulário e dados de contato                  | `/contato`                                       |
-| `/hello-world/`                                 | post      | Post padrão do WordPress (sem valor)           | `/noticias` (não migrado)                        |
-| `/category/uncategorized/`                      | categoria | Vazia                                          | `/noticias`                                      |
-| `/portfolio-item/ecomuseu-dos-campos-…/`        | projeto   | Ecomuseu dos Campos de São José                | `/projetos/ecomuseu-dos-campos-de-sao-jose`      |
-| `/portfolio-item/inventario-cultural-…/`        | projeto   | INRC Congado Paulista + Dossiê Samba de Bumbo  | `/projetos/inventario-cultural-e-dossie-de-registro` |
-| `/portfolio-item/programa-celeo-…-projeto-ecoe/` | projeto  | Projeto Ecoe Verde                             | `/projetos/projeto-ecoe-verde`                   |
-| `/portfolio-item/programa-celeo-…-projeto-quipa/` | projeto | Projeto Quipá                                  | `/projetos/projeto-quipa`                        |
-| `/portfolio-item/programa-de-educacao-patrimonial-…/` | projeto | Programa de Educação Patrimonial (PEP)   | `/projetos/programa-de-educacao-patrimonial`     |
-| `/portfolio-item/projeto-de-memoria-institucional-…/` | projeto | Memória Institucional do Museu do Folclore | `/projetos/memoria-institucional-museu-do-folclore` |
-| `/wp-content/uploads/*`                         | mídia     | 275 arquivos                                   | 301 dinâmico para a mídia migrada                |
+| URL antiga                                            | Tipo      | Conteúdo                                                   | URL nova                                             |
+| ----------------------------------------------------- | --------- | ---------------------------------------------------------- | ---------------------------------------------------- |
+| `/`                                                   | página    | O que é / O que faz a Quarau, galeria e logos de parceiros | `/`                                                  |
+| `/sobre-a-quarau/`                                    | página    | Missão, Visão, Valores, projetos e formulário              | `/sobre`                                             |
+| `/contato/`                                           | página    | Formulário e dados de contato                              | `/contato`                                           |
+| `/hello-world/`                                       | post      | Post padrão do WordPress (sem valor)                       | `/noticias` (não migrado)                            |
+| `/category/uncategorized/`                            | categoria | Vazia                                                      | `/noticias`                                          |
+| `/portfolio-item/ecomuseu-dos-campos-…/`              | projeto   | Ecomuseu dos Campos de São José                            | `/projetos/ecomuseu-dos-campos-de-sao-jose`          |
+| `/portfolio-item/inventario-cultural-…/`              | projeto   | INRC Congado Paulista + Dossiê Samba de Bumbo              | `/projetos/inventario-cultural-e-dossie-de-registro` |
+| `/portfolio-item/programa-celeo-…-projeto-ecoe/`      | projeto   | Projeto Ecoe Verde                                         | `/projetos/projeto-ecoe-verde`                       |
+| `/portfolio-item/programa-celeo-…-projeto-quipa/`     | projeto   | Projeto Quipá                                              | `/projetos/projeto-quipa`                            |
+| `/portfolio-item/programa-de-educacao-patrimonial-…/` | projeto   | Programa de Educação Patrimonial (PEP)                     | `/projetos/programa-de-educacao-patrimonial`         |
+| `/portfolio-item/projeto-de-memoria-institucional-…/` | projeto   | Memória Institucional do Museu do Folclore                 | `/projetos/memoria-institucional-museu-do-folclore`  |
+| `/wp-content/uploads/*`                               | mídia     | 275 arquivos                                               | 301 dinâmico para a mídia migrada                    |
 
 O mapa completo, usado pelo script de migração e pelos testes E2E, está em
 [`content/legacy/url-map.json`](../content/legacy/url-map.json).
@@ -74,16 +74,16 @@ territórios e das instituições, e articulação de atores sociais em torno do
 
 ### Números confirmados no site atual
 
-| Dado                                                            | Fonte              |
-| --------------------------------------------------------------- | ------------------ |
-| ~16 mil pessoas mobilizadas na 3ª edição do Ecomuseu (2021–2023) | página Ecomuseu    |
-| 1.913 beneficiários diretos e 7.652 indiretos em 1 ano (Ecoe)     | página Ecoe        |
-| Atuação junto ao CECP desde 2015                                 | página Ecomuseu    |
-| INRC do Congado Paulista (2015–2017)                             | página Inventário  |
-| Dossiê do Samba de Bumbo Paulista (2019–2023)                    | página Inventário  |
-| PEP da Fundação Cassiano Ricardo (2015–2016)                     | página PEP         |
-| Pesquisa de memória institucional do Museu do Folclore (2020)    | página Memória     |
-| 6 projetos publicados                                            | portfólio          |
+| Dado                                                             | Fonte             |
+| ---------------------------------------------------------------- | ----------------- |
+| ~16 mil pessoas mobilizadas na 3ª edição do Ecomuseu (2021–2023) | página Ecomuseu   |
+| 1.913 beneficiários diretos e 7.652 indiretos em 1 ano (Ecoe)    | página Ecoe       |
+| Atuação junto ao CECP desde 2015                                 | página Ecomuseu   |
+| INRC do Congado Paulista (2015–2017)                             | página Inventário |
+| Dossiê do Samba de Bumbo Paulista (2019–2023)                    | página Inventário |
+| PEP da Fundação Cassiano Ricardo (2015–2016)                     | página PEP        |
+| Pesquisa de memória institucional do Museu do Folclore (2020)    | página Memória    |
+| 6 projetos publicados                                            | portfólio         |
 
 > A certificação de **Tecnologia Social da Fundação Banco do Brasil** foi concedida ao **CECP**
 > pelo projeto Ecomuseu, e não à Quarau. O copy novo mantém essa atribuição.
@@ -104,11 +104,11 @@ Instituto Umbuzeiro. A faixa de logos da home também exibia **Magano Design, Br
 
 ### ODS por projeto (lidos das imagens oficiais publicadas)
 
-| Projeto  | ODS                       |
-| -------- | ------------------------- |
-| Ecomuseu | 4, 11, 12, 13, 16, 17     |
-| Ecoe     | 1, 2, 4, 5, 8, 12         |
-| Quipá    | 1, 2, 4, 5, 8             |
+| Projeto  | ODS                   |
+| -------- | --------------------- |
+| Ecomuseu | 4, 11, 12, 13, 16, 17 |
+| Ecoe     | 1, 2, 4, 5, 8, 12     |
+| Quipá    | 1, 2, 4, 5, 8         |
 
 ### Contato
 

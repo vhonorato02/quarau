@@ -1,3 +1,5 @@
+import { siteUrl as resolveSiteUrl } from './platform-env'
+
 /** Maps a CMS document to its public path. Single source of truth for routing. */
 export type RoutableCollection = 'pages' | 'projects' | 'services' | 'news' | 'jobs'
 
@@ -15,7 +17,7 @@ export function docPath(collection: RoutableCollection, slug: string | null | un
   return `${COLLECTION_BASE[collection]}/${slug}`
 }
 
-export function absoluteUrl(path: string, siteUrl = process.env.SITE_URL ?? 'http://localhost:3000'): string {
+export function absoluteUrl(path: string, siteUrl = resolveSiteUrl()): string {
   return new URL(path, siteUrl.endsWith('/') ? siteUrl : `${siteUrl}/`).toString()
 }
 

@@ -22,10 +22,10 @@ export function SheetContent({
 }) {
   return (
     <Dialog.Portal>
-      <Dialog.Overlay className="fixed inset-0 z-50 bg-ink/50 backdrop-blur-sm data-[state=open]:animate-[fade-in_var(--duration-base)_var(--ease-brand)]" />
+      <Dialog.Overlay className="bg-ink/50 fixed inset-0 z-50 backdrop-blur-sm data-[state=open]:animate-[fade-in_var(--duration-base)_var(--ease-brand)]" />
       <Dialog.Content
         className={cn(
-          'fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-blue-950 text-white shadow-lift outline-none',
+          'shadow-lift fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-blue-950 text-white outline-none',
           'data-[state=open]:animate-[slide-in-right_var(--duration-slow)_var(--ease-brand)]',
           className,
         )}

@@ -29,7 +29,9 @@ export function truncate(text: string, max = 160): string {
 }
 
 /** Builds a minimal Lexical document from plain paragraphs (used by the WP migration). */
-export function paragraphsToLexical(paragraphs: Array<string | { text: string; bold?: boolean }[]>) {
+export function paragraphsToLexical(
+  paragraphs: Array<string | { text: string; bold?: boolean }[]>,
+) {
   const textNode = (text: string, bold = false) => ({
     type: 'text',
     text,
@@ -42,13 +44,13 @@ export function paragraphsToLexical(paragraphs: Array<string | { text: string; b
   return {
     root: {
       type: 'root',
-      format: '',
+      format: '' as const,
       indent: 0,
       version: 1,
       direction: 'ltr' as const,
       children: paragraphs.map((p) => ({
         type: 'paragraph',
-        format: '',
+        format: '' as const,
         indent: 0,
         version: 1,
         direction: 'ltr' as const,

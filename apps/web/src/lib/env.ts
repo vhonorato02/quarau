@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { databaseUrl, siteUrl } from './platform-env'
+
 /**
  * Server-side environment, validated once at startup. Optional services
  * (Meilisearch, Valkey, SMTP, Turnstile, S3) degrade gracefully when absent so
@@ -55,6 +57,7 @@ export type Env = z.infer<typeof schema>
 let cached: Env | undefined
 
 export function env(): Env {
-  if (!cached) cached = schema.parse(process.env)
+  if (!cached)
+    cached = schema.parse({ ...process.env, SITE_URL: siteUrl(), DATABASE_URL: databaseUrl() })
   return cached
 }

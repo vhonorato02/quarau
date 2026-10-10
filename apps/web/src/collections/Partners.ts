@@ -10,7 +10,10 @@ export const Partners: CollectionConfig = {
   defaultSort: 'order',
   admin: { group: 'Institucional', useAsTitle: 'name', defaultColumns: ['name', 'kind', 'order'] },
   access: { read: anyone, create: editors, update: editors, delete: editors },
-  hooks: { afterChange: [revalidateCollection('partners')], afterDelete: [revalidateCollectionDelete('partners')] },
+  hooks: {
+    afterChange: [revalidateCollection('partners')],
+    afterDelete: [revalidateCollectionDelete('partners')],
+  },
   fields: [
     { name: 'name', type: 'text', label: 'Nome', required: true },
     { name: 'fullName', type: 'text', label: 'Nome completo / descrição' },

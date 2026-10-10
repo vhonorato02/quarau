@@ -46,3 +46,10 @@ a:focus-visible,
 button:focus-visible {
   outline-color: var(--quarau-blue-700);
 }
+
+// The dashboard has no localized content and Payload renders its locale switcher there without a
+// locale ("Local: undefined"); it stays available inside every document.
+.template-default:has(.dashboard) .localizer,
+.template-default:has(.dashboard) .app-header__localizer-spacing {
+  display: none;
+}

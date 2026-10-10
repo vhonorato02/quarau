@@ -65,7 +65,12 @@ export const Contact: GlobalConfig = {
   label: 'Contato',
   ...base('contact'),
   fields: [
-    { name: 'companyName', type: 'text', label: 'Razão social / nome', defaultValue: 'Quarau Projetos Socioambientais, Educativos e Culturais' },
+    {
+      name: 'companyName',
+      type: 'text',
+      label: 'Razão social / nome',
+      defaultValue: 'Quarau Projetos Socioambientais, Educativos e Culturais',
+    },
     { name: 'cnpj', type: 'text', label: 'CNPJ' },
     { name: 'email', type: 'email', label: 'E-mail principal', required: true },
     {
@@ -73,7 +78,13 @@ export const Contact: GlobalConfig = {
       type: 'array',
       label: 'Telefones',
       fields: [
-        { name: 'number', type: 'text', label: 'Número', required: true, admin: { placeholder: '(12) 98281-3669' } },
+        {
+          name: 'number',
+          type: 'text',
+          label: 'Número',
+          required: true,
+          admin: { placeholder: '(12) 98281-3669' },
+        },
         { name: 'whatsapp', type: 'checkbox', label: 'Atende por WhatsApp' },
       ],
     },
@@ -143,7 +154,13 @@ export const SiteSettings: GlobalConfig = {
   label: 'SEO e configurações gerais',
   ...base('site-settings'),
   fields: [
-    { name: 'siteName', type: 'text', label: 'Nome do site', defaultValue: 'Quarau', required: true },
+    {
+      name: 'siteName',
+      type: 'text',
+      label: 'Nome do site',
+      defaultValue: 'Quarau',
+      required: true,
+    },
     {
       name: 'titleTemplate',
       type: 'text',
@@ -151,8 +168,19 @@ export const SiteSettings: GlobalConfig = {
       defaultValue: '%s — Quarau',
       admin: { description: '%s é substituído pelo título de cada página.' },
     },
-    { name: 'defaultDescription', type: 'textarea', label: 'Descrição padrão', localized: true, maxLength: 170 },
-    { name: 'defaultOgImage', type: 'upload', relationTo: 'media', label: 'Imagem padrão de compartilhamento' },
+    {
+      name: 'defaultDescription',
+      type: 'textarea',
+      label: 'Descrição padrão',
+      localized: true,
+      maxLength: 170,
+    },
+    {
+      name: 'defaultOgImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Imagem padrão de compartilhamento',
+    },
     {
       name: 'organization',
       type: 'group',
@@ -160,7 +188,12 @@ export const SiteSettings: GlobalConfig = {
       fields: [
         { name: 'legalName', type: 'text', label: 'Nome jurídico' },
         { name: 'foundingYear', type: 'number', label: 'Ano de fundação' },
-        { name: 'areaServed', type: 'text', label: 'Área de atuação geográfica', defaultValue: 'Brasil' },
+        {
+          name: 'areaServed',
+          type: 'text',
+          label: 'Área de atuação geográfica',
+          defaultValue: 'Brasil',
+        },
       ],
     },
     {
@@ -169,7 +202,12 @@ export const SiteSettings: GlobalConfig = {
       label: 'Analytics (Umami)',
       fields: [
         { name: 'umamiWebsiteId', type: 'text', label: 'ID do site no Umami' },
-        { name: 'umamiScriptUrl', type: 'text', label: 'URL do script', defaultValue: '/stats/script.js' },
+        {
+          name: 'umamiScriptUrl',
+          type: 'text',
+          label: 'URL do script',
+          defaultValue: '/stats/script.js',
+        },
       ],
     },
     {

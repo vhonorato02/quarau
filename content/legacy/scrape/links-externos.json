@@ -1,0 +1,94 @@
+[
+ {
+  "url": "https://www.instagram.com/quarau.consultoria/",
+  "status": 429,
+  "on": [
+   "inicio",
+   "hello-world",
+   "sobre-a-quarau",
+   "contato",
+   "portfolio-item__projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo",
+   "portfolio-item__ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental",
+   "portfolio-item__inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional",
+   "portfolio-item__programa-celeo-na-comunidade-projeto-ecoe",
+   "portfolio-item__programa-celeo-na-comunidade-projeto-quipa",
+   "portfolio-item__programa-de-educacao-patrimonial-da-fundacao-cassiano-ricardo",
+   "category__uncategorized",
+   "author__fm_buenoyahoo-com-br"
+  ]
+ },
+ {
+  "url": "https://www.linkedin.com/in/quarau-91196b258/",
+  "status": 999,
+  "on": [
+   "inicio",
+   "hello-world",
+   "sobre-a-quarau",
+   "contato",
+   "portfolio-item__projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo",
+   "portfolio-item__ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental",
+   "portfolio-item__inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional",
+   "portfolio-item__programa-celeo-na-comunidade-projeto-ecoe",
+   "portfolio-item__programa-celeo-na-comunidade-projeto-quipa",
+   "portfolio-item__programa-de-educacao-patrimonial-da-fundacao-cassiano-ricardo",
+   "category__uncategorized",
+   "author__fm_buenoyahoo-com-br"
+  ]
+ },
+ {
+  "url": "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fquarau.com.br%2Fhello-world%2F",
+  "status": 200,
+  "on": [
+   "hello-world"
+  ]
+ },
+ {
+  "url": "https://twitter.com/intent/tweet/?text=Hello+world%21+-+QUARAU.+https%3A%2F%2Fquarau.com.br%2Fhello-world%2F",
+  "status": 200,
+  "on": [
+   "hello-world"
+  ]
+ },
+ {
+  "url": "https://www.linkedin.com/shareArticle/?mini=true&url=https%3A%2F%2Fquarau.com.br%2Fhello-world%2F",
+  "status": 200,
+  "on": [
+   "hello-world"
+  ]
+ },
+ {
+  "url": "https://pinterest.com/pin/find/?url=https%3A%2F%2Fquarau.com.br%2Fhello-world%2F",
+  "status": 200,
+  "on": [
+   "hello-world"
+  ]
+ },
+ {
+  "url": "https://www.calameo.com/read/0010126728ee98dee91fd/",
+  "status": 200,
+  "on": [
+   "portfolio-item__projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo"
+  ]
+ },
+ {
+  "url": "https://www.calameo.com/read/0010126729c18ce8ecbfb/",
+  "status": 200,
+  "on": [
+   "portfolio-item__projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo"
+  ]
+ },
+ {
+  "url": "https://www.calameo.com/read/001012672b53578957aa2/",
+  "status": 200,
+  "on": [
+   "portfolio-item__projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo"
+  ]
+ },
+ {
+  "url": "https://www.calameo.com/read/00101267291cf3c0365a8/",
+  "status": 200,
+  "on": [
+   "portfolio-item__inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional"
+  ]
+ }
+]

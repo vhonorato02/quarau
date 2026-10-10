@@ -30,7 +30,14 @@ export const HeroBlock: Block = {
       ],
     },
     ...sectionIntro.slice(0, 1),
-    { name: 'heading', type: 'textarea', label: 'Título', required: true, localized: true, maxLength: 120 },
+    {
+      name: 'heading',
+      type: 'textarea',
+      label: 'Título',
+      required: true,
+      localized: true,
+      maxLength: 120,
+    },
     { name: 'lead', type: 'textarea', label: 'Texto de apoio', localized: true, maxLength: 320 },
     {
       name: 'media',
@@ -103,13 +110,28 @@ export const StatsBlock: Block = {
       minRows: 1,
       maxRows: 6,
       labels: { singular: 'Indicador', plural: 'Indicadores' },
-      admin: { description: 'Use apenas números comprovados e informe a fonte/período no contexto.' },
+      admin: {
+        description: 'Use apenas números comprovados e informe a fonte/período no contexto.',
+      },
       fields: [
         {
           type: 'row',
           fields: [
-            { name: 'value', type: 'text', label: 'Número', required: true, admin: { width: '30%', placeholder: '16 mil' } },
-            { name: 'label', type: 'text', label: 'Descrição', required: true, localized: true, admin: { width: '70%' } },
+            {
+              name: 'value',
+              type: 'text',
+              label: 'Número',
+              required: true,
+              admin: { width: '30%', placeholder: '16 mil' },
+            },
+            {
+              name: 'label',
+              type: 'text',
+              label: 'Descrição',
+              required: true,
+              localized: true,
+              admin: { width: '70%' },
+            },
           ],
         },
         { name: 'context', type: 'text', label: 'Contexto / fonte', localized: true },
@@ -133,7 +155,13 @@ export const TimelineBlock: Block = {
       minRows: 1,
       labels: { singular: 'Marco', plural: 'Marcos' },
       fields: [
-        { name: 'period', type: 'text', label: 'Ano ou período', required: true, admin: { placeholder: '2015–2017' } },
+        {
+          name: 'period',
+          type: 'text',
+          label: 'Ano ou período',
+          required: true,
+          admin: { placeholder: '2015–2017' },
+        },
         { name: 'title', type: 'text', label: 'Título', required: true, localized: true },
         { name: 'description', type: 'textarea', label: 'Descrição', localized: true },
       ],
@@ -239,7 +267,12 @@ export const ProjectsBlock: Block = {
       admin: { condition: (_, s) => s?.mode === 'selected' },
     },
     { name: 'limit', type: 'number', label: 'Quantidade', defaultValue: 6, min: 1, max: 12 },
-    { name: 'showAllLink', type: 'checkbox', label: 'Mostrar link “Ver todos os projetos”', defaultValue: true },
+    {
+      name: 'showAllLink',
+      type: 'checkbox',
+      label: 'Mostrar link “Ver todos os projetos”',
+      defaultValue: true,
+    },
     toneField(),
     anchorField,
   ],
@@ -295,7 +328,14 @@ export const FaqBlock: Block = {
       labels: { singular: 'Pergunta', plural: 'Perguntas' },
       fields: [
         { name: 'question', type: 'text', label: 'Pergunta', required: true, localized: true },
-        { name: 'answer', type: 'richText', label: 'Resposta', editor: simpleEditor, required: true, localized: true },
+        {
+          name: 'answer',
+          type: 'richText',
+          label: 'Resposta',
+          editor: simpleEditor,
+          required: true,
+          localized: true,
+        },
       ],
     },
     toneField(),
@@ -314,8 +354,22 @@ export const MapBlock: Block = {
       type: 'row',
       fields: [
         { name: 'lat', type: 'number', label: 'Latitude', required: true, admin: { width: '33%' } },
-        { name: 'lng', type: 'number', label: 'Longitude', required: true, admin: { width: '33%' } },
-        { name: 'zoom', type: 'number', label: 'Zoom', defaultValue: 13, min: 3, max: 18, admin: { width: '33%' } },
+        {
+          name: 'lng',
+          type: 'number',
+          label: 'Longitude',
+          required: true,
+          admin: { width: '33%' },
+        },
+        {
+          name: 'zoom',
+          type: 'number',
+          label: 'Zoom',
+          defaultValue: 13,
+          min: 3,
+          max: 18,
+          admin: { width: '33%' },
+        },
       ],
     },
     toneField('alt'),
@@ -372,7 +426,10 @@ export const OdsBlock: Block = {
       type: 'select',
       hasMany: true,
       label: 'Objetivos de Desenvolvimento Sustentável',
-      options: Array.from({ length: 17 }, (_, i) => ({ label: `ODS ${i + 1}`, value: String(i + 1) })),
+      options: Array.from({ length: 17 }, (_, i) => ({
+        label: `ODS ${i + 1}`,
+        value: String(i + 1),
+      })),
     },
     toneField(),
     anchorField,
@@ -385,7 +442,13 @@ export const DownloadsBlock: Block = {
   labels: { singular: 'Documentos', plural: 'Documentos' },
   fields: [
     ...sectionIntro,
-    { name: 'documents', type: 'relationship', relationTo: 'documents', hasMany: true, label: 'Documentos (vazio = todos)' },
+    {
+      name: 'documents',
+      type: 'relationship',
+      relationTo: 'documents',
+      hasMany: true,
+      label: 'Documentos (vazio = todos)',
+    },
     toneField(),
     anchorField,
   ],
@@ -397,7 +460,13 @@ export const TeamBlock: Block = {
   labels: { singular: 'Equipe', plural: 'Equipe' },
   fields: [
     ...sectionIntro,
-    { name: 'members', type: 'relationship', relationTo: 'team', hasMany: true, label: 'Pessoas (vazio = todas)' },
+    {
+      name: 'members',
+      type: 'relationship',
+      relationTo: 'team',
+      hasMany: true,
+      label: 'Pessoas (vazio = todas)',
+    },
     toneField(),
     anchorField,
   ],
@@ -407,7 +476,12 @@ export const ContactFormBlock: Block = {
   slug: 'contactForm',
   interfaceName: 'ContactFormBlock',
   labels: { singular: 'Formulário de contato', plural: 'Formulários de contato' },
-  fields: [...sectionIntro, { name: 'intro', type: 'textarea', label: 'Texto de apoio', localized: true }, toneField('alt'), anchorField],
+  fields: [
+    ...sectionIntro,
+    { name: 'intro', type: 'textarea', label: 'Texto de apoio', localized: true },
+    toneField('alt'),
+    anchorField,
+  ],
 }
 
 export const pageBlocks: Block[] = [
@@ -429,4 +503,43 @@ export const pageBlocks: Block[] = [
   MapBlock,
   ContactFormBlock,
   CtaBlock,
+]
+
+export const StatementBlock: Block = {
+  slug: 'statement',
+  interfaceName: 'StatementBlock',
+  labels: { singular: 'Frase de impacto', plural: 'Frases de impacto' },
+  fields: [
+    sectionIntro[0]!,
+    {
+      name: 'text',
+      type: 'textarea',
+      label: 'Frase',
+      required: true,
+      localized: true,
+      maxLength: 400,
+      admin: {
+        description:
+          'Texto grande que se revela conforme a rolagem. Ideal para manifestos e missão.',
+      },
+    },
+    links(1),
+    toneField(),
+    anchorField,
+  ],
+}
+
+pageBlocks.splice(1, 0, StatementBlock)
+
+/** Blocks available inside a project case study narrative. */
+export const caseBlocks: Block[] = [
+  ContentBlock,
+  MediaTextBlock,
+  StatementBlock,
+  StatsBlock,
+  GalleryBlock,
+  VideoBlock,
+  TimelineBlock,
+  TestimonialsBlock,
+  OdsBlock,
 ]

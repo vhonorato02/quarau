@@ -1,0 +1,524 @@
+{
+ "url": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/",
+ "finalUrl": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/",
+ "status": 200,
+ "slug": "portfolio-item__inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional",
+ "source": [
+  "sitemap:portfolio-sitemap.xml",
+  "rest:portfolio",
+  "link:sobre-a-quarau",
+  "link:portfolio-item__projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo"
+ ],
+ "data": {
+  "lang": "pt-BR",
+  "title": "Inventário Cultural e Dossiê de Registro (CECP | IPHAN - Instituto do Patrimônio Histórico Artístico Nacional) - QUARAU",
+  "meta": {
+   "og:image": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20211010-WA0003-scaled.jpeg",
+   "og:url": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/",
+   "og:type": "article",
+   "og:title": "Inventário Cultural e Dossiê de Registro (CECP | IPHAN - Instituto do Patrimônio Histórico Artístico Nacional) - QUARAU",
+   "og:description": "A Quarau também foi contratada pelo CECP para realização a aplicação do INRC (Inventário Nacional de Referências Culturais) do Congado Paulista (2015-2017), bem como para coordenar a pesquisa e elaborar o Dossiê de Registro do Samba de Bumbo Paulista como Patrimônio Cultural Imaterial Brasileiro (2019-2023).Ambas as pesquisas foram realizadas em parceria com o Instituto do Patrimônio Histórico e Artístico Nacional (IPHAN) seguindo o Decreto-Lei nº 3.551 de agosto de 2000.",
+   "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+   "format-detection": "telephone=no",
+   "viewport": "width=device-width, initial-scale=1, maximum-scale=1",
+   "theme-color": "#ffffff",
+   "description": "A Quarau também foi contratada pelo CECP para realização a aplicação do INRC (Inventário Nacional de Referências Culturais) do Congado Paulista (2015-2017), bem como para coordenar a pesquisa e elaborar o Dossiê de Registro do Samba de Bumbo Paulista como Patrimônio Cultural Imaterial Brasileiro (2019-2023).Ambas as pesquisas foram realizadas em parceria com o Instituto do Patrimônio Histórico e Artístico Nacional (IPHAN) seguindo o Decreto-Lei nº 3.551 de agosto de 2000.",
+   "og:locale": "pt_BR",
+   "og:site_name": "QUARAU",
+   "article:modified_time": "2024-05-29T13:09:46+00:00",
+   "og:image:width": "2560",
+   "og:image:height": "1440",
+   "og:image:type": "image/jpeg",
+   "twitter:card": "summary_large_image",
+   "twitter:label1": "Est. tempo de leitura",
+   "twitter:data1": "1 minuto",
+   "generator": "Powered by Slider Revolution 6.6.18 - responsive, Mobile-Friendly Slider Plugin for WordPress with comfortable drag and drop interface."
+  },
+  "canonical": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/",
+  "jsonLd": [
+   {
+    "@context": "https://schema.org",
+    "@graph": [
+     {
+      "@type": "WebPage",
+      "@id": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/",
+      "url": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/",
+      "name": "Inventário Cultural e Dossiê de Registro (CECP | IPHAN - Instituto do Patrimônio Histórico Artístico Nacional) - QUARAU",
+      "isPartOf": {
+       "@id": "https://quarau.com.br/#website"
+      },
+      "primaryImageOfPage": {
+       "@id": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/#primaryimage"
+      },
+      "image": {
+       "@id": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/#primaryimage"
+      },
+      "thumbnailUrl": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20211010-WA0003-scaled.jpeg",
+      "datePublished": "2023-11-18T19:00:22+00:00",
+      "dateModified": "2024-05-29T13:09:46+00:00",
+      "description": "A Quarau também foi contratada pelo CECP para realização a aplicação do INRC (Inventário Nacional de Referências Culturais) do Congado Paulista (2015-2017), bem como para coordenar a pesquisa e elaborar o Dossiê de Registro do Samba de Bumbo Paulista como Patrimônio Cultural Imaterial Brasileiro (2019-2023).Ambas as pesquisas foram realizadas em parceria com o Instituto do Patrimônio Histórico e Artístico Nacional (IPHAN) seguindo o Decreto-Lei nº 3.551 de agosto de 2000.",
+      "breadcrumb": {
+       "@id": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/#breadcrumb"
+      },
+      "inLanguage": "pt-BR",
+      "potentialAction": [
+       {
+        "@type": "ReadAction",
+        "target": [
+         "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/"
+        ]
+       }
+      ]
+     },
+     {
+      "@type": "ImageObject",
+      "inLanguage": "pt-BR",
+      "@id": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/#primaryimage",
+      "url": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20211010-WA0003-scaled.jpeg",
+      "contentUrl": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20211010-WA0003-scaled.jpeg",
+      "width": 2560,
+      "height": 1440
+     },
+     {
+      "@type": "BreadcrumbList",
+      "@id": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/#breadcrumb",
+      "itemListElement": [
+       {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Início",
+        "item": "https://quarau.com.br/"
+       },
+       {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Inventário Cultural e Dossiê de Registro (CECP | IPHAN &#8211; Instituto do Patrimônio Histórico Artístico Nacional)"
+       }
+      ]
+     },
+     {
+      "@type": "WebSite",
+      "@id": "https://quarau.com.br/#website",
+      "url": "https://quarau.com.br/",
+      "name": "Quarau - Projetos Socioambientais, Educativos e Culturais",
+      "description": "Quarau é uma empresa de consultoria em projetos educativos, culturais e socioambientais que tem experiência consolidada nas várias etapas que compõem um projeto, desde a sua concepção, prospecção, seleção, planejamento, execução, monitoramento, controle, encerramento, promoção e difusão. A Quarau está apta a elaborar junto aos seus parceiros, sejam empresas, instituições públicas ou do terceiro setor, projetos que beneficiem territórios urbanos e rurais, bem como instituições locais, regionais ou nacionais. Utiliza metodologias adequadas aos contextos específicos, garantindo a identificação das potencialidades dos territórios e das instituições.   Seguindo esta perspectiva, a Quarau vem colecionando bons resultados em todas as etapas de produção dos projetos, ocupando papéis importantes na concepção, execução e no gerenciamento dos mesmos.",
+      "publisher": {
+       "@id": "https://quarau.com.br/#organization"
+      },
+      "alternateName": "Quarau",
+      "potentialAction": [
+       {
+        "@type": "SearchAction",
+        "target": {
+         "@type": "EntryPoint",
+         "urlTemplate": "https://quarau.com.br/?s={search_term_string}"
+        },
+        "query-input": {
+         "@type": "PropertyValueSpecification",
+         "valueRequired": true,
+         "valueName": "search_term_string"
+        }
+       }
+      ],
+      "inLanguage": "pt-BR"
+     },
+     {
+      "@type": "Organization",
+      "@id": "https://quarau.com.br/#organization",
+      "name": "Quarau - Projetos Socioambientais, Educativos e Culturais",
+      "url": "https://quarau.com.br/",
+      "logo": {
+       "@type": "ImageObject",
+       "inLanguage": "pt-BR",
+       "@id": "https://quarau.com.br/#/schema/logo/image/",
+       "url": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design-4.png",
+       "contentUrl": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design-4.png",
+       "width": 692,
+       "height": 696,
+       "caption": "Quarau - Projetos Socioambientais, Educativos e Culturais"
+      },
+      "image": {
+       "@id": "https://quarau.com.br/#/schema/logo/image/"
+      },
+      "sameAs": [
+       "https://www.instagram.com/quarau.consultoria/",
+       "https://www.linkedin.com/in/quarau-91196b258/"
+      ]
+     }
+    ]
+   }
+  ],
+  "outline": [],
+  "markdown": "**A Quarau também foi contratada pelo CECP para realização a aplicação do INRC (Inventário Nacional de Referências Culturais) do Congado Paulista (2015-2017), bem como para coordenar a pesquisa e elaborar o Dossiê de Registro do Samba de Bumbo Paulista como Patrimônio Cultural Imaterial Brasileiro (2019-2023).**\n\nAmbas as pesquisas foram realizadas em parceria com o Instituto do Patrimônio Histórico e Artístico Nacional (IPHAN) seguindo o Decreto-Lei nº 3.551 de agosto de 2000.\n\n**[Clique aqui e acesse o livro](https://www.calameo.com/read/00101267291cf3c0365a8)**",
+  "hiddenText": [],
+  "words": 77,
+  "header": {
+   "links": [
+    {
+     "text": "",
+     "href": "https://quarau.com.br/"
+    },
+    {
+     "text": "mobile menu",
+     "href": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/#"
+    },
+    {
+     "text": "INÍCIO",
+     "href": "https://quarau.com.br/"
+    },
+    {
+     "text": "SOBRE A QUARAU",
+     "href": "https://quarau.com.br/sobre-a-quarau/"
+    },
+    {
+     "text": "CONTATO",
+     "href": "https://quarau.com.br/contato/"
+    }
+   ],
+   "logo": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg=="
+  },
+  "footer": {
+   "text": "Quarau Projetos Socioambientais, Educativos e Culturais São José dos Campos - São Paulo contato@quarau.com.br (12) 98281-3669 | (12) 98264-5960 FALE COM A QUARAU",
+   "links": [
+    {
+     "text": "contato@quarau.com.br",
+     "href": "https://quarau.com.br/contato"
+    },
+    {
+     "text": "",
+     "href": "https://www.instagram.com/quarau.consultoria/"
+    },
+    {
+     "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+     "href": "https://www.instagram.com/quarau.consultoria/"
+    },
+    {
+     "text": "",
+     "href": "https://www.linkedin.com/in/quarau-91196b258/"
+    },
+    {
+     "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+     "href": "https://www.linkedin.com/in/quarau-91196b258/"
+    },
+    {
+     "text": "FALE COM A QUARAU",
+     "href": "https://quarau.com.br/contato/"
+    },
+    {
+     "text": "Back to top icon",
+     "href": ""
+    }
+   ]
+  },
+  "links": [
+   {
+    "text": "",
+    "href": "https://quarau.com.br/"
+   },
+   {
+    "text": "mobile menu",
+    "href": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/#"
+   },
+   {
+    "text": "INÍCIO",
+    "href": "https://quarau.com.br/"
+   },
+   {
+    "text": "SOBRE A QUARAU",
+    "href": "https://quarau.com.br/sobre-a-quarau/"
+   },
+   {
+    "text": "CONTATO",
+    "href": "https://quarau.com.br/contato/"
+   },
+   {
+    "text": "Projeto de Memória Institucional do Museu do Folclore de São José dos Campos (CECP | Fundação Cultural Cassiano Ricardo)novembro 18, 2023",
+    "href": "https://quarau.com.br/portfolio-item/projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo/"
+   },
+   {
+    "text": "Programa de Educação Patrimonial da Fundação Cassiano Ricardonovembro 18, 2023",
+    "href": "https://quarau.com.br/portfolio-item/programa-de-educacao-patrimonial-da-fundacao-cassiano-ricardo/"
+   },
+   {
+    "text": "Clique aqui e acesse o livro",
+    "href": "https://www.calameo.com/read/00101267291cf3c0365a8"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/11/1.1.133-Apresentacao-20231118-195024.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/11/2.0.1B-36-Terno-de-Congo-de-Sainhas-Irmaos-Paiva-20231118-195026.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/11/23826251_10208072580452599_7012661833098756994_o-20231118-195027.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/11/23845864_10208072896260494_1379668490107092426_o-20231118-195028.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/11/23847257_10208072590572852_3161924133479159687_o-20231118-195030.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/11/23916463_10208072890700355_7288444022268777658_o-20231118-195031.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/11/23926264_10208072576852509_5947567710325815158_o-20231118-195034.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/11/24059404_10208072574372447_291366456064669096_o-20231118-195035.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/20211010_172948-scaled-e1702478816508.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/M0_Presencial_SP.png"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/M01_Presencial_Virtual2.png"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20210517-WA0024.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20211010-WA0003-scaled.jpeg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20211012-WA0016.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20211012-WA0017.jpg"
+   },
+   {
+    "text": "contato@quarau.com.br",
+    "href": "https://quarau.com.br/contato"
+   },
+   {
+    "text": "",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   },
+   {
+    "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   },
+   {
+    "text": "",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": "FALE COM A QUARAU",
+    "href": "https://quarau.com.br/contato/"
+   },
+   {
+    "text": "Back to top icon",
+    "href": ""
+   },
+   {
+    "text": "menu close icon",
+    "href": "https://quarau.com.br/portfolio-item/inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/#"
+   },
+   {
+    "text": "LinkedIn icon",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": "Instagram icon",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   }
+  ],
+  "images": [
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/11/1.1.133-Apresentacao-20231118-195024.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1024,
+    "h": 768,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/11/2.0.1B-36-Terno-de-Congo-de-Sainhas-Irmaos-Paiva-20231118-195026.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/11/23826251_10208072580452599_7012661833098756994_o-20231118-195027.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/11/23845864_10208072896260494_1379668490107092426_o-20231118-195028.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/11/23847257_10208072590572852_3161924133479159687_o-20231118-195030.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/11/23916463_10208072890700355_7288444022268777658_o-20231118-195031.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/11/23926264_10208072576852509_5947567710325815158_o-20231118-195034.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/11/24059404_10208072574372447_291366456064669096_o-20231118-195035.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/20211010_172948-scaled-e1702478816508.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/M0_Presencial_SP.png",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/M01_Presencial_Virtual2.png",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20210517-WA0024.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20211010-WA0003-scaled.jpeg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20211012-WA0016.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/IMG-20211012-WA0017.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://themes.muffingroup.com/be/company3/wp-content/uploads/2018/06/home_company3_pic7.png",
+    "alt": "Inventário Cultural e Dossiê de Registro (CECP | IPHAN – Instituto do Patrimônio Histórico Artístico Nacional)",
+    "title": "",
+    "w": 0,
+    "h": 0,
+    "where": "footer",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/home_company3_slider_pic5-copy-20231118-193929-copy.png#440",
+    "alt": "",
+    "title": "",
+    "w": 0,
+    "h": 0,
+    "where": "other",
+    "kind": "bg"
+   }
+  ],
+  "iframes": [],
+  "videos": [],
+  "forms": [
+   {
+    "action": "https://quarau.com.br/",
+    "fields": [
+     {
+      "name": "s",
+      "type": "text",
+      "label": "Enter your search",
+      "required": false
+     },
+     {
+      "name": "",
+      "type": "submit",
+      "label": "Search",
+      "required": false
+     }
+    ]
+   }
+  ]
+ }
+}

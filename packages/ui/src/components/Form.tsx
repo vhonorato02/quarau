@@ -27,7 +27,7 @@ export function Field({ id, label, hint, error, required, className, children }:
   const describedBy = [hintId, errorId].filter(Boolean).join(' ') || undefined
   return (
     <div className={cn('flex flex-col gap-2', className)}>
-      <label htmlFor={id} className="text-sm font-semibold text-ink">
+      <label htmlFor={id} className="text-ink text-sm font-semibold">
         {label}
         {required ? (
           <span className="text-danger" aria-hidden="true">
@@ -35,17 +35,22 @@ export function Field({ id, label, hint, error, required, className, children }:
             *
           </span>
         ) : (
-          <span className="font-normal text-ink-subtle"> (opcional)</span>
+          <span className="text-ink-subtle font-normal"> (opcional)</span>
         )}
       </label>
       {hint ? (
-        <p id={hintId} className="text-sm text-ink-muted">
+        <p id={hintId} className="text-ink-muted text-sm">
           {hint}
         </p>
       ) : null}
-      {children({ id, 'aria-invalid': error ? true : undefined, 'aria-describedby': describedBy, required })}
+      {children({
+        id,
+        'aria-invalid': error ? true : undefined,
+        'aria-describedby': describedBy,
+        required,
+      })}
       {error ? (
-        <p id={errorId} className="text-sm font-medium text-danger" role="alert">
+        <p id={errorId} className="text-danger text-sm font-medium" role="alert">
           {error}
         </p>
       ) : null}
@@ -53,23 +58,36 @@ export function Field({ id, label, hint, error, required, className, children }:
   )
 }
 
-export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-  ({ className, ...props }, ref) => <input ref={ref} className={cn(control, 'h-12', className)} {...props} />,
-)
+export const Input = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>(({ className, ...props }, ref) => (
+  <input ref={ref} className={cn(control, 'h-12', className)} {...props} />
+))
 Input.displayName = 'Input'
 
-export const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
-  ({ className, ...props }, ref) => (
-    <textarea ref={ref} className={cn(control, 'min-h-40 py-3 leading-relaxed', className)} {...props} />
-  ),
-)
+export const Textarea = React.forwardRef<
+  HTMLTextAreaElement,
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>
+>(({ className, ...props }, ref) => (
+  <textarea
+    ref={ref}
+    className={cn(control, 'min-h-40 py-3 leading-relaxed', className)}
+    {...props}
+  />
+))
 Textarea.displayName = 'Textarea'
 
-export const Select = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement>>(
-  ({ className, ...props }, ref) => (
-    <select ref={ref} className={cn(control, 'h-12 appearance-none bg-no-repeat pr-10', className)} {...props} />
-  ),
-)
+export const Select = React.forwardRef<
+  HTMLSelectElement,
+  React.SelectHTMLAttributes<HTMLSelectElement>
+>(({ className, ...props }, ref) => (
+  <select
+    ref={ref}
+    className={cn(control, 'h-12 appearance-none bg-no-repeat pr-10', className)}
+    {...props}
+  />
+))
 Select.displayName = 'Select'
 
 export function Checkbox({
@@ -83,10 +101,10 @@ export function Checkbox({
       <input
         id={id}
         type="checkbox"
-        className="mt-0.5 size-5 shrink-0 cursor-pointer rounded-sm border-line-strong accent-blue-700"
+        className="border-line-strong mt-0.5 size-5 shrink-0 cursor-pointer rounded-sm accent-blue-700"
         {...props}
       />
-      <label htmlFor={id} className="text-sm leading-relaxed text-ink-muted">
+      <label htmlFor={id} className="text-ink-muted text-sm leading-relaxed">
         {label}
       </label>
     </div>

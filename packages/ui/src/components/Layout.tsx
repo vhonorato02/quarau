@@ -2,39 +2,33 @@ import * as React from 'react'
 
 import { cn } from '../lib/cn'
 
-type PolymorphicProps<T extends React.ElementType> = {
-  as?: T
-  className?: string
-  children?: React.ReactNode
-} & Omit<React.ComponentPropsWithoutRef<T>, 'as' | 'className' | 'children'>
+type BoxTag = 'div' | 'section' | 'header' | 'footer' | 'article' | 'aside' | 'nav' | 'main'
+type BoxProps = React.HTMLAttributes<HTMLElement> & { as?: BoxTag }
 
-export function Container<T extends React.ElementType = 'div'>({
-  as,
-  className,
-  ...props
-}: PolymorphicProps<T>) {
-  const Comp = as ?? 'div'
+export function Container({ as = 'div', className, ...props }: BoxProps) {
+  const Comp = as
   return <Comp className={cn('container-site', className)} {...props} />
 }
 
 const tones = {
   default: 'bg-surface text-ink',
   alt: 'bg-surface-alt text-ink',
-  brand: 'on-dark bg-brand-blue text-white',
+  /** Brand blue surface in its accessible tone (white text ≥ 4.5:1). See docs/brand.md. */
+  brand: 'on-dark bg-blue-700 text-white',
   dark: 'on-dark bg-blue-950 text-white',
   ink: 'on-dark bg-ink text-white',
 } as const
 
 export type SectionTone = keyof typeof tones
 
-export function Section<T extends React.ElementType = 'section'>({
-  as,
+export function Section({
+  as = 'section',
   className,
   tone = 'default',
   spacing = 'default',
   ...props
-}: PolymorphicProps<T> & { tone?: SectionTone; spacing?: 'default' | 'tight' | 'none' }) {
-  const Comp = as ?? 'section'
+}: BoxProps & { tone?: SectionTone; spacing?: 'default' | 'tight' | 'none' }) {
+  const Comp = as
   return (
     <Comp
       data-tone={tone}

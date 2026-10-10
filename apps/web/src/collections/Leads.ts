@@ -14,26 +14,50 @@ export const Leads: CollectionConfig = {
     group: 'Relacionamento',
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'subject', 'status', 'createdAt'],
-    description: 'Mensagens enviadas pelo formulário do site. Dados pessoais: trate conforme a LGPD.',
+    description:
+      'Mensagens enviadas pelo formulário do site. Dados pessoais: trate conforme a LGPD.',
   },
   access: { read: editors, create: nobody, update: editors, delete: admins },
   fields: [
     {
       type: 'row',
       fields: [
-        { name: 'name', type: 'text', label: 'Nome', required: true, admin: { width: '50%', readOnly: true } },
-        { name: 'email', type: 'email', label: 'E-mail', required: true, admin: { width: '50%', readOnly: true } },
+        {
+          name: 'name',
+          type: 'text',
+          label: 'Nome',
+          required: true,
+          admin: { width: '50%', readOnly: true },
+        },
+        {
+          name: 'email',
+          type: 'email',
+          label: 'E-mail',
+          required: true,
+          admin: { width: '50%', readOnly: true },
+        },
       ],
     },
     {
       type: 'row',
       fields: [
         { name: 'phone', type: 'text', label: 'Telefone', admin: { width: '50%', readOnly: true } },
-        { name: 'organization', type: 'text', label: 'Organização', admin: { width: '50%', readOnly: true } },
+        {
+          name: 'organization',
+          type: 'text',
+          label: 'Organização',
+          admin: { width: '50%', readOnly: true },
+        },
       ],
     },
     { name: 'subject', type: 'text', label: 'Assunto', admin: { readOnly: true } },
-    { name: 'message', type: 'textarea', label: 'Mensagem', required: true, admin: { readOnly: true } },
+    {
+      name: 'message',
+      type: 'textarea',
+      label: 'Mensagem',
+      required: true,
+      admin: { readOnly: true },
+    },
     {
       name: 'status',
       type: 'select',
@@ -47,7 +71,12 @@ export const Leads: CollectionConfig = {
       ],
       admin: { position: 'sidebar' },
     },
-    { name: 'notes', type: 'textarea', label: 'Anotações internas', admin: { position: 'sidebar' } },
+    {
+      name: 'notes',
+      type: 'textarea',
+      label: 'Anotações internas',
+      admin: { position: 'sidebar' },
+    },
     {
       name: 'meta',
       type: 'group',
