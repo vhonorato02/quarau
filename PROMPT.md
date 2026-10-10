@@ -1,8 +1,6 @@
-# Como terminar o site com um único prompt
+# Como terminar o site Quarau com o Claude Code no seu PC
 
-## Antes (você, ~10 minutos, uma vez só)
-
-**Windows:**
+## 1. Antes (você, ~10 minutos, uma vez só)
 
 1. Instale o **Git for Windows**: https://git-scm.com/download/win (avance tudo no padrão).
 2. Abra o **PowerShell** e instale o **Claude Code**:
@@ -11,52 +9,52 @@
    irm https://claude.ai/install.ps1 | iex
    ```
 
-3. Clique com o botão direito no `quarau.zip` → **Extrair tudo…** → escolha **`C:\`**. Isso cria a pasta **`C:\quarau`**.
-   - Fora da Área de Trabalho e de Documentos, que costumam sincronizar com o OneDrive e travam o projeto.
-4. No PowerShell:
+3. Pegue o projeto. Escolha **um**:
+   - **zip:** botão direito no `quarau.zip` → **Extrair tudo…** → escolha `C:\`. Isso cria `C:\quarau`;
+   - **GitHub:** `git clone https://github.com/vhonorato02/quarau C:\quarau`.
+   - Fora da Área de Trabalho e de Documentos (o OneDrive trava o projeto).
+4. No PowerShell: `cd C:\quarau` e depois `claude`. Faça login na sua conta Claude.
 
-   ```powershell
-   cd C:\quarau
-   claude
-   ```
-
-   Faça login na sua conta Claude quando ele pedir.
-
-**Mac:** `curl -fsSL https://claude.ai/install.sh | bash`, descompacte o zip na sua pasta pessoal (cria `~/quarau`), depois `cd ~/quarau && claude`.
-
-## O prompt (copie e cole tudo de uma vez)
+## 2. Primeira vez: cole este prompt
 
 ```text
-Você é o único responsável por concluir e publicar este site. Trabalhe sozinho até o fim.
-
-1. Leia CLAUDE.md, docs/RELATORIO-COMPLETO.md, docs/PLANO.md e docs/PROGRESSO.md.
-2. Execute o PLANO a partir de onde o PROGRESSO parou, fase por fase, até a Fase 8, sem parar
-   para pedir confirmação. Marque o PROGRESSO e faça commit + push na main ao fim de cada fase.
-3. Este computador está cru. Instale só o necessário (Fase 0). Pode usar Docker se for
-   indispensável, mas prefira o caminho sem Docker do plano (banco de desenvolvimento no Neon).
-4. Produção fica na Vercel (projeto "quarau"), só planos gratuitos, só a branch main, sem
-   subagentes e sem branches. Não mexa no domínio quarau.com.br nem no WordPress.
-5. Só me chame nos momentos 🔑 do plano (login na Vercel, login do GitHub no primeiro push,
-   chave da Resend opcional). Nesses momentos, diga exatamente o que eu devo clicar ou digitar.
-6. Nada está pronto sem prova no ar: siga as 5 camadas de docs/QA.md (CI, pós-deploy e
-   jornadas reais com o Playwright MCP em https://quarau.vercel.app), olhe as capturas de
-   desktop e celular, corrija e repita até não haver nada quebrado nem feio. No fim, me peça o aceite.
-7. No fim, me entregue em português simples: a URL do site, a URL do admin, onde está o
-   ACESSO-ADMIN.txt e a lista do que eu preciso confirmar com o cliente.
+Você vai concluir o site da Quarau seguindo o CLAUDE.md e o plano em sessões (docs/PLANO.md).
+Leia docs/PROGRESSO.md e execute a sessão indicada em "Retomar em" até o "Pronto quando",
+sem pedir confirmação. Este computador está cru: comece pela S00. Quando terminar uma sessão,
+atualize o PROGRESSO, faça commit e push, e siga direto para a próxima enquanto houver cota.
+Só me chame nos momentos 🔑, dizendo exatamente o que eu devo clicar ou digitar.
 ```
 
-## Durante
+## 3. Toda vez que voltar (nova janela de cota, PC reiniciado, terminal fechado)
 
-- **Ao abrir o Claude Code pela primeira vez:** se ele perguntar sobre os servidores MCP do projeto (playwright, vercel, context7), aprove.
-- **Autenticar a Vercel no Claude Code:** quando o agente pedir, digite `/mcp`, escolha **vercel** → **Authenticate** e confirme no navegador.
+No PowerShell: `cd C:\quarau` e depois `claude`. Digite `/clear` e cole:
 
-- **Login na Vercel:** ele vai pedir para você abrir um link e confirmar. Entre com o GitHub `vhonorato02`.
-- **Login do GitHub:** no primeiro envio pode abrir uma janela de login do GitHub. Autorize.
-- **Permissões do Windows:** se aparecer uma janela pedindo permissão para instalar o Node.js, clique **Sim**.
-- **Se ele parar no meio:** digite `continue`.
-- **Se você fechar o terminal:** abra de novo na mesma pasta, rode `claude --continue`, ou cole o mesmo prompt. Ele retoma pelo `docs/PROGRESSO.md`.
-- **Resend (opcional, para receber os contatos por e-mail):**
-  - crie a chave em https://resend.com/api-keys;
-  - cole em **Vercel → quarau → Settings → Environment Variables** com o nome `RESEND_API_KEY`;
-  - **nunca cole a chave no chat.**
-- **Sem a Resend:** os contatos ficam salvos no painel do site, em _Contatos recebidos_.
+```text
+continuar
+```
+
+O `CLAUDE.md` e o `docs/PROGRESSO.md` dizem ao agente exatamente onde parou e o que fazer. Se ele parar no meio de uma resposta, digite `continue`.
+
+## 4. Para a cota render mais
+
+- **Uma sessão do plano por janela de uso.** Ao abrir o Claude Code depois de uma pausa, `/clear` e "continuar": contexto limpo custa menos e erra menos.
+- **`/usage`** mostra quanto da cota já foi. Quando estiver acabando, o agente fecha o item, atualiza o PROGRESSO e para num ponto seguro (o hook `handoff-guard` garante).
+- **Troca de modelo:** o agente usa o modelo indicado em cada sessão (Opus para texto, design e decisões; Sonnet para código mecânico e testes). Você não precisa fazer nada.
+- **Não peça "faça tudo de novo"** nem cole logs gigantes: diga só o que viu de errado.
+
+## 5. Momentos em que o agente vai te chamar
+
+| Quando | O quê                                                                                      | Tempo           |
+| ------ | ------------------------------------------------------------------------------------------ | --------------- |
+| S00    | Clicar **Sim** nas janelas do Windows; `gh auth login` (abrir o link e digitar o código)   | 5 min           |
+| S01    | `vercel login` no navegador; no Claude Code `/mcp` → vercel → **Authenticate**             | 5 min           |
+| S04    | Nome e e-mail do **gestor** da Quarau                                                      | 1 min           |
+| S05    | Baixar as exportações do Instagram e do LinkedIn (`content/social/README.md`)              | 10 min + e-mail |
+| S06    | Ler e aprovar os textos do site (`docs/copy/APROVACAO.md`); opcional: chave da Resend      | 30–60 min       |
+| S07    | Olhar 4 imagens da direção visual e dizer "segue"                                          | 5 min           |
+| S11    | **Aceite:** navegar no site no celular e no computador; responder "aprovado" ou os ajustes | 30 min          |
+| S12    | Colar a chave pública SSH no console da VPS; tornar público o pacote da imagem no GitHub   | 10 min          |
+| S13    | Acesso ao DNS do domínio, Google Search Console, criar a página da empresa no LinkedIn     | 30 min          |
+| S14    | Opcional: contas UptimeRobot e Sentry                                                      | 10 min          |
+
+**Nunca cole senha, token ou chave privada no chat.** Quando precisar de uma chave (Resend, por exemplo), o agente diz em qual tela da Vercel colar.

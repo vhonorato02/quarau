@@ -1,102 +1,161 @@
 # Progresso
 
-> O agente marca `[x]` ao concluir cada item do [PLANO.md](PLANO.md), anota decisões e problemas e faz commit.
-> Se a sessão cair, o próximo agente retoma daqui.
+> O agente lê isto **no início de toda sessão** e atualiza **antes de parar**: marca `[x]`, preenche "Retomar em" e faz commit.
+> O hook `handoff-guard` bloqueia a parada se houver mudanças sem este arquivo atualizado.
 
-## Estado atual
+## Retomar em
 
-- Fase em andamento: **0**
-- Última URL publicada: —
-- Último QA no ar: —
+- **Sessão:** S00 — [PC pronto](plano/S00-pc.md)
+- **Próximo passo exato:** começar pelo passo 1 da S00.
+- **Comando para conferir o estado:** `git log --oneline -5 && gh run list -L 3`
+- **Bloqueios / esperando o dono:** —
 
-## Fase 0 — Computador
+## Estado do ambiente
 
-- [ ] Node 22, pnpm 10.28, Vercel CLI instalados
-- [ ] `pnpm install` e Chromium do Playwright
-- [ ] `pnpm typecheck` passa
-- [ ] MCPs aprovados e conectados (playwright, vercel, context7)
+- Homologação: `https://quarau.vercel.app` — último deploy Ready: —
+- Ensaio na VPS: `https://quarau.zewithane.vps.brz.dev.br` — —
+- Produção: `https://quarau.com.br` — ainda no WordPress antigo (não mexer até a S13)
+- Gestor cadastrado (e-mail): —
+- Aprovações:
+  - copy (S06): —
+  - direção visual (S07): —
+  - aceite (S11): —
 
-## Fase 1 — Contas, banco e variáveis
+## Já feito antes do PC (sessão na nuvem, até 2026-10-10)
 
-- [ ] `vercel login` (dono) e `vercel link`
-- [ ] Neon `quarau-db` (production + preview) e `quarau-dev` (development)
-- [ ] Variáveis de desenvolvimento + `apps/web/.env.local`
-- [ ] Migrações no Neon dev + admin local abre
-- [ ] Push na `main` autorizado
+- [x] Diagnóstico completo de site, CMS e sistema ([RELATORIO-COMPLETO.md](RELATORIO-COMPLETO.md), capturas em [diagnostico/](diagnostico/))
+- [x] Raspagem completa do site antigo (`content/legacy/scrape/`, `pnpm --filter @quarau/web scrape:wp`)
+- [x] Leitor das exportações do Instagram e do LinkedIn (`content/social/README.md`, `social:parse`), com testes
+- [x] Ferramenta de QA visual com folhas-resumo (`tests/qa/screens.mjs`)
+- [x] Plano em sessões ([PLANO.md](PLANO.md)), estratégia de QA ([QA.md](QA.md)), ADR 0015
+- [x] Projeto Vercel, Blob e variáveis de produção criados; integração Neon instalada na conta (sem banco ainda)
+- [x] Diagnóstico da VPS somente leitura (`infra/vps/preflight.sh`)
 
-## Fase 2 — Limpar e simplificar
+## S00 — PC pronto
 
-- [ ] Era VPS/Docker removida; ADRs marcadas como substituídas
-- [ ] Meilisearch, Valkey, S3/MinIO removidos; busca no Postgres sem acento
-- [ ] i18n removido; migração inicial recriada
-- [ ] Mídia direto do Blob (CSP + remotePatterns)
-- [ ] `vercel-build` só migra e compila
-- [ ] CI enxuto (quality + e2e) com matriz Chrome/Safari/iPhone/Android/iPad
-- [ ] pos-deploy.yml (smoke, links, cabeçalhos, Lighthouse no ar)
-- [ ] Vercel Analytics + Speed Insights (após consentimento)
-- [ ] Scripts compatíveis com Windows; `.env.example` e README
+- [ ] Ferramentas instaladas (Node 22, pnpm, Vercel CLI, gh, ffmpeg) e Defender com exclusão
+- [ ] `gh auth login` (dono)
+- [ ] `pnpm install` + Chromium/WebKit/Firefox do Playwright
+- [ ] MCPs conectados (playwright, context7)
+- [ ] `pnpm lint && pnpm typecheck && pnpm test` verdes
 
-## Fase 3 — Conteúdo e mídias
+## S01 — Contas, banco e variáveis
 
-- [ ] Biblioteca inteira importada (265 + vídeos), idempotente
-- [ ] Logos de parceiros (maiores) + fallback em texto
-- [ ] Notícias/Vagas somem quando vazias
+- [ ] `vercel login` + `vercel link` + MCP da Vercel autenticado
+- [ ] Neon `quarau-db` (prod + preview) e `quarau-dev` (dev)
+- [ ] Variáveis de dev + `apps/web/.env.local` (scripts padronizados)
+- [ ] Migrações no dev + admin local + `ACESSO-ADMIN.txt`
 
-## Fase 4 — Design
+## S02 — Fundação técnica
 
-- [ ] Fundamentos (tipo, grade, imagens, movimento, cookies, header)
-- [ ] Home
-- [ ] Projetos (lista + case)
-- [ ] Sobre
-- [ ] Atuação (lista + área)
-- [ ] Contato, busca, vazios
+- [ ] Medidas de partida (First Load JS)
+- [ ] 3D, GSAP, Lenis, Meilisearch, Valkey e Umami removidos
+- [ ] Busca sem acento no Postgres
+- [ ] i18n removido; migração inicial recriada; banco de produção zerado
+- [ ] Imagens via `srcset` do Payload direto do CDN (sem processamento no servidor)
+- [ ] `vercel-build` só migra e compila; fila de tarefas por ambiente
+- [ ] CI novo (qualidade, integração, contêiner com 5 navegadores + k6 512 MB + Trivy + GHCR) e `pos-deploy.yml`
+- [ ] Scripts compatíveis com Windows; README; PR #1 fechado
 
-## Fase 5 — CMS
+## S03 — Tudo editável
 
-- [ ] Blocos com nome
-- [ ] Menu com "Seção do site"
-- [ ] Listas legíveis
-- [ ] Painel inicial + Ajuda
-- [ ] Limpezas (primeiro usuário, criado por, API, rascunhos)
-- [ ] Identidade do admin
+- [ ] Global "Textos do site" (82 chaves) e `t()` lendo do CMS
+- [ ] Páginas de listagem como páginas do CMS + blocos de lista; menu só com páginas
+- [ ] CTA do rodapé editável/ocultável; e-mails editáveis
+- [ ] SEO em todos os documentos; Notícias com galeria e origem
+- [ ] `react/jsx-no-literals` sem violações; E2E "editar texto" verde
 
-## Fase 6 — Backend
+## S04 — Painel e gestor
 
-- [ ] Resend (se o dono criou a chave) / formulário ok sem chave
-- [ ] Cron, revalidação, sitemap
+- [ ] Papéis (admin, gestor, editor, autor) + matriz de testes
+- [ ] Convite por e-mail; login seguro; redefinição de senha
+- [ ] Painel com contadores; Ajuda; vídeos
+- [ ] Blocos com nome; listas legíveis; limpezas; identidade
+- [ ] Gestor cadastrado
 
-## Fase 7 — No ar
+## S05 — Conteúdo
 
-- [ ] Deploy Ready
-- [ ] Conteúdo + mídias em produção
-- [ ] Admin de produção (`ACESSO-ADMIN.txt`)
-- [ ] QA visual no ar sem problemas (capturas em `docs/qa/`)
-- [ ] Jornadas no ar: 10 de visitante + 8 de editor (QA.md, camada 4)
-- [ ] pos-deploy.yml verde no último deploy
-- [ ] Aceite do dono (`docs/qa/ACEITE.md`)
-- [ ] Lighthouse mobile: Perf ___ · A11y ___ · BP ___ · SEO ___
+- [ ] Biblioteca inteira + vídeos (idempotente)
+- [ ] Logos de parceiros + fallback em texto
+- [ ] Posts das redes → rascunhos de notícia (ou aguardando exportações)
+- [ ] Seções vazias tratadas
 
-## Fase 8 — Entrega
+## S06 — Copy e SEO editorial
 
-- [ ] relatorio-final.md, cms.md, README
-- [ ] Mensagem final ao dono
+- [ ] Voz e tom + casa de mensagem
+- [ ] Palavras-chave por página
+- [ ] Pacote de textos por página + cobertura 100% decidida
+- [ ] `revisor-copy` + `copy-check` sem erros
+- [ ] Aprovação do dono
+- [ ] Textos carregados no CMS
 
-## Fase 9 — Operação (opcional)
+## S07 — Design system
 
-- [ ] Sentry
-- [ ] UptimeRobot
-- [ ] Speed Insights/Analytics conferidos
+- [ ] Tokens + contraste testado
+- [ ] Componentes com estados
+- [ ] `/_ds` com visual e axe; Storybook removido
+- [ ] Direção aprovada pelo dono
+
+## S08 — Páginas
+
+- [ ] Home · [ ] Projetos · [ ] Case · [ ] Atuação · [ ] Área · [ ] Sobre · [ ] Contato · [ ] Notícias · [ ] Busca · [ ] 404/500
+- [ ] Orçamento (JS ≤ 120 KB, LCP, CLS) no build
+- [ ] Personas de visitante em local
+
+## S09 — Testes fullstack
+
+- [ ] Tabela camada → arquivos → status (QA.md)
+- [ ] Camadas 1–12 verdes no CI; 13–14 sem P0/P1
+- [ ] Tempo de CI: ___ min
+
+## S10 — SEO e LinkedIn
+
+- [ ] Metadados + JSON-LD + sitemap + `llms.txt` + compartilhar
+- [ ] Kit da página de empresa no LinkedIn + 7 posts + bio do Instagram
+
+## S11 — Homologação e aceite
+
+- [ ] Deploy Ready + pós-deploy verde
+- [ ] Conteúdo em produção + acessos
+- [ ] QA no ar (evidências em `docs/qa/<data>/`) — Lighthouse: Perf ___ · A11y ___ · BP ___
+- [ ] Aceite do dono ("aprovado" em **/**)
+
+## S12 — VPS engatilhada
+
+- [ ] SSH do PC
+- [ ] Preflight arquivado e cenário decidido
+- [ ] Imagem acessível (pacote público ou token)
+- [ ] Ensaio no ar + k6 + outros sites ok + rollback testado
+- [ ] `docs/vps/CORTE.md`
+
+## S13 — Go-live
+
+- [ ] Pré-condições
+- [ ] DNS + HTTPS + verificações
+- [ ] Homologação desligada do banco de produção
+- [ ] E-mail do domínio
+- [ ] Search Console/Bing
+- [ ] LinkedIn/Instagram
+- [ ] Primeira semana sem 404 relevantes
+
+## S14 — Operação
+
+- [ ] Uptime + Sentry + smoke agendado
+- [ ] Backup diário + restauração testada
+- [ ] Passagem ao gestor
+- [ ] Relatório final
 
 ## Decisões e problemas
 
-- …
+- (data · sessão · decisão/problema · motivo)
 
 ## `[CONFIRMAR]` com o cliente
 
 - CNPJ, endereço completo, ano de fundação
-- Telefones atendem WhatsApp?
-- LinkedIn de empresa (o atual é perfil pessoal)
+- Os telefones (12) 98281-3669 e (12) 98264-5960 atendem WhatsApp?
+- LinkedIn: criar a Página de empresa (o atual é perfil pessoal)
 - Logos em vetor dos parceiros (Celeo, CECP, Espaço Crescer, Instituto Umbuzeiro)
-- Fotos em alta resolução (WordPress guardou no máx. 1600 px) e créditos
+- Fotos em alta resolução (o WordPress guardou no máx. 1600 px) e créditos
 - Anos do Projeto Quipá; status atual do Ecoe Verde e do Ecomuseu
+- Onde estão o DNS do domínio e o e-mail `contato@` (para o go-live não afetar o e-mail)
 - Lista completa no [relatorio-final.md §4](relatorio-final.md#4-pendências-confirmar)

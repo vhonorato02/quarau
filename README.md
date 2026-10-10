@@ -10,9 +10,9 @@ simples para a equipe.
 | **Qualidade** | TypeScript strict · ESLint/Prettier · Vitest · Payload integration tests · Playwright E2E + axe (WCAG 2.2 AA) · visual regression · Lighthouse CI · links · k6 · Trivy · CodeQL · Renovate                        |
 | **Infra**     | Docker (GHCR) · VPS própria: Traefik (HTTPS/HTTP3) + Postgres compartilhado · auto-deploy sem downtime · restic · alertas ntfy · Sentry                                                                           |
 
-> **Para terminar e publicar o site:** siga [PROMPT.md](PROMPT.md) (um prompt no Claude Code). Estado e plano:
-> [docs/PROGRESSO.md](docs/PROGRESSO.md) · [docs/PLANO.md](docs/PLANO.md) ·
-> [docs/RELATORIO-COMPLETO.md](docs/RELATORIO-COMPLETO.md). Partes sobre VPS/Docker neste repositório estão obsoletas.
+> **Para terminar e publicar o site:** siga [PROMPT.md](PROMPT.md) no Claude Code. Plano em sessões: [docs/PLANO.md](docs/PLANO.md) ·
+> estado: [docs/PROGRESSO.md](docs/PROGRESSO.md) · diagnóstico: [docs/RELATORIO-COMPLETO.md](docs/RELATORIO-COMPLETO.md) ·
+> QA: [docs/QA.md](docs/QA.md). Homologação na Vercel, produção na VPS ([ADR 0015](docs/decisions/0015-homologacao-vercel-producao-vps.md)).
 
 ## Estrutura
 

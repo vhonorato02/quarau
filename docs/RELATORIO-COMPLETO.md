@@ -178,3 +178,38 @@ Funciona:
   - créditos de fotos;
   - fotos em alta resolução;
   - logos em vetor dos parceiros.
+
+## 8. Atualização de 2026-10-10 (o que mudou desde o diagnóstico)
+
+- **Arquitetura decidida ([ADR 0015](decisions/0015-homologacao-vercel-producao-vps.md)):**
+  - homologação na Vercel; produção na VPS do dono, com o domínio;
+  - banco (Neon) e mídia (Blob) **fora** da VPS e compartilhados: a migração vira "subir o contêiner e trocar o DNS";
+  - a plataforma da VPS (`infra/platform`, comando `site`) e o `Dockerfile` **ficam**. O item B8 deste relatório (apagar a infra da VPS) está **revogado**.
+- **Raspagem completa do site antigo** (`content/legacy/scrape/`, `pnpm --filter @quarau/web scrape:wp`):
+  - 12 páginas renderizadas, 1.110 palavras visíveis;
+  - REST: 3 páginas, 1 post, 6 projetos, 269 mídias;
+  - 271 mídias no manifesto (267 imagens = 81,8 MB; 4 vídeos = 1,19 GB), todas baixadas para o cache;
+  - capturas de desktop e celular de cada página;
+  - contatos encontrados só em texto: `contato@quarau.com.br`, (12) 98281-3669, (12) 98264-5960;
+  - redes: Instagram `quarau.consultoria`, LinkedIn `in/quarau-91196b258` (perfil pessoal).
+  - **Problemas do site antigo**, para não repetir:
+    - 0 de 267 imagens com texto alternativo;
+    - nenhuma página de projeto com H1;
+    - 3 páginas sem meta description;
+    - 35 imagens usadas com menos de 1.200 px.
+  - `COBERTURA.md`: 30 de 46 frases do site antigo já estão no conteúdo novo; as 16 restantes viram checklist da copy (S06).
+- **Redes sociais:**
+  - Instagram e LinkedIn bloqueiam leitura sem login (testado: `require_login` e `authwall`), e não contornamos;
+  - posts entram pelas **exportações oficiais** de dados: `content/social/README.md` e `social:parse`, testado.
+- **Textos fora do CMS (auditoria):**
+  - 82 chaves de interface em `src/i18n/messages/pt.json`;
+  - títulos das páginas de listagem no código;
+  - CTA do rodapé no código;
+  - rótulos do bloco de contato;
+  - e-mails automáticos.
+  - Tudo vira editável na S03, com lint impedindo regressão.
+- **Plano refeito em 15 sessões** do tamanho de uma janela de cota ([PLANO.md](PLANO.md)), com:
+  - QA em 16 camadas, incluindo usuários simulados ([QA.md](QA.md));
+  - subagentes de verificação;
+  - hooks de formatação e de handoff;
+  - momentos do dono com tempo estimado.

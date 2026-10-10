@@ -73,8 +73,10 @@ O agente principal decide e corrige; os subagentes só verificam.
 | S05    | Baixar as exportações do Instagram e do LinkedIn (ver `content/social/README.md`)                              | 10 min + espera do e-mail |
 | S06    | Ler e aprovar o pacote de textos (`docs/copy/APROVACAO.md`), num lote só                                       | 30–60 min                 |
 | S06    | Opcional: criar a chave da Resend e colar no painel da Vercel                                                  | 5 min                     |
+| S07    | Olhar a direção visual (`docs/design/DIRECAO.md`, 4 imagens) e dizer "segue" ou o que mudar                    | 5 min                     |
 | S11    | Aceite do site em homologação (navegar no celular e no computador; responder "aprovado" ou a lista de ajustes) | 30 min                    |
 | S12    | Acesso SSH da VPS a partir do PC (gerar chave e colar a pública no console do provedor)                        | 10 min                    |
+| S12    | Tornar público o pacote da imagem no GitHub (Packages → quarau → Change visibility)                            | 1 min                     |
 | S13    | Acesso ao DNS do domínio (registro.br ou onde estiver); Google Search Console; página da empresa no LinkedIn   | 30 min                    |
 | S14    | Opcional: contas UptimeRobot e Sentry                                                                          | 10 min                    |
 

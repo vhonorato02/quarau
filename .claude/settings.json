@@ -39,7 +39,20 @@
       "Bash(brew install:*)",
       "mcp__playwright",
       "mcp__context7",
-      "mcp__vercel"
+      "mcp__vercel",
+      "Bash(gh run:*)",
+      "Bash(gh pr:*)",
+      "Bash(gh api:*)",
+      "Bash(gh auth status:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(sort:*)",
+      "Bash(sed -n:*)",
+      "Bash(tar:*)",
+      "Bash(ffmpeg:*)",
+      "Bash(vercel integration open:*)",
+      "Bash(vercel project:*)"
     ],
     "deny": [
       "Bash(git push --force:*)",
@@ -48,5 +61,28 @@
       "Bash(git switch -c:*)"
     ]
   },
-  "enableAllProjectMcpServers": true
+  "enableAllProjectMcpServers": true,
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/format.mjs\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/handoff-guard.mjs\""
+          }
+        ]
+      }
+    ]
+  }
 }
