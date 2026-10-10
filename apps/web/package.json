@@ -21,6 +21,7 @@
     "migrate:create": "payload migrate:create",
     "migrate:wp": "tsx --env-file-if-exists=../../.env scripts/migrate-wp.ts",
     "seed:admin": "tsx --env-file-if-exists=../../.env scripts/create-admin.ts",
+    "social:parse": "tsx scripts/social/parse-exports.ts",
     "scrape:wp": "tsx scripts/scrape/scrape-wp.ts",
     "search:reindex": "tsx --env-file-if-exists=../../.env scripts/reindex-search.ts"
   },
