@@ -1,121 +1,207 @@
-# QA de verdade — como o site Quarau é testado
+# QA — como o site Quarau é testado (de verdade)
 
-> Regra única: **nada é "pronto" porque passou no computador do agente.** É pronto quando passou nas 5 camadas
-> abaixo, com prova (capturas, números, links) gravada em `docs/qa/<data>/`.
+> **Regra:** nada é "pronto" porque passou no computador do agente. É pronto quando passou nas camadas abaixo, **com prova**: capturas, números e links em `docs/qa/<data>/`.
+> A S09 implementa o que falta; cada sessão anterior já entrega os testes do que mexeu.
 
-## Visão geral
+## A pirâmide
 
-| Camada | Quando                           | Quem/ferramenta                                   | Bloqueia?                         |
-| ------ | -------------------------------- | ------------------------------------------------- | --------------------------------- |
-| 1      | a cada commit                    | agente: lint, tipos, testes unitários             | sim (não faz push)                |
-| 2      | a cada push na `main`            | GitHub Actions: E2E em 3 motores + acessibilidade | sim (corrigir antes de seguir)    |
-| 3      | a cada deploy de produção        | GitHub Actions contra `quarau.vercel.app`         | sim (corrigir ou voltar o deploy) |
-| 4      | fim de cada fase do plano        | agente com **Playwright MCP** (navegador real)    | sim                               |
-| 5      | antes de entregar e depois do ar | dono/cliente (aceite) + monitoramento contínuo    | aceite: sim · monitor: alerta     |
+| #   | Camada                     | Ferramenta                                                            | Quando roda                           | Bloqueia?           |
+| --- | -------------------------- | --------------------------------------------------------------------- | ------------------------------------- | ------------------- |
+| 1   | Estático                   | TypeScript strict, ESLint (+ `jsx-no-literals`, `jsx-a11y`), Prettier | antes de cada commit + CI             | sim                 |
+| 2   | Unitário                   | Vitest                                                                | antes de cada commit + CI             | sim                 |
+| 3   | Integração (backend real)  | Vitest + Local API do Payload + Postgres                              | CI (serviço Postgres)                 | sim                 |
+| 4   | API e segurança de acesso  | Vitest + `fetch` contra o servidor                                    | CI                                    | sim                 |
+| 5   | E2E (usuário automatizado) | Playwright, **5 navegadores/telas**                                   | CI no contêiner de produção           | sim                 |
+| 6   | Visual                     | Playwright `toHaveScreenshot` (páginas + `/_ds`)                      | CI                                    | sim                 |
+| 7   | Acessibilidade             | axe + teclado + `aria` snapshots + zoom 200%                          | CI                                    | sim                 |
+| 8   | SEO                        | testes próprios sobre o HTML e o sitemap                              | CI + pós-deploy                       | sim                 |
+| 9   | Conteúdo                   | `copy-check` (LanguageTool + regras)                                  | S06 e antes do aceite                 | sim                 |
+| 10  | Performance                | Lighthouse CI (orçamento), tamanho de JS, k6 com 512 MB               | CI (k6, JS) + pós-deploy (Lighthouse) | sim                 |
+| 11  | Segurança                  | ZAP baseline, Trivy, `pnpm audit --prod`, gitleaks, CodeQL            | CI                                    | altas/críticas: sim |
+| 12  | Resiliência                | E2E com falhas injetadas                                              | CI                                    | sim                 |
+| 13  | **Usuários simulados**     | subagente `testador-persona` + Playwright MCP                         | S08, S11, S12                         | sim (P0/P1)         |
+| 14  | Caos de interface          | gremlins.js injetado por 60 s em cada página                          | CI (semanal) + S11                    | sim (erro de JS)    |
+| 15  | Aceite humano              | dono e gestor no celular e no computador                              | S11                                   | sim                 |
+| 16  | Monitoramento              | smoke agendado, uptime, Sentry, Speed Insights                        | depois do ar                          | alerta              |
 
-## Camada 1 — Antes de cada commit (local, segundos)
+## O que cada camada cobre
 
-`pnpm lint && pnpm typecheck && pnpm test`. Falhou, não commita.
+### 3–4. Backend de verdade (integração e API)
 
-## Camada 2 — CI a cada push (`.github/workflows/ci.yml`)
+- **Matriz papel × coleção × operação:** anônimo, autor, editor, gestor, admin × todas as coleções e globais × ler/criar/editar/publicar/excluir. A matriz é gerada a partir de uma tabela de expectativas; nada de teste escrito à mão para cada caso.
+- **Rascunho → publicação → versão → restauração.**
+- **Agendamento:** criar com data futura → rodar o job → publicado.
+- **Revalidação:** salvar dispara as tags certas (`next/cache` simulado).
+- **Busca:** normalização sem acento; resultados só de publicados.
+- **Formulário:** grava o contato com hash do IP; e-mails renderizados com os textos do CMS; limite por IP devolve 429; honeypot.
+- **Convite e senha:** cria usuário sem senha → token → define senha → login; bloqueio na 6ª tentativa.
+- **Importações:** `migrate:wp` e `import-news` idempotentes (rodar duas vezes = mesmo estado).
+- **API pública** (REST/GraphQL) sem vazamento:
+  - anônimo não lista usuários, contatos nem rascunhos;
+  - campos internos (`ipHash`, `source`) não saem;
+  - CSRF exige `Origin`;
+  - `/api/payload-jobs/run` exige `CRON_SECRET`;
+  - `/next/revalidate` exige segredo.
+- **Migrações:** banco vazio → `migrate` → seed → `migrate` de novo (sem mudanças).
 
-- **Qualidade:** format, lint, tipos e unitários.
-- **E2E** (Playwright) com Postgres do próprio GitHub, conteúdo de teste (`MIGRATE_OFFLINE=1`) e build de produção.
-- **Matriz de navegadores e telas** (projetos em `apps/web/playwright.config.ts`):
+### 5. E2E — o usuário automatizado
 
-  | Projeto          | Motor              | Tela     | Por quê                              |
-  | ---------------- | ------------------ | -------- | ------------------------------------ |
-  | `desktop-chrome` | Chromium           | 1440×900 | maioria dos acessos de escritório    |
-  | `desktop-safari` | WebKit             | 1440×900 | Macs                                 |
-  | `iphone`         | WebKit (iPhone 14) | 390×844  | **Safari do iPhone**, hoje sem teste |
-  | `android`        | Chromium (Pixel 7) | 412×915  | celulares Android                    |
-  | `tablet`         | WebKit (iPad Mini) | 768×1024 | quebra de layout intermediária       |
+Projetos do Playwright, todos rodando contra o **contêiner de produção** no CI:
 
-- **O que os E2E cobrem:**
-  - todas as rotas respondem 200 (404 onde deve);
-  - 301 das URLs antigas;
-  - navegação e menu do celular;
-  - formulário (sucesso, erro de validação, limite);
-  - busca com e sem acento;
-  - galeria/lightbox no teclado;
-  - vídeo carrega no clique;
-  - **axe WCAG 2.2 AA em todas as páginas**;
-  - fluxo do editor no CMS (login, criar projeto com upload, publicar, aparecer no site, excluir).
-- **Regressão visual:** `visual.spec.ts` compara capturas das páginas principais. Snapshots só são atualizados depois de aprovar as novas capturas na camada 4.
+| Projeto          | Motor              | Tela     |
+| ---------------- | ------------------ | -------- |
+| `desktop-chrome` | Chromium           | 1440×900 |
+| `desktop-safari` | WebKit             | 1440×900 |
+| `iphone`         | WebKit (iPhone 14) | 390×844  |
+| `android`        | Chromium (Pixel 7) | 412×915  |
+| `tablet`         | WebKit (iPad Mini) | 768×1024 |
 
-## Camada 3 — Depois de cada deploy, contra o site no ar (`.github/workflows/pos-deploy.yml`)
+**Jornadas** (mesmas das personas, automatizadas):
 
-Disparada pelo evento `deployment_status` da Vercel (produção, `success`). Roda contra `https://quarau.vercel.app`:
+- **Visitante:**
+  - V1: home → projeto → galeria → contato enviado;
+  - V2: projetos → filtrar → case → próximo;
+  - V3: área → projetos da área → contato;
+  - V4: sobre → parceiros;
+  - V5: busca sem acento;
+  - V6: URL antiga → 301;
+  - V7: só teclado;
+  - V8: rede lenta;
+  - V9: cookies;
+  - V10: 404.
+- **Editor:**
+  - E1: login;
+  - E2: criar projeto com upload, publicar e ver no site;
+  - E3: reordenar blocos da home;
+  - E4: trocar item do menu;
+  - E5: corrigir alt;
+  - E6: agendar;
+  - E7: tratar contato;
+  - E8: restaurar versão;
+  - E9: editar um texto do global e ver no site;
+  - E10: convidar um editor.
+- **Larguras extras** só para layout: 320, 1024 e 1920. Asserta que não há rolagem horizontal nem sobreposição (bounding boxes de header, hero, CTA e banner de cookies).
 
-1. **Smoke E2E:** testes marcados `@smoke`, só leitura (rotas, 301, busca, menu, mídia carregando do Blob).
-   - O formulário roda com um e-mail de teste e o contato criado é apagado em seguida.
-2. **Links:** nenhum link interno quebrado (`linkinator` no sitemap).
-3. **Cabeçalhos de segurança:** CSP, HSTS, `X-Robots-Tag: noindex` (enquanto o domínio for provisório).
-4. **Orçamento de performance** (`npx @lhci/cli autorun`, mobile, 3 execuções, mediana), nas páginas home, lista de projetos, um case, sobre e contato. Metas:
-   - Performance ≥ 90;
-   - Acessibilidade = 100;
-   - Boas práticas ≥ 95;
-   - LCP ≤ 2,5 s;
-   - CLS ≤ 0,05;
-   - TBT ≤ 200 ms.
-5. **Se falhar:**
-   - o workflow fica vermelho e o GitHub manda e-mail ao dono;
-   - o agente corrige e publica de novo;
-   - se for grave e não der para corrigir em minutos, volta o deploy anterior com `vercel rollback` (no plano Hobby só para o anterior imediato).
+### 6–7. Visual e acessibilidade
 
-## Camada 4 — QA exploratório do agente, num navegador de verdade (Playwright MCP)
+- **Visual:** snapshots de cada página e da `/_ds` em 390 e 1440, com máscara em conteúdo dinâmico (datas).
+- **Acessibilidade:**
+  - axe em cada página **e em cada estado** (menu aberto, lightbox aberto, formulário com erro, banner de cookies);
+  - foco visível e ordem de tabulação;
+  - sem armadilha de foco;
+  - `prefers-reduced-motion`;
+  - zoom de 200% sem perda;
+  - alvos ≥ 44 px no celular.
 
-Os testes automáticos pegam o que alguém previu. Esta camada pega o resto: o agente **usa o site como uma pessoa** pelo Playwright MCP (clica, digita, rola, redimensiona) e **olha cada tela**.
+### 8. SEO (automatizado)
 
-1. **Varredura visual:**
-   - `pnpm --filter @quarau/web exec node tests/qa/screens.mjs https://quarau.vercel.app`;
-   - abrir e olhar **todas** as capturas (desktop + celular);
-   - procurar sobreposição, corte, buraco de grade, texto pequeno, imagem borrada e contraste.
-2. **Jornadas do visitante** (desktop e iPhone):
-   - V1: chegar na home → entender o que a Quarau faz em 5 s → abrir um projeto → ver galeria e vídeo → "Fale com a Quarau" → enviar contato.
-   - V2: Projetos → filtrar por área → abrir case → "próximo projeto".
-   - V3: Atuação → abrir uma área → ver os projetos dela → contato.
-   - V4: Sobre → missão/valores → parceiros.
-   - V5: busca "patrimonio" (sem acento) → resultado certo.
-   - V6: URL antiga do WordPress (`/portfolio/projeto-ecoe-verde/`) → cai no case novo.
-   - V7: só teclado (Tab/Enter/Esc) do topo ao rodapé da home e do contato; foco sempre visível.
-   - V8: rede lenta (3G simulada) → a página aparece em < 4 s e sem pulos de layout.
-   - V9: cookies → recusar e aceitar; o banner nunca cobre botões.
-   - V10: página que não existe → 404 útil.
-3. **Jornadas do editor** (CMS, desktop):
-   - E1: login → painel inicial mostra contadores e contatos novos.
-   - E2: criar projeto com capa, galeria (upload de 3 fotos) e área → rascunho → visualizar → publicar → aparece no site em segundos.
-   - E3: editar a home → os blocos têm nome → reordenar → publicar.
-   - E4: trocar um item do menu ("Seção do site").
-   - E5: mídias "para revisar" → corrigir o alt de uma.
-   - E6: agendar publicação → conferir que o cron publica (ou disparar o cron manualmente).
-   - E7: ver um contato recebido → mudar status.
-   - E8: versões → restaurar a anterior.
-4. **Evidências:** 1 captura por jornada em `docs/qa/<data>/` (JPEG ≤ 150 KB) e o resultado em PROGRESSO.md.
+Para cada URL do sitemap:
 
-## Camada 5 — Aceite humano e monitoramento
+- 200;
+- `<title>` único ≤ 60;
+- description 120–160;
+- 1 H1;
+- canonical absoluto;
+- OG com imagem de 1200×630 acessível;
+- JSON-LD válido (parse + campos obrigatórios por tipo);
+- sem `noindex` quando `SITE_NOINDEX=false`.
 
-**Aceite (antes de dizer "acabou"):**
+Também:
 
-- O agente gera `docs/qa/ACEITE.md` com o link de cada página, uma captura de cada uma e a lista `[CONFIRMAR]`.
-- O dono navega pelo site no celular e no computador e responde no chat o que quer mudar. O agente ajusta e repete.
-- Acaba quando o dono escreve "aprovado".
+- **Sitemap:** só publicados, com `lastmod`.
+- **robots:** conforme o ambiente.
+- **301:** todos os redirects de `content/legacy/url-map.json`.
+- **Links internos:** sem 404 (linkinator).
 
-**Monitoramento (depois do ar, gratuito):**
+### 9. Conteúdo
 
-| O quê                 | Ferramenta                     | Custo                    | Montagem                                                                    |
-| --------------------- | ------------------------------ | ------------------------ | --------------------------------------------------------------------------- |
-| Velocidade real       | Vercel Speed Insights          | grátis (Hobby, limitado) | `vercel project speed-insights` + `@vercel/speed-insights`                  |
-| Visitas (sem cookies) | Vercel Web Analytics           | grátis (Hobby, limitado) | `vercel project web-analytics` + `@vercel/analytics`, só após consentimento |
-| Erros em produção     | Sentry (SDK já está no código) | grátis (Developer)       | 🔑 integração Sentry pela Vercel → `SENTRY_DSN`                             |
-| Site fora do ar       | UptimeRobot (ou Better Stack)  | grátis                   | 🔑 conta + monitor em `/next/health` a cada 5 min, alerta por e-mail        |
-| Dependências          | Renovate (já configurado)      | grátis                   | PRs mensais agrupados; o CI decide                                          |
-| Regressão contínua    | pos-deploy.yml (camada 3)      | grátis                   | já descrito                                                                 |
+`scripts/qa/copy-check.ts` passa por **todos** os textos publicados no CMS:
+
+- LanguageTool pt-BR (gramática e ortografia);
+- sem `[CONFIRMAR]`, `Lorem` ou `TODO` publicados;
+- alt em 100% das imagens;
+- tamanho de títulos e descrições;
+- siglas explicadas;
+- imagem exibida maior que o original → alerta.
+
+### 10. Performance e capacidade (a VPS é fraca e compartilhada)
+
+- **Lighthouse CI** no pós-deploy, mobile, mediana de 3: Performance ≥ 90, Acessibilidade 100, Boas práticas ≥ 95, LCP ≤ 2,5 s, CLS ≤ 0,05, TBT ≤ 200 ms.
+- **JS inicial da home** ≤ 120 KB gzip (lido do build; falha o CI se passar).
+- **k6 no contêiner com `--memory=512m --cpus=1`:**
+  - 30 req/s por 2 min nas páginas principais: p95 ≤ 400 ms, 0 erros, memória do contêiner < 400 MB;
+  - pico de 60 req/s por 30 s sem queda.
+  - Repetido na VPS real no ensaio geral (S12).
+
+### 11. Segurança
+
+- **ZAP baseline** contra o contêiner (`zaproxy/action-baseline`): sem alertas altos.
+- **Trivy** na imagem.
+- **`pnpm audit --prod`:** sem alta/crítica.
+- **gitleaks** no repositório.
+- **CodeQL.**
+- **Cabeçalhos** (CSP, HSTS, X-Frame-Options, Referrer-Policy) conferidos por teste.
+
+### 12. Resiliência
+
+- **Banco fora:** página de erro humana, `/next/health` 503 e sem vazamento de stack.
+- **E-mail fora:** o contato é salvo mesmo assim e o painel avisa.
+- **CDN de mídia lento:** layout não pula (dimensões reservadas).
+- **Job falhando:** é registrado e não derruba o site.
+
+### 13. Usuários simulados — o QA que pega o que ninguém previu
+
+O subagente `testador-persona` recebe uma persona e um objetivo. Ele usa o site **pelo Playwright MCP**: lê a tela, decide, clica e preenche, pensando em voz alta. Devolve:
+
+- se conseguiu e em quantos passos;
+- onde hesitou;
+- o que estava confuso;
+- erros de console;
+- capturas.
+
+Nota de facilidade de 1 a 5.
+
+**Personas (visitante):**
+
+1. **Gerente de investimento social de uma empresa de energia:** quer saber se a Quarau já fez edital e monitoramento para empresa parecida. Tem 3 minutos, está no celular.
+2. **Coordenadora de cultura de uma prefeitura do Vale do Paraíba:** precisa de inventário cultural / dossiê de registro e quer ver um case e falar com alguém.
+3. **Diretora de uma ONG:** quer entender se a Quarau ajuda a escrever projeto para edital e quanto envolve.
+4. **Jornalista:** procura dados de impacto de um projeto específico para uma matéria.
+5. **Pessoa com baixa visão:** usa zoom de 200% e teclado.
+
+**Personas (painel):**
+
+6. **Gestor da Quarau, sem conhecimento técnico:** publicar a notícia de um evento com 3 fotos e ligar a um projeto.
+7. **Estagiária com papel Autor:** criar rascunho de projeto e mandar para revisão.
+8. **Gestor:** trocar o texto do botão do topo e o e-mail de confirmação do formulário.
+
+**Critério:** todas concluem; nenhuma hesitação classificada como P0/P1 sem correção; nota média ≥ 4.
+
+### 14. Caos de interface
+
+gremlins.js injetado por 60 s em cada página (cliques, toques, digitação e rolagem aleatórios), em desktop e celular. Qualquer erro de JS no console reprova.
+
+### 15. Aceite humano (S11)
+
+`docs/qa/ACEITE.md` traz:
+
+- o link de cada página e uma captura;
+- o roteiro de 10 minutos para o dono e o gestor (o que testar no celular);
+- a lista `[CONFIRMAR]`.
+
+O agente ajusta até o "aprovado".
+
+### 16. Depois do ar
+
+- **Smoke agendado:** GitHub Actions a cada 6 h contra o domínio (rotas principais, formulário em modo teste, mídia do CDN).
+- **UptimeRobot** em `/next/health` a cada 5 min.
+- **Sentry** para erros.
+- **Speed Insights** para Core Web Vitals reais.
 
 ## Definição de pronto (do site inteiro)
 
-- 0 problemas P0/P1 do RELATORIO-COMPLETO.
-- Camadas 1–3 verdes no último commit.
-- Camada 4: 10 jornadas de visitante e 8 de editor ok, com capturas.
-- Metas de performance e acessibilidade atingidas no ar.
-- Aceite do dono.
+- Camadas 1–12 verdes no último commit.
+- 13–14 sem P0/P1.
+- 15 com "aprovado".
+- 16 montada no go-live.
+- Evidências em `docs/qa/<data>/`.
