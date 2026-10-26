@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 
-import { getMediaByLegacyPath } from '@/lib/queries'
+import { getMediaByLegacyPath } from '@/server/queries'
 
 /**
  * 301 for old WordPress media URLs (/wp-content/uploads/2023/12/foto-1024x683.jpg)

@@ -14,10 +14,8 @@
     "test:e2e": "pnpm --filter @quarau/web test:e2e",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "storybook": "pnpm --filter @quarau/ui storybook",
-    "migrate:wp": "pnpm --filter @quarau/web migrate:wp",
-    "services:up": "docker compose -f infra/compose/docker-compose.dev.yml up -d",
-    "services:down": "docker compose -f infra/compose/docker-compose.dev.yml down"
+    "db:local": "node tools/db/local-pg.mjs",
+    "seed": "pnpm --filter @quarau/web seed"
   },
   "devDependencies": {
     "@lhci/cli": "0.15.1",

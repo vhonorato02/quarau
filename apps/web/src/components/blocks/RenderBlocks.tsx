@@ -1,85 +1,125 @@
-import type { Locale } from '@/i18n/routing'
-import type { Page } from '@/payload-types'
-
-import { ContactFormBlock } from './ContactForm'
-import { ContentBlock } from './Content'
-import { GalleryBlock } from './Gallery'
-import { HeroBlock } from './Hero'
-import { MapBlock } from './Map'
-import { MediaTextBlock } from './MediaText'
+import { ContactForm } from './ContactForm'
 import {
-  CtaBlock,
-  DownloadsBlock,
-  FaqBlock,
-  OdsBlock,
-  PartnersBlock,
-  TeamBlock,
-  TestimonialsBlock,
-} from './Misc'
-import { ProjectsBlock } from './Projects'
-import { ServicesBlock } from './Services'
-import { StatementBlock } from './Statement'
-import { StatsBlock } from './Stats'
-import { TimelineBlock } from './Timeline'
-import { VideoBlock } from './Video'
+  Cycle,
+  Figure,
+  MediaText,
+  Ods,
+  ProofNumber,
+  Publications,
+  Quote,
+  RichTextBlock,
+} from './Content'
+import { Gallery } from './Gallery'
+import { HeroLens, PageIntro } from './Hero'
+import { ProjectIndex } from './Projects'
+import { Areas, CtaBand, NewsList, PartnersStrip } from './Sections'
+import type { AnyBlock, BlockContext } from './types'
+import { Video } from './Video'
 
-type AnyBlock = NonNullable<Page['layout']>[number]
+/** Sections that bring their own vertical rhythm (band backgrounds or q-section). */
+const SELF_SPACED = new Set([
+  'heroLens',
+  'pageIntro',
+  'partnersStrip',
+  'projectIndex',
+  'cycle',
+  'areas',
+  'ctaBand',
+  'contactForm',
+  'newsList',
+])
 
+function Block({ block, index, ctx }: { block: AnyBlock; index: number; ctx: BlockContext }) {
+  switch (block.blockType) {
+    case 'heroLens':
+      return <HeroLens block={block} />
+    case 'pageIntro':
+      return <PageIntro block={block} ctx={ctx} />
+    case 'partnersStrip':
+      return <PartnersStrip block={block} index={index} />
+    case 'projectIndex':
+      return <ProjectIndex block={block} index={index} />
+    case 'proofNumber':
+      return <ProofNumber block={block} />
+    case 'cycle':
+      return <Cycle block={block} index={index} />
+    case 'areas':
+      return <Areas block={block} index={index} />
+    case 'richText':
+      return <RichTextBlock block={block} index={index} />
+    case 'mediaText':
+      return <MediaText block={block} index={index} />
+    case 'quote':
+      return <Quote block={block} />
+    case 'figure':
+      return <Figure block={block} />
+    case 'gallery':
+      return <Gallery block={block} index={index} />
+    case 'video':
+      return <Video block={block} />
+    case 'publications':
+      return <Publications block={block} index={index} />
+    case 'ods':
+      return <Ods block={block} index={index} />
+    case 'ctaBand':
+      return <CtaBand block={block} index={index} />
+    case 'contactForm':
+      return <ContactForm block={block} index={index} />
+    case 'newsList':
+      return <NewsList block={block} index={index} />
+    default:
+      return null
+  }
+}
+
+/**
+ * Page body: consecutive "content" blocks (text, photo, quote…) share one section with an even
+ * rhythm; band blocks (cycle, contact…) stand alone.
+ */
 export function RenderBlocks({
   blocks,
-  locale,
+  ctx,
+  flow = false,
 }: {
   blocks: AnyBlock[] | null | undefined
-  locale: Locale
+  ctx: BlockContext
+  flow?: boolean
 }) {
   if (!blocks?.length) return null
+  if (flow) {
+    return (
+      <div className="q-story-blocks">
+        {blocks.map((b, i) => (
+          <Block key={b.id ?? i} block={b} index={i} ctx={ctx} />
+        ))}
+      </div>
+    )
+  }
+  const groups: Array<{ self: boolean; items: Array<{ b: AnyBlock; i: number }> }> = []
+  blocks.forEach((b, i) => {
+    const self = SELF_SPACED.has(b.blockType)
+    const last = groups.at(-1)
+    if (!self && last && !last.self) last.items.push({ b, i })
+    else groups.push({ self, items: [{ b, i }] })
+  })
   return (
     <>
-      {blocks.map((block, i) => {
-        const key = block.id ?? `${block.blockType}-${i}`
-        switch (block.blockType) {
-          case 'hero':
-            return <HeroBlock key={key} block={block} isFirst={i === 0} />
-          case 'statement':
-            return <StatementBlock key={key} block={block} />
-          case 'content':
-            return <ContentBlock key={key} block={block} />
-          case 'mediaText':
-            return <MediaTextBlock key={key} block={block} priority={i <= 1} />
-          case 'stats':
-            return <StatsBlock key={key} block={block} />
-          case 'timeline':
-            return <TimelineBlock key={key} block={block} />
-          case 'gallery':
-            return <GalleryBlock key={key} block={block} />
-          case 'video':
-            return <VideoBlock key={key} block={block} />
-          case 'projects':
-            return <ProjectsBlock key={key} block={block} locale={locale} />
-          case 'services':
-            return <ServicesBlock key={key} block={block} locale={locale} />
-          case 'testimonials':
-            return <TestimonialsBlock key={key} block={block} />
-          case 'partners':
-            return <PartnersBlock key={key} block={block} locale={locale} />
-          case 'ods':
-            return <OdsBlock key={key} block={block} />
-          case 'team':
-            return <TeamBlock key={key} block={block} locale={locale} />
-          case 'downloads':
-            return <DownloadsBlock key={key} block={block} locale={locale} />
-          case 'faq':
-            return <FaqBlock key={key} block={block} />
-          case 'map':
-            return <MapBlock key={key} block={block} />
-          case 'contactForm':
-            return <ContactFormBlock key={key} block={block} locale={locale} />
-          case 'cta':
-            return <CtaBlock key={key} block={block} />
-          default:
-            return null
-        }
-      })}
+      {groups.map((g) =>
+        g.self ? (
+          <Block
+            key={g.items[0]!.b.id ?? g.items[0]!.i}
+            block={g.items[0]!.b}
+            index={g.items[0]!.i}
+            ctx={ctx}
+          />
+        ) : (
+          <div key={g.items[0]!.b.id ?? g.items[0]!.i} className="q-section q-story-blocks">
+            {g.items.map(({ b, i }) => (
+              <Block key={b.id ?? i} block={b} index={i} ctx={ctx} />
+            ))}
+          </div>
+        ),
+      )}
     </>
   )
 }

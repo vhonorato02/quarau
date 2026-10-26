@@ -1,76 +1,101 @@
-import { ArrowIcon, Button, Container, Section } from '@quarau/ui'
 import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
-import type * as React from 'react'
 
-import { ProjectCard } from '@/components/projects/ProjectCard'
-import type { Locale } from '@/i18n/routing'
-import { listDocs } from '@/lib/queries'
-import type { Project, ProjectsBlock as ProjectsBlockType } from '@/payload-types'
+import { fill, type SiteTexts } from '@/cms/globals/site-texts'
+import { CMSLink } from '@/components/CMSLink'
+import { Img } from '@/components/Img'
+import { docPath } from '@/lib/urls'
+import type { Project } from '@/payload-types'
+import { getTexts, listProjects } from '@/server/queries'
 
-import { SectionHeader, toneToSection } from './SectionHeader'
+import { type BlockOf, headingId } from './types'
 
-export async function ProjectsBlock({
-  block,
-  locale,
+/** "2015–2023", "desde 2022", "2020" or null when no year is confirmed. */
+export function projectPeriod(
+  p: Pick<Project, 'startYear' | 'endYear' | 'ongoing'>,
+  t: SiteTexts,
+): string | null {
+  if (p.ongoing && p.startYear) return fill(t.project.since, { year: p.startYear })
+  if (p.startYear && p.endYear && p.endYear !== p.startYear)
+    return `${p.startYear}\u2013${p.endYear}`
+  return p.startYear ? String(p.startYear) : p.endYear ? String(p.endYear) : null
+}
+
+/** The project index: territory first, then the name, who carries it out and the period. */
+export function ProjectRows({
+  projects,
+  t,
+  headingLevel = 3,
 }: {
-  block: ProjectsBlockType
-  locale: Locale
+  projects: Project[]
+  t: SiteTexts
+  headingLevel?: 2 | 3
 }) {
-  const t = await getTranslations('common')
-  const limit = block.limit ?? 6
-  let projects: Project[]
-  if (block.mode === 'selected') {
-    projects = (block.selected ?? []).filter((p): p is Project => typeof p === 'object')
-  } else {
-    const all = await listDocs('projects', { locale, sort: '-startYear', limit: 50, depth: 1 })
-    projects =
-      block.mode === 'featured'
-        ? [...all.filter((p) => p.featured), ...all.filter((p) => !p.featured)]
-        : all
-  }
-  projects = projects.slice(0, limit)
-  if (!projects.length) return null
-
-  const [first, ...rest] = projects
+  const H = headingLevel === 2 ? 'h2' : 'h3'
   return (
-    <Section tone={toneToSection(block.tone)} id={block.anchor ?? undefined}>
-      <Container>
-        <SectionHeader
-          eyebrow={block.eyebrow}
-          heading={block.heading}
-          intro={block.intro}
-          action={
-            block.showAllLink ? (
-              <Button asChild variant="secondary">
-                <Link href="/projetos">
-                  {t('seeAllProjects')}
-                  <ArrowIcon />
-                </Link>
-              </Button>
-            ) : null
-          }
-        />
-        <div className="grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-12">
-          {first ? (
-            <ProjectCard
-              project={first}
-              size="feature"
-              index={0}
-              className="md:col-span-2 lg:col-span-8"
-            />
-          ) : null}
-          {rest.map((p, i) => (
-            <ProjectCard
-              key={p.id}
-              project={p}
-              index={i + 1}
-              className={i === 0 ? 'lg:col-span-4 lg:mt-24' : 'lg:col-span-4'}
-              style={{ '--reveal-delay': i * 80 } as React.CSSProperties}
-            />
-          ))}
+    <ul className="q-index">
+      {projects.map((p, i) => {
+        const period = projectPeriod(p, t)
+        return (
+          <li key={p.id}>
+            <Link className="q-row" href={docPath('projects', p.slug)}>
+              <span className="q-row__place">{p.territory}</span>
+              <span className="q-row__main">
+                <H>{p.title}</H>
+                {p.carriedOutBy || period ? (
+                  <span className="q-row__meta">
+                    {p.carriedOutBy ? <span>{p.carriedOutBy}</span> : null}
+                    {period ? <span className="tabular-nums">{period}</span> : null}
+                  </span>
+                ) : null}
+              </span>
+              <span className="q-row__img">
+                <Img
+                  media={p.coverImage}
+                  sizes="(min-width: 56rem) 22vw, 6.5rem"
+                  priority={i < 2}
+                />
+              </span>
+            </Link>
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
+export async function ProjectIndex({
+  block,
+  index,
+}: {
+  block: BlockOf<'projectIndex'>
+  index: number
+}) {
+  const ids = (block.projects ?? []).map((p) => (typeof p === 'object' ? p.id : p))
+  const [projects, t] = await Promise.all([
+    listProjects({ mode: block.mode, ids, limit: block.limit }),
+    getTexts(),
+  ])
+  const id = headingId(block, index)
+  return (
+    <section className="q-section q-wrap" aria-labelledby={block.heading ? id : undefined}>
+      {block.heading ? (
+        <div className="q-head">
+          <h2 id={id} className="q-h2">
+            {block.heading}
+          </h2>
+          {block.intro ? <p>{block.intro}</p> : null}
         </div>
-      </Container>
-    </Section>
+      ) : null}
+      {projects.length ? (
+        <ProjectRows projects={projects} t={t} />
+      ) : (
+        <p className="q-muted">{t.project.empty}</p>
+      )}
+      {block.link?.label ? (
+        <p className="q-index-more">
+          <CMSLink link={block.link} variant="ghost" />
+        </p>
+      ) : null}
+    </section>
   )
 }

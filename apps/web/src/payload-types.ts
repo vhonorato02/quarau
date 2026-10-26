@@ -68,14 +68,11 @@ export interface Config {
   blocks: {};
   collections: {
     pages: Page;
-    services: Service;
     projects: Project;
+    services: Service;
     news: News;
-    jobs: Job;
-    team: Team;
     partners: Partner;
     media: Media;
-    documents: Document;
     leads: Lead;
     users: User;
     redirects: Redirect;
@@ -88,14 +85,11 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
-    services: ServicesSelect<false> | ServicesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
-    jobs: JobsSelect<false> | JobsSelect<true>;
-    team: TeamSelect<false> | TeamSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    documents: DocumentsSelect<false> | DocumentsSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -108,22 +102,24 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('pt' | 'en' | 'es') | ('pt' | 'en' | 'es')[];
+  fallbackLocale: null;
   globals: {
     navigation: Navigation;
     footer: Footer;
     contact: Contact;
     social: Social;
-    'site-settings': SiteSetting;
+    settings: Setting;
+    'site-texts': SiteText;
   };
   globalsSelect: {
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     contact: ContactSelect<false> | ContactSelect<true>;
     social: SocialSelect<false> | SocialSelect<true>;
-    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    settings: SettingsSelect<false> | SettingsSelect<true>;
+    'site-texts': SiteTextsSelect<false> | SiteTextsSelect<true>;
   };
-  locale: 'pt' | 'en' | 'es';
+  locale: null;
   widgets: {
     collections: CollectionsWidget;
   };
@@ -158,7 +154,7 @@ export interface UserAuthOperations {
   };
 }
 /**
- * Páginas institucionais montadas com blocos. A página com endereço “inicio” é a home.
+ * Monte cada página com blocos. A página com endereço “inicio” é a página inicial do site.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
@@ -168,25 +164,330 @@ export interface Page {
   title: string;
   layout?:
     | (
-        | HeroBlock
-        | StatementBlock
-        | ContentBlock
-        | MediaTextBlock
-        | StatsBlock
-        | TimelineBlock
-        | GalleryBlock
-        | VideoBlock
-        | ProjectsBlock
-        | ServicesBlock
-        | TestimonialsBlock
-        | PartnersBlock
-        | OdsBlock
-        | TeamBlock
-        | DownloadsBlock
-        | FaqBlock
-        | MapBlock
-        | ContactFormBlock
-        | CtaBlock
+        | {
+            /**
+             * Frase principal da página. Curta: até 6 palavras.
+             */
+            heading: string;
+            lead: string;
+            image: number | Media;
+            /**
+             * O que a foto mostra, onde e quando. Ex.: “Roda de conversa, 2023”.
+             */
+            caption?: string | null;
+            primary: {
+              type?: ('internal' | 'external') | null;
+              newTab?: boolean | null;
+              reference?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'projects';
+                    value: number | Project;
+                  } | null)
+                | ({
+                    relationTo: 'services';
+                    value: number | Service;
+                  } | null)
+                | ({
+                    relationTo: 'news';
+                    value: number | News;
+                  } | null);
+              url?: string | null;
+              label: string;
+            };
+            secondary?: {
+              type?: ('internal' | 'external') | null;
+              newTab?: boolean | null;
+              reference?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'projects';
+                    value: number | Project;
+                  } | null)
+                | ({
+                    relationTo: 'services';
+                    value: number | Service;
+                  } | null)
+                | ({
+                    relationTo: 'news';
+                    value: number | News;
+                  } | null);
+              url?: string | null;
+              label?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'heroLens';
+          }
+        | {
+            heading: string;
+            lead?: string | null;
+            image?: (number | null) | Media;
+            caption?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pageIntro';
+          }
+        | {
+            /**
+             * Os nomes vêm de “Parceiros e clientes” (os marcados para aparecer na faixa), na ordem definida lá.
+             */
+            heading?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'partnersStrip';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            mode?: ('all' | 'featured' | 'manual') | null;
+            projects?: (number | Project)[] | null;
+            /**
+             * Vazio = sem limite.
+             */
+            limit?: number | null;
+            link?: {
+              type?: ('internal' | 'external') | null;
+              newTab?: boolean | null;
+              reference?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'projects';
+                    value: number | Project;
+                  } | null)
+                | ({
+                    relationTo: 'services';
+                    value: number | Service;
+                  } | null)
+                | ({
+                    relationTo: 'news';
+                    value: number | News;
+                  } | null);
+              url?: string | null;
+              label?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'projectIndex';
+          }
+        | {
+            /**
+             * Só números publicados e verificáveis. Ex.: “16 mil”.
+             */
+            value: string;
+            text: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'proofNumber';
+          }
+        | {
+            heading: string;
+            steps?:
+              | {
+                  label: string;
+                  id?: string | null;
+                }[]
+              | null;
+            text?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cycle';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'areas';
+          }
+        | {
+            heading?: string | null;
+            layout?: ('narrow' | 'split') | null;
+            body: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'richText';
+          }
+        | {
+            heading?: string | null;
+            body: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            image: number | Media;
+            imagePosition?: ('right' | 'left') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaText';
+          }
+        | {
+            text: string;
+            /**
+             * Toda citação precisa de fonte.
+             */
+            source: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            image: number | Media;
+            caption?: string | null;
+            size?: ('text' | 'wide' | 'full') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'figure';
+          }
+        | {
+            heading?: string | null;
+            /**
+             * As 5 primeiras aparecem no mosaico; as demais abrem em “Ver todas”.
+             */
+            images: (number | Media)[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            video: number | Media;
+            poster: number | Media;
+            caption?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'video';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  title: string;
+                  url: string;
+                  cover?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'publications';
+          }
+        | {
+            heading?: string | null;
+            goals: (
+              | '1'
+              | '2'
+              | '3'
+              | '4'
+              | '5'
+              | '6'
+              | '7'
+              | '8'
+              | '9'
+              | '10'
+              | '11'
+              | '12'
+              | '13'
+              | '14'
+              | '15'
+              | '16'
+              | '17'
+            )[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'ods';
+          }
+        | {
+            heading: string;
+            text?: string | null;
+            link: {
+              type?: ('internal' | 'external') | null;
+              newTab?: boolean | null;
+              reference?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'projects';
+                    value: number | Project;
+                  } | null)
+                | ({
+                    relationTo: 'services';
+                    value: number | Service;
+                  } | null)
+                | ({
+                    relationTo: 'news';
+                    value: number | News;
+                  } | null);
+              url?: string | null;
+              label: string;
+            };
+            showContacts?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'ctaBand';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contactForm';
+          }
+        | {
+            heading?: string | null;
+            limit?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'newsList';
+          }
       )[]
     | null;
   /**
@@ -198,6 +499,7 @@ export interface Page {
    */
   publishedAt?: string | null;
   createdBy?: (number | null) | User;
+  searchText?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -211,48 +513,7 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HeroBlock".
- */
-export interface HeroBlock {
-  variant?: ('immersive' | 'image' | 'simple') | null;
-  eyebrow?: string | null;
-  heading: string;
-  lead?: string | null;
-  media?: (number | null) | Media;
-  links?:
-    | {
-        type?: ('internal' | 'external') | null;
-        newTab?: boolean | null;
-        reference?:
-          | ({
-              relationTo: 'pages';
-              value: number | Page;
-            } | null)
-          | ({
-              relationTo: 'projects';
-              value: number | Project;
-            } | null)
-          | ({
-              relationTo: 'services';
-              value: number | Service;
-            } | null)
-          | ({
-              relationTo: 'news';
-              value: number | News;
-            } | null);
-        url?: string | null;
-        label: string;
-        appearance?: ('primary' | 'secondary' | 'link') | null;
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'hero';
-}
-/**
- * Imagens e vídeos. Todo arquivo precisa de texto alternativo (descrição para leitores de tela).
+ * Fotos, vídeos e PDFs. Ao enviar uma foto, o site cria versões otimizadas sozinho. Toda imagem precisa de texto alternativo.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
@@ -260,22 +521,23 @@ export interface HeroBlock {
 export interface Media {
   id: number;
   /**
-   * Descreva o que a imagem mostra, como se contasse para alguém que não pode vê-la (ex.: “Jovens plantam mudas na horta comunitária do Bairro Esmeralda, em Atibaia”).
+   * Descreva o que a imagem mostra para quem não pode vê-la. Ex.: “Jovens plantam mudas na horta comunitária do Bairro Esmeralda, em Atibaia”.
    */
   alt: string;
+  /**
+   * O que, onde e quando.
+   */
   caption?: string | null;
+  /**
+   * Só com autoria confirmada.
+   */
   credit?: string | null;
   /**
-   * Marcado pela migração quando o alt foi gerado automaticamente.
+   * Marcado na importação quando o texto foi gerado automaticamente.
    */
   needsReview?: boolean | null;
-  /**
-   * Usada para redirecionar links antigos (/wp-content/uploads/...).
-   */
   legacyUrl?: string | null;
   blurDataURL?: string | null;
-  prefix?: string | null;
-  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -296,7 +558,7 @@ export interface Media {
       filesize?: number | null;
       filename?: string | null;
     };
-    card?: {
+    square?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -304,7 +566,31 @@ export interface Media {
       filesize?: number | null;
       filename?: string | null;
     };
-    wide?: {
+    sm?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    md?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    lg?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    xl?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -323,6 +609,8 @@ export interface Media {
   };
 }
 /**
+ * Cada projeto vira uma página em /projetos/<endereço> e aparece nas listas de projetos.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
@@ -330,87 +618,177 @@ export interface Project {
   id: number;
   title: string;
   /**
-   * Uma ou duas frases. Aparece em listagens, na busca e como descrição padrão para o Google.
+   * Uma ou duas frases. Aparece nas listas, na busca e como descrição no Google se o SEO ficar vazio.
    */
-  summary?: string | null;
+  summary: string;
+  /**
+   * Foto real do projeto. Aparece nas listas e ao compartilhar o link.
+   */
   coverImage: number | Media;
-  client?: string | null;
-  location?: string | null;
+  /**
+   * Município e UF, como aparece nas listas. Ex.: “Atibaia, SP”.
+   */
+  territory: string;
+  /**
+   * Opcional. Ex.: “Bairro Esmeralda (Tanque), Atibaia, SP”.
+   */
+  territoryDetail?: string | null;
+  /**
+   * Ex.: “Programa Celeo na Comunidade”.
+   */
+  program?: string | null;
+  /**
+   * Ex.: “CECP e Petrobras Socioambiental”.
+   */
+  carriedOutBy?: string | null;
+  role?: string | null;
+  /**
+   * Vazio = não exibido.
+   */
   startYear?: number | null;
   /**
-   * Vazio = em andamento
+   * Vazio = não exibido.
    */
   endYear?: number | null;
-  role?: string | null;
+  /**
+   * Mostra “desde <ano de início>”.
+   */
+  ongoing?: boolean | null;
   partners?: (number | Partner)[] | null;
   services?: (number | Service)[] | null;
+  /**
+   * Só os ODS publicados pelo projeto.
+   */
   ods?:
     | ('1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17')[]
     | null;
   /**
-   * Opcional. Copie latitude e longitude do Google Maps (clique com o botão direito no local).
+   * Aparece em destaque, ao lado do texto. A ideia central do projeto.
    */
-  coordinates?: {
-    lat?: number | null;
-    lng?: number | null;
-  };
-  featured?: boolean | null;
-  accent?: ('blue' | 'green' | 'dark') | null;
-  /**
-   * Somente números comprovados (relatórios, prestação de contas).
-   */
-  highlights?:
-    | {
-        value: string;
-        label: string;
-        id?: string | null;
-      }[]
-    | null;
-  body?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Monte a narrativa do case intercalando textos, imagens, números, vídeos e citações.
-   */
-  chapters?:
+  lead?: string | null;
+  story?:
     | (
-        | ContentBlock
-        | MediaTextBlock
-        | StatementBlock
-        | StatsBlock
-        | GalleryBlock
-        | VideoBlock
-        | TimelineBlock
-        | TestimonialsBlock
-        | OdsBlock
+        | {
+            heading?: string | null;
+            layout?: ('narrow' | 'split') | null;
+            body: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'richText';
+          }
+        | {
+            heading?: string | null;
+            body: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            image: number | Media;
+            imagePosition?: ('right' | 'left') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaText';
+          }
+        | {
+            text: string;
+            /**
+             * Toda citação precisa de fonte.
+             */
+            source: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            image: number | Media;
+            caption?: string | null;
+            size?: ('text' | 'wide' | 'full') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'figure';
+          }
+        | {
+            heading?: string | null;
+            /**
+             * As 5 primeiras aparecem no mosaico; as demais abrem em “Ver todas”.
+             */
+            images: (number | Media)[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            video: number | Media;
+            poster: number | Media;
+            caption?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'video';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  title: string;
+                  url: string;
+                  cover?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'publications';
+          }
+        | {
+            /**
+             * Só números publicados e verificáveis. Ex.: “16 mil”.
+             */
+            value: string;
+            text: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'proofNumber';
+          }
       )[]
     | null;
-  quote?: {
-    text?: string | null;
-    source?: string | null;
-  };
-  publications?:
-    | {
-        label: string;
-        url: string;
-        cover?: (number | null) | Media;
-        id?: string | null;
-      }[]
-    | null;
-  video?: (number | null) | Media;
-  gallery?: (number | Media)[] | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -424,10 +802,19 @@ export interface Project {
    */
   slug: string;
   /**
+   * Usado pelas listas “só destaques”.
+   */
+  featured?: boolean | null;
+  /**
+   * Números menores aparecem primeiro.
+   */
+  order?: number | null;
+  /**
    * Preenchida automaticamente na primeira publicação.
    */
   publishedAt?: string | null;
   createdBy?: (number | null) | User;
+  searchText?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -452,6 +839,8 @@ export interface Partner {
   createdAt: string;
 }
 /**
+ * Cada área vira uma página em /atuacao/<endereço> e aparece no bloco “Áreas de atuação”.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services".
  */
@@ -459,10 +848,12 @@ export interface Service {
   id: number;
   title: string;
   /**
-   * Uma ou duas frases. Aparece em listagens, na busca e como descrição padrão para o Google.
+   * Uma ou duas frases. Aparece nas listas, na busca e como descrição no Google se o SEO ficar vazio.
    */
-  summary?: string | null;
-  icon?: ('territory' | 'heritage' | 'education' | 'management' | 'diffusion') | null;
+  summary: string;
+  /**
+   * Foto real do projeto. Aparece nas listas e ao compartilhar o link.
+   */
   coverImage?: (number | null) | Media;
   deliverables?:
     | {
@@ -470,42 +861,127 @@ export interface Service {
         id?: string | null;
       }[]
     | null;
-  body?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  layout?:
+  story?:
     | (
-        | HeroBlock
-        | StatementBlock
-        | ContentBlock
-        | MediaTextBlock
-        | StatsBlock
-        | TimelineBlock
-        | GalleryBlock
-        | VideoBlock
-        | ProjectsBlock
-        | ServicesBlock
-        | TestimonialsBlock
-        | PartnersBlock
-        | OdsBlock
-        | TeamBlock
-        | DownloadsBlock
-        | FaqBlock
-        | MapBlock
-        | ContactFormBlock
-        | CtaBlock
+        | {
+            heading?: string | null;
+            layout?: ('narrow' | 'split') | null;
+            body: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'richText';
+          }
+        | {
+            heading?: string | null;
+            body: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            image: number | Media;
+            imagePosition?: ('right' | 'left') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaText';
+          }
+        | {
+            text: string;
+            /**
+             * Toda citação precisa de fonte.
+             */
+            source: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quote';
+          }
+        | {
+            image: number | Media;
+            caption?: string | null;
+            size?: ('text' | 'wide' | 'full') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'figure';
+          }
+        | {
+            heading?: string | null;
+            /**
+             * As 5 primeiras aparecem no mosaico; as demais abrem em “Ver todas”.
+             */
+            images: (number | Media)[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
+        | {
+            video: number | Media;
+            poster: number | Media;
+            caption?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'video';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  title: string;
+                  url: string;
+                  cover?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'publications';
+          }
+        | {
+            /**
+             * Só números publicados e verificáveis. Ex.: “16 mil”.
+             */
+            value: string;
+            text: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'proofNumber';
+          }
       )[]
     | null;
   /**
@@ -521,105 +997,7 @@ export interface Service {
    */
   publishedAt?: string | null;
   createdBy?: (number | null) | User;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "StatementBlock".
- */
-export interface StatementBlock {
-  eyebrow?: string | null;
-  /**
-   * Texto grande que se revela conforme a rolagem. Ideal para manifestos e missão.
-   */
-  text: string;
-  links?:
-    | {
-        type?: ('internal' | 'external') | null;
-        newTab?: boolean | null;
-        reference?:
-          | ({
-              relationTo: 'pages';
-              value: number | Page;
-            } | null)
-          | ({
-              relationTo: 'projects';
-              value: number | Project;
-            } | null)
-          | ({
-              relationTo: 'services';
-              value: number | Service;
-            } | null)
-          | ({
-              relationTo: 'news';
-              value: number | News;
-            } | null);
-        url?: string | null;
-        label: string;
-        appearance?: ('primary' | 'secondary' | 'link') | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'statement';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "news".
- */
-export interface News {
-  id: number;
-  title: string;
-  /**
-   * Uma ou duas frases. Aparece em listagens, na busca e como descrição padrão para o Google.
-   */
-  summary?: string | null;
-  coverImage: number | Media;
-  category?: ('noticia' | 'artigo' | 'evento' | 'publicacao') | null;
-  body: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedProjects?: (number | Project)[] | null;
-  /**
-   * Parte final do endereço da página. Gerado a partir do título; use apenas letras, números e hífens.
-   */
-  slug: string;
-  /**
-   * Preenchida automaticamente na primeira publicação.
-   */
-  publishedAt?: string | null;
-  createdBy?: (number | null) | User;
+  searchText?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -664,420 +1042,27 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Enquanto não houver notícia publicada, a seção Notícias não aparece no site.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock".
+ * via the `definition` "news".
  */
-export interface ContentBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  body: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  layout?: ('split' | 'narrow') | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'content';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaTextBlock".
- */
-export interface MediaTextBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  body?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  media: number | Media;
-  mediaPosition?: ('right' | 'left') | null;
-  links?:
-    | {
-        type?: ('internal' | 'external') | null;
-        newTab?: boolean | null;
-        reference?:
-          | ({
-              relationTo: 'pages';
-              value: number | Page;
-            } | null)
-          | ({
-              relationTo: 'projects';
-              value: number | Project;
-            } | null)
-          | ({
-              relationTo: 'services';
-              value: number | Service;
-            } | null)
-          | ({
-              relationTo: 'news';
-              value: number | News;
-            } | null);
-        url?: string | null;
-        label: string;
-        appearance?: ('primary' | 'secondary' | 'link') | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'mediaText';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "StatsBlock".
- */
-export interface StatsBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  /**
-   * Use apenas números comprovados e informe a fonte/período no contexto.
-   */
-  items?:
-    | {
-        value: string;
-        label: string;
-        context?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'stats';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TimelineBlock".
- */
-export interface TimelineBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  items?:
-    | {
-        period: string;
-        title: string;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'timeline';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "GalleryBlock".
- */
-export interface GalleryBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  images: (number | Media)[];
-  layout?: ('mosaic' | 'carousel') | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'gallery';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "VideoBlock".
- */
-export interface VideoBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  source?: ('upload' | 'embed') | null;
-  file?: (number | null) | Media;
-  url?: string | null;
-  poster?: (number | null) | Media;
-  caption?: string | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'video';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ProjectsBlock".
- */
-export interface ProjectsBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  intro?: string | null;
-  mode?: ('featured' | 'latest' | 'selected') | null;
-  selected?: (number | Project)[] | null;
-  limit?: number | null;
-  showAllLink?: boolean | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'projects';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ServicesBlock".
- */
-export interface ServicesBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  intro?: string | null;
-  services?: (number | Service)[] | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'services';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TestimonialsBlock".
- */
-export interface TestimonialsBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  /**
-   * Publique apenas depoimentos autorizados por escrito.
-   */
-  items?:
-    | {
-        quote: string;
-        author?: string | null;
-        role?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'testimonials';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PartnersBlock".
- */
-export interface PartnersBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  partners?: (number | Partner)[] | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'partners';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "OdsBlock".
- */
-export interface OdsBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  text?: string | null;
-  goals?:
-    | ('1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17')[]
-    | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'ods';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TeamBlock".
- */
-export interface TeamBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  members?: (number | Team)[] | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'team';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "team".
- */
-export interface Team {
-  id: number;
-  name: string;
-  role: string;
-  photo?: (number | null) | Media;
-  bio?: string | null;
-  linkedin?: string | null;
-  lattes?: string | null;
-  /**
-   * Números menores aparecem primeiro.
-   */
-  order?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "DownloadsBlock".
- */
-export interface DownloadsBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  documents?: (number | Document)[] | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'downloads';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "documents".
- */
-export interface Document {
+export interface News {
   id: number;
   title: string;
-  description?: string | null;
-  category?: ('publicacao' | 'relatorio' | 'institucional' | 'edital') | null;
   /**
-   * Números menores aparecem primeiro.
+   * Uma ou duas frases. Aparece nas listas, na busca e como descrição no Google se o SEO ficar vazio.
    */
-  order?: number | null;
-  prefix?: string | null;
-  _objectKey?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FaqBlock".
- */
-export interface FaqBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  items?:
+  summary: string;
+  /**
+   * Foto real do projeto. Aparece nas listas e ao compartilhar o link.
+   */
+  coverImage: number | Media;
+  story: (
     | {
-        question: string;
-        answer: {
+        heading?: string | null;
+        layout?: ('narrow' | 'split') | null;
+        body: {
           root: {
             type: string;
             children: {
@@ -1093,139 +1078,112 @@ export interface FaqBlock {
           [k: string]: unknown;
         };
         id?: string | null;
-      }[]
-    | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'faq';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MapBlock".
- */
-export interface MapBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  address?: string | null;
-  lat: number;
-  lng: number;
-  zoom?: number | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'map';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContactFormBlock".
- */
-export interface ContactFormBlock {
-  eyebrow?: string | null;
-  heading?: string | null;
-  intro?: string | null;
-  /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
-   */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  /**
-   * Permite linkar direto para a seção, ex.: #metodologia. Use letras minúsculas e hífens.
-   */
-  anchor?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'contactForm';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CtaBlock".
- */
-export interface CtaBlock {
-  heading: string;
-  text?: string | null;
-  links?:
+        blockName?: string | null;
+        blockType: 'richText';
+      }
     | {
-        type?: ('internal' | 'external') | null;
-        newTab?: boolean | null;
-        reference?:
-          | ({
-              relationTo: 'pages';
-              value: number | Page;
-            } | null)
-          | ({
-              relationTo: 'projects';
-              value: number | Project;
-            } | null)
-          | ({
-              relationTo: 'services';
-              value: number | Service;
-            } | null)
-          | ({
-              relationTo: 'news';
-              value: number | News;
-            } | null);
-        url?: string | null;
-        label: string;
-        appearance?: ('primary' | 'secondary' | 'link') | null;
+        heading?: string | null;
+        body: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        image: number | Media;
+        imagePosition?: ('right' | 'left') | null;
         id?: string | null;
-      }[]
-    | null;
+        blockName?: string | null;
+        blockType: 'mediaText';
+      }
+    | {
+        text: string;
+        /**
+         * Toda citação precisa de fonte.
+         */
+        source: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'quote';
+      }
+    | {
+        image: number | Media;
+        caption?: string | null;
+        size?: ('text' | 'wide' | 'full') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'figure';
+      }
+    | {
+        heading?: string | null;
+        /**
+         * As 5 primeiras aparecem no mosaico; as demais abrem em “Ver todas”.
+         */
+        images: (number | Media)[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'gallery';
+      }
+    | {
+        video: number | Media;
+        poster: number | Media;
+        caption?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'video';
+      }
+    | {
+        heading?: string | null;
+        items?:
+          | {
+              title: string;
+              url: string;
+              cover?: (number | null) | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'publications';
+      }
+    | {
+        /**
+         * Só números publicados e verificáveis. Ex.: “16 mil”.
+         */
+        value: string;
+        text: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'proofNumber';
+      }
+  )[];
+  relatedProjects?: (number | Project)[] | null;
   /**
-   * As cores seguem a marca. Textos e botões se ajustam automaticamente para manter o contraste.
+   * Link do post no Instagram/LinkedIn ou da matéria original.
    */
-  tone?: ('default' | 'alt' | 'brand' | 'dark') | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cta';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jobs".
- */
-export interface Job {
-  id: number;
-  title: string;
-  /**
-   * Uma ou duas frases. Aparece em listagens, na busca e como descrição padrão para o Google.
-   */
-  summary?: string | null;
-  type?: ('clt' | 'pj' | 'estagio' | 'temporario') | null;
-  location?: string | null;
-  opening?: ('open' | 'closed') | null;
-  closingDate?: string | null;
-  description: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  /**
-   * Ex.: mailto:contato@quarau.com.br?subject=Vaga ou link de formulário externo.
-   */
-  applyUrl: string;
+  sourceUrl?: string | null;
   /**
    * Parte final do endereço da página. Gerado a partir do título; use apenas letras, números e hífens.
    */
@@ -1234,6 +1192,8 @@ export interface Job {
    * Preenchida automaticamente na primeira publicação.
    */
   publishedAt?: string | null;
+  createdBy?: (number | null) | User;
+  searchText?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -1265,7 +1225,6 @@ export interface Lead {
   meta?: {
     consent?: boolean | null;
     sourcePath?: string | null;
-    locale?: string | null;
     ipHash?: string | null;
     userAgent?: string | null;
     emailDelivered?: boolean | null;
@@ -1426,24 +1385,16 @@ export interface PayloadLockedDocument {
         value: number | Page;
       } | null)
     | ({
-        relationTo: 'services';
-        value: number | Service;
-      } | null)
-    | ({
         relationTo: 'projects';
         value: number | Project;
       } | null)
     | ({
+        relationTo: 'services';
+        value: number | Service;
+      } | null)
+    | ({
         relationTo: 'news';
         value: number | News;
-      } | null)
-    | ({
-        relationTo: 'jobs';
-        value: number | Job;
-      } | null)
-    | ({
-        relationTo: 'team';
-        value: number | Team;
       } | null)
     | ({
         relationTo: 'partners';
@@ -1452,10 +1403,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'documents';
-        value: number | Document;
       } | null)
     | ({
         relationTo: 'leads';
@@ -1520,415 +1467,216 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
-        hero?: T | HeroBlockSelect<T>;
-        statement?: T | StatementBlockSelect<T>;
-        content?: T | ContentBlockSelect<T>;
-        mediaText?: T | MediaTextBlockSelect<T>;
-        stats?: T | StatsBlockSelect<T>;
-        timeline?: T | TimelineBlockSelect<T>;
-        gallery?: T | GalleryBlockSelect<T>;
-        video?: T | VideoBlockSelect<T>;
-        projects?: T | ProjectsBlockSelect<T>;
-        services?: T | ServicesBlockSelect<T>;
-        testimonials?: T | TestimonialsBlockSelect<T>;
-        partners?: T | PartnersBlockSelect<T>;
-        ods?: T | OdsBlockSelect<T>;
-        team?: T | TeamBlockSelect<T>;
-        downloads?: T | DownloadsBlockSelect<T>;
-        faq?: T | FaqBlockSelect<T>;
-        map?: T | MapBlockSelect<T>;
-        contactForm?: T | ContactFormBlockSelect<T>;
-        cta?: T | CtaBlockSelect<T>;
+        heroLens?:
+          | T
+          | {
+              heading?: T;
+              lead?: T;
+              image?: T;
+              caption?: T;
+              primary?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              secondary?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        pageIntro?:
+          | T
+          | {
+              heading?: T;
+              lead?: T;
+              image?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        partnersStrip?:
+          | T
+          | {
+              heading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        projectIndex?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              mode?: T;
+              projects?: T;
+              limit?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        proofNumber?:
+          | T
+          | {
+              value?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cycle?:
+          | T
+          | {
+              heading?: T;
+              steps?:
+                | T
+                | {
+                    label?: T;
+                    id?: T;
+                  };
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        areas?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              id?: T;
+              blockName?: T;
+            };
+        richText?:
+          | T
+          | {
+              heading?: T;
+              layout?: T;
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        mediaText?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              image?: T;
+              imagePosition?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              text?: T;
+              source?: T;
+              id?: T;
+              blockName?: T;
+            };
+        figure?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              size?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              images?: T;
+              id?: T;
+              blockName?: T;
+            };
+        video?:
+          | T
+          | {
+              video?: T;
+              poster?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        publications?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    url?: T;
+                    cover?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        ods?:
+          | T
+          | {
+              heading?: T;
+              goals?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ctaBand?:
+          | T
+          | {
+              heading?: T;
+              text?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              showContacts?: T;
+              id?: T;
+              blockName?: T;
+            };
+        contactForm?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              id?: T;
+              blockName?: T;
+            };
+        newsList?:
+          | T
+          | {
+              heading?: T;
+              limit?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   slug?: T;
   publishedAt?: T;
   createdBy?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        image?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HeroBlock_select".
- */
-export interface HeroBlockSelect<T extends boolean = true> {
-  variant?: T;
-  eyebrow?: T;
-  heading?: T;
-  lead?: T;
-  media?: T;
-  links?:
-    | T
-    | {
-        type?: T;
-        newTab?: T;
-        reference?: T;
-        url?: T;
-        label?: T;
-        appearance?: T;
-        id?: T;
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "StatementBlock_select".
- */
-export interface StatementBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  text?: T;
-  links?:
-    | T
-    | {
-        type?: T;
-        newTab?: T;
-        reference?: T;
-        url?: T;
-        label?: T;
-        appearance?: T;
-        id?: T;
-      };
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock_select".
- */
-export interface ContentBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  body?: T;
-  layout?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaTextBlock_select".
- */
-export interface MediaTextBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  body?: T;
-  media?: T;
-  mediaPosition?: T;
-  links?:
-    | T
-    | {
-        type?: T;
-        newTab?: T;
-        reference?: T;
-        url?: T;
-        label?: T;
-        appearance?: T;
-        id?: T;
-      };
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "StatsBlock_select".
- */
-export interface StatsBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  items?:
-    | T
-    | {
-        value?: T;
-        label?: T;
-        context?: T;
-        id?: T;
-      };
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TimelineBlock_select".
- */
-export interface TimelineBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  items?:
-    | T
-    | {
-        period?: T;
-        title?: T;
-        description?: T;
-        id?: T;
-      };
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "GalleryBlock_select".
- */
-export interface GalleryBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  images?: T;
-  layout?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "VideoBlock_select".
- */
-export interface VideoBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  source?: T;
-  file?: T;
-  url?: T;
-  poster?: T;
-  caption?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ProjectsBlock_select".
- */
-export interface ProjectsBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  intro?: T;
-  mode?: T;
-  selected?: T;
-  limit?: T;
-  showAllLink?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ServicesBlock_select".
- */
-export interface ServicesBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  intro?: T;
-  services?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TestimonialsBlock_select".
- */
-export interface TestimonialsBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  items?:
-    | T
-    | {
-        quote?: T;
-        author?: T;
-        role?: T;
-        id?: T;
-      };
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PartnersBlock_select".
- */
-export interface PartnersBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  partners?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "OdsBlock_select".
- */
-export interface OdsBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  text?: T;
-  goals?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TeamBlock_select".
- */
-export interface TeamBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  members?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "DownloadsBlock_select".
- */
-export interface DownloadsBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  documents?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FaqBlock_select".
- */
-export interface FaqBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  items?:
-    | T
-    | {
-        question?: T;
-        answer?: T;
-        id?: T;
-      };
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MapBlock_select".
- */
-export interface MapBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  address?: T;
-  lat?: T;
-  lng?: T;
-  zoom?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContactFormBlock_select".
- */
-export interface ContactFormBlockSelect<T extends boolean = true> {
-  eyebrow?: T;
-  heading?: T;
-  intro?: T;
-  tone?: T;
-  anchor?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CtaBlock_select".
- */
-export interface CtaBlockSelect<T extends boolean = true> {
-  heading?: T;
-  text?: T;
-  links?:
-    | T
-    | {
-        type?: T;
-        newTab?: T;
-        reference?: T;
-        url?: T;
-        label?: T;
-        appearance?: T;
-        id?: T;
-      };
-  tone?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "services_select".
- */
-export interface ServicesSelect<T extends boolean = true> {
-  title?: T;
-  summary?: T;
-  icon?: T;
-  coverImage?: T;
-  deliverables?:
-    | T
-    | {
-        item?: T;
-        id?: T;
-      };
-  body?: T;
-  layout?:
-    | T
-    | {
-        hero?: T | HeroBlockSelect<T>;
-        statement?: T | StatementBlockSelect<T>;
-        content?: T | ContentBlockSelect<T>;
-        mediaText?: T | MediaTextBlockSelect<T>;
-        stats?: T | StatsBlockSelect<T>;
-        timeline?: T | TimelineBlockSelect<T>;
-        gallery?: T | GalleryBlockSelect<T>;
-        video?: T | VideoBlockSelect<T>;
-        projects?: T | ProjectsBlockSelect<T>;
-        services?: T | ServicesBlockSelect<T>;
-        testimonials?: T | TestimonialsBlockSelect<T>;
-        partners?: T | PartnersBlockSelect<T>;
-        ods?: T | OdsBlockSelect<T>;
-        team?: T | TeamBlockSelect<T>;
-        downloads?: T | DownloadsBlockSelect<T>;
-        faq?: T | FaqBlockSelect<T>;
-        map?: T | MapBlockSelect<T>;
-        contactForm?: T | ContactFormBlockSelect<T>;
-        cta?: T | CtaBlockSelect<T>;
-      };
-  slug?: T;
-  order?: T;
-  publishedAt?: T;
-  createdBy?: T;
+  searchText?: T;
   meta?:
     | T
     | {
@@ -1948,59 +1696,98 @@ export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   summary?: T;
   coverImage?: T;
-  client?: T;
-  location?: T;
+  territory?: T;
+  territoryDetail?: T;
+  program?: T;
+  carriedOutBy?: T;
+  role?: T;
   startYear?: T;
   endYear?: T;
-  role?: T;
+  ongoing?: T;
   partners?: T;
   services?: T;
   ods?: T;
-  coordinates?:
+  lead?: T;
+  story?:
     | T
     | {
-        lat?: T;
-        lng?: T;
+        richText?:
+          | T
+          | {
+              heading?: T;
+              layout?: T;
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        mediaText?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              image?: T;
+              imagePosition?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              text?: T;
+              source?: T;
+              id?: T;
+              blockName?: T;
+            };
+        figure?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              size?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              images?: T;
+              id?: T;
+              blockName?: T;
+            };
+        video?:
+          | T
+          | {
+              video?: T;
+              poster?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        publications?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    url?: T;
+                    cover?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        proofNumber?:
+          | T
+          | {
+              value?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
-  featured?: T;
-  accent?: T;
-  highlights?:
-    | T
-    | {
-        value?: T;
-        label?: T;
-        id?: T;
-      };
-  body?: T;
-  chapters?:
-    | T
-    | {
-        content?: T | ContentBlockSelect<T>;
-        mediaText?: T | MediaTextBlockSelect<T>;
-        statement?: T | StatementBlockSelect<T>;
-        stats?: T | StatsBlockSelect<T>;
-        gallery?: T | GalleryBlockSelect<T>;
-        video?: T | VideoBlockSelect<T>;
-        timeline?: T | TimelineBlockSelect<T>;
-        testimonials?: T | TestimonialsBlockSelect<T>;
-        ods?: T | OdsBlockSelect<T>;
-      };
-  quote?:
-    | T
-    | {
-        text?: T;
-        source?: T;
-      };
-  publications?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-        cover?: T;
-        id?: T;
-      };
-  video?: T;
-  gallery?: T;
   meta?:
     | T
     | {
@@ -2009,8 +1796,121 @@ export interface ProjectsSelect<T extends boolean = true> {
         image?: T;
       };
   slug?: T;
+  featured?: T;
+  order?: T;
   publishedAt?: T;
   createdBy?: T;
+  searchText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  title?: T;
+  summary?: T;
+  coverImage?: T;
+  deliverables?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  story?:
+    | T
+    | {
+        richText?:
+          | T
+          | {
+              heading?: T;
+              layout?: T;
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        mediaText?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              image?: T;
+              imagePosition?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              text?: T;
+              source?: T;
+              id?: T;
+              blockName?: T;
+            };
+        figure?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              size?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              images?: T;
+              id?: T;
+              blockName?: T;
+            };
+        video?:
+          | T
+          | {
+              video?: T;
+              poster?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        publications?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    url?: T;
+                    cover?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        proofNumber?:
+          | T
+          | {
+              value?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  slug?: T;
+  order?: T;
+  publishedAt?: T;
+  createdBy?: T;
+  searchText?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2023,12 +1923,92 @@ export interface NewsSelect<T extends boolean = true> {
   title?: T;
   summary?: T;
   coverImage?: T;
-  category?: T;
-  body?: T;
+  story?:
+    | T
+    | {
+        richText?:
+          | T
+          | {
+              heading?: T;
+              layout?: T;
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        mediaText?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              image?: T;
+              imagePosition?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quote?:
+          | T
+          | {
+              text?: T;
+              source?: T;
+              id?: T;
+              blockName?: T;
+            };
+        figure?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              size?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              heading?: T;
+              images?: T;
+              id?: T;
+              blockName?: T;
+            };
+        video?:
+          | T
+          | {
+              video?: T;
+              poster?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        publications?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    url?: T;
+                    cover?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        proofNumber?:
+          | T
+          | {
+              value?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
   relatedProjects?: T;
+  sourceUrl?: T;
   slug?: T;
   publishedAt?: T;
   createdBy?: T;
+  searchText?: T;
   meta?:
     | T
     | {
@@ -2039,47 +2019,6 @@ export interface NewsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jobs_select".
- */
-export interface JobsSelect<T extends boolean = true> {
-  title?: T;
-  summary?: T;
-  type?: T;
-  location?: T;
-  opening?: T;
-  closingDate?: T;
-  description?: T;
-  applyUrl?: T;
-  slug?: T;
-  publishedAt?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        image?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "team_select".
- */
-export interface TeamSelect<T extends boolean = true> {
-  name?: T;
-  role?: T;
-  photo?: T;
-  bio?: T;
-  linkedin?: T;
-  lattes?: T;
-  order?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2107,8 +2046,6 @@ export interface MediaSelect<T extends boolean = true> {
   needsReview?: T;
   legacyUrl?: T;
   blurDataURL?: T;
-  prefix?: T;
-  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -2133,7 +2070,7 @@ export interface MediaSelect<T extends boolean = true> {
               filesize?: T;
               filename?: T;
             };
-        card?:
+        square?:
           | T
           | {
               url?: T;
@@ -2143,7 +2080,37 @@ export interface MediaSelect<T extends boolean = true> {
               filesize?: T;
               filename?: T;
             };
-        wide?:
+        sm?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        md?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        lg?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        xl?:
           | T
           | {
               url?: T;
@@ -2167,29 +2134,6 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "documents_select".
- */
-export interface DocumentsSelect<T extends boolean = true> {
-  title?: T;
-  description?: T;
-  category?: T;
-  order?: T;
-  prefix?: T;
-  _objectKey?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "leads_select".
  */
 export interface LeadsSelect<T extends boolean = true> {
@@ -2206,7 +2150,6 @@ export interface LeadsSelect<T extends boolean = true> {
     | {
         consent?: T;
         sourcePath?: T;
-        locale?: T;
         ipHash?: T;
         userAgent?: T;
         emailDelivered?: T;
@@ -2334,7 +2277,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface Navigation {
   id: number;
   /**
-   * Até 7 itens para manter o menu legível.
+   * Até 6 itens. Cada item aponta para uma página do site.
    */
   items?:
     | {
@@ -2362,9 +2305,6 @@ export interface Navigation {
         id?: string | null;
       }[]
     | null;
-  /**
-   * Deixe o texto vazio para não exibir o botão.
-   */
   cta?: {
     type?: ('internal' | 'external') | null;
     newTab?: boolean | null;
@@ -2398,35 +2338,29 @@ export interface Navigation {
 export interface Footer {
   id: number;
   tagline?: string | null;
-  columns?:
+  links?:
     | {
-        title: string;
-        links?:
-          | {
-              type?: ('internal' | 'external') | null;
-              newTab?: boolean | null;
-              reference?:
-                | ({
-                    relationTo: 'pages';
-                    value: number | Page;
-                  } | null)
-                | ({
-                    relationTo: 'projects';
-                    value: number | Project;
-                  } | null)
-                | ({
-                    relationTo: 'services';
-                    value: number | Service;
-                  } | null)
-                | ({
-                    relationTo: 'news';
-                    value: number | News;
-                  } | null);
-              url?: string | null;
-              label: string;
-              id?: string | null;
-            }[]
-          | null;
+        type?: ('internal' | 'external') | null;
+        newTab?: boolean | null;
+        reference?:
+          | ({
+              relationTo: 'pages';
+              value: number | Page;
+            } | null)
+          | ({
+              relationTo: 'projects';
+              value: number | Project;
+            } | null)
+          | ({
+              relationTo: 'services';
+              value: number | Service;
+            } | null)
+          | ({
+              relationTo: 'news';
+              value: number | News;
+            } | null);
+        url?: string | null;
+        label: string;
         id?: string | null;
       }[]
     | null;
@@ -2465,36 +2399,38 @@ export interface Footer {
  */
 export interface Contact {
   id: number;
-  companyName?: string | null;
-  cnpj?: string | null;
   email: string;
   phones?:
     | {
         number: string;
+        /**
+         * Marque só se confirmado.
+         */
         whatsapp?: boolean | null;
         id?: string | null;
       }[]
     | null;
-  address?: {
-    street?: string | null;
-    district?: string | null;
-    city?: string | null;
-    state?: string | null;
-    postalCode?: string | null;
-    lat?: number | null;
-    lng?: number | null;
-  };
-  hours?: string | null;
+  /**
+   * E-mails separados por vírgula. Vazio = e-mail de contato.
+   */
+  notificationEmails?: string | null;
   formSubjects?:
     | {
         label: string;
         id?: string | null;
       }[]
     | null;
-  /**
-   * E-mails separados por vírgula. Vazio = e-mail principal.
-   */
-  notificationEmails?: string | null;
+  name: string;
+  legalName?: string | null;
+  cnpj?: string | null;
+  address?: {
+    street?: string | null;
+    district?: string | null;
+    city?: string | null;
+    state?: string | null;
+    postalCode?: string | null;
+  };
+  foundingYear?: number | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2506,9 +2442,8 @@ export interface Social {
   id: number;
   profiles?:
     | {
-        network: 'instagram' | 'linkedin' | 'facebook' | 'youtube' | 'whatsapp';
+        network: 'instagram' | 'linkedin' | 'facebook' | 'youtube';
         url: string;
-        handle?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -2517,52 +2452,156 @@ export interface Social {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "site-settings".
+ * via the `definition` "settings".
  */
-export interface SiteSetting {
+export interface Setting {
   id: number;
   siteName: string;
   /**
-   * %s é substituído pelo título de cada página.
+   * %s vira o título de cada página. Ex.: “%s — Quarau”.
    */
-  titleTemplate?: string | null;
-  defaultDescription?: string | null;
+  titleTemplate: string;
+  defaultDescription: string;
   defaultOgImage?: (number | null) | Media;
-  organization?: {
-    legalName?: string | null;
-    foundingYear?: number | null;
-    areaServed?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Rótulos, botões, mensagens de erro, aviso de cookies e outros textos curtos que aparecem em todo o site.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-texts".
+ */
+export interface SiteText {
+  id: number;
+  common: {
+    skipLink: string;
+    menuOpen: string;
+    menuClose: string;
+    navLabel: string;
+    breadcrumbLabel: string;
+    home: string;
+    search: string;
+    readMore: string;
+    externalHint: string;
   };
-  analytics?: {
-    umamiWebsiteId?: string | null;
-    umamiScriptUrl?: string | null;
+  footer: {
+    navTitle: string;
+    contactTitle: string;
+    socialTitle: string;
+    cookiePreferences: string;
+    cnpj: string;
+    copyright: string;
   };
-  announcement?: {
-    enabled?: boolean | null;
-    text?: string | null;
-    link?: {
-      type?: ('internal' | 'external') | null;
-      newTab?: boolean | null;
-      reference?:
-        | ({
-            relationTo: 'pages';
-            value: number | Page;
-          } | null)
-        | ({
-            relationTo: 'projects';
-            value: number | Project;
-          } | null)
-        | ({
-            relationTo: 'services';
-            value: number | Service;
-          } | null)
-        | ({
-            relationTo: 'news';
-            value: number | News;
-          } | null);
-      url?: string | null;
-      label?: string | null;
-    };
+  project: {
+    territory: string;
+    program: string;
+    carriedOutBy: string;
+    role: string;
+    period: string;
+    since: string;
+    areas: string;
+    partners: string;
+    ods: string;
+    photos: string;
+    next: string;
+    all: string;
+    empty: string;
+  };
+  gallery: {
+    seeAll: string;
+    close: string;
+    previous: string;
+    next: string;
+    counter: string;
+    dialogLabel: string;
+  };
+  service: {
+    deliverables: string;
+    relatedProjects: string;
+    all: string;
+  };
+  news: {
+    publishedOn: string;
+    source: string;
+    related: string;
+    all: string;
+  };
+  form: {
+    name: string;
+    email: string;
+    phone: string;
+    organization: string;
+    subject: string;
+    subjectPlaceholder: string;
+    message: string;
+    messageHelp: string;
+    consent: string;
+    privacyLink: string;
+    legalBasis: string;
+    submit: string;
+    sending: string;
+    successTitle: string;
+    successText: string;
+    sendAnother: string;
+    errorSummary: string;
+    required: string;
+    emailInvalid: string;
+    messageShort: string;
+    consentRequired: string;
+    rateLimited: string;
+    captcha: string;
+    server: string;
+  };
+  contact: {
+    email: string;
+    phone: string;
+    whatsapp: string;
+    address: string;
+    instagram: string;
+    linkedin: string;
+    facebook: string;
+    youtube: string;
+  };
+  cookies: {
+    title: string;
+    text: string;
+    accept: string;
+    reject: string;
+    customize: string;
+    save: string;
+    essential: string;
+    essentialHelp: string;
+    analytics: string;
+    analyticsHelp: string;
+    policy: string;
+  };
+  search: {
+    title: string;
+    label: string;
+    submit: string;
+    resultsOne: string;
+    resultsMany: string;
+    empty: string;
+    typeProjects: string;
+    typePages: string;
+    typeServices: string;
+    typeNews: string;
+  };
+  notFound: {
+    title: string;
+    text: string;
+    home: string;
+    projects: string;
+    contact: string;
+  };
+  error: {
+    title: string;
+    text: string;
+    retry: string;
+  };
+  video: {
+    play: string;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -2601,20 +2640,14 @@ export interface NavigationSelect<T extends boolean = true> {
  */
 export interface FooterSelect<T extends boolean = true> {
   tagline?: T;
-  columns?:
+  links?:
     | T
     | {
-        title?: T;
-        links?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              id?: T;
-            };
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
         id?: T;
       };
   legalLinks?:
@@ -2636,8 +2669,6 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "contact_select".
  */
 export interface ContactSelect<T extends boolean = true> {
-  companyName?: T;
-  cnpj?: T;
   email?: T;
   phones?:
     | T
@@ -2646,6 +2677,16 @@ export interface ContactSelect<T extends boolean = true> {
         whatsapp?: T;
         id?: T;
       };
+  notificationEmails?: T;
+  formSubjects?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  name?: T;
+  legalName?: T;
+  cnpj?: T;
   address?:
     | T
     | {
@@ -2654,17 +2695,8 @@ export interface ContactSelect<T extends boolean = true> {
         city?: T;
         state?: T;
         postalCode?: T;
-        lat?: T;
-        lng?: T;
       };
-  hours?: T;
-  formSubjects?:
-    | T
-    | {
-        label?: T;
-        id?: T;
-      };
-  notificationEmails?: T;
+  foundingYear?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2679,7 +2711,6 @@ export interface SocialSelect<T extends boolean = true> {
     | {
         network?: T;
         url?: T;
-        handle?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -2688,40 +2719,176 @@ export interface SocialSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "site-settings_select".
+ * via the `definition` "settings_select".
  */
-export interface SiteSettingsSelect<T extends boolean = true> {
+export interface SettingsSelect<T extends boolean = true> {
   siteName?: T;
   titleTemplate?: T;
   defaultDescription?: T;
   defaultOgImage?: T;
-  organization?:
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-texts_select".
+ */
+export interface SiteTextsSelect<T extends boolean = true> {
+  common?:
     | T
     | {
-        legalName?: T;
-        foundingYear?: T;
-        areaServed?: T;
+        skipLink?: T;
+        menuOpen?: T;
+        menuClose?: T;
+        navLabel?: T;
+        breadcrumbLabel?: T;
+        home?: T;
+        search?: T;
+        readMore?: T;
+        externalHint?: T;
       };
-  analytics?:
+  footer?:
     | T
     | {
-        umamiWebsiteId?: T;
-        umamiScriptUrl?: T;
+        navTitle?: T;
+        contactTitle?: T;
+        socialTitle?: T;
+        cookiePreferences?: T;
+        cnpj?: T;
+        copyright?: T;
       };
-  announcement?:
+  project?:
     | T
     | {
-        enabled?: T;
+        territory?: T;
+        program?: T;
+        carriedOutBy?: T;
+        role?: T;
+        period?: T;
+        since?: T;
+        areas?: T;
+        partners?: T;
+        ods?: T;
+        photos?: T;
+        next?: T;
+        all?: T;
+        empty?: T;
+      };
+  gallery?:
+    | T
+    | {
+        seeAll?: T;
+        close?: T;
+        previous?: T;
+        next?: T;
+        counter?: T;
+        dialogLabel?: T;
+      };
+  service?:
+    | T
+    | {
+        deliverables?: T;
+        relatedProjects?: T;
+        all?: T;
+      };
+  news?:
+    | T
+    | {
+        publishedOn?: T;
+        source?: T;
+        related?: T;
+        all?: T;
+      };
+  form?:
+    | T
+    | {
+        name?: T;
+        email?: T;
+        phone?: T;
+        organization?: T;
+        subject?: T;
+        subjectPlaceholder?: T;
+        message?: T;
+        messageHelp?: T;
+        consent?: T;
+        privacyLink?: T;
+        legalBasis?: T;
+        submit?: T;
+        sending?: T;
+        successTitle?: T;
+        successText?: T;
+        sendAnother?: T;
+        errorSummary?: T;
+        required?: T;
+        emailInvalid?: T;
+        messageShort?: T;
+        consentRequired?: T;
+        rateLimited?: T;
+        captcha?: T;
+        server?: T;
+      };
+  contact?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        whatsapp?: T;
+        address?: T;
+        instagram?: T;
+        linkedin?: T;
+        facebook?: T;
+        youtube?: T;
+      };
+  cookies?:
+    | T
+    | {
+        title?: T;
         text?: T;
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
+        accept?: T;
+        reject?: T;
+        customize?: T;
+        save?: T;
+        essential?: T;
+        essentialHelp?: T;
+        analytics?: T;
+        analyticsHelp?: T;
+        policy?: T;
+      };
+  search?:
+    | T
+    | {
+        title?: T;
+        label?: T;
+        submit?: T;
+        resultsOne?: T;
+        resultsMany?: T;
+        empty?: T;
+        typeProjects?: T;
+        typePages?: T;
+        typeServices?: T;
+        typeNews?: T;
+      };
+  notFound?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        home?: T;
+        projects?: T;
+        contact?: T;
+      };
+  error?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        retry?: T;
+      };
+  video?:
+    | T
+    | {
+        play?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2751,20 +2918,16 @@ export interface TaskSchedulePublish {
           value: number | Page;
         } | null)
       | ({
-          relationTo: 'services';
-          value: number | Service;
-        } | null)
-      | ({
           relationTo: 'projects';
           value: number | Project;
         } | null)
       | ({
-          relationTo: 'news';
-          value: number | News;
+          relationTo: 'services';
+          value: number | Service;
         } | null)
       | ({
-          relationTo: 'jobs';
-          value: number | Job;
+          relationTo: 'news';
+          value: number | News;
         } | null);
     global?: string | null;
     user?: {

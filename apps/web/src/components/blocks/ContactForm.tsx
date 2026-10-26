@@ -1,101 +1,54 @@
-import { Container, Section } from '@quarau/ui'
-import { getTranslations } from 'next-intl/server'
+import { fill } from '@/cms/globals/site-texts'
+import { docPath } from '@/lib/urls'
+import { getGlobal, getTexts } from '@/server/queries'
 
-import type { Locale } from '@/i18n/routing'
-import { getGlobal } from '@/lib/queries'
-import type { ContactFormBlock as ContactFormBlockType } from '@/payload-types'
+import { ContactFormClient, type FormTexts } from './ContactFormClient'
+import { ContactList } from './Sections'
+import { type BlockOf, headingId } from './types'
 
-import { ContactFormClient } from './ContactFormClient'
-import { SectionHeader, toneToSection } from './SectionHeader'
+/** The privacy policy is the first internal page among the footer's legal links. */
+export async function privacyPath(): Promise<string | null> {
+  const footer = await getGlobal('footer')
+  for (const l of footer.legalLinks ?? []) {
+    const v = l.reference?.value
+    if (l.reference?.relationTo === 'pages' && typeof v === 'object' && v?.slug)
+      return docPath('pages', v.slug)
+  }
+  return null
+}
 
-const waHref = (n: string) => `https://wa.me/55${n.replace(/\D/g, '')}`
-
-export async function ContactFormBlock({
+export async function ContactForm({
   block,
-  locale,
+  index,
 }: {
-  block: ContactFormBlockType
-  locale: Locale
+  block: BlockOf<'contactForm'>
+  index: number
 }) {
-  const [contact, t] = await Promise.all([
-    getGlobal('contact', locale).catch(() => null),
-    getTranslations('contact'),
-  ])
-  const subjects = contact?.formSubjects?.map((s) => s.label).filter(Boolean) ?? []
-  const email = contact?.email ?? 'contato@quarau.com.br'
-
+  const [t, contact, privacy] = await Promise.all([getTexts(), getGlobal('contact'), privacyPath()])
+  const id = headingId(block, index)
+  const texts: FormTexts = { ...t.form, server: fill(t.form.server, { email: contact.email }) }
   return (
-    <Section tone={toneToSection(block.tone)} id={block.anchor ?? 'contato'}>
-      <Container className="grid gap-14 lg:grid-cols-12">
-        <div className="flex flex-col gap-8 lg:col-span-5">
-          <SectionHeader
-            eyebrow={block.eyebrow}
-            heading={block.heading}
-            intro={block.intro}
-            className="mb-0 lg:mb-0"
-          />
-          <dl className="border-line grid gap-6 border-t pt-8">
-            <div>
-              <dt className="text-ink-muted text-sm font-semibold">E-mail</dt>
-              <dd className="text-h4 font-medium">
-                <a href={`mailto:${email}`} className="hover:text-blue-700 hover:underline">
-                  {email}
-                </a>
-              </dd>
-            </div>
-            {contact?.phones?.length ? (
-              <div>
-                <dt className="text-ink-muted text-sm font-semibold">Telefone / WhatsApp</dt>
-                {contact.phones.map((p) => (
-                  <dd key={p.number} className="text-h4 font-medium">
-                    <a
-                      href={p.whatsapp ? waHref(p.number) : `tel:+55${p.number.replace(/\D/g, '')}`}
-                      className="hover:text-blue-700 hover:underline"
-                    >
-                      {p.number}
-                    </a>
-                  </dd>
-                ))}
-              </div>
-            ) : null}
-            {contact?.address?.city ? (
-              <div>
-                <dt className="text-ink-muted text-sm font-semibold">Localização</dt>
-                <dd className="text-h4 font-medium">
-                  {contact.address.city} — {contact.address.state}
-                </dd>
-              </div>
-            ) : null}
-          </dl>
+    <section className="q-section q-wrap" aria-labelledby={block.heading ? id : undefined}>
+      {block.heading ? (
+        <div className="q-head">
+          <h2 id={id} className="q-h2">
+            {block.heading}
+          </h2>
+          {block.intro ? <p>{block.intro}</p> : null}
         </div>
-        <div className="lg:col-span-7">
-          <ContactFormClient
-            subjects={subjects}
-            locale={locale}
-            turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? null}
-            labels={{
-              name: t('name'),
-              email: t('email'),
-              phone: t('phone'),
-              organization: t('organization'),
-              subject: t('subject'),
-              message: t('message'),
-              consent: t.raw('consent') as string,
-              submit: t('submit'),
-              sending: t('sending'),
-              success: t('success'),
-              error: t('error', { email }),
-              rateLimited: t('rateLimited'),
-              invalid: t('invalid'),
-              required: t('required'),
-              emailInvalid: t('emailInvalid'),
-              messageShort: t('messageShort'),
-              consentRequired: t('consentRequired'),
-              captcha: t('captcha'),
-            }}
-          />
-        </div>
-      </Container>
-    </Section>
+      ) : null}
+      <div className="q-contact-page">
+        <ContactFormClient
+          texts={texts}
+          subjects={(contact.formSubjects ?? []).map((s) => s.label)}
+          privacyHref={privacy}
+          turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || null}
+        />
+        <aside>
+          <h2>{t.footer.contactTitle}</h2>
+          <ContactList />
+        </aside>
+      </div>
+    </section>
   )
 }

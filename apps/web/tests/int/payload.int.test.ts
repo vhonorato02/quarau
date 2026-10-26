@@ -3,8 +3,6 @@ import sharp from 'sharp'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import config from '@/payload.config'
-import { searchIndex } from '@/lib/search'
-import { paragraphsToLexical } from '@/utilities/lexical'
 
 let payload: Payload
 const run = Date.now().toString(36)
@@ -93,6 +91,8 @@ describe('projects', () => {
       data: {
         title: `Projeto Teste Ação ${run}`,
         coverImage: mediaId,
+        summary: 'Resumo de teste.',
+        territory: 'São João do Piauí, PI',
         _status: 'published',
       } as never,
       context: ctx(),
@@ -108,6 +108,8 @@ describe('projects', () => {
         data: {
           title: `Projeto Teste Ação ${run}`,
           coverImage: mediaId,
+          summary: 'Resumo de teste.',
+          territory: 'São João do Piauí, PI',
           _status: 'published',
         } as never,
         context: ctx(),
@@ -119,7 +121,13 @@ describe('projects', () => {
     const user = await payload.findByID({ collection: 'users', id: authorId })
     const draft = await payload.create({
       collection: 'projects',
-      data: { title: `Rascunho do autor ${run}`, coverImage: mediaId, _status: 'draft' },
+      data: {
+        title: `Rascunho do autor ${run}`,
+        coverImage: mediaId,
+        summary: 'Resumo.',
+        territory: 'Atibaia, SP',
+        _status: 'draft',
+      },
       user,
       overrideAccess: false,
       draft: true,
@@ -132,6 +140,8 @@ describe('projects', () => {
         data: {
           title: `Publicação indevida ${run}`,
           coverImage: mediaId,
+          summary: 'Resumo de teste.',
+          territory: 'São João do Piauí, PI',
           _status: 'published',
         } as never,
         user,
@@ -150,24 +160,31 @@ describe('projects', () => {
     expect(res.docs).toHaveLength(0)
   })
 
-  it.runIf(Boolean(process.env.MEILI_HOST))(
-    'indexes published projects in Meilisearch',
-    async () => {
-      const p = await payload.create({
-        collection: 'projects',
-        data: {
-          title: `Indexado ${run}`,
-          coverImage: mediaId,
-          _status: 'published',
-          body: paragraphsToLexical([`Palavra única ${run}zz`]),
-        } as never,
-        context: ctx(),
-      })
-      const doc = await searchIndex()!.getDocument(`projects_${p.id}_pt`)
-      expect(doc.title).toBe(`Indexado ${run}`)
-      expect(doc.url).toBe(`/projetos/indexado-${run}`)
-    },
-  )
+  it('finds published projects without accents (Postgres search field)', async () => {
+    await payload.create({
+      collection: 'projects',
+      data: {
+        title: `Ação Quilombola ${run}`,
+        coverImage: mediaId,
+        summary: 'Resumo.',
+        territory: 'São João do Piauí, PI',
+        _status: 'published',
+      } as never,
+      context: ctx(),
+    })
+    const res = await payload.find({
+      collection: 'projects',
+      where: {
+        and: [
+          { searchText: { like: 'acao quilombola' } },
+          { searchText: { like: 'sao joao' } },
+          { title: { contains: run } },
+        ],
+      },
+      overrideAccess: false,
+    })
+    expect(res.docs.map((d) => d.title)).toContain(`Ação Quilombola ${run}`)
+  })
 })
 
 describe('users', () => {

@@ -1,18 +1,11 @@
 import type { MetadataRoute } from 'next'
 
-import { absoluteUrl } from '@/lib/urls'
+import { siteUrl } from '@/lib/platform-env'
+import { buildRobots } from '@/lib/sitemap'
 
-// Depends on runtime env (SITE_NOINDEX), so it must not be prerendered at build time.
+// Depends on runtime env (SITE_NOINDEX), so it is not prerendered.
 export const dynamic = 'force-dynamic'
 
 export default function robots(): MetadataRoute.Robots {
-  // Temporary domain / staging: block everything until go-live (SITE_NOINDEX=false).
-  if (process.env.SITE_NOINDEX !== 'false') {
-    return { rules: [{ userAgent: '*', disallow: '/' }] }
-  }
-  return {
-    rules: [{ userAgent: '*', allow: '/', disallow: ['/admin', '/api', '/next/', '/busca'] }],
-    sitemap: absoluteUrl('/sitemap.xml'),
-    host: absoluteUrl('/'),
-  }
+  return buildRobots({ siteUrl: siteUrl(), noindex: process.env.SITE_NOINDEX !== 'false' })
 }

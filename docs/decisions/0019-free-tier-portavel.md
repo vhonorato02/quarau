@@ -10,29 +10,29 @@ por site + CLI `site`, repo `vhonorato02/vps-platform`). A migração tem de lev
 
 Limites conferidos nas páginas oficiais em 2026-10-26:
 
-| Serviço | Plano gratuito |
-| --- | --- |
-| Vercel Hobby | **uso não comercial e pessoal**; 100 GB de transferência; 1 M invocações; 4 h de CPU ativa; funções até 300 s; cron **1×/dia** com precisão de ±59 min ([hobby](https://vercel.com/docs/plans/hobby), [cron](https://vercel.com/docs/cron-jobs/usage-and-pricing)) |
-| Neon Free | 1 GB por projeto; 100 CU-h/mês por projeto; 10 branches; suspende após 5 min ocioso ([plans](https://neon.com/docs/introduction/plans)) |
-| Cloudflare R2 | 10 GB-mês; 1 M operações classe A e 10 M classe B por mês; **saída gratuita** ([pricing](https://developers.cloudflare.com/r2/pricing/)) |
-| Resend Free | 3.000 e-mails/mês, **100/dia**, 3 domínios ([pricing](https://resend.com/pricing)) |
+| Serviço       | Plano gratuito                                                                                                                                                                                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Vercel Hobby  | **uso não comercial e pessoal**; 100 GB de transferência; 1 M invocações; 4 h de CPU ativa; funções até 300 s; cron **1×/dia** com precisão de ±59 min ([hobby](https://vercel.com/docs/plans/hobby), [cron](https://vercel.com/docs/cron-jobs/usage-and-pricing)) |
+| Neon Free     | 1 GB por projeto; 100 CU-h/mês por projeto; 10 branches; suspende após 5 min ocioso ([plans](https://neon.com/docs/introduction/plans))                                                                                                                            |
+| Cloudflare R2 | 10 GB-mês; 1 M operações classe A e 10 M classe B por mês; **saída gratuita** ([pricing](https://developers.cloudflare.com/r2/pricing/))                                                                                                                           |
+| Resend Free   | 3.000 e-mails/mês, **100/dia**, 3 domínios ([pricing](https://resend.com/pricing))                                                                                                                                                                                 |
 
 ## Decisão
 
 Toda dependência externa fica atrás de um adaptador escolhido por variável de ambiente:
 
-| Peça | Agora (grátis) | Na VPS | Adaptador / variável |
-| --- | --- | --- | --- |
-| App | Vercel Hobby, `gru1` | contêiner `ghcr.io/vhonorato02/quarau` atrás do Caddy | `output: 'standalone'` fora da Vercel |
-| Banco | Neon Free | Postgres do compose do site | `DATABASE_URL`; só migrações versionadas |
-| Mídia | Cloudflare R2 | **continua no R2** | `S3_*` (`@payloadcms/storage-s3`); sem `S3_*` = disco (`MEDIA_DIR`) |
-| E-mail | Resend (SMTP) | Resend | `SMTP_*` ou `RESEND_API_KEY`; sem nenhum = só grava no CMS |
-| Antispam | Turnstile | Turnstile | `TURNSTILE_SECRET_KEY` (sem chave = desligado em dev) |
-| Erros | Sentry free | Sentry | `SENTRY_DSN` (vazio = desligado) |
-| Busca | Postgres `unaccent` | igual | — |
-| Rate limit | memória da função | memória do processo (ou Postgres) | interface `RateLimiter` |
-| Tarefas agendadas | GitHub Actions `schedule` a cada 15 min chamando `/api/payload-jobs/run` (o cron da Vercel Hobby é 1×/dia) | fila do Payload no próprio processo, a cada minuto | `PAYLOAD_JOBS_AUTORUN`, `CRON_SECRET` |
-| CI/CD | GitHub Actions + deploy Git da Vercel | GitHub Actions → GHCR → `site deploy` | mesmo pipeline |
+| Peça              | Agora (grátis)                                                                                             | Na VPS                                                | Adaptador / variável                                                |
+| ----------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------- |
+| App               | Vercel Hobby, `gru1`                                                                                       | contêiner `ghcr.io/vhonorato02/quarau` atrás do Caddy | `output: 'standalone'` fora da Vercel                               |
+| Banco             | Neon Free                                                                                                  | Postgres do compose do site                           | `DATABASE_URL`; só migrações versionadas                            |
+| Mídia             | Cloudflare R2                                                                                              | **continua no R2**                                    | `S3_*` (`@payloadcms/storage-s3`); sem `S3_*` = disco (`MEDIA_DIR`) |
+| E-mail            | Resend (SMTP)                                                                                              | Resend                                                | `SMTP_*` ou `RESEND_API_KEY`; sem nenhum = só grava no CMS          |
+| Antispam          | Turnstile                                                                                                  | Turnstile                                             | `TURNSTILE_SECRET_KEY` (sem chave = desligado em dev)               |
+| Erros             | Sentry free                                                                                                | Sentry                                                | `SENTRY_DSN` (vazio = desligado)                                    |
+| Busca             | Postgres `unaccent`                                                                                        | igual                                                 | —                                                                   |
+| Rate limit        | memória da função                                                                                          | memória do processo (ou Postgres)                     | interface `RateLimiter`                                             |
+| Tarefas agendadas | GitHub Actions `schedule` a cada 15 min chamando `/api/payload-jobs/run` (o cron da Vercel Hobby é 1×/dia) | fila do Payload no próprio processo, a cada minuto    | `PAYLOAD_JOBS_AUTORUN`, `CRON_SECRET`                               |
+| CI/CD             | GitHub Actions + deploy Git da Vercel                                                                      | GitHub Actions → GHCR → `site deploy`                 | mesmo pipeline                                                      |
 
 Regra: **nenhuma API exclusiva da Vercel no código de domínio.** `VERCEL` só decide detalhes de runtime
 (tamanho do pool, autorun de tarefas).

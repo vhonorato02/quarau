@@ -3,22 +3,11 @@ import type { NextRequest } from 'next/server'
 
 import { tags } from '@/lib/cache-tags'
 
-const ALL = [
-  'pages',
-  'projects',
-  'services',
-  'news',
-  'jobs',
-  'team',
-  'partners',
-  'documents',
-  'media',
-  'redirects',
-]
-const GLOBALS = ['navigation', 'footer', 'contact', 'social', 'site-settings']
+const COLLECTIONS = ['pages', 'projects', 'services', 'news', 'partners', 'media', 'redirects']
+const GLOBALS = ['navigation', 'footer', 'contact', 'social', 'settings', 'site-texts']
 
 /**
- * On-demand revalidation for scripts (WP migration, restores, deploy warm-up).
+ * On-demand revalidation for scripts (seed, restores, deploy warm-up).
  * POST /next/revalidate  Authorization: Bearer $REVALIDATE_SECRET  body: { "all": true } | { "tags": [...] }
  */
 export async function POST(req: NextRequest) {
@@ -26,10 +15,17 @@ export async function POST(req: NextRequest) {
   if (!secret || req.headers.get('authorization') !== `Bearer ${secret}`) {
     return Response.json({ ok: false }, { status: 401 })
   }
-  const body = (await req.json().catch(() => ({}))) as { all?: boolean; tags?: string[] }
+  const body = (await req.json().catch(() => ({}))) as { all?: boolean; tags?: unknown }
   const list = body.all
-    ? [...ALL.map(tags.collection), ...GLOBALS.map(tags.global), tags.sitemap]
-    : (body.tags ?? []).filter((t) => typeof t === 'string').slice(0, 100)
+    ? [
+        ...COLLECTIONS.map(tags.collection),
+        ...GLOBALS.map(tags.global),
+        tags.redirects,
+        tags.sitemap,
+      ]
+    : (Array.isArray(body.tags) ? body.tags : [])
+        .filter((t): t is string => typeof t === 'string')
+        .slice(0, 100)
   for (const t of list) revalidateTag(t, { expire: 0 })
   if (body.all) revalidatePath('/', 'layout')
   return Response.json({ ok: true, revalidated: list.length })

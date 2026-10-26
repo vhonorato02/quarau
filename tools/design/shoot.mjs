@@ -19,12 +19,28 @@ for (const t of targets) {
   const [name, src] = t.split('=')
   const url = /^https?:/.test(src) ? src : pathToFileURL(path.resolve(src)).href
   for (const width of [390, 1440]) {
-    const page = await browser.newPage({ viewport: { width, height: width === 390 ? 844 : 900 }, deviceScaleFactor: 1 })
+    const page = await browser.newPage({
+      viewport: { width, height: width === 390 ? 844 : 900 },
+      deviceScaleFactor: 1,
+    })
     await page.goto(url, { waitUntil: 'networkidle' })
     await page.evaluate(() => document.fonts.ready)
+    // Scroll to the end so lazy images load, then back to the top.
+    await page.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 600) {
+        window.scrollTo(0, y)
+        await new Promise((r) => setTimeout(r, 120))
+      }
+      window.scrollTo(0, 0)
+    })
+    await page.waitForLoadState('networkidle')
     const file = path.join(out, `${name}-${width}.jpg`)
     await page.screenshot({ path: file, fullPage: true, type: 'jpeg', quality: 72 })
-    if (width === 1440) await sharp(file).resize({ width: 720 }).jpeg({ quality: 70 }).toFile(path.join(out, `${name}-1440-mini.jpg`))
+    if (width === 1440)
+      await sharp(file)
+        .resize({ width: 720 })
+        .jpeg({ quality: 70 })
+        .toFile(path.join(out, `${name}-1440-mini.jpg`))
     await page.close()
     console.log('ok', file)
   }

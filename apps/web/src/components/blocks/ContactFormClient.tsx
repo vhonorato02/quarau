@@ -1,185 +1,216 @@
 'use client'
 
-import { ArrowIcon, Button, Checkbox, Field, Input, Select, Textarea } from '@quarau/ui'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Script from 'next/script'
-import { useActionState, useEffect, useRef } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 
-import { submitContact } from '@/actions/contact'
-import type { ContactState } from '@/lib/contact-schema'
+import type { SiteTexts } from '@/cms/globals/site-texts'
+import type { ContactInput, ContactState } from '@/lib/contact-schema'
+import { submitContact } from '@/server/contact/action'
 
-type Labels = Record<
-  | 'name'
-  | 'email'
-  | 'phone'
-  | 'organization'
-  | 'subject'
-  | 'message'
-  | 'consent'
-  | 'submit'
-  | 'sending'
-  | 'success'
-  | 'error'
-  | 'rateLimited'
-  | 'invalid'
-  | 'required'
-  | 'emailInvalid'
-  | 'messageShort'
-  | 'consentRequired'
-  | 'captcha',
-  string
->
+export type FormTexts = SiteTexts['form']
 
+type FieldName = keyof ContactInput
+
+/**
+ * Contact form. Works without JavaScript (server action); with JS it keeps the values,
+ * focuses the error summary and announces the result. Every text comes from the CMS.
+ */
 export function ContactFormClient({
+  texts,
   subjects,
-  locale,
+  privacyHref,
   turnstileSiteKey,
-  labels,
 }: {
+  texts: FormTexts
   subjects: string[]
-  locale: string
+  privacyHref: string | null
   turnstileSiteKey: string | null
-  labels: Labels
 }) {
   const [state, action, pending] = useActionState<ContactState, FormData>(submitContact, {
     status: 'idle',
   })
+  const [sent, setSent] = useState(false)
   const pathname = usePathname()
-  const statusRef = useRef<HTMLDivElement>(null)
-  const formRef = useRef<HTMLFormElement>(null)
+  const status = useRef<HTMLDivElement>(null)
   const errors = state.status === 'error' ? (state.fieldErrors ?? {}) : {}
-  const msg = (key?: string) => (key ? (labels[key as keyof Labels] ?? labels.required) : undefined)
 
   useEffect(() => {
-    if (state.status === 'success') formRef.current?.reset()
-    if (state.status !== 'idle') statusRef.current?.focus()
+    if (state.status === 'success') setSent(true)
+    if (state.status !== 'idle') status.current?.focus()
   }, [state])
 
-  const [consentBefore, consentLink = '', consentAfter = ''] =
-    labels.consent.split(/<link>|<\/link>/)
+  const err = (name: FieldName) => {
+    const key = errors[name]
+    return key ? texts[key] : null
+  }
+  const describe = (name: FieldName, help?: boolean) =>
+    [help ? `f-${name}-help` : null, errors[name] ? `f-${name}-err` : null]
+      .filter(Boolean)
+      .join(' ') || undefined
+  const fieldError = (name: FieldName) =>
+    err(name) ? (
+      <p id={`f-${name}-err`} className="q-field__error">
+        {err(name)}
+      </p>
+    ) : null
+
+  if (sent) {
+    return (
+      <div
+        ref={status}
+        tabIndex={-1}
+        className="q-alert q-alert--success outline-none"
+        role="status"
+      >
+        <h3>{texts.successTitle}</h3>
+        <p>{texts.successText}</p>
+        <button type="button" className="q-btn q-btn--ghost mt-4" onClick={() => setSent(false)}>
+          {texts.sendAnother}
+        </button>
+      </div>
+    )
+  }
+
+  const generalError =
+    state.status === 'error'
+      ? state.code === 'invalid'
+        ? texts.errorSummary
+        : state.code === 'rateLimited'
+          ? texts.rateLimited
+          : state.code === 'captcha'
+            ? texts.captcha
+            : texts.server
+      : null
 
   return (
-    <form ref={formRef} action={action} noValidate className="grid gap-6 sm:grid-cols-2">
-      <div ref={statusRef} tabIndex={-1} aria-live="polite" className="outline-none sm:col-span-2">
-        {state.status === 'success' ? (
-          <p className="border-success/30 rounded-md border bg-green-50 p-4 font-medium text-green-800">
-            {labels.success}
-          </p>
-        ) : null}
-        {state.status === 'error' ? (
-          <p
-            role="alert"
-            className="border-danger/30 text-danger rounded-md border bg-red-50 p-4 font-medium"
-          >
-            {state.code === 'invalid'
-              ? labels.invalid
-              : state.code === 'rateLimited'
-                ? labels.rateLimited
-                : state.code === 'captcha'
-                  ? labels.captcha
-                  : labels.error}
+    <form action={action} noValidate className="q-form" aria-busy={pending}>
+      <div ref={status} tabIndex={-1} className="outline-none" aria-live="assertive">
+        {generalError ? (
+          <p className="q-alert q-alert--error" role="alert">
+            {generalError}
           </p>
         ) : null}
       </div>
-
-      <Field id="name" label={labels.name} required error={msg(errors.name)}>
-        {(p) => <Input {...p} name="name" autoComplete="name" maxLength={120} />}
-      </Field>
-      <Field id="email" label={labels.email} required error={msg(errors.email)}>
-        {(p) => (
-          <Input
-            {...p}
+      <input type="hidden" name="sourcePath" value={pathname ?? '/'} />
+      <div className="q-honeypot" aria-hidden="true">
+        <label htmlFor="f-website">{texts.name}</label>
+        <input id="f-website" name="website" tabIndex={-1} autoComplete="off" />
+      </div>
+      <div className="q-form__row">
+        <div className="q-field">
+          <label htmlFor="f-name">{texts.name}</label>
+          <input
+            id="f-name"
+            name="name"
+            className="q-input"
+            autoComplete="name"
+            required
+            aria-invalid={Boolean(errors.name)}
+            aria-describedby={describe('name')}
+          />
+          {fieldError('name')}
+        </div>
+        <div className="q-field">
+          <label htmlFor="f-email">{texts.email}</label>
+          <input
+            id="f-email"
             name="email"
             type="email"
+            className="q-input"
             autoComplete="email"
             inputMode="email"
-            maxLength={200}
+            required
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={describe('email')}
           />
-        )}
-      </Field>
-      <Field id="phone" label={labels.phone}>
-        {(p) => (
-          <Input {...p} name="phone" type="tel" autoComplete="tel" inputMode="tel" maxLength={40} />
-        )}
-      </Field>
-      <Field id="organization" label={labels.organization}>
-        {(p) => <Input {...p} name="organization" autoComplete="organization" maxLength={160} />}
-      </Field>
-      <Field id="subject" label={labels.subject} className="sm:col-span-2">
-        {(p) =>
-          subjects.length ? (
-            <Select {...p} name="subject" defaultValue="">
-              <option value="">—</option>
-              {subjects.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </Select>
-          ) : (
-            <Input {...p} name="subject" maxLength={160} />
-          )
-        }
-      </Field>
-      <Field
-        id="message"
-        label={labels.message}
-        required
-        error={msg(errors.message)}
-        className="sm:col-span-2"
-      >
-        {(p) => <Textarea {...p} name="message" rows={6} maxLength={5000} />}
-      </Field>
-
-      {/* Honeypot (hidden from people and assistive tech) */}
-      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
-        <label htmlFor="website">Website</label>
-        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+          {fieldError('email')}
+        </div>
       </div>
-      <input type="hidden" name="sourcePath" value={pathname} />
-      <input type="hidden" name="locale" value={locale} />
-
-      <div className="sm:col-span-2">
-        <Checkbox
-          id="consent"
-          name="consent"
+      <div className="q-form__row">
+        <div className="q-field">
+          <label htmlFor="f-phone">{texts.phone}</label>
+          <input
+            id="f-phone"
+            name="phone"
+            type="tel"
+            className="q-input"
+            autoComplete="tel"
+            inputMode="tel"
+          />
+        </div>
+        <div className="q-field">
+          <label htmlFor="f-org">{texts.organization}</label>
+          <input id="f-org" name="organization" className="q-input" autoComplete="organization" />
+        </div>
+      </div>
+      {subjects.length ? (
+        <div className="q-field">
+          <label htmlFor="f-subject">{texts.subject}</label>
+          <select id="f-subject" name="subject" className="q-input" defaultValue="">
+            <option value="">{texts.subjectPlaceholder}</option>
+            {subjects.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
+      <div className="q-field">
+        <label htmlFor="f-message">{texts.message}</label>
+        <p id="f-message-help" className="q-field__help">
+          {texts.messageHelp}
+        </p>
+        <textarea
+          id="f-message"
+          name="message"
+          className="q-input"
+          rows={6}
           required
-          aria-invalid={errors.consent ? true : undefined}
-          aria-describedby={errors.consent ? 'consent-error' : undefined}
-          label={
-            <>
-              {consentBefore}
-              <Link href="/privacidade" className="text-blue-700 underline underline-offset-2">
-                {consentLink}
-              </Link>
-              {consentAfter}
-            </>
-          }
+          aria-invalid={Boolean(errors.message)}
+          aria-describedby={describe('message', true)}
         />
-        {errors.consent ? (
-          <p id="consent-error" className="text-danger mt-2 text-sm font-medium">
-            {labels.consentRequired}
-          </p>
-        ) : null}
+        {fieldError('message')}
       </div>
-
+      <div className="q-field">
+        <label className="q-check" htmlFor="f-consent">
+          <input
+            id="f-consent"
+            name="consent"
+            type="checkbox"
+            required
+            aria-invalid={Boolean(errors.consent)}
+            aria-describedby={describe('consent')}
+          />
+          <span>
+            {`${texts.consent} `}
+            {privacyHref ? (
+              <Link className="q-link" href={privacyHref}>
+                {texts.privacyLink}
+              </Link>
+            ) : (
+              texts.privacyLink
+            )}
+          </span>
+        </label>
+        {fieldError('consent')}
+        <p className="q-field__help">{texts.legalBasis}</p>
+      </div>
       {turnstileSiteKey ? (
         <>
-          <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
-          <div
-            className="cf-turnstile sm:col-span-2"
-            data-sitekey={turnstileSiteKey}
-            data-language="pt-br"
+          <Script
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            strategy="lazyOnload"
           />
+          <div className="cf-turnstile" data-sitekey={turnstileSiteKey} data-language="pt-br" />
         </>
       ) : null}
-
-      <div className="sm:col-span-2">
-        <Button type="submit" size="lg" disabled={pending} aria-disabled={pending}>
-          {pending ? labels.sending : labels.submit}
-          <ArrowIcon />
-        </Button>
+      <div>
+        <button type="submit" className="q-btn" disabled={pending} aria-busy={pending}>
+          {pending ? texts.sending : texts.submit}
+        </button>
       </div>
     </form>
   )

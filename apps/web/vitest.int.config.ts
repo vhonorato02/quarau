@@ -1,7 +1,7 @@
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 
-/** Integration tests: real Payload + Postgres (+ Meilisearch when MEILI_HOST is set). */
+/** Integration tests: real Payload + Postgres. */
 export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {

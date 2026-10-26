@@ -1,8 +1,9 @@
-import { ArrowIcon, Button, cn } from '@quarau/ui'
+import { cx } from '@quarau/ui'
 import Link from 'next/link'
-import type * as React from 'react'
+import type { ReactNode } from 'react'
 
-import { docPath, type RoutableCollection } from '@/lib/urls'
+import { docPath, isRoutable } from '@/lib/urls'
+import { getTexts } from '@/server/queries'
 
 export type LinkData = {
   type?: 'internal' | 'external' | null
@@ -10,78 +11,63 @@ export type LinkData = {
   reference?: { relationTo: string; value: number | { slug?: string | null } | null } | null
   url?: string | null
   label?: string | null
-  appearance?: 'primary' | 'secondary' | 'link' | null
 }
 
-export function resolveHref(link: LinkData): string | null {
-  if (link.type === 'external') return link.url ?? null
+export function resolveHref(link: LinkData | null | undefined): string | null {
+  if (!link) return null
+  if (link.type === 'external') return link.url || null
   const ref = link.reference
-  if (ref && typeof ref.value === 'object' && ref.value) {
-    return docPath(ref.relationTo as RoutableCollection, ref.value.slug)
+  if (ref && typeof ref.value === 'object' && ref.value && isRoutable(ref.relationTo)) {
+    return docPath(ref.relationTo, ref.value.slug)
   }
-  return link.url ?? null
+  return null
 }
 
-export function CMSLink({
+type Variant = 'primary' | 'ghost' | 'light' | 'link' | 'plain'
+
+const variantClass: Record<Variant, string> = {
+  primary: 'q-btn',
+  ghost: 'q-btn q-btn--ghost',
+  light: 'q-btn q-btn--light',
+  link: 'q-link',
+  plain: '',
+}
+
+/** A link configured in the CMS (internal document or external URL). Renders nothing when incomplete. */
+export async function CMSLink({
   link,
+  variant = 'link',
   className,
-  tone = 'light',
-  size = 'md',
   children,
 }: {
-  link: LinkData
+  link: LinkData | null | undefined
+  variant?: Variant
   className?: string
-  tone?: 'light' | 'dark'
-  size?: 'sm' | 'md' | 'lg'
-  children?: React.ReactNode
+  children?: ReactNode
 }) {
   const href = resolveHref(link)
-  if (!href) return null
-  const label = children ?? link.label
-  const external = /^https?:\/\//.test(href)
-  const targetProps = link.newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {}
-  const inner = (
-    <>
-      {label}
-      {link.newTab ? <span className="sr-only"> (abre em nova aba)</span> : null}
-    </>
-  )
-
-  if (!link.appearance || link.appearance === 'link') {
-    const cls = cn('underline-offset-4 hover:underline', className)
-    return external ? (
-      <a href={href} className={cls} {...targetProps}>
-        {inner}
+  const label = children ?? link?.label
+  if (!href || !label) return null
+  const cls = cx(variantClass[variant], className) || undefined
+  if (link?.newTab) {
+    const t = await getTexts()
+    return (
+      <a href={href} className={cls} target="_blank" rel="noopener noreferrer">
+        {label}
+        <span className="q-sr">{` ${t.common.externalHint}`}</span>
       </a>
-    ) : (
-      <Link href={href} className={cls} {...targetProps}>
-        {inner}
-      </Link>
     )
   }
-
-  const variant =
-    link.appearance === 'primary'
-      ? tone === 'dark'
-        ? 'inverse'
-        : 'primary'
-      : tone === 'dark'
-        ? 'outline-inverse'
-        : 'secondary'
-
+  if (/^(https?:|mailto:|tel:)/.test(href)) {
+    return (
+      <a href={href} className={cls}>
+        {label}
+      </a>
+    )
+  }
   return (
-    <Button asChild variant={variant} size={size} className={className}>
-      {external ? (
-        <a href={href} {...targetProps}>
-          {inner}
-          <ArrowIcon />
-        </a>
-      ) : (
-        <Link href={href} {...targetProps}>
-          {inner}
-          <ArrowIcon />
-        </Link>
-      )}
-    </Button>
+    <Link href={href} className={cls}>
+      {label}
+    </Link>
   )
 }

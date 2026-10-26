@@ -21,13 +21,13 @@ coleções sem conteúdo nem plano (Equipe, Vagas, Documentos).
 
 **Substitui:**
 
-| Antes | Agora |
-| --- | --- |
-| Meilisearch | busca no Postgres com `unaccent` + `ILIKE` em campos indexados (site pequeno; nada a sincronizar) |
-| Valkey (rate limit, cache) | limitador em memória atrás de uma interface (`RateLimiter`); troca por Postgres/Valkey sem tocar no domínio |
-| Vercel Blob | S3 genérico (Cloudflare R2 em produção; disco local em dev), ADR 0019 |
-| Animações GSAP/Lenis/motion | CSS (uma animação: a lente da home), `prefers-reduced-motion` respeitado |
-| i18n | pt-BR fixo; `lang="pt-BR"` |
+| Antes                       | Agora                                                                                                       |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Meilisearch                 | busca no Postgres com `unaccent` + `ILIKE` em campos indexados (site pequeno; nada a sincronizar)           |
+| Valkey (rate limit, cache)  | limitador em memória atrás de uma interface (`RateLimiter`); troca por Postgres/Valkey sem tocar no domínio |
+| Vercel Blob                 | S3 genérico (Cloudflare R2 em produção; disco local em dev), ADR 0019                                       |
+| Animações GSAP/Lenis/motion | CSS (uma animação: a lente da home), `prefers-reduced-motion` respeitado                                    |
+| i18n                        | pt-BR fixo; `lang="pt-BR"`                                                                                  |
 
 ## Consequências
 

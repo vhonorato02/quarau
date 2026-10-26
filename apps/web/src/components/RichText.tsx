@@ -5,14 +5,14 @@ import {
   LinkJSXConverter,
   RichText as LexicalRichText,
 } from '@payloadcms/richtext-lexical/react'
-import { cn } from '@quarau/ui'
+import { cx } from '@quarau/ui'
 
-import { docPath, type RoutableCollection } from '@/lib/urls'
+import { docPath, isRoutable } from '@/lib/urls'
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   const doc = linkNode.fields.doc
-  if (!doc || typeof doc.value !== 'object') return '/'
-  return docPath(doc.relationTo as RoutableCollection, (doc.value as { slug?: string }).slug)
+  if (!doc || typeof doc.value !== 'object' || !isRoutable(doc.relationTo)) return '/'
+  return docPath(doc.relationTo, (doc.value as { slug?: string }).slug)
 }
 
 const converters: JSXConvertersFunction<DefaultNodeTypes> = ({ defaultConverters }) => ({
@@ -20,22 +20,18 @@ const converters: JSXConvertersFunction<DefaultNodeTypes> = ({ defaultConverters
   ...LinkJSXConverter({ internalDocToHref }),
 })
 
-export function RichText({
-  data,
-  className,
-  prose = true,
-}: {
-  data: SerializedEditorState | null | undefined | Record<string, unknown>
-  className?: string
-  prose?: boolean
-}) {
+/**
+ * Lexical rich text → React. The editor only offers semantic formatting (cms/fields/richText.ts),
+ * so content is rendered as React elements: no raw HTML, nothing to sanitize.
+ */
+export function RichText({ data, className }: { data: unknown; className?: string }) {
   if (!data || typeof data !== 'object' || !('root' in data)) return null
   return (
     <LexicalRichText
       data={data as SerializedEditorState}
       converters={converters}
       disableContainer={false}
-      className={cn(prose && 'prose-quarau', className)}
+      className={cx('q-prose', className)}
     />
   )
 }

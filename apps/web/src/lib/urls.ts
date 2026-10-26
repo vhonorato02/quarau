@@ -1,19 +1,21 @@
 import { siteUrl as resolveSiteUrl } from './platform-env'
 
 /** Maps a CMS document to its public path. Single source of truth for routing. */
-export type RoutableCollection = 'pages' | 'projects' | 'services' | 'news' | 'jobs'
+export type RoutableCollection = 'pages' | 'projects' | 'services' | 'news'
 
 export const COLLECTION_BASE: Record<RoutableCollection, string> = {
   pages: '',
   projects: '/projetos',
   services: '/atuacao',
   news: '/noticias',
-  jobs: '/trabalhe-conosco',
 }
+
+/** The page whose slug is HOME_SLUG is served at "/". */
+export const HOME_SLUG = 'inicio'
 
 export function docPath(collection: RoutableCollection, slug: string | null | undefined): string {
   if (!slug) return '/'
-  if (collection === 'pages') return slug === 'inicio' ? '/' : `/${slug}`
+  if (collection === 'pages') return slug === HOME_SLUG ? '/' : `/${slug}`
   return `${COLLECTION_BASE[collection]}/${slug}`
 }
 

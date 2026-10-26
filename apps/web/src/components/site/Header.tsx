@@ -1,37 +1,42 @@
-import { getTranslations } from 'next-intl/server'
+import Link from 'next/link'
 
-import { resolveHref, type LinkData } from '@/components/CMSLink'
-import type { Locale } from '@/i18n/routing'
-import { getGlobal } from '@/lib/queries'
+import { resolveHref } from '@/components/CMSLink'
+import { getGlobal, getTexts } from '@/server/queries'
 
-import { HeaderClient } from './HeaderClient'
-import { DEFAULT_NAV } from './nav-defaults'
+import { type NavItem, SiteNav } from './SiteNav'
 
-export async function Header({ locale }: { locale: Locale }) {
-  const [nav, t] = await Promise.all([
-    getGlobal('navigation', locale).catch(() => null),
-    getTranslations('common'),
+export async function Header() {
+  const [nav, t, contact] = await Promise.all([
+    getGlobal('navigation'),
+    getTexts(),
+    getGlobal('contact'),
   ])
-  const items =
-    nav?.items
-      ?.map((i) => ({ label: i.label ?? '', href: resolveHref(i as LinkData) ?? '' }))
-      .filter((i) => i.label && i.href) ?? []
-  const cta = nav?.cta?.label
-    ? { label: nav.cta.label, href: resolveHref(nav.cta as LinkData) ?? '/contato' }
-    : null
-
+  const items: NavItem[] = (nav.items ?? []).flatMap((item) => {
+    const href = resolveHref(item)
+    return href && item.label ? [{ href, label: item.label }] : []
+  })
+  const ctaHref = resolveHref(nav.cta)
+  const cta = ctaHref && nav.cta?.label ? { href: ctaHref, label: nav.cta.label } : null
+  const logo = (
+    <Link href="/" className="q-header__logo">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/quarau-logotipo.svg" alt={contact.name} width={1295} height={306} />
+    </Link>
+  )
   return (
-    <HeaderClient
-      items={items.length ? items : DEFAULT_NAV}
-      cta={cta ?? { label: t('contactCta'), href: '/contato' }}
-      labels={{
-        home: t('home'),
-        menu: t('menu'),
-        openMenu: t('openMenu'),
-        closeMenu: t('closeMenu'),
-        mainNav: t('mainNav'),
-        search: t('search'),
-      }}
-    />
+    <header className="q-header">
+      <a className="q-skip" href="#conteudo">
+        {t.common.skipLink}
+      </a>
+      <div className="q-wrap q-header__bar">
+        {logo}
+        <SiteNav
+          items={items}
+          cta={cta}
+          logo={logo}
+          labels={{ nav: t.common.navLabel, open: t.common.menuOpen, close: t.common.menuClose }}
+        />
+      </div>
+    </header>
   )
 }

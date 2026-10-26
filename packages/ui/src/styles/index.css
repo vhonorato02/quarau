@@ -1,5 +1,4 @@
-@import 'tailwindcss';
+/* Quarau design system: import once in the app's global CSS (after `@import 'tailwindcss'`). */
 @import './tokens.css';
 @import './base.css';
-
-@source '../components';
+@import './components.css';
