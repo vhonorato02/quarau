@@ -1,4 +1,4 @@
-import { absoluteUrl, docPath, HOME_SLUG, type RoutableCollection } from './urls'
+import { absoluteUrl, docPath, HOME_SLUG, NEWS_SLUG, type RoutableCollection } from './urls'
 
 export type SitemapDoc = { collection: RoutableCollection; slug: string; updatedAt?: string | null }
 export type SitemapEntry = { url: string; lastModified?: Date; priority: number }
@@ -21,10 +21,7 @@ export function buildSitemap({
       Number(a.slug === HOME_SLUG && a.collection === 'pages'),
   )
   for (const d of sorted) {
-    if (
-      !hasNews &&
-      (d.collection === 'news' || (d.collection === 'pages' && d.slug === 'noticias'))
-    )
+    if (!hasNews && (d.collection === 'news' || (d.collection === 'pages' && d.slug === NEWS_SLUG)))
       continue
     const url = absoluteUrl(docPath(d.collection, d.slug), siteUrl)
     if (seen.has(url)) continue

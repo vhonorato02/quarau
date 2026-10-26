@@ -9,6 +9,9 @@ import { buildMetadata } from '@/server/seo'
 
 type Props = { searchParams: Promise<{ q?: string | string[] }> }
 
+/** Search results depend on the query: rendered per request, never at build time. */
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(): Promise<Metadata> {
   const [t, settings] = await Promise.all([getTexts(), getGlobal('settings')])
   return buildMetadata({ title: t.search.title, path: '/busca', noindex: true, settings })

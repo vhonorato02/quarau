@@ -13,6 +13,9 @@ export const COLLECTION_BASE: Record<RoutableCollection, string> = {
 /** The page whose slug is HOME_SLUG is served at "/". */
 export const HOME_SLUG = 'inicio'
 
+/** The news listing page; hidden (404, out of menus and sitemap) while no story is published. */
+export const NEWS_SLUG = 'noticias'
+
 export function docPath(collection: RoutableCollection, slug: string | null | undefined): string {
   if (!slug) return '/'
   if (collection === 'pages') return slug === HOME_SLUG ? '/' : `/${slug}`

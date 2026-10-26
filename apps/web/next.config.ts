@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { withPayload } from '@payloadcms/next/withPayload'
 import type { NextConfig } from 'next'
 
+import { HOME_SLUG } from './src/lib/urls'
 import { legacyRedirects } from './src/lib/redirects'
 import { mediaOrigin } from './src/server/storage'
 
@@ -80,7 +81,11 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     // Every old WordPress address → new page (content/legacy/url-map.json, tested).
-    return legacyRedirects()
+    return [{ source: `/${HOME_SLUG}`, destination: '/', permanent: true }, ...legacyRedirects()]
+  },
+  async rewrites() {
+    // The home is the CMS page "inicio", served by the [slug] route (rendered on demand, then cached).
+    return [{ source: '/', destination: `/${HOME_SLUG}` }]
   },
 }
 

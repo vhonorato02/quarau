@@ -132,8 +132,8 @@ async function resolve(
   return value
 }
 
-async function main() {
-  const payload = await getPayload({ config })
+/** Creates what is missing and returns what was created (empty on a second run). */
+export async function seed(payload: Payload): Promise<string[]> {
   const created: string[] = []
 
   // Partners
@@ -278,11 +278,19 @@ async function main() {
     created.push('textos do site')
   }
 
-  log(created.length ? `criado: ${created.join(', ')}` : 'nada a criar (tudo já existe)')
-  process.exit(0)
+  return created
 }
 
-main().catch((err) => {
-  console.error('[seed] falhou', err)
-  process.exit(1)
-})
+const isCli = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+if (isCli) {
+  getPayload({ config })
+    .then(seed)
+    .then((created) => {
+      log(created.length ? `criado: ${created.join(', ')}` : 'nada a criar (tudo já existe)')
+      process.exit(0)
+    })
+    .catch((err) => {
+      console.error('[seed] falhou', err)
+      process.exit(1)
+    })
+}
