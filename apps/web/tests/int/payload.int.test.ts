@@ -188,6 +188,21 @@ describe('projects', () => {
 })
 
 describe('users', () => {
+  it('rejects passwords shorter than 12 characters', async () => {
+    await expect(
+      payload.create({
+        collection: 'users',
+        data: {
+          email: `curta-${run}@test.local`,
+          password: 'curta123',
+          name: 'Curta',
+          roles: ['author'],
+        },
+        context: ctx(),
+      }),
+    ).rejects.toThrow(/password/)
+  })
+
   it('makes the first account an administrator and keeps later roles', async () => {
     if (firstAccountRoles) expect(firstAccountRoles).toEqual(['admin'])
     const author = await payload.findByID({ collection: 'users', id: authorId })

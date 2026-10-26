@@ -15,7 +15,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "db:local": "node tools/db/local-pg.mjs",
-    "seed": "pnpm --filter @quarau/web seed"
+    "seed": "pnpm --filter @quarau/web seed",
+    "check:texts": "node tools/qa/hardcoded.mjs"
   },
   "devDependencies": {
     "@lhci/cli": "0.15.1",

@@ -1,6 +1,8 @@
-import type { CollectionConfig } from 'payload'
+import { type CollectionConfig, ValidationError } from 'payload'
 
 import { adminsFieldLevel, adminsOrSelf, admins, ROLES } from '../access'
+
+const MIN_PASSWORD = 12
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -24,6 +26,24 @@ export const Users: CollectionConfig = {
     admin: ({ req }) => Boolean(req.user),
   },
   hooks: {
+    beforeValidate: [
+      // Payload hashes passwords with PBKDF2 (salted); length is the rule people can actually follow.
+      ({ data }) => {
+        const pw = (data as { password?: unknown } | undefined)?.password
+        if (typeof pw === 'string' && pw.length > 0 && pw.length < MIN_PASSWORD) {
+          throw new ValidationError({
+            collection: 'users',
+            errors: [
+              {
+                path: 'password',
+                message: `A senha precisa ter pelo menos ${MIN_PASSWORD} caracteres.`,
+              },
+            ],
+          })
+        }
+        return data
+      },
+    ],
     beforeChange: [
       // The very first account (created on the /admin "first register" screen) must be
       // an administrator; the roles field is admin-only, so it would otherwise be an author.

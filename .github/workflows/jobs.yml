@@ -1,0 +1,25 @@
+name: Scheduled publishing
+
+# Vercel Hobby runs cron jobs only once a day, so scheduled publishing is triggered from here
+# every 15 minutes (docs/decisions/0019). On the VPS the server runs the queue itself and this
+# workflow is turned off by removing the JOBS_URL variable.
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  run-queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: vars.JOBS_URL != ''
+    steps:
+      - name: Run the Payload jobs queue
+        env:
+          JOBS_URL: ${{ vars.JOBS_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          curl --fail --silent --show-error --max-time 120 \
+            -H "Authorization: Bearer $CRON_SECRET" "$JOBS_URL" -o /dev/null
