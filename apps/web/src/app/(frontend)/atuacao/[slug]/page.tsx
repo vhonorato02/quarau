@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Breadcrumbs } from '@/components/blocks/Hero'
 import { ProjectRows } from '@/components/blocks/Projects'
 import { RenderBlocks } from '@/components/blocks/RenderBlocks'
+import { RichText } from '@/components/RichText'
 import { Img, isMedia } from '@/components/Img'
 import { JsonLd } from '@/components/JsonLd'
 import { docPath } from '@/lib/urls'
@@ -28,6 +29,12 @@ export default async function ServicePage({ params }: Props) {
   const projects = await projectsForService(service.id)
   const path = docPath('services', service.slug)
   const listTitle = listing?.title ?? t.service.all
+  // Leading text blocks sit next to the deliverables; the rest of the story follows below.
+  const story = service.story ?? []
+  const firstOther = story.findIndex((b) => b.blockType !== 'richText')
+  const split = firstOther === -1 ? story.length : firstOther
+  const intro = story.slice(0, split).filter((b) => b.blockType === 'richText')
+  const rest = story.slice(split)
   const caption = isMedia(service.coverImage) ? service.coverImage.caption : null
 
   return (
@@ -52,22 +59,27 @@ export default async function ServicePage({ params }: Props) {
         ) : null}
       </header>
 
-      {service.deliverables?.length ? (
+      {intro.length || service.deliverables?.length ? (
         <section className="q-section q-wrap q-split" aria-labelledby="entregas">
           <h2 id="entregas" className="q-h2">
             {t.service.deliverables}
           </h2>
-          <ul className="q-area">
-            {service.deliverables.map((d) => (
-              <li key={d.id ?? d.item} className="text-xl">
-                {d.item}
-              </li>
+          <div className="q-split__body">
+            {intro.map((b) => (
+              <RichText key={b.id ?? 'intro'} data={b.body} className="mb-8" />
             ))}
-          </ul>
+            {service.deliverables?.length ? (
+              <ul className="q-checklist">
+                {service.deliverables.map((d) => (
+                  <li key={d.id ?? d.item}>{d.item}</li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
         </section>
       ) : null}
 
-      <RenderBlocks blocks={service.story} ctx={{ path, title: service.title, isHome: false }} />
+      <RenderBlocks blocks={rest} ctx={{ path, title: service.title, isHome: false }} />
 
       {projects.length ? (
         <section className="q-section q-wrap" aria-labelledby="projetos-area">

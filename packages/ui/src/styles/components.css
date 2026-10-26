@@ -31,6 +31,10 @@
   .q-section--tight {
     padding-block: 2rem;
   }
+  /* An inner page opening already gives air: the first section after it starts closer. */
+  .q-intro + .q-section {
+    padding-top: clamp(1rem, 3vw, 2.5rem);
+  }
   .q-sr {
     position: absolute;
     width: 1px;
@@ -248,9 +252,11 @@
     .q-header__logo img {
       width: 10.5rem;
     }
-    .q-nav,
-    .q-header__cta {
+    .q-nav {
       display: block;
+    }
+    .q-header__cta {
+      display: inline-flex;
     }
     .q-menu-btn {
       display: none;
@@ -779,9 +785,34 @@
     .q-split > h2 {
       grid-column: 1 / 6;
     }
-    .q-split > .q-prose {
+    .q-split > .q-prose,
+    .q-split > .q-split__body {
       grid-column: 7 / 13;
     }
+  }
+  .q-checklist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 3px solid var(--color-ink);
+  }
+  .q-checklist li {
+    position: relative;
+    padding: 0.85rem 0 0.85rem 1.5rem;
+    border-bottom: 1px solid var(--color-line);
+    font-size: 1.1875rem;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+  .q-checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.35rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-green);
   }
   .q-narrow > h2 {
     max-width: var(--container-read);
