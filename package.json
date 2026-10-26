@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@lhci/cli": "0.15.1",
+    "embedded-postgres": "17.10.0-beta.17",
     "lighthouse": "^13.5.0",
     "prettier": "3.9.9",
     "prettier-plugin-tailwindcss": "^0.7.0",

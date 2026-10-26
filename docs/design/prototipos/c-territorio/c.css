@@ -1,0 +1,51 @@
+/* Direção C — "Território": o azul da marca como superfície e um mapa de coordenadas real dos projetos. */
+.wrap { width: min(100% - 2.5rem, 84rem); margin-inline: auto; }
+.top { background: var(--blue); color: #fff; }
+.hdr { display: flex; justify-content: space-between; align-items: center; padding-block: 1.25rem; }
+.hdr nav { display: flex; gap: 2rem; font-weight: 500; }
+.hdr a { text-decoration: none; }
+.hero { display: grid; grid-template-columns: 1.25fr 1fr; gap: 3rem; padding-block: 3rem 0; align-items: end; }
+.hero h1 { font-size: clamp(2.75rem, 6.4vw, 6rem); line-height: .95; letter-spacing: -.035em; font-weight: 600; }
+.hero p { margin-top: 1.75rem; font-size: 1.3125rem; max-width: 36ch; }
+.hero .btn { display: inline-flex; margin: 2.25rem 0 4rem; min-height: 3rem; align-items: center; padding: 0 1.5rem; border-radius: 999px; background: #fff; color: var(--blue-800); font-weight: 600; text-decoration: none; }
+.map { align-self: stretch; position: relative; }
+.map svg { width: 100%; height: 100%; max-height: 40rem; display: block; }
+.map text { font: 500 15px Barlow, sans-serif; fill: #fff; }
+.map .small { font-size: 12px; opacity: .8; }
+.grid-l { stroke: rgb(255 255 255 / .25); stroke-width: 1; }
+.pt { fill: var(--green); stroke: #fff; stroke-width: 3; }
+.tiles { padding-block: clamp(4rem, 8vw, 7rem); display: grid; grid-template-columns: repeat(12, 1fr); gap: 2.5rem 1.5rem; }
+.tiles h2 { grid-column: 1 / -1; font-size: clamp(2.25rem, 4vw, 3.5rem); font-weight: 600; letter-spacing: -.025em; }
+.tile { text-decoration: none; }
+.tile:nth-of-type(4n+1) { grid-column: 1 / 8; } .tile:nth-of-type(4n+2) { grid-column: 8 / 13; margin-top: 5rem; }
+.tile:nth-of-type(4n+3) { grid-column: 1 / 6; } .tile:nth-of-type(4n) { grid-column: 6 / 13; margin-top: 3rem; }
+.tile img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.tile .coord { display: block; margin-top: 1rem; color: var(--blue-700); font-weight: 500; font-size: .9375rem; font-variant-numeric: tabular-nums; }
+.tile h3 { margin-top: .25rem; font-size: 1.75rem; line-height: 1.1; font-weight: 600; letter-spacing: -.015em; }
+.tile:hover h3 { color: var(--blue-700); }
+.band { background: var(--mist); padding-block: clamp(4rem, 8vw, 7rem); }
+.band h2 { font-size: clamp(2rem, 3.6vw, 3rem); font-weight: 600; letter-spacing: -.02em; line-height: 1.05; max-width: 22ch; }
+.band ol { margin-top: 2.5rem; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem 1rem; counter-reset: s; }
+.band li { counter-increment: s; border-top: 3px solid var(--blue); padding-top: .75rem; font-weight: 600; font-size: 1.25rem; }
+.band li::before { content: counter(s, decimal-leading-zero); display: block; font-size: .875rem; color: var(--ink-2); font-weight: 500; }
+.ftr { background: var(--blue-950); color: #cfe3ef; padding-block: 3rem; }
+.ftr .wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+/* projeto */
+.p-hero { padding-block: 2rem 4rem; display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: end; }
+.p-hero .coord { font-size: 1rem; font-weight: 500; opacity: .85; font-variant-numeric: tabular-nums; }
+.p-hero h1 { margin-top: 1rem; font-size: clamp(2.5rem, 5.6vw, 5rem); line-height: .97; letter-spacing: -.03em; font-weight: 600; }
+.p-hero dl { margin: 0; font-size: 1rem; }
+.p-hero dl div { padding-block: .6rem; border-top: 1px solid rgb(255 255 255 / .35); }
+.p-hero dt { opacity: .8; } .p-hero dd { margin: 0; font-weight: 500; }
+.p-photo img { width: 100%; aspect-ratio: 16 / 7; object-fit: cover; }
+.p-body { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; padding-block: 4rem; }
+.p-body > div { grid-column: 3 / 9; } .p-body p + p { margin-top: 1em; }
+.p-body aside { grid-column: 9 / 13; font-size: 1.5rem; line-height: 1.3; font-weight: 500; color: var(--blue-800); }
+@media (max-width: 860px) {
+  .hdr nav { display: none; }
+  .hero, .p-hero { grid-template-columns: 1fr; }
+  .map svg { max-height: 22rem; }
+  .tile:nth-of-type(n) { grid-column: 1 / -1; margin-top: 0; }
+  .band ol { grid-template-columns: 1fr 1fr; }
+  .p-body > div, .p-body aside { grid-column: 1 / -1; }
+}

@@ -1,0 +1,61 @@
+/* Direção B — "Ficha": foto plena e índice tipográfico, como um inventário de referências culturais. */
+body { background: #fff; }
+.hdr { position: absolute; inset: 0 0 auto; z-index: 2; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem clamp(1.25rem, 4vw, 3rem); color: #fff; }
+.hdr nav { display: flex; gap: 2rem; font-weight: 500; }
+.hdr a { text-decoration: none; }
+.hdr--solid { position: static; color: var(--ink); border-bottom: 1px solid var(--ink); }
+.hero { position: relative; height: 100svh; min-height: 36rem; color: #fff; }
+.hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgb(14 26 36 / .78), rgb(14 26 36 / .1) 60%); }
+.hero__in { position: absolute; z-index: 1; left: clamp(1.25rem, 4vw, 3rem); right: clamp(1.25rem, 4vw, 3rem); bottom: 4.5rem; }
+.hero h1 { font-size: clamp(2.5rem, 6vw, 5.5rem); line-height: .98; letter-spacing: -.03em; font-weight: 600; max-width: 18ch; }
+.hero__in p { margin-top: 1.25rem; font-size: 1.25rem; max-width: 40ch; }
+.hero__cap { position: absolute; z-index: 1; right: clamp(1.25rem, 4vw, 3rem); bottom: 1.5rem; left: clamp(1.25rem, 4vw, 3rem); font-size: .875rem; opacity: .85; }
+.index { padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 4vw, 3rem); }
+.index__head, .index li a { display: grid; grid-template-columns: 1fr 16rem 8rem; gap: 1.5rem; align-items: baseline; }
+.index__head { padding-bottom: 1rem; border-bottom: 2px solid var(--ink); font-size: .9375rem; color: var(--ink-2); }
+.index__head h2 { font-size: 1rem; font-weight: 600; color: var(--ink); }
+.index li a { padding-block: 1.25rem; border-bottom: 1px solid var(--line); text-decoration: none; }
+.index .t { font-size: clamp(1.5rem, 3.4vw, 3rem); font-weight: 600; letter-spacing: -.025em; line-height: 1.05; }
+.index .p, .index .y { font-size: 1rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.index li a:hover .t { color: var(--blue-700); }
+.split { display: grid; grid-template-columns: 1.3fr 1fr; background: var(--blue-950); color: #fff; }
+.split img { width: 100%; height: 100%; object-fit: cover; min-height: 28rem; }
+.split div { padding: clamp(2.5rem, 6vw, 5rem); align-self: center; }
+.split h2 { font-size: clamp(1.75rem, 3vw, 2.75rem); line-height: 1.1; font-weight: 600; letter-spacing: -.02em; }
+.split p { margin-top: 1.25rem; color: #cfe3ef; }
+.split a { display: inline-block; margin-top: 2rem; font-weight: 600; color: #fff; }
+.what { padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 4vw, 3rem); display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
+.what h2 { font-size: 2.5rem; font-weight: 600; letter-spacing: -.02em; line-height: 1; }
+.what dl { margin: 0; }
+.what dl div { display: grid; grid-template-columns: 14rem 1fr; gap: 1.5rem; padding-block: 1.25rem; border-top: 1px solid var(--ink); }
+.what dt { font-weight: 600; font-size: 1.25rem; }
+.what dd { margin: 0; color: var(--ink-2); }
+.contact { padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 4vw, 3rem); background: var(--blue); color: #fff; }
+.contact h2 { font-size: clamp(3rem, 8vw, 7rem); font-weight: 600; letter-spacing: -.04em; line-height: .9; }
+.contact p { margin-top: 1.25rem; font-size: 1.5rem; font-weight: 500; }
+.ftr { display: flex; justify-content: space-between; padding: 1.5rem clamp(1.25rem, 4vw, 3rem); font-size: .9375rem; }
+/* ficha do projeto */
+.f-title { padding: 3rem clamp(1.25rem, 4vw, 3rem) 2rem; }
+.f-title p { color: var(--ink-2); font-size: 1rem; }
+.f-title h1 { margin-top: 1rem; font-size: clamp(2.5rem, 6vw, 5.5rem); font-weight: 600; letter-spacing: -.035em; line-height: .95; max-width: 16ch; }
+.ficha { margin: 0 clamp(1.25rem, 4vw, 3rem); display: grid; grid-template-columns: repeat(3, 1fr); border-top: 2px solid var(--ink); }
+.ficha div { padding: 1rem 1rem 1.25rem 0; border-bottom: 1px solid var(--line); }
+.ficha dt { font-size: .875rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.ficha dd { margin: .25rem 0 0; font-size: 1.125rem; font-weight: 500; line-height: 1.35; }
+.ficha .empty dd { color: var(--ink-2); font-weight: 400; font-style: italic; }
+.f-photo { margin: 3rem 0; }
+.f-photo img { width: 100%; max-height: 80svh; object-fit: cover; }
+.f-text { padding: 0 clamp(1.25rem, 4vw, 3rem); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+.f-text p + p { margin-top: 1em; }
+.f-text blockquote { font-size: 1.75rem; line-height: 1.25; font-weight: 500; border-left: 4px solid var(--green); padding-left: 1.5rem; }
+.f-gal { padding: 4rem clamp(1.25rem, 4vw, 3rem); display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; }
+.f-gal img { aspect-ratio: 1; object-fit: cover; width: 100%; }
+@media (max-width: 860px) {
+  .hdr nav { display: none; }
+  .index__head span { display: none; }
+  .index__head, .index li a { grid-template-columns: 1fr; gap: .25rem; }
+  .split, .what, .what dl div, .f-text { grid-template-columns: 1fr; }
+  .ficha { grid-template-columns: 1fr 1fr; }
+  .f-gal { grid-template-columns: 1fr 1fr; }
+}
