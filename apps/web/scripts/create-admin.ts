@@ -1,9 +1,13 @@
 /**
  * Creates (or resets the password of) the first administrator.
  *   ADMIN_EMAIL=ana@quarau.com.br ADMIN_NAME="Ana" pnpm seed:admin
- * If ADMIN_PASSWORD is not set, a strong random password is generated and printed once.
+ * If ADMIN_PASSWORD is not set, a strong random password is generated and written to
+ * ACESSO-ADMIN.txt at the repository root (git-ignored); it is never printed.
  */
 import { randomBytes } from 'node:crypto'
+import { writeFile } from 'node:fs/promises'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import { getPayload } from 'payload'
 
@@ -37,10 +41,21 @@ async function main() {
     })
     console.info(`[admin] administrador criado: ${email}`)
   }
-  if (!process.env.ADMIN_PASSWORD)
-    console.info(
-      `[admin] senha gerada (guarde em local seguro, não será exibida de novo): ${password}`,
+  if (!process.env.ADMIN_PASSWORD) {
+    const file = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      '../../../ACESSO-ADMIN.txt',
     )
+    await writeFile(
+      file,
+      `Painel: /admin
+E-mail: ${email}
+Senha: ${password}
+`,
+      { mode: 0o600 },
+    )
+    console.info(`[admin] senha gerada e gravada em ${file} (fora do git)`)
+  }
   process.exit(0)
 }
 

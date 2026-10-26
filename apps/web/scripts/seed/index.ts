@@ -6,6 +6,9 @@
  * Idempotent and safe to run on a live site: every document is looked up by its slug (media by
  * the old URL) and is only created when missing. Nothing that exists is ever updated, so edits
  * made in the CMS are never overwritten. Globals are filled only while still empty.
+ *
+ * SEED_OFFLINE=true (CI) never touches the old WordPress: images not in .migrate-cache/ are
+ * replaced by generated placeholders and video blocks are skipped.
  */
 import { existsSync } from 'node:fs'
 import { mkdir, writeFile } from 'node:fs/promises'
@@ -13,6 +16,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { getPayload, type Payload } from 'payload'
+import sharp from 'sharp'
 
 import config from '../../src/payload.config'
 import { SITE_TEXTS } from '../../src/cms/globals/site-texts'
@@ -21,6 +25,7 @@ import { globals, type Img, pages, partners, projects, services } from './conten
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 const CACHE = path.resolve(dirname, '../../.migrate-cache')
 const WP = 'https://quarau.com.br/wp-content/uploads/'
+const OFFLINE = process.env.SEED_OFFLINE === 'true'
 
 /** Payload mutates the context object during uploads: a new one per call. */
 const ctx = () => ({ disableRevalidate: true, seeding: true })
@@ -31,12 +36,24 @@ async function localFile(rel: string): Promise<string> {
   const isVideo = rel.startsWith('video/')
   const file = path.join(CACHE, isVideo ? rel : path.join('uploads', rel))
   if (existsSync(file)) return file
+  if (OFFLINE) return placeholder(rel)
   const url = isVideo ? `${WP}2023/12/${path.basename(rel)}` : `${WP}${rel}`
   log('baixando', url)
   const res = await fetch(url)
   if (!res.ok) throw new Error(`não foi possível baixar ${url} (${res.status})`)
   await mkdir(path.dirname(file), { recursive: true })
   await writeFile(file, Buffer.from(await res.arrayBuffer()))
+  return file
+}
+
+/** A plain 1600×1000 image standing in for a photo when seeding offline. */
+async function placeholder(rel: string): Promise<string> {
+  const file = path.join(CACHE, 'offline', `${path.parse(rel).name}.jpg`)
+  if (existsSync(file)) return file
+  await mkdir(path.dirname(file), { recursive: true })
+  await sharp({ create: { width: 1600, height: 1000, channels: 3, background: '#7a8f6b' } })
+    .jpeg()
+    .toFile(file)
   return file
 }
 
@@ -94,7 +111,10 @@ async function resolve(
   if (isImg(value)) return media(payload, value)
   if (Array.isArray(value)) {
     const out = []
-    for (const v of value) out.push(await resolve(payload, v, pageIds))
+    for (const v of value) {
+      if (OFFLINE && (v as { blockType?: string } | null)?.blockType === 'video') continue
+      out.push(await resolve(payload, v, pageIds))
+    }
     return out
   }
   if (value && typeof value === 'object') {

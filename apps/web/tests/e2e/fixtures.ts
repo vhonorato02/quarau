@@ -6,6 +6,7 @@ export const ROUTES = [
   '/sobre',
   '/contato',
   '/privacidade',
+  '/termos',
   '/projetos',
   '/projetos/ecomuseu-dos-campos-de-sao-jose',
   '/projetos/inventario-cultural-e-dossie-de-registro',
@@ -18,8 +19,6 @@ export const ROUTES = [
   '/atuacao/patrimonio-cultural-e-pesquisa',
   '/atuacao/educacao-patrimonial-e-ambiental',
   '/atuacao/gestao-e-difusao',
-  '/noticias',
-  '/trabalhe-conosco',
   '/busca',
 ]
 
@@ -28,7 +27,10 @@ export const test = base.extend({
   page: async ({ page }, use) => {
     await page.addInitScript(() => {
       try {
-        localStorage.setItem('quarau-consent-v1', 'denied')
+        localStorage.setItem(
+          'quarau-consent',
+          JSON.stringify({ v: 1, analytics: false, at: new Date().toISOString() }),
+        )
       } catch {
         /* ignore */
       }

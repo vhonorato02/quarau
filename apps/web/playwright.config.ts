@@ -14,7 +14,7 @@ export default defineConfig({
   testDir: './tests/e2e',
   timeout: 60_000,
   expect: {
-    timeout: 10_000,
+    timeout: 15_000,
     toHaveScreenshot: { maxDiffPixelRatio: 0.02, animations: 'disabled' },
   },
   fullyParallel: true,

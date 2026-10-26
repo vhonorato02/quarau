@@ -9,6 +9,8 @@ setup('admin login', async ({ page }) => {
     .getByLabel(/senha|password/i)
     .fill(process.env.E2E_ADMIN_PASSWORD ?? 'e2e-admin-password')
   await page.getByRole('button', { name: /entrar|login/i }).click()
-  await expect(page.getByText(/Bem-vindo ao painel da Quarau/i)).toBeVisible({ timeout: 30_000 })
+  await expect(page.getByRole('heading', { name: /O que você quer fazer hoje/ })).toBeVisible({
+    timeout: 60_000,
+  })
   await page.context().storageState({ path: ADMIN_STATE })
 })

@@ -266,7 +266,8 @@ export async function getMediaByLegacyPath(
     depth: 0,
     limit: 1,
     pagination: false,
-    select: { url: true } as never,
+    // url is computed from filename: both are needed.
+    select: { url: true, filename: true } as never,
   })
   return (res.docs[0] as { url?: string | null } | undefined) ?? null
 }

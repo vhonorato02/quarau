@@ -3,11 +3,11 @@ import { expect, test } from './fixtures'
 test('main menu reaches the portfolio and a case study', async ({ page, isMobile }) => {
   await page.goto('/')
   if (isMobile) {
-    await page.getByRole('button', { name: 'Abrir menu' }).click()
+    await page.getByRole('button', { name: 'Menu', exact: true }).click()
     await page.getByRole('dialog').getByRole('link', { name: 'Projetos' }).click()
   } else {
     await page
-      .getByRole('navigation', { name: 'Navegação principal' })
+      .getByRole('navigation', { name: 'Menu principal' })
       .getByRole('link', { name: 'Projetos' })
       .click()
   }
@@ -20,27 +20,31 @@ test('main menu reaches the portfolio and a case study', async ({ page, isMobile
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Quipá')
 })
 
-test('portfolio filters by practice area', async ({ page }) => {
+test('practice area shows its related projects', async ({ page }) => {
   await page.goto('/projetos')
-  const all = await page.locator('article').count()
-  await page.getByRole('button', { name: 'Patrimônio cultural e pesquisa' }).click()
-  await expect(
-    page.getByRole('button', { name: 'Patrimônio cultural e pesquisa' }),
-  ).toHaveAttribute('aria-pressed', 'true')
-  const filtered = await page.locator('article').count()
+  const all = await page.locator('main a[href^="/projetos/"]').count()
+  await page.goto('/atuacao')
+  await page.getByRole('link', { name: /Patrimônio cultural e pesquisa/ }).click()
+  await expect(page).toHaveURL(/\/atuacao\/patrimonio-cultural-e-pesquisa$/)
+  const related = page.getByRole('region', { name: 'Projetos nesta área' })
+  await expect(related).toBeVisible()
+  await expect(related.getByRole('link', { name: /Inventário Cultural/ })).toBeVisible()
+  const filtered = await related.getByRole('link').count()
   expect(filtered).toBeGreaterThan(0)
   expect(filtered).toBeLessThan(all)
 })
 
 test('gallery lightbox opens and navigates with keyboard', async ({ page }) => {
   await page.goto('/projetos/programa-de-educacao-patrimonial')
-  const firstTile = page.getByRole('button', { name: /Ampliar imagem/ }).first()
+  const firstTile = page.locator('main button[aria-haspopup="dialog"]').first()
   await firstTile.click()
-  const dialog = page.getByRole('dialog', { name: /Imagem \d+ de/ })
+  const dialog = page.getByRole('dialog', { name: 'Fotos em tela cheia' })
   await expect(dialog).toBeVisible()
-  await expect(dialog).toContainText('1 /')
+  await expect(dialog.locator('[aria-live="polite"]')).toHaveText(/^1 de \d+$/)
+  const firstImage = await dialog.getByRole('img').getAttribute('src')
   await page.keyboard.press('ArrowRight')
-  await expect(dialog).toContainText('2 /')
+  await expect(dialog.locator('[aria-live="polite"]')).toHaveText(/^2 de \d+$/)
+  await expect(dialog.getByRole('img')).not.toHaveAttribute('src', firstImage!)
   await page.keyboard.press('Escape')
   await expect(dialog).toBeHidden()
   // Focus returns to the image that opened the viewer.

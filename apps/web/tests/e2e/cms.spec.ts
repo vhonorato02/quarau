@@ -30,6 +30,7 @@ test('editor updates and publishes a page; the site reflects it', async ({ page,
 
 test('admin is in Portuguese and branded', async ({ page }) => {
   await page.goto('/admin')
-  await expect(page.getByText('Bem-vindo ao painel da Quarau')).toBeVisible()
-  await expect(page.getByRole('link', { name: /Projetos \(cases\)/ }).first()).toBeVisible()
+  await expect(page.getByRole('heading', { name: /O que você quer fazer hoje/ })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Projetos', exact: true })).toBeVisible()
+  await expect(page.getByRole('banner').getByRole('img', { name: 'Quarau' })).toBeVisible()
 })

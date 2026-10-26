@@ -3,6 +3,7 @@ name: CI/CD
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
 
@@ -14,12 +15,14 @@ permissions:
   contents: read
 
 env:
-  IMAGE: ghcr.io/${{ github.repository_owner }}/quarau-web
-  NODE_VERSION: '22'
+  IMAGE: ghcr.io/vhonorato02/quarau
+  NODE_VERSION: '24'
+  PAYLOAD_DB_PUSH: 'false'
+  PAYLOAD_JOBS_AUTORUN: 'false'
 
 jobs:
   quality:
-    name: Lint, typecheck, unit, Storybook
+    name: Format, lint, types, unit tests and dependency audit
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -32,47 +35,79 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
-      - run: pnpm --filter @quarau/ui build-storybook
-      - uses: actions/upload-artifact@v4
-        with: { name: storybook, path: packages/ui/storybook-static, retention-days: 7 }
+      - run: pnpm audit --prod --audit-level=high
 
   integration:
-    name: Payload integration (Postgres + Meilisearch)
+    name: Payload integration (Postgres)
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: quarau_int
+          # Disposable database, reachable only inside this GitHub runner.
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ['127.0.0.1:5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d quarau_int"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres@localhost:5432/quarau_int
+      SITE_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with: { node-version: '${{ env.NODE_VERSION }}', cache: pnpm }
-      - run: docker compose -f infra/compose/docker-compose.dev.yml up -d --wait postgres meilisearch
       - run: pnpm install --frozen-lockfile
+      - name: Generate ephemeral application secret
+        run: |
+          secret=$(openssl rand -hex 32)
+          echo "::add-mask::$secret"
+          echo "PAYLOAD_SECRET=$secret" >> "$GITHUB_ENV"
+      - run: pnpm --filter @quarau/web payload migrate
       - run: pnpm --filter @quarau/web test:int
-        env:
-          DATABASE_URL: postgres://quarau:quarau@localhost:5432/quarau
-          PAYLOAD_SECRET: ci-secret-ci-secret-ci-secret
-          PAYLOAD_JOBS_AUTORUN: 'false'
-          MEILI_HOST: http://localhost:7700
-          MEILI_MASTER_KEY: dev-meili-master-key
-          MEILI_INDEX: quarau_ci
 
   e2e:
-    name: Image + E2E, a11y, Lighthouse, links, load, security
+    name: Production container, E2E, accessibility, Lighthouse and security
+    needs: [quality, integration]
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     permissions:
       contents: read
       packages: write
       security-events: write
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: quarau_e2e
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ['127.0.0.1:5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d quarau_e2e"
+          --health-interval 5s --health-timeout 5s --health-retries 10
     env:
-      E2E_DB: quarau_e2e
+      E2E_BASE_URL: http://localhost:3000
+      E2E_ADMIN_EMAIL: e2e@quarau.local
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with: { node-version: '${{ env.NODE_VERSION }}', cache: pnpm }
-
       - uses: docker/setup-buildx-action@v3
+
+      - name: Build content tools image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: tools
+          load: true
+          tags: quarau-tools:${{ github.sha }}
+          cache-from: type=gha,scope=quarau
+          build-args: APP_VERSION=${{ github.sha }}
+
       - name: Build production image
         uses: docker/build-push-action@v6
         with:
@@ -80,82 +115,103 @@ jobs:
           target: runner
           load: true
           tags: ${{ env.IMAGE }}:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            APP_VERSION=${{ github.sha }}
-            NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ vars.TURNSTILE_SITE_KEY }}
-            NEXT_PUBLIC_UMAMI_ORIGIN=${{ vars.UMAMI_ORIGIN }}
+          cache-from: type=gha,scope=quarau
+          cache-to: type=gha,scope=quarau,mode=max
+          build-args: APP_VERSION=${{ github.sha }}
 
-      - name: Start services
+      - name: Prepare isolated application environment
         run: |
-          docker compose -f infra/compose/docker-compose.dev.yml up -d --wait
-          docker compose -f infra/compose/docker-compose.dev.yml exec -T postgres createdb -U quarau "$E2E_DB"
-
-      - name: Start web container
-        run: |
-          cat > e2e.env <<EOF
+          secret=$(openssl rand -hex 32)
+          password=$(openssl rand -hex 24)
+          echo "::add-mask::$secret"
+          echo "::add-mask::$password"
+          echo "E2E_ADMIN_PASSWORD=$password" >> "$GITHUB_ENV"
+          umask 077
+          cat > "$RUNNER_TEMP/quarau-e2e.env" <<EOF
+          NODE_ENV=production
           SITE_URL=http://localhost:3000
           SITE_NOINDEX=false
-          DATABASE_URL=postgres://quarau:quarau@localhost:5432/${E2E_DB}
-          PAYLOAD_SECRET=e2e-secret-e2e-secret-e2e-secret
-          PREVIEW_SECRET=e2e-preview
-          REVALIDATE_SECRET=e2e-revalidate
-          S3_ENDPOINT=http://localhost:9000
-          S3_BUCKET=quarau-e2e
-          S3_ACCESS_KEY_ID=quarau
-          S3_SECRET_ACCESS_KEY=quarau-dev-secret
-          MEILI_HOST=http://localhost:7700
-          MEILI_MASTER_KEY=dev-meili-master-key
-          MEILI_INDEX=quarau_e2e
-          REDIS_URL=redis://localhost:6379
-          SMTP_HOST=localhost
-          SMTP_PORT=1025
+          DATABASE_URL=postgres://postgres@localhost:5432/quarau_e2e
+          PAYLOAD_SECRET=$secret
+          PAYLOAD_DB_PUSH=false
+          PAYLOAD_JOBS_AUTORUN=false
+          MEDIA_DIR=/media
+          SEED_OFFLINE=true
+          ADMIN_EMAIL=$E2E_ADMIN_EMAIL
+          ADMIN_PASSWORD=$password
           EOF
-          docker run -d --name web --network host --env-file e2e.env "$IMAGE:${{ github.sha }}"
-          for i in $(seq 1 60); do
-            curl -fsS http://localhost:3000/next/health && break
-            sleep 2
-          done
-          curl -fsS http://localhost:3000/next/health
+          docker volume create quarau-e2e-media
+
+      - name: Apply migrations and seed offline content and administrator
+        run: |
+          docker run --rm --network host --env-file "$RUNNER_TEMP/quarau-e2e.env" \
+            -v quarau-e2e-media:/media "quarau-tools:${{ github.sha }}" pnpm seed
+          docker run --rm --network host --env-file "$RUNNER_TEMP/quarau-e2e.env" \
+            -v quarau-e2e-media:/media "quarau-tools:${{ github.sha }}" pnpm seed:admin
+          docker run --rm -v quarau-e2e-media:/media "quarau-tools:${{ github.sha }}" \
+            chown -R 1001:1001 /media
+
+      - name: Start non-root production container with read-only filesystem
+        run: |
+          docker run -d --name web --network host --read-only \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --tmpfs /tmp:rw,nosuid,nodev,size=128m \
+            --tmpfs /app/apps/web/.next/cache:rw,nosuid,nodev,uid=1001,gid=1001,size=128m \
+            --env-file "$RUNNER_TEMP/quarau-e2e.env" \
+            -v quarau-e2e-media:/media "$IMAGE:${{ github.sha }}"
+          curl --fail --silent --show-error --retry 60 --retry-delay 2 \
+            --retry-connrefused --retry-all-errors --max-time 10 \
+            http://localhost:3000/api/health
 
       - run: pnpm install --frozen-lockfile
-      - name: Seed content (offline migration) and admin
+      - name: Playwright E2E (desktop, mobile, CMS and axe)
         working-directory: apps/web
-        env:
-          NODE_ENV: production
-          PAYLOAD_JOBS_AUTORUN: 'false'
-          MIGRATE_OFFLINE: '1'
-          ADMIN_EMAIL: e2e@quarau.local
-          ADMIN_PASSWORD: e2e-admin-password
-        run: |
-          set -a; source ../../e2e.env; set +a
-          pnpm migrate:wp
-          pnpm seed:admin
-
-      - name: Playwright E2E (routes, redirects, a11y, form, search, CMS)
-        working-directory: apps/web
-        env:
-          E2E_BASE_URL: http://localhost:3000
         run: |
           pnpm exec playwright install --with-deps chromium
           pnpm test:e2e
 
-      - name: Broken links (internal)
-        run: npx --yes linkinator@6 http://localhost:3000 --recurse --skip "^(?!http://localhost:3000)" --skip "/admin" --skip "/api/" --timeout 20000
+      - name: Broken internal links
+        run: pnpm dlx linkinator@6 http://localhost:3000 --recurse --skip "^(?!http://localhost:3000)|/admin|/api/" --timeout 20000
 
-      - name: Lighthouse CI
+      - name: Lighthouse mobile (95 in all four categories)
         run: |
-          export CHROME_PATH=$(find ~/.cache/ms-playwright -type f -name chrome -path '*chrome-linux*' | head -1)
+          export CHROME_PATH=$(cd apps/web && node --input-type=module -e "import { chromium } from '@playwright/test'; console.log(chromium.executablePath())")
           pnpm exec lhci autorun
 
       - name: Load test (k6)
-        run: docker run --rm --network host -v "$PWD/tests/k6:/scripts" mirror.gcr.io/grafana/k6:latest run -e BASE_URL=http://localhost:3000 /scripts/smoke.js
+        run: docker run --rm --network host -v "$PWD/tests/k6:/scripts:ro" grafana/k6:latest run -e BASE_URL=http://localhost:3000 /scripts/smoke.js
 
-      - name: Container logs
+      - name: Trivy (blocking critical vulnerabilities)
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/out" aquasec/trivy:latest \
+            image --quiet --severity CRITICAL --ignore-unfixed --format sarif --output /out/trivy.sarif "$IMAGE:${{ github.sha }}"
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest \
+            image --quiet --severity CRITICAL --ignore-unfixed --exit-code 1 "$IMAGE:${{ github.sha }}"
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('trivy.sarif') != '' && github.event_name != 'pull_request'
+        with: { sarif_file: trivy.sarif, category: trivy }
+
+      - name: Publish verified image to GHCR
+        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_ACTOR: ${{ github.actor }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
+        run: |
+          printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$GH_ACTOR" --password-stdin
+          docker push "$IMAGE:${{ github.sha }}"
+          if [ "$REF_TYPE" = tag ]; then
+            docker tag "$IMAGE:${{ github.sha }}" "$IMAGE:$RELEASE_TAG"
+            docker push "$IMAGE:$RELEASE_TAG"
+          else
+            docker tag "$IMAGE:${{ github.sha }}" "$IMAGE:latest"
+            docker push "$IMAGE:latest"
+          fi
+
+      - name: Collect container diagnostics
         if: always()
         run: docker logs web --tail 300 > web.log 2>&1 || true
-
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -165,23 +221,11 @@ jobs:
             apps/web/test-results
             .lighthouseci
             web.log
+            trivy.sarif
           retention-days: 7
-
-      - name: Trivy (image vulnerabilities)
+      - name: Remove disposable environment
+        if: always()
         run: |
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/out" mirror.gcr.io/aquasec/trivy:latest \
-            image --quiet --severity CRITICAL --ignore-unfixed --format sarif --output /out/trivy.sarif "$IMAGE:${{ github.sha }}"
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock mirror.gcr.io/aquasec/trivy:latest \
-            image --quiet --severity CRITICAL --ignore-unfixed --exit-code 1 "$IMAGE:${{ github.sha }}"
-      - uses: github/codeql-action/upload-sarif@v3
-        if: always() && hashFiles('trivy.sarif') != ''
-        with: { sarif_file: trivy.sarif, category: trivy }
-
-      - name: Push image to GHCR
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-          docker tag "$IMAGE:${{ github.sha }}" "$IMAGE:latest"
-          docker push "$IMAGE:${{ github.sha }}"
-          docker push "$IMAGE:latest"
-          # A VPS confere o :latest a cada 2 min e publica sozinha (docs/decisions/0013).
+          docker rm -f web || true
+          docker volume rm quarau-e2e-media || true
+          rm -f "$RUNNER_TEMP/quarau-e2e.env"

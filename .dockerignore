@@ -9,7 +9,11 @@
 apps/web/.migrate-cache
 apps/web/media
 .git
-.env
-.env.*
-!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+**/.auth
+**/ACESSO-ADMIN.txt
+**/*.tmp.*
+.cache
 .preview

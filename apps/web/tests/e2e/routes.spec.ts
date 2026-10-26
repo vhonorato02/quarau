@@ -17,7 +17,8 @@ for (const route of ROUTES) {
 test('unknown page returns branded 404', async ({ page }) => {
   const res = await page.goto('/pagina-que-nao-existe')
   expect(res?.status()).toBe(404)
-  await expect(page.getByRole('heading', { name: /Página não encontrada/ })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Esta página não existe mais' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Ir para o início' })).toHaveAttribute('href', '/')
 })
 
 test('SEO essentials on a project page', async ({ page }) => {
@@ -28,8 +29,15 @@ test('SEO essentials on a project page', async ({ page }) => {
   )
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /.+/)
   const ld = await page.locator('script[type="application/ld+json"]').allTextContents()
-  expect(ld.join(' ')).toContain('BreadcrumbList')
-  expect(ld.join(' ')).toContain('Organization')
+  const entities = ld.flatMap((value) => JSON.parse(value))
+  expect(entities).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({ '@type': 'BreadcrumbList' }),
+      expect.objectContaining({ '@type': 'CreativeWork' }),
+      expect.objectContaining({ '@type': 'WebSite' }),
+      expect.objectContaining({ '@type': 'ProfessionalService', name: 'Quarau' }),
+    ]),
+  )
 })
 
 test('sitemap and robots', async ({ request }) => {
