@@ -1,11 +1,8 @@
 import Link from 'next/link'
-import { connection } from 'next/server'
 
 import { getTexts } from '@/server/queries'
 
-/** Rendered per request (its texts come from the CMS), so the build does not need the database. */
 export default async function NotFound() {
-  await connection()
   const t = await getTexts()
   return (
     <section className="q-wrap q-lost">

@@ -189,11 +189,27 @@ export async function listPartners(onlyStrip = true): Promise<Partner[]> {
   })
 }
 
+/**
+ * The Docker/Vercel build runs without a database (pages render on first visit). The only thing the
+ * build prerenders is the generic 404 shell, so there — and only there — globals fall back to empty.
+ * At runtime a database error still surfaces (error page, health check), never silently.
+ */
+const isBuild = () => process.env.NEXT_PHASE === 'phase-production-build'
+
 export async function getGlobal<S extends GlobalSlug>(slug: S): Promise<Config['globals'][S]> {
-  return cached(['global', slug], [tags.global(slug), tags.collection('media')], async (draft) => {
-    const payload = await getPayload()
-    return payload.findGlobal({ slug, depth: 1, draft }) as Promise<Config['globals'][S]>
-  })
+  try {
+    return await cached(
+      ['global', slug],
+      [tags.global(slug), tags.collection('media')],
+      async (draft) => {
+        const payload = await getPayload()
+        return payload.findGlobal({ slug, depth: 1, draft }) as Promise<Config['globals'][S]>
+      },
+    )
+  } catch (err) {
+    if (isBuild()) return {} as Config['globals'][S]
+    throw err
+  }
 }
 
 export async function getTexts(): Promise<SiteTexts> {
