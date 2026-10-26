@@ -24,7 +24,7 @@ export function Breadcrumbs({
           return (
             <li key={`${c.label}-${i}`} className="flex items-center gap-2">
               {last || !c.href ? (
-                <span aria-current={last ? 'page' : undefined} className="opacity-80">
+                <span aria-current={last ? 'page' : undefined} className="font-medium">
                   {c.label}
                 </span>
               ) : (

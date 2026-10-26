@@ -1,5 +1,10 @@
 import { revalidatePath, revalidateTag } from 'next/cache'
-import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, GlobalAfterChangeHook, PayloadRequest } from 'payload'
+import type {
+  CollectionAfterChangeHook,
+  CollectionAfterDeleteHook,
+  GlobalAfterChangeHook,
+  PayloadRequest,
+} from 'payload'
 
 import { tags } from '../lib/cache-tags'
 import { docPath, isRoutable } from '../lib/urls'
@@ -26,15 +31,20 @@ function revalidateForDoc(req: PayloadRequest, collection: string, slug?: string
   })
 }
 
-type WithSlug = { slug?: string | null; _status?: string | null }
+type WithSlug = { id: number | string; slug?: string | null; _status?: string | null }
 
 export const revalidateCollection =
   (collection: string): CollectionAfterChangeHook<WithSlug> =>
   ({ doc, previousDoc, req }) => {
     // Re-render when published, or when a previously published doc changes state/slug.
-    if (doc._status === 'published' || previousDoc?._status === 'published' || doc._status === undefined) {
+    if (
+      doc._status === 'published' ||
+      previousDoc?._status === 'published' ||
+      doc._status === undefined
+    ) {
       revalidateForDoc(req, collection, doc.slug)
-      if (previousDoc?.slug && previousDoc.slug !== doc.slug) revalidateForDoc(req, collection, previousDoc.slug)
+      if (previousDoc?.slug && previousDoc.slug !== doc.slug)
+        revalidateForDoc(req, collection, previousDoc.slug)
     }
     return doc
   }

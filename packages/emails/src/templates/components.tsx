@@ -1,4 +1,14 @@
-import { Body, Container, Head, Hr, Html, Img, Preview, Section, Text } from '@react-email/components'
+import {
+  Body,
+  Container,
+  Head,
+  Hr,
+  Html,
+  Img,
+  Preview,
+  Section,
+  Text,
+} from '@react-email/components'
 import * as React from 'react'
 
 export const brand = {
@@ -27,7 +37,9 @@ export function Layout({
       <Head />
       <Preview>{preview}</Preview>
       <Body style={{ backgroundColor: brand.bg, fontFamily: font, margin: 0, padding: '32px 0' }}>
-        <Container style={{ backgroundColor: '#fff', maxWidth: 600, borderRadius: 12, overflow: 'hidden' }}>
+        <Container
+          style={{ backgroundColor: '#fff', maxWidth: 600, borderRadius: 12, overflow: 'hidden' }}
+        >
           <Section style={{ padding: '28px 40px', borderBottom: `4px solid ${brand.blue}` }}>
             <Img
               src={`${siteUrl}/brand/quarau-logotipo.png`}
@@ -49,6 +61,18 @@ export function Layout({
   )
 }
 
-export const h1 = { color: brand.ink, fontSize: 24, lineHeight: '30px', fontWeight: 600, margin: '0 0 16px' }
+export const h1 = {
+  color: brand.ink,
+  fontSize: 24,
+  lineHeight: '30px',
+  fontWeight: 600,
+  margin: '0 0 16px',
+}
 export const p = { color: brand.ink, fontSize: 16, lineHeight: '26px', margin: '0 0 16px' }
-export const label = { color: brand.muted, fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase' as const, margin: '0 0 4px' }
+export const label = {
+  color: brand.muted,
+  fontSize: 12,
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase' as const,
+  margin: '0 0 4px',
+}

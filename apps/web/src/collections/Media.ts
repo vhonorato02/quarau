@@ -10,10 +10,14 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 /** Tiny blurred WebP used as `placeholder="blur"` while the real image loads. */
 const generateBlur: CollectionBeforeChangeHook = async ({ data, req }) => {
   const file = req.file
-  if (!file?.data || !file.mimetype?.startsWith('image/') || file.mimetype === 'image/svg+xml') return data
+  if (!file?.data || !file.mimetype?.startsWith('image/') || file.mimetype === 'image/svg+xml')
+    return data
   try {
     const sharp = (await import('sharp')).default
-    const buf = await sharp(file.data).resize(16, 16, { fit: 'inside' }).webp({ quality: 40 }).toBuffer()
+    const buf = await sharp(file.data)
+      .resize(16, 16, { fit: 'inside' })
+      .webp({ quality: 40 })
+      .toBuffer()
     data.blurDataURL = `data:image/webp;base64,${buf.toString('base64')}`
   } catch (err) {
     req.payload.logger.warn({ err }, 'could not generate blur placeholder')
@@ -27,7 +31,8 @@ export const Media: CollectionConfig = {
   admin: {
     group: 'Biblioteca',
     defaultColumns: ['filename', 'alt', 'mimeType', 'updatedAt'],
-    description: 'Imagens e vídeos. Todo arquivo precisa de texto alternativo (descrição para leitores de tela).',
+    description:
+      'Imagens e vídeos. Todo arquivo precisa de texto alternativo (descrição para leitores de tela).',
   },
   access: {
     read: anyone,
@@ -38,17 +43,49 @@ export const Media: CollectionConfig = {
   hooks: { beforeChange: [generateBlur] },
   upload: {
     staticDir: path.resolve(dirname, '../../media'),
-    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif', 'image/svg+xml', 'video/mp4', 'video/webm'],
+    mimeTypes: [
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'image/avif',
+      'image/gif',
+      'image/svg+xml',
+      'video/mp4',
+      'video/webm',
+    ],
     focalPoint: true,
     crop: true,
     adminThumbnail: 'thumbnail',
     formatOptions: { format: 'webp', options: { quality: 82 } },
     resizeOptions: { width: 3200, height: 3200, fit: 'inside', withoutEnlargement: true },
     imageSizes: [
-      { name: 'thumbnail', width: 480, height: 360, position: 'centre', formatOptions: { format: 'webp', options: { quality: 75 } } },
-      { name: 'card', width: 1200, height: 900, position: 'centre', formatOptions: { format: 'webp', options: { quality: 78 } } },
-      { name: 'wide', width: 2400, withoutEnlargement: true, formatOptions: { format: 'webp', options: { quality: 80 } } },
-      { name: 'og', width: 1200, height: 630, position: 'centre', formatOptions: { format: 'jpeg', options: { quality: 82 } } },
+      {
+        name: 'thumbnail',
+        width: 480,
+        height: 360,
+        position: 'centre',
+        formatOptions: { format: 'webp', options: { quality: 75 } },
+      },
+      {
+        name: 'card',
+        width: 1200,
+        height: 900,
+        position: 'centre',
+        formatOptions: { format: 'webp', options: { quality: 78 } },
+      },
+      {
+        name: 'wide',
+        width: 2400,
+        withoutEnlargement: true,
+        formatOptions: { format: 'webp', options: { quality: 80 } },
+      },
+      {
+        name: 'og',
+        width: 1200,
+        height: 630,
+        position: 'centre',
+        formatOptions: { format: 'jpeg', options: { quality: 82 } },
+      },
     ],
   },
   fields: [
@@ -70,14 +107,21 @@ export const Media: CollectionConfig = {
       type: 'checkbox',
       label: 'Texto alternativo precisa de revisão',
       defaultValue: false,
-      admin: { position: 'sidebar', description: 'Marcado pela migração quando o alt foi gerado automaticamente.' },
+      admin: {
+        position: 'sidebar',
+        description: 'Marcado pela migração quando o alt foi gerado automaticamente.',
+      },
     },
     {
       name: 'legacyUrl',
       type: 'text',
       label: 'URL no site antigo',
       index: true,
-      admin: { position: 'sidebar', readOnly: true, description: 'Usada para redirecionar links antigos (/wp-content/uploads/...).' },
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Usada para redirecionar links antigos (/wp-content/uploads/...).',
+      },
     },
     { name: 'blurDataURL', type: 'text', admin: { hidden: true } },
   ],

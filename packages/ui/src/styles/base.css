@@ -18,7 +18,10 @@
     font-family: var(--font-sans);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
-    font-feature-settings: 'kern', 'liga', 'tnum' 0;
+    font-feature-settings:
+      'kern',
+      'liga',
+      'tnum' 0;
   }
 
   ::selection {

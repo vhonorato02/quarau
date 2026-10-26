@@ -1,12 +1,15 @@
 import type { CollectionConfig, Field } from 'payload'
 
 import { populatePublishedAt } from '../hooks/fields'
+import { siteUrl as resolveSiteUrl } from '../lib/platform-env'
 import { docPath, type RoutableCollection } from '../lib/urls'
 
-const siteUrl = () => process.env.SITE_URL ?? 'http://localhost:3000'
+const siteUrl = resolveSiteUrl
 
 /** Live preview + preview button pointing at the Next.js draft-mode route. */
-export function previewConfig(collection: RoutableCollection): NonNullable<CollectionConfig['admin']> {
+export function previewConfig(
+  collection: RoutableCollection,
+): NonNullable<CollectionConfig['admin']> {
   const url = (slug?: string | null, locale?: string) => {
     const params = new URLSearchParams({
       path: docPath(collection, slug ?? ''),
@@ -68,7 +71,10 @@ export const summaryField: Field = {
   label: 'Resumo',
   localized: true,
   maxLength: 280,
-  admin: { description: 'Uma ou duas frases. Aparece em listagens, na busca e como descrição padrão para o Google.' },
+  admin: {
+    description:
+      'Uma ou duas frases. Aparece em listagens, na busca e como descrição padrão para o Google.',
+  },
 }
 
 export const orderField: Field = {

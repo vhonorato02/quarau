@@ -14,13 +14,17 @@ export function LeadConfirmation({ siteUrl, name }: LeadConfirmationProps) {
     <Layout preview="Recebemos sua mensagem" siteUrl={siteUrl}>
       <Text style={h1}>Olá, {first}.</Text>
       <Text style={p}>
-        Recebemos sua mensagem e agradecemos o contato. Nossa equipe vai analisá-la e responder pelo e-mail informado.
+        Recebemos sua mensagem e agradecemos o contato. Nossa equipe vai analisá-la e responder pelo
+        e-mail informado.
       </Text>
       <Text style={p}>Equipe Quarau</Text>
     </Layout>
   )
 }
 
-LeadConfirmation.PreviewProps = { siteUrl: 'https://quarau.com.br', name: 'Maria Souza' } satisfies LeadConfirmationProps
+LeadConfirmation.PreviewProps = {
+  siteUrl: 'https://quarau.com.br',
+  name: 'Maria Souza',
+} satisfies LeadConfirmationProps
 
 export default LeadConfirmation

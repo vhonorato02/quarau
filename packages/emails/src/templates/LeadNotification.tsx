@@ -35,12 +35,20 @@ export function LeadNotification(props: LeadNotificationProps) {
             <Text style={{ ...p, margin: 0 }}>{v}</Text>
           </Section>
         ))}
-      <Section style={{ margin: '20px 0', padding: 20, backgroundColor: brand.bg, borderRadius: 8 }}>
+      <Section
+        style={{ margin: '20px 0', padding: 20, backgroundColor: brand.bg, borderRadius: 8 }}
+      >
         <Text style={{ ...p, whiteSpace: 'pre-wrap', margin: 0 }}>{props.message}</Text>
       </Section>
       <Button
         href={props.adminUrl}
-        style={{ backgroundColor: brand.blue700, color: '#fff', padding: '12px 22px', borderRadius: 999, fontWeight: 600 }}
+        style={{
+          backgroundColor: brand.blue700,
+          color: '#fff',
+          padding: '12px 22px',
+          borderRadius: 999,
+          fontWeight: 600,
+        }}
       >
         Abrir no painel
       </Button>

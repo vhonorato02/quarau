@@ -9,12 +9,12 @@
 
 ### Versões oficiais encontradas (e só estas são usadas)
 
-| Versão                        | Arquivo no repositório                                      | Origem (raster original)                              |
-| ----------------------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
-| Símbolo colorido (Q + ponto)  | `apps/web/public/brand/quarau-simbolo.svg`                  | `SIMBOLO-QUARAU-COLORIDO-20231118-192931.png` (1155×1010) |
-| Símbolo negativo (branco)     | `apps/web/public/brand/quarau-simbolo-branco.svg`           | `home_company3_slider_pic5-copy…png` (marca d’água do slider) |
-| Logotipo colorido + assinatura | `apps/web/public/brand/quarau-logotipo.svg`                | `Untitled-design-3.png` / `Untitled-design-4.png`     |
-| Logotipo negativo + assinatura | `apps/web/public/brand/quarau-logotipo-branco.svg`         | `Layer-1-20231118-193158.png` (1295×306, slider da home) |
+| Versão                         | Arquivo no repositório                             | Origem (raster original)                                      |
+| ------------------------------ | -------------------------------------------------- | ------------------------------------------------------------- |
+| Símbolo colorido (Q + ponto)   | `apps/web/public/brand/quarau-simbolo.svg`         | `SIMBOLO-QUARAU-COLORIDO-20231118-192931.png` (1155×1010)     |
+| Símbolo negativo (branco)      | `apps/web/public/brand/quarau-simbolo-branco.svg`  | `home_company3_slider_pic5-copy…png` (marca d’água do slider) |
+| Logotipo colorido + assinatura | `apps/web/public/brand/quarau-logotipo.svg`        | `Untitled-design-3.png` / `Untitled-design-4.png`             |
+| Logotipo negativo + assinatura | `apps/web/public/brand/quarau-logotipo-branco.svg` | `Layer-1-20231118-193158.png` (1295×306, slider da home)      |
 
 Os originais raster estão em [`docs/brand-assets/originais/`](brand-assets/originais).
 
@@ -52,10 +52,10 @@ reprodutível [`tools/brand/vectorize_logo.py`](../tools/brand/vectorize_logo.py
 
 ### Primárias (identidade, inegociáveis)
 
-| Token               | Hex       | Origem                                                                          |
-| ------------------- | --------- | ------------------------------------------------------------------------------- |
-| `--color-brand-blue`  | `#0089CF` | Cor de tema do CSS do site (botões, links, rodapé, seleção) e cor do logotipo    |
-| `--color-brand-green` | `#39B54A` | Cor de destaque do CSS (links, ícones) e o ponto do logotipo                      |
+| Token                 | Hex       | Origem                                                                        |
+| --------------------- | --------- | ----------------------------------------------------------------------------- |
+| `--color-brand-blue`  | `#0089CF` | Cor de tema do CSS do site (botões, links, rodapé, seleção) e cor do logotipo |
+| `--color-brand-green` | `#39B54A` | Cor de destaque do CSS (links, ícones) e o ponto do logotipo                  |
 
 Variação encontrada: o arquivo do **símbolo** usa `#0080C8` (azul) e `#3AAA35` (verde), diferença
 típica de conversão CMYK→RGB. O SVG do símbolo mantém as cores do seu próprio arquivo de origem. Os
@@ -65,17 +65,17 @@ tokens do sistema usam as cores do logotipo e do CSS `[CONFIRMAR as cores oficia
 
 Derivadas por escurecimento da cor da marca, apenas para cumprir **WCAG 2.2 AA** em texto:
 
-| Token                 | Hex       | Uso                                         | Contraste      |
-| --------------------- | --------- | ------------------------------------------- | -------------- |
-| `--color-blue-700`    | `#006FA8` | Texto de link, botão primário (fundo)       | 5,47:1 no branco |
-| `--color-blue-800`    | `#005C8C` | Hover/pressionado                           | 7,22:1 no branco |
-| `--color-green-700`   | `#24792F` | Texto/ícone verde sobre fundo claro         | 5,45:1 no branco |
-| `--color-ink`         | `#0E1A24` | Títulos e texto principal                   | 17,6:1 no branco |
-| `--color-ink-muted`   | `#4A5866` | Texto secundário                            | 7,29:1 no branco |
-| `--color-surface`     | `#FFFFFF` | Fundo                                       |                |
-| `--color-surface-alt` | `#F4F7F9` | Seções alternadas                           |                |
-| `--color-line`        | `#DCE3E8` | Divisores e bordas                          |                |
-| Estados               | `#B42318` erro · `#B54708` alerta · `#24792F` sucesso | Formulários |   |
+| Token                 | Hex                                                   | Uso                                   | Contraste        |
+| --------------------- | ----------------------------------------------------- | ------------------------------------- | ---------------- |
+| `--color-blue-700`    | `#006FA8`                                             | Texto de link, botão primário (fundo) | 5,47:1 no branco |
+| `--color-blue-800`    | `#005C8C`                                             | Hover/pressionado                     | 7,22:1 no branco |
+| `--color-green-700`   | `#24792F`                                             | Texto/ícone verde sobre fundo claro   | 5,45:1 no branco |
+| `--color-ink`         | `#0E1A24`                                             | Títulos e texto principal             | 17,6:1 no branco |
+| `--color-ink-muted`   | `#4A5866`                                             | Texto secundário                      | 7,29:1 no branco |
+| `--color-surface`     | `#FFFFFF`                                             | Fundo                                 |                  |
+| `--color-surface-alt` | `#F4F7F9`                                             | Seções alternadas                     |                  |
+| `--color-line`        | `#DCE3E8`                                             | Divisores e bordas                    |                  |
+| Estados               | `#B42318` erro · `#B54708` alerta · `#24792F` sucesso | Formulários                           |                  |
 
 **Regras de contraste:**
 
@@ -86,9 +86,9 @@ Derivadas por escurecimento da cor da marca, apenas para cumprir **WCAG 2.2 AA**
 
 ## 3. Tipografia
 
-| Papel            | Família                                   | Origem                                                  |
-| ---------------- | ----------------------------------------- | ------------------------------------------------------- |
-| Títulos e texto  | **Barlow** (300, 400, 500, 600, 700, itálicos) | CSS do tema: `body`, `h1`–`h6` e menu usam `"Barlow"`; também é a fonte da assinatura do logo |
+| Papel           | Família                                        | Origem                                                                                        |
+| --------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Títulos e texto | **Barlow** (300, 400, 500, 600, 700, itálicos) | CSS do tema: `body`, `h1`–`h6` e menu usam `"Barlow"`; também é a fonte da assinatura do logo |
 
 - Fonte **self-hosted** (`@fontsource/barlow`, licença OFL), subsets latin e latin-ext, com
   `font-display: swap` e preload dos pesos críticos.

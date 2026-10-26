@@ -7,3 +7,9 @@ onlyBuiltDependencies:
   - '@swc/core'
   - unrs-resolver
   - '@parcel/watcher'
+
+# Security patches for transitive dependencies (see `pnpm audit --prod`).
+overrides:
+  undici@>=7 <7.29.1: ^7.30.0
+  nodemailer@<10.0.9: ^10.0.15
+  dompurify@>=3 <3.4.16: ^3.4.16

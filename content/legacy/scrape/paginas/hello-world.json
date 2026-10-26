@@ -1,0 +1,445 @@
+{
+ "url": "https://quarau.com.br/hello-world/",
+ "finalUrl": "https://quarau.com.br/hello-world/",
+ "status": 200,
+ "slug": "hello-world",
+ "source": [
+  "sitemap:post-sitemap.xml",
+  "rest:posts"
+ ],
+ "data": {
+  "lang": "pt-BR",
+  "title": "Hello world! - QUARAU",
+  "meta": {
+   "og:url": "https://quarau.com.br/hello-world/",
+   "og:type": "article",
+   "og:title": "Hello world! - QUARAU",
+   "og:description": "Welcome to WordPress. This is your first post. Edit or delete it, then start writing!",
+   "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+   "format-detection": "telephone=no",
+   "viewport": "width=device-width, initial-scale=1, maximum-scale=1",
+   "theme-color": "#ffffff",
+   "og:locale": "pt_BR",
+   "og:site_name": "QUARAU",
+   "article:published_time": "2018-06-21T07:34:47+00:00",
+   "og:image": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design-3.png",
+   "og:image:width": "1200",
+   "og:image:height": "675",
+   "og:image:type": "image/png",
+   "author": "Quarau",
+   "twitter:card": "summary_large_image",
+   "twitter:label1": "Escrito por",
+   "twitter:data1": "Quarau",
+   "generator": "Powered by Slider Revolution 6.6.18 - responsive, Mobile-Friendly Slider Plugin for WordPress with comfortable drag and drop interface."
+  },
+  "canonical": "https://quarau.com.br/hello-world/",
+  "jsonLd": [
+   {
+    "@context": "https://schema.org",
+    "@graph": [
+     {
+      "@type": "Article",
+      "@id": "https://quarau.com.br/hello-world/#article",
+      "isPartOf": {
+       "@id": "https://quarau.com.br/hello-world/"
+      },
+      "author": {
+       "name": "Quarau",
+       "@id": "https://quarau.com.br/#/schema/person/da6723e80d76d7d173162c702e400e4e"
+      },
+      "headline": "Hello world!",
+      "datePublished": "2018-06-21T07:34:47+00:00",
+      "mainEntityOfPage": {
+       "@id": "https://quarau.com.br/hello-world/"
+      },
+      "wordCount": 17,
+      "commentCount": 0,
+      "publisher": {
+       "@id": "https://quarau.com.br/#organization"
+      },
+      "articleSection": [
+       "Uncategorized"
+      ],
+      "inLanguage": "pt-BR",
+      "potentialAction": [
+       {
+        "@type": "CommentAction",
+        "name": "Comment",
+        "target": [
+         "https://quarau.com.br/hello-world/#respond"
+        ]
+       }
+      ]
+     },
+     {
+      "@type": "WebPage",
+      "@id": "https://quarau.com.br/hello-world/",
+      "url": "https://quarau.com.br/hello-world/",
+      "name": "Hello world! - QUARAU",
+      "isPartOf": {
+       "@id": "https://quarau.com.br/#website"
+      },
+      "datePublished": "2018-06-21T07:34:47+00:00",
+      "breadcrumb": {
+       "@id": "https://quarau.com.br/hello-world/#breadcrumb"
+      },
+      "inLanguage": "pt-BR",
+      "potentialAction": [
+       {
+        "@type": "ReadAction",
+        "target": [
+         "https://quarau.com.br/hello-world/"
+        ]
+       }
+      ]
+     },
+     {
+      "@type": "BreadcrumbList",
+      "@id": "https://quarau.com.br/hello-world/#breadcrumb",
+      "itemListElement": [
+       {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Início",
+        "item": "https://quarau.com.br/"
+       },
+       {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Hello world!"
+       }
+      ]
+     },
+     {
+      "@type": "WebSite",
+      "@id": "https://quarau.com.br/#website",
+      "url": "https://quarau.com.br/",
+      "name": "Quarau - Projetos Socioambientais, Educativos e Culturais",
+      "description": "Quarau é uma empresa de consultoria em projetos educativos, culturais e socioambientais que tem experiência consolidada nas várias etapas que compõem um projeto, desde a sua concepção, prospecção, seleção, planejamento, execução, monitoramento, controle, encerramento, promoção e difusão. A Quarau está apta a elaborar junto aos seus parceiros, sejam empresas, instituições públicas ou do terceiro setor, projetos que beneficiem territórios urbanos e rurais, bem como instituições locais, regionais ou nacionais. Utiliza metodologias adequadas aos contextos específicos, garantindo a identificação das potencialidades dos territórios e das instituições.   Seguindo esta perspectiva, a Quarau vem colecionando bons resultados em todas as etapas de produção dos projetos, ocupando papéis importantes na concepção, execução e no gerenciamento dos mesmos.",
+      "publisher": {
+       "@id": "https://quarau.com.br/#organization"
+      },
+      "alternateName": "Quarau",
+      "potentialAction": [
+       {
+        "@type": "SearchAction",
+        "target": {
+         "@type": "EntryPoint",
+         "urlTemplate": "https://quarau.com.br/?s={search_term_string}"
+        },
+        "query-input": {
+         "@type": "PropertyValueSpecification",
+         "valueRequired": true,
+         "valueName": "search_term_string"
+        }
+       }
+      ],
+      "inLanguage": "pt-BR"
+     },
+     {
+      "@type": "Organization",
+      "@id": "https://quarau.com.br/#organization",
+      "name": "Quarau - Projetos Socioambientais, Educativos e Culturais",
+      "url": "https://quarau.com.br/",
+      "logo": {
+       "@type": "ImageObject",
+       "inLanguage": "pt-BR",
+       "@id": "https://quarau.com.br/#/schema/logo/image/",
+       "url": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design-4.png",
+       "contentUrl": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design-4.png",
+       "width": 692,
+       "height": 696,
+       "caption": "Quarau - Projetos Socioambientais, Educativos e Culturais"
+      },
+      "image": {
+       "@id": "https://quarau.com.br/#/schema/logo/image/"
+      },
+      "sameAs": [
+       "https://www.instagram.com/quarau.consultoria/",
+       "https://www.linkedin.com/in/quarau-91196b258/"
+      ]
+     },
+     {
+      "@type": "Person",
+      "@id": "https://quarau.com.br/#/schema/person/da6723e80d76d7d173162c702e400e4e",
+      "name": "Quarau",
+      "image": {
+       "@type": "ImageObject",
+       "inLanguage": "pt-BR",
+       "@id": "https://quarau.com.br/wp-content/litespeed/avatar/ab78d80a72a8e674a68240455ec64805.jpg?ver=1791411035",
+       "url": "https://quarau.com.br/wp-content/litespeed/avatar/ab78d80a72a8e674a68240455ec64805.jpg?ver=1791411035",
+       "contentUrl": "https://quarau.com.br/wp-content/litespeed/avatar/ab78d80a72a8e674a68240455ec64805.jpg?ver=1791411035",
+       "caption": "Quarau"
+      },
+      "sameAs": [
+       "https://quarau.com.br"
+      ],
+      "url": "https://quarau.com.br/author/fm_buenoyahoo-com-br/"
+     }
+    ]
+   }
+  ],
+  "outline": [
+   {
+    "level": 5,
+    "text": "Quarau"
+   },
+   {
+    "level": 3,
+    "text": "Deixe um comentário Cancelar resposta"
+   }
+  ],
+  "markdown": "Published by __ [Quarau](https://quarau.com.br/author/fm_buenoyahoo-com-br/)\n\nat __ junho 21, 2018\n\nCategories __\n\nTags __\n\nWelcome to WordPress. This is your first post. Edit or delete it, then start writing!\n\nShare\n\n[__](https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fquarau.com.br%2Fhello-world%2F)[__](https://twitter.com/intent/tweet?text=Hello+world%21+-+QUARAU.+https%3A%2F%2Fquarau.com.br%2Fhello-world%2F)[__](https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fquarau.com.br%2Fhello-world%2F)[__](https://pinterest.com/pin/find/?url=https%3A%2F%2Fquarau.com.br%2Fhello-world%2F)\n\n##### [Quarau](https://quarau.com.br/author/fm_buenoyahoo-com-br/)\n\n### Deixe um comentário [Cancelar resposta](https://quarau.com.br/hello-world/#respond)\n\nO seu endereço de e-mail não será publicado. Campos obrigatórios são marcados com *\n\nComentário *\n\nNome *\n\nE-mail *\n\nSite\n\nSalvar meus dados neste navegador para a próxima vez que eu comentar.",
+  "hiddenText": [],
+  "words": 62,
+  "header": {
+   "links": [
+    {
+     "text": "",
+     "href": "https://quarau.com.br/"
+    },
+    {
+     "text": "mobile menu",
+     "href": "https://quarau.com.br/hello-world/#"
+    },
+    {
+     "text": "INÍCIO",
+     "href": "https://quarau.com.br/"
+    },
+    {
+     "text": "SOBRE A QUARAU",
+     "href": "https://quarau.com.br/sobre-a-quarau/"
+    },
+    {
+     "text": "CONTATO",
+     "href": "https://quarau.com.br/contato/"
+    }
+   ],
+   "logo": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg=="
+  },
+  "footer": {
+   "text": "Quarau Projetos Socioambientais, Educativos e Culturais São José dos Campos - São Paulo contato@quarau.com.br (12) 98281-3669 | (12) 98264-5960 FALE COM A QUARAU",
+   "links": [
+    {
+     "text": "contato@quarau.com.br",
+     "href": "https://quarau.com.br/contato"
+    },
+    {
+     "text": "",
+     "href": "https://www.instagram.com/quarau.consultoria/"
+    },
+    {
+     "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+     "href": "https://www.instagram.com/quarau.consultoria/"
+    },
+    {
+     "text": "",
+     "href": "https://www.linkedin.com/in/quarau-91196b258/"
+    },
+    {
+     "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+     "href": "https://www.linkedin.com/in/quarau-91196b258/"
+    },
+    {
+     "text": "FALE COM A QUARAU",
+     "href": "https://quarau.com.br/contato/"
+    },
+    {
+     "text": "Back to top icon",
+     "href": ""
+    }
+   ]
+  },
+  "links": [
+   {
+    "text": "",
+    "href": "https://quarau.com.br/"
+   },
+   {
+    "text": "mobile menu",
+    "href": "https://quarau.com.br/hello-world/#"
+   },
+   {
+    "text": "INÍCIO",
+    "href": "https://quarau.com.br/"
+   },
+   {
+    "text": "SOBRE A QUARAU",
+    "href": "https://quarau.com.br/sobre-a-quarau/"
+   },
+   {
+    "text": "CONTATO",
+    "href": "https://quarau.com.br/contato/"
+   },
+   {
+    "text": "Quarau",
+    "href": "https://quarau.com.br/author/fm_buenoyahoo-com-br/"
+   },
+   {
+    "text": "Uncategorized",
+    "href": "https://quarau.com.br/category/uncategorized/"
+   },
+   {
+    "text": "",
+    "href": "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fquarau.com.br%2Fhello-world%2F"
+   },
+   {
+    "text": "",
+    "href": "https://twitter.com/intent/tweet?text=Hello+world%21+-+QUARAU.+https%3A%2F%2Fquarau.com.br%2Fhello-world%2F"
+   },
+   {
+    "text": "",
+    "href": "https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fquarau.com.br%2Fhello-world%2F"
+   },
+   {
+    "text": "",
+    "href": "https://pinterest.com/pin/find/?url=https%3A%2F%2Fquarau.com.br%2Fhello-world%2F"
+   },
+   {
+    "text": "Quarau",
+    "href": "https://quarau.com.br/author/fm_buenoyahoo-com-br/"
+   },
+   {
+    "text": "Cancelar resposta",
+    "href": "https://quarau.com.br/hello-world/#respond"
+   },
+   {
+    "text": "contato@quarau.com.br",
+    "href": "https://quarau.com.br/contato"
+   },
+   {
+    "text": "",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   },
+   {
+    "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   },
+   {
+    "text": "",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": "FALE COM A QUARAU",
+    "href": "https://quarau.com.br/contato/"
+   },
+   {
+    "text": "Back to top icon",
+    "href": ""
+   },
+   {
+    "text": "menu close icon",
+    "href": "https://quarau.com.br/hello-world/#"
+   },
+   {
+    "text": "LinkedIn icon",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": "Instagram icon",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   }
+  ],
+  "images": [
+   {
+    "src": "https://quarau.com.br/wp-content/litespeed/avatar/4a509a149419600cfc7d7e7100efc57e.jpg?ver=1791239409",
+    "alt": "Quarau",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://themes.muffingroup.com/be/company3/wp-content/uploads/2018/06/home_company3_pic7.png",
+    "alt": "Hello world!",
+    "title": "",
+    "w": 0,
+    "h": 0,
+    "where": "footer",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/home_company3_slider_pic5-copy-20231118-193929-copy.png#440",
+    "alt": "",
+    "title": "",
+    "w": 0,
+    "h": 0,
+    "where": "other",
+    "kind": "bg"
+   }
+  ],
+  "iframes": [],
+  "videos": [],
+  "forms": [
+   {
+    "action": "https://quarau.com.br/",
+    "fields": [
+     {
+      "name": "s",
+      "type": "text",
+      "label": "Enter your search",
+      "required": false
+     },
+     {
+      "name": "",
+      "type": "submit",
+      "label": "Search",
+      "required": false
+     }
+    ]
+   },
+   {
+    "action": "https://quarau.com.br/wp-comments-post.php",
+    "fields": [
+     {
+      "name": "comment",
+      "type": "textarea",
+      "label": "Comentário *",
+      "required": true
+     },
+     {
+      "name": "author",
+      "type": "text",
+      "label": "Nome *",
+      "required": true
+     },
+     {
+      "name": "email",
+      "type": "text",
+      "label": "E-mail *",
+      "required": true
+     },
+     {
+      "name": "url",
+      "type": "text",
+      "label": "Site",
+      "required": false
+     },
+     {
+      "name": "wp-comment-cookies-consent",
+      "type": "checkbox",
+      "label": "Salvar meus dados neste navegador para a próxima vez que eu comentar.",
+      "required": false
+     },
+     {
+      "name": "submit",
+      "type": "submit",
+      "label": "",
+      "required": false
+     },
+     {
+      "name": "ak_hp_textarea",
+      "type": "textarea",
+      "label": "Δ",
+      "required": false
+     }
+    ]
+   }
+  ]
+ }
+}

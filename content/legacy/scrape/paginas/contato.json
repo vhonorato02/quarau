@@ -1,0 +1,346 @@
+{
+ "url": "https://quarau.com.br/contato/",
+ "finalUrl": "https://quarau.com.br/contato/",
+ "status": 200,
+ "slug": "contato",
+ "source": [
+  "sitemap:page-sitemap.xml",
+  "rest:pages",
+  "link:inicio",
+  "link:hello-world",
+  "link:sobre-a-quarau"
+ ],
+ "data": {
+  "lang": "pt-BR",
+  "title": "Fale com a Quarau - QUARAU",
+  "meta": {
+   "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+   "format-detection": "telephone=no",
+   "viewport": "width=device-width, initial-scale=1, maximum-scale=1",
+   "theme-color": "#ffffff",
+   "description": "Quarau é uma empresa de consultoria em projetos educativos, culturais e socioambientais que tem experiência consolidada nas várias etapas que compõem um projeto, desde a sua concepção, prospecção, seleção, planejamento, execução, monitoramento, controle, encerramento, promoção e difusão.",
+   "og:locale": "pt_BR",
+   "og:type": "article",
+   "og:title": "Fale com a Quarau - QUARAU",
+   "og:description": "Quarau é uma empresa de consultoria em projetos educativos, culturais e socioambientais que tem experiência consolidada nas várias etapas que compõem um projeto, desde a sua concepção, prospecção, seleção, planejamento, execução, monitoramento, controle, encerramento, promoção e difusão.",
+   "og:url": "https://quarau.com.br/contato/",
+   "og:site_name": "QUARAU",
+   "article:modified_time": "2024-06-21T23:25:14+00:00",
+   "og:image": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design-3.png",
+   "og:image:width": "1200",
+   "og:image:height": "675",
+   "og:image:type": "image/png",
+   "twitter:card": "summary_large_image",
+   "generator": "Powered by Slider Revolution 6.6.18 - responsive, Mobile-Friendly Slider Plugin for WordPress with comfortable drag and drop interface."
+  },
+  "canonical": "https://quarau.com.br/contato/",
+  "jsonLd": [
+   {
+    "@context": "https://schema.org",
+    "@graph": [
+     {
+      "@type": "WebPage",
+      "@id": "https://quarau.com.br/contato/",
+      "url": "https://quarau.com.br/contato/",
+      "name": "Fale com a Quarau - QUARAU",
+      "isPartOf": {
+       "@id": "https://quarau.com.br/#website"
+      },
+      "datePublished": "2018-06-26T13:08:59+00:00",
+      "dateModified": "2024-06-21T23:25:14+00:00",
+      "description": "Quarau é uma empresa de consultoria em projetos educativos, culturais e socioambientais que tem experiência consolidada nas várias etapas que compõem um projeto, desde a sua concepção, prospecção, seleção, planejamento, execução, monitoramento, controle, encerramento, promoção e difusão.",
+      "breadcrumb": {
+       "@id": "https://quarau.com.br/contato/#breadcrumb"
+      },
+      "inLanguage": "pt-BR",
+      "potentialAction": [
+       {
+        "@type": "ReadAction",
+        "target": [
+         "https://quarau.com.br/contato/"
+        ]
+       }
+      ]
+     },
+     {
+      "@type": "BreadcrumbList",
+      "@id": "https://quarau.com.br/contato/#breadcrumb",
+      "itemListElement": [
+       {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Início",
+        "item": "https://quarau.com.br/"
+       },
+       {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Fale com a Quarau"
+       }
+      ]
+     },
+     {
+      "@type": "WebSite",
+      "@id": "https://quarau.com.br/#website",
+      "url": "https://quarau.com.br/",
+      "name": "Quarau - Projetos Socioambientais, Educativos e Culturais",
+      "description": "Quarau é uma empresa de consultoria em projetos educativos, culturais e socioambientais que tem experiência consolidada nas várias etapas que compõem um projeto, desde a sua concepção, prospecção, seleção, planejamento, execução, monitoramento, controle, encerramento, promoção e difusão. A Quarau está apta a elaborar junto aos seus parceiros, sejam empresas, instituições públicas ou do terceiro setor, projetos que beneficiem territórios urbanos e rurais, bem como instituições locais, regionais ou nacionais. Utiliza metodologias adequadas aos contextos específicos, garantindo a identificação das potencialidades dos territórios e das instituições.   Seguindo esta perspectiva, a Quarau vem colecionando bons resultados em todas as etapas de produção dos projetos, ocupando papéis importantes na concepção, execução e no gerenciamento dos mesmos.",
+      "publisher": {
+       "@id": "https://quarau.com.br/#organization"
+      },
+      "alternateName": "Quarau",
+      "potentialAction": [
+       {
+        "@type": "SearchAction",
+        "target": {
+         "@type": "EntryPoint",
+         "urlTemplate": "https://quarau.com.br/?s={search_term_string}"
+        },
+        "query-input": {
+         "@type": "PropertyValueSpecification",
+         "valueRequired": true,
+         "valueName": "search_term_string"
+        }
+       }
+      ],
+      "inLanguage": "pt-BR"
+     },
+     {
+      "@type": "Organization",
+      "@id": "https://quarau.com.br/#organization",
+      "name": "Quarau - Projetos Socioambientais, Educativos e Culturais",
+      "url": "https://quarau.com.br/",
+      "logo": {
+       "@type": "ImageObject",
+       "inLanguage": "pt-BR",
+       "@id": "https://quarau.com.br/#/schema/logo/image/",
+       "url": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design-4.png",
+       "contentUrl": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design-4.png",
+       "width": 692,
+       "height": 696,
+       "caption": "Quarau - Projetos Socioambientais, Educativos e Culturais"
+      },
+      "image": {
+       "@id": "https://quarau.com.br/#/schema/logo/image/"
+      },
+      "sameAs": [
+       "https://www.instagram.com/quarau.consultoria/",
+       "https://www.linkedin.com/in/quarau-91196b258/"
+      ]
+     }
+    ]
+   }
+  ],
+  "outline": [
+   {
+    "level": 3,
+    "text": "Fale com a Quarau"
+   }
+  ],
+  "markdown": "### Fale com a Quarau\n\nSeu nome\n\nSeu e-mail\n\nAssunto\n\nSua mensagem",
+  "hiddenText": [],
+  "words": 11,
+  "header": {
+   "links": [
+    {
+     "text": "",
+     "href": "https://quarau.com.br/"
+    },
+    {
+     "text": "mobile menu",
+     "href": "https://quarau.com.br/contato/#"
+    },
+    {
+     "text": "INÍCIO",
+     "href": "https://quarau.com.br/"
+    },
+    {
+     "text": "SOBRE A QUARAU",
+     "href": "https://quarau.com.br/sobre-a-quarau/"
+    },
+    {
+     "text": "CONTATO",
+     "href": "https://quarau.com.br/contato/"
+    }
+   ],
+   "logo": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg=="
+  },
+  "footer": {
+   "text": "Quarau Projetos Socioambientais, Educativos e Culturais São José dos Campos - São Paulo contato@quarau.com.br (12) 98281-3669 | (12) 98264-5960 FALE COM A QUARAU",
+   "links": [
+    {
+     "text": "contato@quarau.com.br",
+     "href": "https://quarau.com.br/contato"
+    },
+    {
+     "text": "",
+     "href": "https://www.instagram.com/quarau.consultoria/"
+    },
+    {
+     "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+     "href": "https://www.instagram.com/quarau.consultoria/"
+    },
+    {
+     "text": "",
+     "href": "https://www.linkedin.com/in/quarau-91196b258/"
+    },
+    {
+     "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+     "href": "https://www.linkedin.com/in/quarau-91196b258/"
+    },
+    {
+     "text": "FALE COM A QUARAU",
+     "href": "https://quarau.com.br/contato/"
+    },
+    {
+     "text": "Back to top icon",
+     "href": ""
+    }
+   ]
+  },
+  "links": [
+   {
+    "text": "",
+    "href": "https://quarau.com.br/"
+   },
+   {
+    "text": "mobile menu",
+    "href": "https://quarau.com.br/contato/#"
+   },
+   {
+    "text": "INÍCIO",
+    "href": "https://quarau.com.br/"
+   },
+   {
+    "text": "SOBRE A QUARAU",
+    "href": "https://quarau.com.br/sobre-a-quarau/"
+   },
+   {
+    "text": "CONTATO",
+    "href": "https://quarau.com.br/contato/"
+   },
+   {
+    "text": "contato@quarau.com.br",
+    "href": "https://quarau.com.br/contato"
+   },
+   {
+    "text": "",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   },
+   {
+    "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   },
+   {
+    "text": "",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": "FALE COM A QUARAU",
+    "href": "https://quarau.com.br/contato/"
+   },
+   {
+    "text": "Back to top icon",
+    "href": ""
+   },
+   {
+    "text": "menu close icon",
+    "href": "https://quarau.com.br/contato/#"
+   },
+   {
+    "text": "LinkedIn icon",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": "Instagram icon",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   }
+  ],
+  "images": [
+   {
+    "src": "https://themes.muffingroup.com/be/company3/wp-content/uploads/2018/06/home_company3_pic7.png",
+    "alt": "Fale com a Quarau",
+    "title": "",
+    "w": 0,
+    "h": 0,
+    "where": "footer",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/home_company3_slider_pic5-copy-20231118-193929-copy.png#440",
+    "alt": "",
+    "title": "",
+    "w": 0,
+    "h": 0,
+    "where": "other",
+    "kind": "bg"
+   }
+  ],
+  "iframes": [],
+  "videos": [],
+  "forms": [
+   {
+    "action": "https://quarau.com.br/",
+    "fields": [
+     {
+      "name": "s",
+      "type": "text",
+      "label": "Enter your search",
+      "required": false
+     },
+     {
+      "name": "",
+      "type": "submit",
+      "label": "Search",
+      "required": false
+     }
+    ]
+   },
+   {
+    "action": "https://quarau.com.br/contato/#wpcf7-f443-p13-o1",
+    "fields": [
+     {
+      "name": "your-name",
+      "type": "text",
+      "label": "Seu nome",
+      "required": false
+     },
+     {
+      "name": "your-email",
+      "type": "email",
+      "label": "Seu e-mail",
+      "required": false
+     },
+     {
+      "name": "your-subject",
+      "type": "text",
+      "label": "Assunto",
+      "required": false
+     },
+     {
+      "name": "your-message",
+      "type": "textarea",
+      "label": "Sua mensagem",
+      "required": false
+     },
+     {
+      "name": "",
+      "type": "submit",
+      "label": "",
+      "required": false
+     },
+     {
+      "name": "_wpcf7_ak_hp_textarea",
+      "type": "textarea",
+      "label": "Δ",
+      "required": false
+     }
+    ]
+   }
+  ]
+ }
+}

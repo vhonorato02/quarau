@@ -11,7 +11,11 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 export const Documents: CollectionConfig = {
   slug: 'documents',
   labels: { singular: 'Documento', plural: 'Documentos e downloads' },
-  admin: { group: 'Biblioteca', useAsTitle: 'title', defaultColumns: ['title', 'category', 'filename', 'updatedAt'] },
+  admin: {
+    group: 'Biblioteca',
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'category', 'filename', 'updatedAt'],
+  },
   access: { read: anyone, create: editors, update: editors, delete: editors },
   upload: {
     staticDir: path.resolve(dirname, '../../media/documents'),

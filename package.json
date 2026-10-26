@@ -20,6 +20,8 @@
     "services:down": "docker compose -f infra/compose/docker-compose.dev.yml down"
   },
   "devDependencies": {
+    "@lhci/cli": "0.15.1",
+    "lighthouse": "^13.5.0",
     "prettier": "3.9.9",
     "prettier-plugin-tailwindcss": "^0.7.0",
     "turbo": "2.11.7",

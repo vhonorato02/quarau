@@ -15,10 +15,12 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary: 'bg-blue-700 text-white hover:bg-blue-800',
-        secondary: 'border border-ink/20 bg-transparent text-ink hover:border-ink hover:bg-ink hover:text-white',
+        secondary:
+          'border border-ink/20 bg-transparent text-ink hover:border-ink hover:bg-ink hover:text-white',
         ghost: 'text-blue-700 hover:bg-blue-50',
         inverse: 'bg-white text-ink hover:bg-blue-50',
-        'outline-inverse': 'border border-white/40 text-white hover:border-white hover:bg-white hover:text-ink',
+        'outline-inverse':
+          'border border-white/40 text-white hover:border-white hover:bg-white hover:text-ink',
         link: 'px-0 text-blue-700 underline-offset-[0.25em] hover:underline',
       },
       size: {
@@ -37,8 +39,7 @@ export const buttonVariants = cva(
 )
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   /** Render the child element (e.g. a Next.js Link) with button styles. */
   asChild?: boolean
 }

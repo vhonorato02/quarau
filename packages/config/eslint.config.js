@@ -43,9 +43,17 @@ export function createConfig(options = {}) {
           'error',
           { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
         ],
-        '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
+        '@typescript-eslint/consistent-type-imports': [
+          'error',
+          { fixStyle: 'inline-type-imports' },
+        ],
         'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
       },
+    },
+    {
+      // Playwright fixtures use a `use` callback that is not a React hook.
+      files: ['**/tests/e2e/**'],
+      rules: { 'react-hooks/rules-of-hooks': 'off' },
     },
     prettier,
   )

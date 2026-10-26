@@ -23,6 +23,21 @@ export const Users: CollectionConfig = {
     delete: admins,
     admin: ({ req }) => Boolean(req.user),
   },
+  hooks: {
+    beforeChange: [
+      // The very first account (created on the /admin "first register" screen) must be
+      // an administrator; the roles field is admin-only, so it would otherwise be an author.
+      async ({ operation, data, req }) => {
+        if (operation !== 'create') return data
+        const { totalDocs } = await req.payload.count({
+          collection: 'users',
+          overrideAccess: true,
+          req,
+        })
+        return totalDocs === 0 ? { ...data, roles: ['admin'] } : data
+      },
+    ],
+  },
   fields: [
     { name: 'name', type: 'text', label: 'Nome', required: true },
     {

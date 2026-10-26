@@ -1,0 +1,484 @@
+{
+ "url": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/",
+ "finalUrl": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/",
+ "status": 200,
+ "slug": "portfolio-item__ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental",
+ "source": [
+  "sitemap:portfolio-sitemap.xml",
+  "rest:portfolio",
+  "link:sobre-a-quarau",
+  "link:portfolio-item__projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo"
+ ],
+ "data": {
+  "lang": "pt-BR",
+  "title": "Ecomuseu dos Campos de São José (CECP | Petrobras Socioambiental) - QUARAU",
+  "meta": {
+   "og:image": "https://quarau.com.br/wp-content/uploads/2018/06/2.jpg",
+   "og:url": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/",
+   "og:type": "article",
+   "og:title": "Ecomuseu dos Campos de São José (CECP | Petrobras Socioambiental) - QUARAU",
+   "og:description": "A Quarau é contratada pelo Centro de Estudos da Cultura Popular (CECP) desde 2015 para realizar a elaboração dos projetos, gerenciamento de equipes, articulação de parceiros, realização de pesquisas e produção de relatórios técnicos do Ecomuseu dos Campos de São José.",
+   "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+   "format-detection": "telephone=no",
+   "viewport": "width=device-width, initial-scale=1, maximum-scale=1",
+   "theme-color": "#ffffff",
+   "description": "A Quarau é contratada pelo Centro de Estudos da Cultura Popular (CECP) desde 2015 para realizar a elaboração dos projetos, gerenciamento de equipes, articulação de parceiros, realização de pesquisas e produção de relatórios técnicos do Ecomuseu dos Campos de São José.",
+   "og:locale": "pt_BR",
+   "og:site_name": "QUARAU",
+   "article:modified_time": "2024-05-29T13:06:31+00:00",
+   "og:image:width": "1280",
+   "og:image:height": "720",
+   "og:image:type": "image/jpeg",
+   "twitter:card": "summary_large_image",
+   "twitter:label1": "Est. tempo de leitura",
+   "twitter:data1": "1 minuto",
+   "generator": "Powered by Slider Revolution 6.6.18 - responsive, Mobile-Friendly Slider Plugin for WordPress with comfortable drag and drop interface."
+  },
+  "canonical": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/",
+  "jsonLd": [
+   {
+    "@context": "https://schema.org",
+    "@graph": [
+     {
+      "@type": "WebPage",
+      "@id": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/",
+      "url": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/",
+      "name": "Ecomuseu dos Campos de São José (CECP | Petrobras Socioambiental) - QUARAU",
+      "isPartOf": {
+       "@id": "https://quarau.com.br/#website"
+      },
+      "primaryImageOfPage": {
+       "@id": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/#primaryimage"
+      },
+      "image": {
+       "@id": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/#primaryimage"
+      },
+      "thumbnailUrl": "https://quarau.com.br/wp-content/uploads/2018/06/2.jpg",
+      "datePublished": "2018-06-28T13:43:50+00:00",
+      "dateModified": "2024-05-29T13:06:31+00:00",
+      "description": "A Quarau é contratada pelo Centro de Estudos da Cultura Popular (CECP) desde 2015 para realizar a elaboração dos projetos, gerenciamento de equipes, articulação de parceiros, realização de pesquisas e produção de relatórios técnicos do Ecomuseu dos Campos de São José.",
+      "breadcrumb": {
+       "@id": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/#breadcrumb"
+      },
+      "inLanguage": "pt-BR",
+      "potentialAction": [
+       {
+        "@type": "ReadAction",
+        "target": [
+         "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/"
+        ]
+       }
+      ]
+     },
+     {
+      "@type": "ImageObject",
+      "inLanguage": "pt-BR",
+      "@id": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/#primaryimage",
+      "url": "https://quarau.com.br/wp-content/uploads/2018/06/2.jpg",
+      "contentUrl": "https://quarau.com.br/wp-content/uploads/2018/06/2.jpg",
+      "width": 1280,
+      "height": 720
+     },
+     {
+      "@type": "BreadcrumbList",
+      "@id": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/#breadcrumb",
+      "itemListElement": [
+       {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Início",
+        "item": "https://quarau.com.br/"
+       },
+       {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Ecomuseu dos Campos de São José (CECP | Petrobras Socioambiental)"
+       }
+      ]
+     },
+     {
+      "@type": "WebSite",
+      "@id": "https://quarau.com.br/#website",
+      "url": "https://quarau.com.br/",
+      "name": "Quarau - Projetos Socioambientais, Educativos e Culturais",
+      "description": "Quarau é uma empresa de consultoria em projetos educativos, culturais e socioambientais que tem experiência consolidada nas várias etapas que compõem um projeto, desde a sua concepção, prospecção, seleção, planejamento, execução, monitoramento, controle, encerramento, promoção e difusão. A Quarau está apta a elaborar junto aos seus parceiros, sejam empresas, instituições públicas ou do terceiro setor, projetos que beneficiem territórios urbanos e rurais, bem como instituições locais, regionais ou nacionais. Utiliza metodologias adequadas aos contextos específicos, garantindo a identificação das potencialidades dos territórios e das instituições.   Seguindo esta perspectiva, a Quarau vem colecionando bons resultados em todas as etapas de produção dos projetos, ocupando papéis importantes na concepção, execução e no gerenciamento dos mesmos.",
+      "publisher": {
+       "@id": "https://quarau.com.br/#organization"
+      },
+      "alternateName": "Quarau",
+      "potentialAction": [
+       {
+        "@type": "SearchAction",
+        "target": {
+         "@type": "EntryPoint",
+         "urlTemplate": "https://quarau.com.br/?s={search_term_string}"
+        },
+        "query-input": {
+         "@type": "PropertyValueSpecification",
+         "valueRequired": true,
+         "valueName": "search_term_string"
+        }
+       }
+      ],
+      "inLanguage": "pt-BR"
+     },
+     {
+      "@type": "Organization",
+      "@id": "https://quarau.com.br/#organization",
+      "name": "Quarau - Projetos Socioambientais, Educativos e Culturais",
+      "url": "https://quarau.com.br/",
+      "logo": {
+       "@type": "ImageObject",
+       "inLanguage": "pt-BR",
+       "@id": "https://quarau.com.br/#/schema/logo/image/",
+       "url": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design-4.png",
+       "contentUrl": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design-4.png",
+       "width": 692,
+       "height": 696,
+       "caption": "Quarau - Projetos Socioambientais, Educativos e Culturais"
+      },
+      "image": {
+       "@id": "https://quarau.com.br/#/schema/logo/image/"
+      },
+      "sameAs": [
+       "https://www.instagram.com/quarau.consultoria/",
+       "https://www.linkedin.com/in/quarau-91196b258/"
+      ]
+     }
+    ]
+   }
+  ],
+  "outline": [],
+  "markdown": "**A Quarau é contratada pelo Centro de Estudos da Cultura Popular (CECP) desde 2015 para realizar a elaboração dos projetos, gerenciamento de equipes, articulação de parceiros, realização de pesquisas e produção de relatórios técnicos do Ecomuseu dos Campos de São José.**\n\nNa Terceira Edição do Projeto Ecomuseu, 2021 – 2023, foram mobilizadas cerca de 16 mil pessoas.\n\nO **Ecomuseu** é realizado pelo CECP em parceria com a Petrobras por meio do Programa Petrobras Socioambiental. Este projeto rendeu ao CECP a certificação de instituição desenvolvedora de Tecnologia Social pela Fundação Banco do Brasil (FBB).\n\nO projeto Ecomuseu dos Campos de São José atua dentro dos Objetivos do Desenvolvimento Sustentável (ODS):\n\n![](https://quarau.com.br/wp-content/uploads/2023/12/Tecnologia-social.jpg)",
+  "hiddenText": [],
+  "words": 109,
+  "header": {
+   "links": [
+    {
+     "text": "",
+     "href": "https://quarau.com.br/"
+    },
+    {
+     "text": "mobile menu",
+     "href": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/#"
+    },
+    {
+     "text": "INÍCIO",
+     "href": "https://quarau.com.br/"
+    },
+    {
+     "text": "SOBRE A QUARAU",
+     "href": "https://quarau.com.br/sobre-a-quarau/"
+    },
+    {
+     "text": "CONTATO",
+     "href": "https://quarau.com.br/contato/"
+    }
+   ],
+   "logo": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg=="
+  },
+  "footer": {
+   "text": "Quarau Projetos Socioambientais, Educativos e Culturais São José dos Campos - São Paulo contato@quarau.com.br (12) 98281-3669 | (12) 98264-5960 FALE COM A QUARAU",
+   "links": [
+    {
+     "text": "contato@quarau.com.br",
+     "href": "https://quarau.com.br/contato"
+    },
+    {
+     "text": "",
+     "href": "https://www.instagram.com/quarau.consultoria/"
+    },
+    {
+     "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+     "href": "https://www.instagram.com/quarau.consultoria/"
+    },
+    {
+     "text": "",
+     "href": "https://www.linkedin.com/in/quarau-91196b258/"
+    },
+    {
+     "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+     "href": "https://www.linkedin.com/in/quarau-91196b258/"
+    },
+    {
+     "text": "FALE COM A QUARAU",
+     "href": "https://quarau.com.br/contato/"
+    },
+    {
+     "text": "Back to top icon",
+     "href": ""
+    }
+   ]
+  },
+  "links": [
+   {
+    "text": "",
+    "href": "https://quarau.com.br/"
+   },
+   {
+    "text": "mobile menu",
+    "href": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/#"
+   },
+   {
+    "text": "INÍCIO",
+    "href": "https://quarau.com.br/"
+   },
+   {
+    "text": "SOBRE A QUARAU",
+    "href": "https://quarau.com.br/sobre-a-quarau/"
+   },
+   {
+    "text": "CONTATO",
+    "href": "https://quarau.com.br/contato/"
+   },
+   {
+    "text": "Projeto de Memória Institucional do Museu do Folclore de São José dos Campos (CECP | Fundação Cultural Cassiano Ricardo)novembro 18, 2023",
+    "href": "https://quarau.com.br/portfolio-item/projeto-de-memoria-institucional-do-museu-do-folclore-de-sao-jose-dos-campos-cecp-fundacao-cultural-cassiano-ricardo/"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/04_09_2023_Roda-de-conversa_CSJ_Maria-8-1.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/05_05_2023_Feira-de-Sabere-e-Fazeres_Fabio-e-Rosa-31.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/05_05_2023_Feira-de-Sabere-e-Fazeres_Fabio-e-Rosa-145.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/06_02_2023_Roda_de_Conversa_Nucleo_Ingrid-3.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/06_05_2023_Feira-de-Saberes-e-Fazeres_Maria-9.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/DSC03990.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/Screenshot-2023-12-02-164440-1.png"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/WhatsApp-Image-2022-01-15-at-16.37.54-1.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/IMG_1380_2.jpg"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/A0.png"
+   },
+   {
+    "text": "",
+    "href": "https://quarau.com.br/wp-content/uploads/2023/12/WhatsApp-Image-2023-11-23-at-15.32.163.jpeg"
+   },
+   {
+    "text": "contato@quarau.com.br",
+    "href": "https://quarau.com.br/contato"
+   },
+   {
+    "text": "",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   },
+   {
+    "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   },
+   {
+    "text": "",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": ".path{fill:none;stroke:#333;stroke-miterlimit:10;stroke-width:1.5px;}",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": "FALE COM A QUARAU",
+    "href": "https://quarau.com.br/contato/"
+   },
+   {
+    "text": "Back to top icon",
+    "href": ""
+   },
+   {
+    "text": "menu close icon",
+    "href": "https://quarau.com.br/portfolio-item/ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/#"
+   },
+   {
+    "text": "LinkedIn icon",
+    "href": "https://www.linkedin.com/in/quarau-91196b258/"
+   },
+   {
+    "text": "Instagram icon",
+    "href": "https://www.instagram.com/quarau.consultoria/"
+   }
+  ],
+  "images": [
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/Tecnologia-social.jpg",
+    "alt": "",
+    "title": "",
+    "w": 280,
+    "h": 287,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/Untitled-design.png",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/04_09_2023_Roda-de-conversa_CSJ_Maria-8-1.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/05_05_2023_Feira-de-Sabere-e-Fazeres_Fabio-e-Rosa-31.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/05_05_2023_Feira-de-Sabere-e-Fazeres_Fabio-e-Rosa-145.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/06_02_2023_Roda_de_Conversa_Nucleo_Ingrid-3.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/06_05_2023_Feira-de-Saberes-e-Fazeres_Maria-9.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/DSC03990.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/Screenshot-2023-12-02-164440-1.png",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/WhatsApp-Image-2022-01-15-at-16.37.54-1.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/IMG_1380_2.jpg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/A0.png",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/WhatsApp-Image-2023-11-23-at-15.32.163.jpeg",
+    "alt": "",
+    "title": "",
+    "w": 1,
+    "h": 1,
+    "where": "main",
+    "kind": "img"
+   },
+   {
+    "src": "https://themes.muffingroup.com/be/company3/wp-content/uploads/2018/06/home_company3_pic7.png",
+    "alt": "Ecomuseu dos Campos de São José (CECP | Petrobras Socioambiental)",
+    "title": "",
+    "w": 0,
+    "h": 0,
+    "where": "footer",
+    "kind": "img"
+   },
+   {
+    "src": "https://quarau.com.br/wp-content/uploads/2023/12/home_company3_slider_pic5-copy-20231118-193929-copy.png#440",
+    "alt": "",
+    "title": "",
+    "w": 0,
+    "h": 0,
+    "where": "other",
+    "kind": "bg"
+   }
+  ],
+  "iframes": [],
+  "videos": [
+   "https://quarau.com.br/wp-content/uploads/2023/12/Video_Final.mp4#466"
+  ],
+  "forms": [
+   {
+    "action": "https://quarau.com.br/",
+    "fields": [
+     {
+      "name": "s",
+      "type": "text",
+      "label": "Enter your search",
+      "required": false
+     },
+     {
+      "name": "",
+      "type": "submit",
+      "label": "Search",
+      "required": false
+     }
+    ]
+   }
+  ]
+ }
+}

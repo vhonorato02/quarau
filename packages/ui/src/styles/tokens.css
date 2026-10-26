@@ -40,7 +40,8 @@
   --color-success: #24792f;
 
   /* Typography */
-  --font-sans: 'Barlow', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-sans:
+    'Barlow', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --font-display: 'Barlow', ui-sans-serif, system-ui, sans-serif;
 
   --text-eyebrow: 0.8125rem;

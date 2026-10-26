@@ -31,7 +31,8 @@ export const slugField = (fallbackField = 'title'): Field => ({
   required: true,
   admin: {
     position: 'sidebar',
-    description: 'Parte final do endereço da página. Gerado a partir do título; use apenas letras, números e hífens.',
+    description:
+      'Parte final do endereço da página. Gerado a partir do título; use apenas letras, números e hífens.',
   },
   hooks: { beforeValidate: [formatSlug(fallbackField)] },
   validate: (val: unknown) =>

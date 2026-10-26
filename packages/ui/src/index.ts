@@ -2,7 +2,14 @@ export { cn } from './lib/cn'
 export { ODS, isOdsNumber, type OdsNumber } from './lib/ods'
 export { Button, ArrowIcon, buttonVariants, type ButtonProps } from './components/Button'
 export { Container, Section, type SectionTone } from './components/Layout'
-export { Heading, Eyebrow, Lead, BrandDot, type HeadingProps, type HeadingSize } from './components/Typography'
+export {
+  Heading,
+  Eyebrow,
+  Lead,
+  BrandDot,
+  type HeadingProps,
+  type HeadingSize,
+} from './components/Typography'
 export { LogoSymbol, Logotype } from './components/Logo'
 export { Badge, OdsChip, OdsList } from './components/Badge'
 export { Stat, type StatProps } from './components/Stat'

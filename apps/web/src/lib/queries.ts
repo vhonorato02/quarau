@@ -46,7 +46,11 @@ async function isDraft(): Promise<boolean> {
 }
 
 /** Wraps a CMS query with Next's data cache (tag-invalidated) unless draft mode is on. */
-async function cached<T>(keyParts: string[], cacheTags: string[], fn: (draft: boolean) => Promise<T>): Promise<T> {
+async function cached<T>(
+  keyParts: string[],
+  cacheTags: string[],
+  fn: (draft: boolean) => Promise<T>,
+): Promise<T> {
   const draft = await isDraft()
   if (draft) return fn(true)
   return unstable_cache(() => fn(false), keyParts, { tags: cacheTags, revalidate: REVALIDATE })()
@@ -57,20 +61,24 @@ export async function getDocBySlug<C extends Routable>(
   slug: string,
   locale: Locale = 'pt',
 ): Promise<DocFor<C> | null> {
-  return cached(['doc', collection, slug, locale], [tags.collection(collection), tags.doc(collection, slug)], async (draft) => {
-    const payload = await getPayload()
-    const res = await payload.find({
-      collection,
-      where: { slug: { equals: slug } },
-      locale,
-      draft,
-      depth: 2,
-      limit: 1,
-      overrideAccess: draft,
-      pagination: false,
-    })
-    return (res.docs[0] as DocFor<C> | undefined) ?? null
-  })
+  return cached(
+    ['doc', collection, slug, locale],
+    [tags.collection(collection), tags.doc(collection, slug)],
+    async (draft) => {
+      const payload = await getPayload()
+      const res = await payload.find({
+        collection,
+        where: { slug: { equals: slug } },
+        locale,
+        draft,
+        depth: 2,
+        limit: 1,
+        overrideAccess: draft,
+        pagination: false,
+      })
+      return (res.docs[0] as DocFor<C> | undefined) ?? null
+    },
+  )
 }
 
 export async function listDocs<C extends Routable | 'team' | 'partners' | 'documents'>(
@@ -79,7 +87,15 @@ export async function listDocs<C extends Routable | 'team' | 'partners' | 'docum
 ) {
   const { locale = 'pt', limit = 100, sort, where, depth = 1 } = opts
   return cached(
-    ['list', collection, locale, String(limit), sort ?? '', JSON.stringify(where ?? {}), String(depth)],
+    [
+      'list',
+      collection,
+      locale,
+      String(limit),
+      sort ?? '',
+      JSON.stringify(where ?? {}),
+      String(depth),
+    ],
     [tags.collection(collection)],
     async (draft) => {
       const payload = await getPayload()
@@ -91,11 +107,20 @@ export async function listDocs<C extends Routable | 'team' | 'partners' | 'docum
         depth,
         sort,
         draft: hasDrafts ? draft : undefined,
-        where: hasDrafts && !draft ? { and: [{ _status: { equals: 'published' } }, ...(where ? [where] : [])] } : where,
+        where:
+          hasDrafts && !draft
+            ? { and: [{ _status: { equals: 'published' } }, ...(where ? [where] : [])] }
+            : where,
         pagination: false,
       })
       return res.docs as unknown as Array<
-        C extends Routable ? DocFor<C> : C extends 'team' ? Team : C extends 'partners' ? Partner : DocumentDoc
+        C extends Routable
+          ? DocFor<C>
+          : C extends 'team'
+            ? Team
+            : C extends 'partners'
+              ? Partner
+              : DocumentDoc
       >
     },
   )
@@ -109,7 +134,10 @@ type GlobalMap = {
   'site-settings': SiteSetting
 }
 
-export async function getGlobal<G extends keyof GlobalMap>(slug: G, locale: Locale = 'pt'): Promise<GlobalMap[G]> {
+export async function getGlobal<G extends keyof GlobalMap>(
+  slug: G,
+  locale: Locale = 'pt',
+): Promise<GlobalMap[G]> {
   return cached(['global', slug, locale], [tags.global(slug)], async () => {
     const payload = await getPayload()
     return (await payload.findGlobal({ slug, locale, depth: 1 })) as GlobalMap[G]
@@ -119,7 +147,12 @@ export async function getGlobal<G extends keyof GlobalMap>(slug: G, locale: Loca
 export async function getRedirects() {
   return cached(['redirects'], [tags.collection('redirects')], async () => {
     const payload = await getPayload()
-    const res = await payload.find({ collection: 'redirects', limit: 1000, depth: 1, pagination: false })
+    const res = await payload.find({
+      collection: 'redirects',
+      limit: 1000,
+      depth: 1,
+      pagination: false,
+    })
     return res.docs
   })
 }

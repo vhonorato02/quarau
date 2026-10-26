@@ -1,0 +1,88 @@
+# Plataforma da VPS: proxy de borda + Postgres compartilhado.
+#
+# Instalada em /srv/platform por infra/platform/install.sh. Cada site vive em
+# /srv/sites/<site> com o próprio compose e entra nas redes externas "proxy"
+# (para receber tráfego) e "db" (para falar com o Postgres). As rotas ficam em
+# traefik/dynamic/site-<site>.yml, escritas pelo comando "site" (o Traefik não
+# tem acesso ao Docker). Ver docs/decisions/0013-plataforma-vps-traefik-sem-painel.md.
+name: platform
+
+networks:
+  proxy:
+    name: proxy
+  db:
+    name: db
+    internal: true
+
+services:
+  traefik:
+    image: traefik:v3.6
+    restart: unless-stopped
+    command:
+      - --global.checknewversion=false
+      - --global.sendanonymoususage=false
+      - --log.level=WARN
+      - --ping=true
+      - --providers.file.directory=/etc/traefik/dynamic
+      - --providers.file.watch=true
+      - --entrypoints.http.address=:80
+      - --entrypoints.http.http.redirections.entrypoint.to=https
+      - --entrypoints.http.http.redirections.entrypoint.scheme=https
+      - --entrypoints.https.address=:443
+      - --entrypoints.https.http3=true
+      - --entrypoints.https.http.tls.certresolver=letsencrypt
+      - --entrypoints.https.http.middlewares=defaults@file
+      - --certificatesresolvers.letsencrypt.acme.storage=/acme/acme.json
+      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+    ports:
+      - '80:80'
+      - '443:443/tcp'
+      - '443:443/udp'
+    volumes:
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
+      - ./traefik/acme:/acme
+    networks: [proxy]
+    read_only: true
+    security_opt: ['no-new-privileges:true']
+    healthcheck:
+      test: ['CMD', 'traefik', 'healthcheck', '--ping']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits: { memory: 128m }
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina em /srv/platform/.env}
+    command:
+      - postgres
+      - -c
+      - shared_buffers=128MB
+      - -c
+      - effective_cache_size=384MB
+      - -c
+      - work_mem=4MB
+      - -c
+      - maintenance_work_mem=64MB
+      - -c
+      - max_connections=100
+      - -c
+      - log_min_duration_statement=500
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      db:
+        aliases: [postgres]
+    shm_size: 128m
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      retries: 10
+    deploy:
+      resources:
+        limits: { memory: 448m }
