@@ -24,4 +24,4 @@ while IFS='=' read -r k v; do
 done < "$envfile"
 cd "$out"
 echo "Publicando $(du -sh . | cut -f1) (fotos: $(ls apps/web/public/media | wc -l))..."
-npx --yes vercel@latest deploy --temporary --yes "${args[@]}" 2>&1 | grep -vE "^(npm warn)" | sed -E 's#(postgres(ql)?://)[^ ]+#\1***#g'
+env -u CI -u GITHUB_ACTIONS -u CONTINUOUS_INTEGRATION npx --yes vercel@latest deploy --temporary --yes "${args[@]}" 2>&1 | grep -vE "^(npm warn)" | sed -E 's#(postgres(ql)?://)[^ ]+#\1***#g'
