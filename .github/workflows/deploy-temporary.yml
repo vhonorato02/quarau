@@ -34,7 +34,7 @@ jobs:
           umask 077
           printf '%s\n' "$TEMP_DEPLOY_ENV" > "$RUNNER_TEMP/app.env"
           bash tools/deploy/vercel-temporary.sh "$RUNNER_TEMP/app.env" "$RUNNER_TEMP/media" > "$RUNNER_TEMP/out.txt" 2>&1 || status=$?
-          grep -oE 'https://[a-z0-9-]+\.vercel\.app' "$RUNNER_TEMP/out.txt" | sort -u || true
+          grep -oE 'https://[a-z0-9-]+\.(tmp\.now|vercel\.app)' "$RUNNER_TEMP/out.txt" | sort -u || true
           grep -E '^(Error|> Error)' "$RUNNER_TEMP/out.txt" | head -5 || true
           openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:OUT_KEY -in "$RUNNER_TEMP/out.txt" -out out.enc
           rm -f "$RUNNER_TEMP/app.env" "$RUNNER_TEMP/out.txt"

@@ -17,7 +17,8 @@ find "$media" -maxdepth 1 -type f ! -name '*.mp4' ! -name '*.webm' -exec cp {} "
 args=()
 while IFS='=' read -r k v; do
   [[ -z $k || $k == \#* ]] && continue
-  args+=(--env "$k=$v" --build-env "$k=$v")
+  args+=(--env "$k=$v")
+  export "$k=$v" # the anonymous deploy builds locally: the build reads them from this process
 done < "$envfile"
 cd "$out/apps/web"
 echo "Publicando $(du -sh "$out" | cut -f1) (fotos: $(ls public/media | wc -l))..."
