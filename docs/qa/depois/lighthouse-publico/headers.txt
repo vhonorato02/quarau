@@ -1,0 +1,24 @@
+HTTP/2 200 
+age: 10
+cache-control: public, max-age=0, must-revalidate
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' blob:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; frame-ancestors 'self'; form-action 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+content-type: text/html; charset=utf-8
+cross-origin-opener-policy: same-origin
+date: Tue, 27 Oct 2026 14:38:00 GMT
+etag: "6mdncsgz7v12i2"
+permissions-policy: camera=(), microphone=(), geolocation=(), interest-cohort=(), browsing-topics=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+x-matched-path: /[slug]
+x-nextjs-prerender: 1
+x-nextjs-rewritten-path: /inicio
+x-nextjs-stale-time: 300
+x-robots-tag: noindex, nofollow
+x-vercel-cache: HIT
+x-vercel-id: cle1::iad1::hq6nz-1793111891696-4c7bce1a66cb
+content-length: 50323
+

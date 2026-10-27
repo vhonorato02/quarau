@@ -24,7 +24,6 @@ const shot = async (name) => {
   })
   console.log('📸', n, name)
 }
-const step = process.env.QA_STEP ?? 'all'
 const title = `Nossa metodologia ${Date.now().toString(36)}`
 
 await page.goto(`${base}/admin/login`)

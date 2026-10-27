@@ -6,18 +6,16 @@
 
 ## Retomar em
 
-- **Fase:** 6 — QA final + publicação temporária (2026-10-27).
-- **Plano em curso:** (1) estabilizar ✔ `129a7b2` → (2) performance ≥ 95 local → (3) banco temporário Neon
-  reclamável ✔ (São Paulo, expira 30/10 se não reclamado) → (4) `bash tools/deploy/vercel-temporary.sh` (deploy
-  reclamável, sem login) → (5) QA na URL pública (Playwright, axe, Lighthouse, cabeçalhos, formulário, painel)
-  → (6) autocrítica 2ª rodada, docs, commit.
-- **Credenciais do deploy temporário:** só em `.cache/neon/` (fora do git): `neon.env` (banco) e `app.env` (segredos).
-- **Limitação do deploy temporário:** sem armazenamento de objetos (o do Neon só existe após reclamar; R2 exige conta):
-  fotos servidas como estáticos (`MEDIA_STATIC=true`), vídeos ocultos, envio de arquivo bloqueado com aviso.
+- **Fase:** 6 concluída em 2026-10-27, exceto o que depende do dono.
+- **Publicação:** demonstração temporária reclamável na Vercel, republicável a qualquer momento por
+  GitHub → Actions → _Temporary deployment (claimable)_ (publica + e2e + Lighthouse na URL nova). Cada execução
+  gera URL nova e vale 59 min se não for reclamada; o banco Neon reclamável vale até 2026-10-30.
+- **Próximo passo:** o dono reclama o deploy da Vercel e o banco Neon (links entregues no chat, nunca no git);
+  depois cria R2/Resend/Turnstile e segue [MIGRACAO-VPS.md](MIGRACAO-VPS.md).
+- **Credenciais locais (fora do git):** `.cache/neon/` (banco e segredos do deploy), `ACESSO-ADMIN.txt`
+  (admin), `.cache/leigo.pw` (editora de teste). Segredos no GitHub: `TEMP_DEPLOY_ENV`, `TEMP_DEPLOY_OUTPUT_KEY`,
+  `E2E_ADMIN_EMAIL`, `E2E_ADMIN_PASSWORD`.
 - **Comando para conferir o estado:** `git log --oneline -5 && gh run list -L 3`
-- **Rodar localmente (Windows, sem Docker):** `pnpm db:local` → `pnpm --filter @quarau/web migrate` → `pnpm seed` → `pnpm dev`.
-- **Esperando o dono:** reclamar o banco Neon e o deploy Vercel (links no relatório), depois contas R2/Resend/Turnstile
-  ([MIGRACAO-VPS.md](MIGRACAO-VPS.md) §Contas); fatos `[CONFIRMAR]` em [CONTENT-TODO.md](CONTENT-TODO.md).
 
 ## Fases da missão
 
@@ -35,17 +33,17 @@
   - [x] Conteúdo real da raspagem, seed idempotente que não sobrescreve edições
 - [x] **5 — Pronto para migrar**: Dockerfile testado no CI com Postgres de serviço, `/api/health`, GHCR,
       [MIGRACAO-VPS.md](MIGRACAO-VPS.md)
-- [ ] **6 — QA final** (evidências em `qa/depois/`)
-  - [ ] CI verde (todos os gates)
-  - [ ] e2e contra a URL publicada (depende das contas; até lá, contra o contêiner de produção no CI)
-  - [ ] Lighthouse mobile ≥ 95 nas 4 categorias
-  - [ ] axe sem violações AA + teclado registrado
-  - [ ] Cabeçalhos (Observatory)
+- [x] **6 — QA final** (evidências em `qa/depois/`)
+  - [x] e2e contra a URL publicada: 88/88 (site, painel, axe; desktop e celular)
+  - [~] Lighthouse mobile ≥ 95: home 98, Projetos 99, projeto 96, Contato 98, Sobre 94; a11y e boas práticas 100;
+    SEO 69 só pelo `noindex` proposital do domínio temporário
+  - [x] axe sem violações AA (e2e); navegação por teclado coberta pelos e2e de menu/foco
+  - [x] Cabeçalhos de segurança (`qa/depois/lighthouse-publico/headers.txt`); Observatory exige domínio público próprio
   - [x] Zero hardcoded
-  - [ ] Teste "leigo" no painel com capturas
-  - [ ] Imagem Docker com Postgres local passando nos e2e
-  - [ ] Segunda rodada da autocrítica (notas ≥ 8)
-  - [ ] Code review final com achados corrigidos
+  - [x] Teste "leigo" no painel com capturas (achou e corrigiu o bug de bloco vazio em produção)
+  - [x] Imagem Docker com Postgres de serviço passando nos e2e (job do CI)
+  - [x] Segunda rodada da autocrítica (notas ≥ 8; ver AUTOCRITICA §6)
+  - [ ] Gate do Lighthouse no job do contêiner do CI ainda vermelho por TBT em máquina lenta
 
 ## Decisões e problemas
 
@@ -55,3 +53,8 @@
   o build do Docker não precisa de banco.
 - 2026-10-26 · F4 · CSP sem nonce nas páginas estáticas (ADR 0021): nonce exige renderização dinâmica no Next 16.
 - 2026-10-26 · F4 · Next 16.4.3 / zod 4.6.7 e overrides de transitivas: nenhuma vulnerabilidade alta ou crítica.
+- 2026-10-27 · F6 · Deploy anônimo da Vercel construído em Linux pelo GitHub Actions (Windows não gera o pacote);
+  link de reclamar fica criptografado no artefato, nunca no log público.
+- 2026-10-27 · F6 · Salvamento automático desligado: em produção ele corria junto com a montagem do formulário e
+  deixava blocos novos vazios (achado no teste leigo).
+- 2026-10-27 · F6 · Branch padrão do GitHub trocado para `main`.

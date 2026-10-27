@@ -59,6 +59,21 @@ resultado com os mesmos critérios.
 - Nada sobre a equipe, CNPJ, endereço completo e anos do Quipá existe em fonte verificável
   ([CONTENT-TODO.md](CONTENT-TODO.md)); esses campos ficam ocultos.
 
-## 6. Segunda rodada (depois da reconstrução)
+## 6. Segunda rodada (2026-10-27, na URL pública)
 
-Preenchida na Fase 6 com as medidas de [`qa/depois/`](qa/).
+Medido no deploy temporário da Vercel (`gru1`, banco Neon em São Paulo), pelo workflow
+`deploy-temporary.yml` logo após publicar. Evidências em [`qa/depois/`](qa/depois/).
+
+| Aspecto            | Antes | Agora  | Evidência e o que ainda falta                                                                                                                                                                                                                                                                                                                       |
+| ------------------ | ----- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Design**         | 3     | **8**  | Direção "Lente" aplicada em todas as páginas ([folha-celular.jpg](qa/depois/folha-celular.jpg), `capturas/`). Falta: fotos em alta resolução e créditos (dependem da Quarau); miniaturas reais no seletor de blocos do painel.                                                                                                                      |
+| **UX e conteúdo**  | 4     | **8**  | Proposta e CTA na primeira tela; projetos por território; contato com `tel:`; nada vazio no menu (Notícias some sem notícia). Falta: fatos `[CONFIRMAR]` (CNPJ, endereço, equipe) e depoimentos reais.                                                                                                                                              |
+| **Código**         | 5     | **8**  | Camadas `cms → server → components → app`; Zod nas fronteiras; 40 unitários, 18 de integração (papéis, rascunho, agendamento, seed), 88 e2e na URL pública; zero texto fixo (lint + script); build sem banco; imagem Docker testada no CI. Falta: gate do Lighthouse no CI do contêiner ainda acusa TBT em máquina lenta.                           |
+| **CMS**            | 4     | **8**  | Teste "leigo" com editora (não admin) criando, publicando e editando uma página só pelo painel ([leigo/](qa/depois/leigo/)); blocos com nome; "Textos do site"; painel com pendências e ajuda. O teste achou e corrigiu um bug real (bloco novo vazio em produção). Falta: envio de fotos no deploy temporário (sem armazenamento até reclamar/R2). |
+| **Performance**    | 6     | **9**  | Lighthouse mobile (mediana de 3): home 98, Projetos 99, projeto 96, Contato 98, Sobre 94 ([lighthouse.txt](qa/depois/lighthouse-publico/lighthouse.txt)). Falta: Sobre 1 ponto abaixo da meta 95 em parte das execuções.                                                                                                                            |
+| **Acessibilidade** | 8     | **10** | Lighthouse 100 em todas; axe sem violações nos e2e (desktop e celular); foco visível, menu em `<dialog>`, ordem de títulos corrigida.                                                                                                                                                                                                               |
+| **SEO**            | 7     | **9**  | Metadados, JSON-LD, sitemap, robots, 301 de todas as URLs do WordPress (testados). O 69 medido é o `noindex` proposital do domínio temporário (`SITE_NOINDEX=true`); sem ele as demais checagens passam.                                                                                                                                            |
+| **Segurança**      | —     | **8**  | Cabeçalhos ([headers.txt](qa/depois/lighthouse-publico/headers.txt)): CSP, HSTS, nosniff, X-Frame, Referrer, Permissions, COOP; papéis testados; senha ≥ 12; bloqueio de login; upload sem SVG; auditoria sem alta/crítica. CSP sem nonce nas páginas estáticas ([ADR 0021](decisions/0021-csp-sem-nonce-nas-paginas-estaticas.md)).                |
+
+**O que ainda impede "10":** contas definitivas (Vercel/Neon reclamados, R2, Resend, Turnstile), fatos da empresa
+e fotos originais — tudo depende do dono ([CONTENT-TODO.md](CONTENT-TODO.md), [MIGRACAO-VPS.md](MIGRACAO-VPS.md)).

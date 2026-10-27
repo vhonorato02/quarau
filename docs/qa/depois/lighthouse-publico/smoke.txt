@@ -1,0 +1,13 @@
+200 0.588944s /
+200 1.639005s /sobre
+200 0.611969s /projetos
+200 1.138920s /projetos/projeto-quipa
+200 0.841729s /atuacao
+200 0.512201s /contato
+200 0.537645s /privacidade
+404 0.374982s /noticias
+404 0.587183s /nao-existe
+200 3.090293s /api/health
+200 0.994222s /sitemap.xml
+200 0.147006s /robots.txt
+308 0.141128s /sobre-a-quarau/

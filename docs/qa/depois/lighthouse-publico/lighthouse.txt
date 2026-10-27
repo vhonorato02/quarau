@@ -1,0 +1,5 @@
+https://rapid-thunder-yu47j4a.tmp.now/ {"performance":98,"accessibility":100,"best-practices":100,"seo":69}
+https://rapid-thunder-yu47j4a.tmp.now/projetos {"performance":99,"accessibility":100,"best-practices":100,"seo":69}
+https://rapid-thunder-yu47j4a.tmp.now/projetos/projeto-quipa {"performance":96,"accessibility":100,"best-practices":100,"seo":69}
+https://rapid-thunder-yu47j4a.tmp.now/sobre {"performance":94,"accessibility":100,"best-practices":100,"seo":69}
+https://rapid-thunder-yu47j4a.tmp.now/contato {"performance":98,"accessibility":100,"best-practices":100,"seo":69}
