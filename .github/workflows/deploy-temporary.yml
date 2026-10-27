@@ -1,0 +1,47 @@
+name: Temporary deployment (claimable)
+
+# Anonymous `vercel deploy --temporary` built on Linux (Windows cannot produce the prebuilt output).
+# The claim link must stay private (public repo): the log shows only the public URL; the full CLI
+# output is encrypted with TEMP_DEPLOY_OUTPUT_KEY and kept as an artifact.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Photos of the seeded database
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download media-demo -p media-demo.tar.gz -D "$RUNNER_TEMP"
+          mkdir -p "$RUNNER_TEMP/media" && tar -xzf "$RUNNER_TEMP/media-demo.tar.gz" -C "$RUNNER_TEMP/media"
+      - name: Deploy
+        env:
+          TEMP_DEPLOY_ENV: ${{ secrets.TEMP_DEPLOY_ENV }}
+          OUT_KEY: ${{ secrets.TEMP_DEPLOY_OUTPUT_KEY }}
+        run: |
+          umask 077
+          printf '%s\n' "$TEMP_DEPLOY_ENV" > "$RUNNER_TEMP/app.env"
+          bash tools/deploy/vercel-temporary.sh "$RUNNER_TEMP/app.env" "$RUNNER_TEMP/media" > "$RUNNER_TEMP/out.txt" 2>&1 || status=$?
+          grep -oE 'https://[a-z0-9-]+\.vercel\.app' "$RUNNER_TEMP/out.txt" | sort -u || true
+          grep -E '^(Error|> Error)' "$RUNNER_TEMP/out.txt" | head -5 || true
+          openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:OUT_KEY -in "$RUNNER_TEMP/out.txt" -out out.enc
+          rm -f "$RUNNER_TEMP/app.env" "$RUNNER_TEMP/out.txt"
+          exit ${status:-0}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deploy-output-encrypted
+          path: out.enc
+          retention-days: 3
