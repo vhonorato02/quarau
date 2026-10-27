@@ -8,12 +8,12 @@
 set -euo pipefail
 envfile=$1; media=$2
 root=$(git rev-parse --show-toplevel)
-out="$root/.cache/deploy"
+out="${DEPLOY_DIR:-$root/.cache/deploy}" # outside the git checkout in CI: the CLI must not mix the two roots
 rm -rf "$out" && mkdir -p "$out"
 git -C "$root" ls-files -co --exclude-standard -z | (cd "$root" && xargs -0 tar -cf -) | tar -xf - -C "$out"
 mkdir -p "$out/apps/web/public/media"
 find "$media" -maxdepth 1 -type f ! -name '*.mp4' ! -name '*.webm' -exec cp {} "$out/apps/web/public/media/" \;
-# Monorepo: a CLI detecta apps/web como raiz do app a partir da raiz do repositório.
+# Monorepo: the CLI runs from apps/web; the workspace sits next to it (local build).
 args=()
 while IFS='=' read -r k v; do
   [[ -z $k || $k == \#* ]] && continue
@@ -21,6 +21,6 @@ while IFS='=' read -r k v; do
   args+=(--env "$k=$v")
   export "$k=$v" # the anonymous deploy builds locally: the build reads them from this process
 done < "$envfile"
-cd "$out"
+cd "$out/apps/web"
 echo "Publicando $(du -sh "$out" | cut -f1) (fotos: $(ls apps/web/public/media | wc -l))..."
 env -u CI -u GITHUB_ACTIONS -u CONTINUOUS_INTEGRATION npx --yes vercel@latest deploy --temporary --yes "${args[@]}" 2>&1 | grep -vE "^(npm warn)" | sed -E 's#(postgres(ql)?://)[^ ]+#\1***#g'
