@@ -87,7 +87,7 @@ export async function ProjectIndex({
         </div>
       ) : null}
       {projects.length ? (
-        <ProjectRows projects={projects} t={t} />
+        <ProjectRows projects={projects} t={t} headingLevel={block.heading ? 3 : 2} />
       ) : (
         <p className="q-muted">{t.project.empty}</p>
       )}

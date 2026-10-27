@@ -21,6 +21,7 @@ export const Services: CollectionConfig = {
   labels: { singular: 'Área de atuação', plural: 'Áreas de atuação' },
   defaultSort: 'order',
   admin: {
+    hideAPIURL: true,
     group: 'Conteúdo',
     useAsTitle: 'title',
     defaultColumns: ['title', 'order', '_status', 'updatedAt'],
@@ -49,6 +50,7 @@ export const Services: CollectionConfig = {
     {
       name: 'story',
       type: 'blocks',
+      labels: { singular: 'Bloco', plural: 'Blocos' },
       label: 'Texto da página',
       blocks: storyBlocks,
       admin: { initCollapsed: true },

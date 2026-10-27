@@ -40,6 +40,7 @@ export const Projects: CollectionConfig = {
   labels: { singular: 'Projeto', plural: 'Projetos' },
   defaultSort: 'order',
   admin: {
+    hideAPIURL: true,
     group: 'Conteúdo',
     useAsTitle: 'title',
     defaultColumns: ['title', 'territory', 'featured', '_status', 'updatedAt'],
@@ -169,6 +170,7 @@ export const Projects: CollectionConfig = {
             {
               name: 'story',
               type: 'blocks',
+              labels: { singular: 'Bloco', plural: 'Blocos' },
               label: 'Blocos da história',
               blocks: storyBlocks,
               admin: { initCollapsed: true },

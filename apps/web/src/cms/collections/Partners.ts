@@ -8,7 +8,12 @@ export const Partners: CollectionConfig = {
   slug: 'partners',
   labels: { singular: 'Parceiro / cliente', plural: 'Parceiros e clientes' },
   defaultSort: 'order',
-  admin: { group: 'Institucional', useAsTitle: 'name', defaultColumns: ['name', 'kind', 'order'] },
+  admin: {
+    hideAPIURL: true,
+    group: 'Institucional',
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'kind', 'order'],
+  },
   access: { read: anyone, create: editors, update: editors, delete: editors },
   hooks: {
     afterChange: [revalidateCollection('partners')],

@@ -89,4 +89,21 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default withPayload(nextConfig, { devBundleServerPackages: false })
+const withCms = withPayload(nextConfig, { devBundleServerPackages: false })
+
+/**
+ * withPayload sends `Accept-CH`/`Critical-CH: Sec-CH-Prefers-Color-Scheme` on every path (for the admin
+ * theme). On the public site `Critical-CH` makes Chrome restart each first navigation (~0.6 s on mobile),
+ * so those hints are limited to the admin.
+ */
+export default {
+  ...withCms,
+  async headers() {
+    const all = (await withCms.headers?.()) ?? []
+    return all.map((rule) =>
+      rule.source === '/:path*' && rule.headers.some((h) => h.key === 'Critical-CH')
+        ? { ...rule, source: '/admin/:path*' }
+        : rule,
+    )
+  },
+} satisfies NextConfig

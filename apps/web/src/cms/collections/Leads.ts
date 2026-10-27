@@ -11,6 +11,7 @@ export const Leads: CollectionConfig = {
   labels: { singular: 'Contato recebido', plural: 'Contatos recebidos' },
   defaultSort: '-createdAt',
   admin: {
+    hideAPIURL: true,
     group: 'Relacionamento',
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'subject', 'status', 'createdAt'],

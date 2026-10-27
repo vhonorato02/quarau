@@ -442,7 +442,7 @@ export const projects: ProjectSeed[] = [
           p(
             'A Quarau atuou como consultora em todas as etapas do programa: elaboração do edital, prospecção de ONGs, avaliação, seleção, monitoramento, finalização e difusão audiovisual.',
           ),
-          h('h3', 'Biointeração na prática'),
+          h('h2', 'Biointeração na prática'),
           p(
             'Com a Casa do Mel, a Casa de Farinha e outras unidades de compartilhamento, o projeto põe em prática o que o líder e escritor quilombola Antônio Bispo dos Santos, um dos idealizadores do Instituto Umbuzeiro, chamou de biointeração.',
           ),

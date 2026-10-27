@@ -26,6 +26,7 @@ export const News: CollectionConfig = {
   labels: { singular: 'Notícia', plural: 'Notícias' },
   defaultSort: '-publishedAt',
   admin: {
+    hideAPIURL: true,
     group: 'Conteúdo',
     useAsTitle: 'title',
     defaultColumns: ['title', 'publishedAt', '_status'],
@@ -51,6 +52,7 @@ export const News: CollectionConfig = {
     {
       name: 'story',
       type: 'blocks',
+      labels: { singular: 'Bloco', plural: 'Blocos' },
       label: 'Texto da notícia',
       blocks: storyBlocks,
       required: true,

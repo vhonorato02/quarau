@@ -36,6 +36,7 @@ export const Media: CollectionConfig = {
   slug: 'media',
   labels: { singular: 'Mídia', plural: 'Mídias' },
   admin: {
+    hideAPIURL: true,
     group: 'Biblioteca',
     defaultColumns: ['filename', 'alt', 'needsReview', 'updatedAt'],
     listSearchableFields: ['filename', 'alt', 'caption'],

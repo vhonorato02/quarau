@@ -24,7 +24,19 @@ for (const t of targets) {
       deviceScaleFactor: 1,
     })
     await page.goto(url, { waitUntil: 'networkidle' })
-    await page.evaluate(() => document.fonts.ready)
+    await page.evaluate(async () => {
+      await document.fonts.ready
+      // Scroll through the page so lazy images load, then wait for every image to decode.
+      for (let y = 0; y < document.body.scrollHeight; y += window.innerHeight * 0.8) {
+        window.scrollTo(0, y)
+        await new Promise((r) => setTimeout(r, 120))
+      }
+      window.scrollTo(0, 0)
+      await Promise.all(
+        [...document.images].map((img) => (img.complete ? null : img.decode().catch(() => null))),
+      )
+    })
+    await page.waitForTimeout(300)
     // Scroll to the end so lazy images load, then back to the top.
     await page.evaluate(async () => {
       for (let y = 0; y < document.body.scrollHeight; y += 600) {

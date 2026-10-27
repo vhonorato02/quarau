@@ -8,7 +8,7 @@ import { SiteTextsGlobal } from './site-texts'
 const base = (slug: string): Pick<GlobalConfig, 'access' | 'hooks' | 'admin'> => ({
   access: { read: anyone, update: editors },
   hooks: { afterChange: [revalidateGlobal(slug)] },
-  admin: { group: 'Configurações do site' },
+  admin: { group: 'Configurações do site', hideAPIURL: true },
 })
 
 export const Navigation: GlobalConfig = {

@@ -14,6 +14,7 @@ export const Users: CollectionConfig = {
     cookies: { sameSite: 'Lax', secure: process.env.NODE_ENV === 'production' },
   },
   admin: {
+    hideAPIURL: true,
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'roles'],
     group: 'Configurações',

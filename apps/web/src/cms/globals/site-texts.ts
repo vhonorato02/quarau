@@ -179,6 +179,7 @@ export const SiteTextsGlobal: GlobalConfig = {
   label: 'Textos do site',
   admin: {
     group: 'Configurações do site',
+    hideAPIURL: true,
     description:
       'Rótulos, botões, mensagens de erro, aviso de cookies e outros textos curtos que aparecem em todo o site.',
   },

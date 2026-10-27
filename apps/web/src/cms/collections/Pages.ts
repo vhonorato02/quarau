@@ -16,6 +16,7 @@ export const Pages: CollectionConfig = {
   slug: 'pages',
   labels: { singular: 'Página', plural: 'Páginas' },
   admin: {
+    hideAPIURL: true,
     group: 'Conteúdo',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
@@ -45,6 +46,7 @@ export const Pages: CollectionConfig = {
     {
       name: 'layout',
       type: 'blocks',
+      labels: { singular: 'Bloco', plural: 'Blocos' },
       label: 'Blocos da página',
       blocks: pageBlocks,
       minRows: 1,
