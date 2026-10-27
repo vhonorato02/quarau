@@ -33,7 +33,7 @@ export function ProjectRows({
   const H = headingLevel === 2 ? 'h2' : 'h3'
   return (
     <ul className="q-index">
-      {projects.map((p, i) => {
+      {projects.map((p) => {
         const period = projectPeriod(p, t)
         return (
           <li key={p.id}>
@@ -49,11 +49,7 @@ export function ProjectRows({
                 ) : null}
               </span>
               <span className="q-row__img">
-                <Img
-                  media={p.coverImage}
-                  sizes="(min-width: 56rem) 22vw, 6.5rem"
-                  priority={i < 2}
-                />
+                <Img media={p.coverImage} crop="thumbnail" />
               </span>
             </Link>
           </li>

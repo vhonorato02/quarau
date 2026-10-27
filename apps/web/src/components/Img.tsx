@@ -34,6 +34,7 @@ export function Img({
   media,
   sizes = '100vw',
   priority = false,
+  eager = false,
   crop,
   className,
   alt,
@@ -41,6 +42,8 @@ export function Img({
   media: unknown
   sizes?: string
   priority?: boolean
+  /** Load early but without high fetch priority (wide covers that may sit below the fold on phones). */
+  eager?: boolean
   crop?: 'square' | 'thumbnail'
   className?: string
   alt?: string
@@ -51,7 +54,7 @@ export function Img({
   const common = {
     className,
     decoding: 'async' as const,
-    loading: priority ? ('eager' as const) : ('lazy' as const),
+    loading: priority || eager ? ('eager' as const) : ('lazy' as const),
     fetchPriority: priority ? ('high' as const) : undefined,
     style: { objectPosition },
   }

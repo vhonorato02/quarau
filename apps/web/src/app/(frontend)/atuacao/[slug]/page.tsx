@@ -53,7 +53,7 @@ export default async function ServicePage({ params }: Props) {
         </div>
         {isMedia(service.coverImage) ? (
           <figure className="q-wrap q-bleed mt-10 md:mt-14">
-            <Img media={service.coverImage} priority sizes="(min-width: 82rem) 82rem, 100vw" />
+            <Img media={service.coverImage} eager sizes="(min-width: 82rem) 82rem, 100vw" />
             {caption ? <figcaption>{caption}</figcaption> : null}
           </figure>
         ) : null}

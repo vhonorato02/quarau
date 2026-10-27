@@ -59,7 +59,7 @@ export default async function NewsPage({ params }: Props) {
           <p className="q-lead q-intro__lead">{news.summary}</p>
         </div>
         <figure className="q-wrap q-bleed mt-10 md:mt-14">
-          <Img media={news.coverImage} priority sizes="(min-width: 82rem) 82rem, 100vw" />
+          <Img media={news.coverImage} eager sizes="(min-width: 82rem) 82rem, 100vw" />
           {caption ? <figcaption>{caption}</figcaption> : null}
         </figure>
       </header>
