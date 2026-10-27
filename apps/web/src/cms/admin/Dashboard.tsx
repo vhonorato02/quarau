@@ -87,9 +87,10 @@ export async function Dashboard({ payload }: Props) {
         <summary>Como funciona (2 minutos de leitura)</summary>
         <ol>
           <li>
-            <strong>Rascunho e publicação.</strong> O que você edita fica salvo como rascunho. O
-            site só muda quando você clica em <em>Publicar alterações</em>. O botão{' '}
-            <em>Visualizar</em> mostra a página como vai ficar.
+            <strong>Rascunho e publicação.</strong> <em>Salvar rascunho</em> guarda o que você
+            editou sem mudar o site. O site só muda quando você clica em{' '}
+            <em>Publicar alterações</em>. O botão <em>Visualizar</em> mostra a página como vai
+            ficar.
           </li>
           <li>
             <strong>Agendar.</strong> Na seta ao lado de <em>Publicar alterações</em>, escolha{' '}

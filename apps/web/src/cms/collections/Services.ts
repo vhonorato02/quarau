@@ -53,7 +53,7 @@ export const Services: CollectionConfig = {
       labels: { singular: 'Bloco', plural: 'Blocos' },
       label: 'Texto da página',
       blocks: storyBlocks,
-      admin: { initCollapsed: true },
+      admin: { initCollapsed: false },
     },
     slugField(),
     orderField,

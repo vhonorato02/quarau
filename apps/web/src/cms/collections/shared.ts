@@ -23,7 +23,9 @@ export const versionsWithDrafts: CollectionConfig['versions'] = {
   maxPerDoc: 30,
   drafts: {
     // Autosave only after the first manual save: "Criar novo" no longer leaves empty drafts behind.
-    autosave: { interval: 1500, showSaveDraftButton: true },
+    // No autosave: in production builds an autosave racing the form-state request left new blocks blank.
+    // Editors save with "Salvar rascunho" and publish with "Publicar alterações" (clearer for non-technical staff).
+    autosave: false,
     schedulePublish: true,
     validate: false,
   },

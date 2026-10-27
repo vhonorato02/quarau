@@ -173,7 +173,7 @@ export const Projects: CollectionConfig = {
               labels: { singular: 'Bloco', plural: 'Blocos' },
               label: 'Blocos da história',
               blocks: storyBlocks,
-              admin: { initCollapsed: true },
+              admin: { initCollapsed: false },
             },
           ],
         },

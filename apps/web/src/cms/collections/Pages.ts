@@ -50,7 +50,7 @@ export const Pages: CollectionConfig = {
       label: 'Blocos da página',
       blocks: pageBlocks,
       minRows: 1,
-      admin: { initCollapsed: true },
+      admin: { initCollapsed: false },
     },
     slugField(),
     publishedAtField,

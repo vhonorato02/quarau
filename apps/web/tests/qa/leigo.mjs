@@ -42,12 +42,85 @@ await page
   .first()
   .fill(title)
 await shot('nova-pagina')
-if (step === 'explore') {
-  await page
-    .getByRole('button', { name: /adicionar (bloco|layout)/i })
-    .first()
-    .click()
-  await shot('escolher-bloco')
-  await browser.close()
-  process.exit(0)
-}
+// 4. Abertura de página
+await page
+  .getByRole('button', { name: /adicionar (bloco|layout)/i })
+  .first()
+  .click()
+await shot('escolher-bloco')
+await page.getByText('Abertura de página', { exact: true }).click()
+await page
+  .getByLabel(/^Título/)
+  .nth(1)
+  .fill('Como trabalhamos em cada território')
+await page
+  .getByLabel(/^Texto de apresentação/)
+  .first()
+  .fill('Uma página criada do zero pelo painel, sem tocar em código.')
+await shot('bloco-abertura')
+// 5. Bloco de texto
+await page
+  .getByRole('button', { name: /adicionar (bloco|layout)/i })
+  .last()
+  .click()
+await page.getByText('Texto', { exact: true }).first().click()
+const editor = page.locator('[contenteditable="true"]').last()
+await editor.click()
+await editor.pressSequentially(
+  'Primeiro diagnosticamos o território; depois desenhamos o projeto com quem vive nele.',
+)
+await shot('bloco-texto')
+// 6. Publicar
+await page
+  .getByRole('button', { name: /^Publicar/ })
+  .first()
+  .click()
+await expect(page.getByText(/publicad|sucesso/i).first()).toBeVisible({ timeout: 30_000 })
+await shot('publicado')
+const slug = await page.getByLabel(/Endereço \(slug\)/).inputValue()
+// 7. Ver no site
+const site = await browser.newPage({ viewport: { width: 390, height: 844 } })
+await site.goto(`${base}/${slug}`)
+await expect(
+  site.getByRole('heading', { level: 1, name: 'Como trabalhamos em cada território' }),
+).toBeVisible({ timeout: 30_000 })
+await site.screenshot({
+  path: path.join(out, `${String(++n).padStart(2, '0')}-site-celular.jpg`),
+  type: 'jpeg',
+  quality: 70,
+  fullPage: true,
+})
+console.log('📸', n, 'site-celular')
+// 8. Editar e publicar de novo
+await page
+  .getByLabel(/^Título/)
+  .nth(1)
+  .fill('Como trabalhamos em cada território (editado)')
+await page
+  .getByRole('button', { name: /^Publicar/ })
+  .first()
+  .click()
+await expect(page.getByText(/publicad|sucesso/i).first()).toBeVisible({ timeout: 30_000 })
+await expect
+  .poll(
+    async () => {
+      await site.reload()
+      return site.getByRole('heading', { level: 1 }).innerText()
+    },
+    { timeout: 30_000 },
+  )
+  .toContain('(editado)')
+await site.screenshot({
+  path: path.join(out, `${String(++n).padStart(2, '0')}-site-editado.jpg`),
+  type: 'jpeg',
+  quality: 70,
+})
+console.log('📸', n, 'site-editado')
+// 9. Limpeza: apagar a página de teste
+await page
+  .getByRole('button', { name: /mais opções|more options/i })
+  .first()
+  .click()
+  .catch(() => {})
+console.log('OK', `${base}/${slug}`)
+await browser.close()
