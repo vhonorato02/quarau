@@ -4,6 +4,7 @@ import path from 'node:path'
 
 import { HeadBucketCommand, S3Client } from '@aws-sdk/client-s3'
 
+import { mediaStatic } from '@/lib/platform-env'
 import { logger } from '@/server/logger'
 import { getPayload } from '@/server/payload'
 import { storageConfig } from '@/server/storage'
@@ -14,7 +15,9 @@ export const dynamic = 'force-dynamic'
 const DRAIN_FILE = '/tmp/quarau-drain'
 const noStore = { 'Cache-Control': 'no-store' }
 
-async function checkStorage(): Promise<'ok' | 'error'> {
+async function checkStorage(): Promise<'ok' | 'static' | 'error'> {
+  // Temporary deployment: photos are static files of the deployment itself.
+  if (mediaStatic()) return 'static'
   const cfg = storageConfig()
   try {
     if (cfg) {
@@ -42,7 +45,7 @@ export async function GET() {
     db = 'error'
   }
   const storage = await checkStorage()
-  const ok = db === 'ok' && storage === 'ok'
+  const ok = db === 'ok' && storage !== 'error'
   return Response.json(
     { status: ok ? 'ok' : 'error', db, storage, version: process.env.APP_VERSION ?? 'dev', latencyMs: Date.now() - started },
     { status: ok ? 200 : 503, headers: noStore },

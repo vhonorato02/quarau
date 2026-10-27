@@ -38,7 +38,7 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
 let current = ''
 for (const [slug, [route, selector]] of Object.entries(blocks)) {
   if (route !== current) {
-    await page.goto(base + route, { waitUntil: 'networkidle' })
+    await page.goto(base + route, { waitUntil: 'load', timeout: 60000 })
     await page.addStyleTag({ content: '*{animation:none!important;transition:none!important}' })
     current = route
   }

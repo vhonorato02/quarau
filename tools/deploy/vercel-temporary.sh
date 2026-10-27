@@ -13,15 +13,12 @@ rm -rf "$out" && mkdir -p "$out"
 git -C "$root" ls-files -co --exclude-standard -z | (cd "$root" && xargs -0 tar -cf -) | tar -xf - -C "$out"
 mkdir -p "$out/apps/web/public/media"
 find "$media" -maxdepth 1 -type f ! -name '*.mp4' ! -name '*.webm' -exec cp {} "$out/apps/web/public/media/" \;
-# Monorepo sem configuração de projeto: o builder do Next roda a partir de apps/web.
-cat > "$out/vercel.json" <<'JSON'
-{ "builds": [{ "src": "apps/web/package.json", "use": "@vercel/next" }], "regions": ["gru1"] }
-JSON
+# Monorepo: a CLI roda de dentro de apps/web (build local, com o workspace inteiro ao lado).
 args=()
 while IFS='=' read -r k v; do
   [[ -z $k || $k == \#* ]] && continue
   args+=(--env "$k=$v" --build-env "$k=$v")
 done < "$envfile"
-cd "$out"
-echo "Publicando $(du -sh . | cut -f1) (fotos: $(ls apps/web/public/media | wc -l))..."
+cd "$out/apps/web"
+echo "Publicando $(du -sh "$out" | cut -f1) (fotos: $(ls public/media | wc -l))..."
 env -u CI -u GITHUB_ACTIONS -u CONTINUOUS_INTEGRATION npx --yes vercel@latest deploy --temporary --yes "${args[@]}" 2>&1 | grep -vE "^(npm warn)" | sed -E 's#(postgres(ql)?://)[^ ]+#\1***#g'
