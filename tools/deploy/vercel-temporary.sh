@@ -13,7 +13,7 @@ rm -rf "$out" && mkdir -p "$out"
 git -C "$root" ls-files -co --exclude-standard -z | (cd "$root" && xargs -0 tar -cf -) | tar -xf - -C "$out"
 mkdir -p "$out/apps/web/public/media"
 find "$media" -maxdepth 1 -type f ! -name '*.mp4' ! -name '*.webm' -exec cp {} "$out/apps/web/public/media/" \;
-# Monorepo: a CLI roda de dentro de apps/web (build local, com o workspace inteiro ao lado).
+# Monorepo: a CLI detecta apps/web como raiz do app a partir da raiz do repositório.
 args=()
 while IFS='=' read -r k v; do
   [[ -z $k || $k == \#* ]] && continue
@@ -21,6 +21,6 @@ while IFS='=' read -r k v; do
   args+=(--env "$k=$v")
   export "$k=$v" # the anonymous deploy builds locally: the build reads them from this process
 done < "$envfile"
-cd "$out/apps/web"
-echo "Publicando $(du -sh "$out" | cut -f1) (fotos: $(ls public/media | wc -l))..."
+cd "$out"
+echo "Publicando $(du -sh "$out" | cut -f1) (fotos: $(ls apps/web/public/media | wc -l))..."
 env -u CI -u GITHUB_ACTIONS -u CONTINUOUS_INTEGRATION npx --yes vercel@latest deploy --temporary --yes "${args[@]}" 2>&1 | grep -vE "^(npm warn)" | sed -E 's#(postgres(ql)?://)[^ ]+#\1***#g'
