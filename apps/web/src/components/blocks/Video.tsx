@@ -1,3 +1,4 @@
+import { mediaStatic } from '@/lib/platform-env'
 import { isMedia, mediaSrc } from '@/components/Img'
 import { getTexts } from '@/server/queries'
 
@@ -6,7 +7,7 @@ import type { BlockOf } from './types'
 
 /** Self-hosted MP4 behind a poster: nothing is downloaded until the visitor presses play. */
 export async function Video({ block }: { block: BlockOf<'video'> }) {
-  if (!isMedia(block.video) || !block.video.url) return null
+  if (!isMedia(block.video) || !block.video.url || mediaStatic()) return null
   const t = await getTexts()
   const poster = mediaSrc(block.poster, 'lg')
   return (

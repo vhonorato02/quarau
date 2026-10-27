@@ -6,15 +6,18 @@
 
 ## Retomar em
 
-- **Fase:** 6 — QA final (as fases 0–5 estão feitas; falta evidência e polimento).
-- **Próximo passo exato:** CI verde no commit atual → QA local na imagem de produção (`docs/qa/depois/`):
-  capturas 390/1440 de todas as páginas, Lighthouse mobile, axe, teclado, cabeçalhos; teste "leigo" no painel
-  com capturas; crítica visual página a página; segunda rodada da autocrítica; code review final.
+- **Fase:** 6 — QA final + publicação temporária (2026-10-27).
+- **Plano em curso:** (1) estabilizar ✔ `129a7b2` → (2) performance ≥ 95 local → (3) banco temporário Neon
+  reclamável ✔ (São Paulo, expira 30/10 se não reclamado) → (4) `bash tools/deploy/vercel-temporary.sh` (deploy
+  reclamável, sem login) → (5) QA na URL pública (Playwright, axe, Lighthouse, cabeçalhos, formulário, painel)
+  → (6) autocrítica 2ª rodada, docs, commit.
+- **Credenciais do deploy temporário:** só em `.cache/neon/` (fora do git): `neon.env` (banco) e `app.env` (segredos).
+- **Limitação do deploy temporário:** sem armazenamento de objetos (o do Neon só existe após reclamar; R2 exige conta):
+  fotos servidas como estáticos (`MEDIA_STATIC=true`), vídeos ocultos, envio de arquivo bloqueado com aviso.
 - **Comando para conferir o estado:** `git log --oneline -5 && gh run list -L 3`
-- **Rodar localmente (Windows, sem Docker):** `pnpm db:local` (outro terminal) → `pnpm --filter @quarau/web migrate`
-  → `pnpm seed` → `pnpm dev` (porta 3000; use `-p 3300` se ocupada).
-- **Bloqueios / esperando o dono:** contas (Vercel, Neon, Cloudflare R2, Resend, Turnstile, Sentry) para publicar a
-  homologação; ver [MIGRACAO-VPS.md](MIGRACAO-VPS.md) §Contas. Fatos `[CONFIRMAR]` em [CONTENT-TODO.md](CONTENT-TODO.md).
+- **Rodar localmente (Windows, sem Docker):** `pnpm db:local` → `pnpm --filter @quarau/web migrate` → `pnpm seed` → `pnpm dev`.
+- **Esperando o dono:** reclamar o banco Neon e o deploy Vercel (links no relatório), depois contas R2/Resend/Turnstile
+  ([MIGRACAO-VPS.md](MIGRACAO-VPS.md) §Contas); fatos `[CONFIRMAR]` em [CONTENT-TODO.md](CONTENT-TODO.md).
 
 ## Fases da missão
 

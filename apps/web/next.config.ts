@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { withPayload } from '@payloadcms/next/withPayload'
 import type { NextConfig } from 'next'
 
+import { mediaStatic } from './src/lib/platform-env'
 import { HOME_SLUG } from './src/lib/urls'
 import { legacyRedirects } from './src/lib/redirects'
 import { mediaOrigin } from './src/server/storage'
@@ -84,8 +85,15 @@ const nextConfig: NextConfig = {
     return [{ source: `/${HOME_SLUG}`, destination: '/', permanent: true }, ...legacyRedirects()]
   },
   async rewrites() {
-    // The home is the CMS page "inicio", served by the [slug] route (rendered on demand, then cached).
-    return [{ source: '/', destination: `/${HOME_SLUG}` }]
+    return {
+      // Temporary deployment without object storage: photos are static files in public/media.
+      beforeFiles: mediaStatic()
+        ? [{ source: '/api/media/file/:path*', destination: '/media/:path*' }]
+        : [],
+      // The home is the CMS page "inicio", served by the [slug] route (rendered on demand, then cached).
+      afterFiles: [{ source: '/', destination: `/${HOME_SLUG}` }],
+      fallback: [],
+    }
   },
 }
 

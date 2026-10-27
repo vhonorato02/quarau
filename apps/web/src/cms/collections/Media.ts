@@ -1,7 +1,9 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
+import { APIError, type CollectionBeforeChangeHook, type CollectionConfig } from 'payload'
+
+import { mediaStatic } from '../../lib/platform-env'
 
 import { anyone, editors, hasRole } from '../access'
 
@@ -10,6 +12,13 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 /** Tiny blurred WebP used as a placeholder while the real image loads. */
 const generateBlur: CollectionBeforeChangeHook = async ({ data, req }) => {
   const file = req.file
+  if (file && mediaStatic())
+    throw new APIError(
+      'O envio de arquivos está desligado nesta versão de demonstração (falta configurar o armazenamento de mídia). Os textos e as fotos já enviadas podem ser editados normalmente.',
+      400,
+      undefined,
+      true,
+    )
   if (!file?.data || !file.mimetype?.startsWith('image/')) return data
   try {
     const sharp = (await import('sharp')).default
