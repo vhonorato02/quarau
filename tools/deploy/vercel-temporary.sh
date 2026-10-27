@@ -17,6 +17,7 @@ find "$media" -maxdepth 1 -type f ! -name '*.mp4' ! -name '*.webm' -exec cp {} "
 args=()
 while IFS='=' read -r k v; do
   [[ -z $k || $k == \#* ]] && continue
+  v=${v%$'\r'}; v=${v#\"}; v=${v%\"}; v=${v#\'}; v=${v%\'} # dotenv quotes and CRLF
   args+=(--env "$k=$v")
   export "$k=$v" # the anonymous deploy builds locally: the build reads them from this process
 done < "$envfile"
