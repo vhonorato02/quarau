@@ -25,7 +25,17 @@ test('editor updates and publishes a page; the site reflects it', async ({ page,
       },
       { timeout: 30_000 },
     )
-    .toContain('Política de privacidade')
+    .toContain(stamp)
+
+  // Leave the page as it was (the suite also runs against the public demo).
+  await title.fill('Política de privacidade')
+  await page
+    .getByRole('button', { name: /Publicar/ })
+    .first()
+    .click()
+  await expect(page.getByText(/publicad|atualizad|sucesso/i).first()).toBeVisible({
+    timeout: 30_000,
+  })
 })
 
 test('admin is in Portuguese and branded', async ({ page }) => {

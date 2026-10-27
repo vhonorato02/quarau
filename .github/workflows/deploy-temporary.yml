@@ -27,6 +27,7 @@ jobs:
           gh release download media-demo -p media-demo.tar.gz -D "$RUNNER_TEMP"
           mkdir -p "$RUNNER_TEMP/media" && tar -xzf "$RUNNER_TEMP/media-demo.tar.gz" -C "$RUNNER_TEMP/media"
       - name: Deploy
+        id: deploy
         env:
           TEMP_DEPLOY_ENV: ${{ secrets.TEMP_DEPLOY_ENV }}
           OUT_KEY: ${{ secrets.TEMP_DEPLOY_OUTPUT_KEY }}
@@ -34,7 +35,9 @@ jobs:
           umask 077
           printf '%s\n' "$TEMP_DEPLOY_ENV" > "$RUNNER_TEMP/app.env"
           DEPLOY_DIR="$RUNNER_TEMP/deploy" bash tools/deploy/vercel-temporary.sh "$RUNNER_TEMP/app.env" "$RUNNER_TEMP/media" > "$RUNNER_TEMP/out.txt" 2>&1 || status=$?
-          grep -oE 'https://[a-z0-9-]+\.(tmp\.now|vercel\.app)' "$RUNNER_TEMP/out.txt" | sort -u || true
+          url=$(grep -oE 'https://[a-z0-9-]+\.(tmp\.now|vercel\.app)' "$RUNNER_TEMP/out.txt" | head -1 || true)
+          echo "$url"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
           grep -E '^(Error|> Error)' "$RUNNER_TEMP/out.txt" | head -5 || true
           openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:OUT_KEY -in "$RUNNER_TEMP/out.txt" -out out.enc
           rm -f "$RUNNER_TEMP/app.env" "$RUNNER_TEMP/out.txt"
@@ -45,3 +48,47 @@ jobs:
           name: deploy-output-encrypted
           path: out.enc
           retention-days: 3
+
+      # ---------- QA on the URL that was just published ----------
+      - name: Install for QA
+        if: steps.deploy.outputs.url != ''
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter @quarau/web exec playwright install --with-deps chromium
+      - name: Smoke and headers
+        if: steps.deploy.outputs.url != ''
+        env:
+          URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          mkdir -p qa
+          for p in / /sobre /projetos /projetos/projeto-quipa /atuacao /contato /privacidade /noticias /nao-existe /api/health /sitemap.xml /robots.txt /sobre-a-quarau/; do
+            curl -s -o /dev/null -w "%{http_code} %{time_total}s $p
+" "$URL$p"
+          done | tee qa/smoke.txt
+          curl -sI "$URL/" | tee qa/headers.txt
+      - name: E2E (site, panel, accessibility) against the public URL
+        if: steps.deploy.outputs.url != ''
+        continue-on-error: true
+        env:
+          CI: 'true'
+          E2E_BASE_URL: ${{ steps.deploy.outputs.url }}
+          E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
+          E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+        run: pnpm --filter @quarau/web exec playwright test --reporter=line,html
+      - name: Lighthouse mobile against the public URL
+        if: steps.deploy.outputs.url != ''
+        continue-on-error: true
+        env:
+          URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          npx --yes @lhci/cli@0.15.1 collect --numberOfRuns=3 --settings.chromeFlags="--no-sandbox --headless=new"             --url="$URL/" --url="$URL/projetos" --url="$URL/projetos/projeto-quipa" --url="$URL/sobre" --url="$URL/contato"
+          npx --yes @lhci/cli@0.15.1 upload --target=filesystem --outputDir=qa/lighthouse
+          node -e "for (const r of require('./qa/lighthouse/manifest.json').filter(x=>x.isRepresentativeRun)) console.log(r.url, JSON.stringify(Object.fromEntries(Object.entries(r.summary).map(([k,v])=>[k,Math.round(v*100)]))))" | tee qa/lighthouse.txt
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.deploy.outputs.url != ''
+        with:
+          name: qa-public
+          path: |
+            qa
+            apps/web/playwright-report
+          retention-days: 14
