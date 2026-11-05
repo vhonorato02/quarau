@@ -671,6 +671,7 @@ export const pages: Array<{
         intro:
           'Metodologias ajustadas a cada contexto, para reconhecer as potencialidades dos territórios e das instituições.',
       },
+      { blockType: 'newsList', heading: 'Notícias e publicações', limit: 3 },
       {
         blockType: 'ctaBand',
         heading: 'Tem um projeto para um território? Vamos conversar.',
@@ -952,6 +953,7 @@ export const globals = {
       link({ label: 'Projetos', page: 'projetos' }),
       link({ label: 'Atuação', page: 'atuacao' }),
       link({ label: 'Sobre', page: 'sobre' }),
+      link({ label: 'Notícias', page: 'noticias' }),
       link({ label: 'Contato', page: 'contato' }),
     ],
     cta: link({ label: 'Conversar sobre um projeto', page: 'contato' }),
@@ -963,6 +965,7 @@ export const globals = {
       link({ label: 'Projetos', page: 'projetos' }),
       link({ label: 'Atuação', page: 'atuacao' }),
       link({ label: 'Sobre', page: 'sobre' }),
+      link({ label: 'Notícias', page: 'noticias' }),
       link({ label: 'Contato', page: 'contato' }),
     ],
     legalLinks: [
