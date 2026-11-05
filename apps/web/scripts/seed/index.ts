@@ -21,6 +21,7 @@ import sharp from 'sharp'
 import config from '../../src/payload.config'
 import { SITE_TEXTS } from '../../src/cms/globals/site-texts'
 import { globals, type Img, pages, partners, projects, services } from './content'
+import { curatedNews, curatedNewsStory } from './news'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 const CACHE = path.resolve(dirname, '../../.migrate-cache')
@@ -196,6 +197,41 @@ export async function seed(payload: Payload): Promise<string[]> {
     created.push(`projeto ${p.title}`)
   }
 
+  // Editorial archive: original adaptations of verified Quarau posts and official references.
+  // Reuse project media already in the CMS; never import third-party social assets or overwrite
+  // human edits. News are visible immediately after publication, via the existing CMS queries.
+  for (const item of curatedNews) {
+    if (await findBy(payload, 'news', 'slug', item.slug)) continue
+
+    const related = await payload.find({
+      collection: 'projects',
+      where: { slug: { equals: item.projectSlug } },
+      limit: 1,
+      depth: 0,
+    })
+    const project = related.docs[0]
+    if (!project) throw new Error(`projeto não encontrado para notícia: ${item.projectSlug}`)
+    const cover = project.coverImage
+    const coverImage = typeof cover === 'number' ? cover : cover?.id
+    if (!coverImage) throw new Error(`projeto sem imagem para notícia: ${item.projectSlug}`)
+
+    await payload.create({
+      collection: 'news',
+      data: {
+        title: item.title,
+        summary: item.summary,
+        slug: item.slug,
+        story: curatedNewsStory(item),
+        relatedProjects: [project.id],
+        coverImage,
+        sourceUrl: item.sourceUrl,
+        _status: 'published',
+      } as never,
+      context: ctx(),
+    })
+    created.push(`notícia ${item.title}`)
+  }
+
   // Pages: first create every missing page (links between pages need their ids)…
   const pageIds = new Map<string, number>()
   const fresh = new Set<string>()
@@ -234,6 +270,34 @@ export async function seed(payload: Payload): Promise<string[]> {
       context: ctx(),
     })
     created.push(`página ${pg.title}`)
+  }
+
+  // Earlier seeds intentionally kept Notícias in draft before the editorial archive existed.
+  // Publish only the untouched two-block template, preserving any custom editorial draft.
+  if (curatedNews.length) {
+    const listing = await payload.find({
+      collection: 'pages',
+      where: { slug: { equals: 'noticias' } },
+      limit: 1,
+      depth: 0,
+      draft: true,
+    })
+    const page = listing.docs[0]
+    if (
+      page?._status === 'draft' &&
+      page.title === 'Notícias' &&
+      page.layout?.length === 2 &&
+      page.layout[0]?.blockType === 'pageIntro' &&
+      page.layout[1]?.blockType === 'newsList'
+    ) {
+      await payload.update({
+        collection: 'pages',
+        id: page.id,
+        data: { _status: 'published' },
+        context: ctx(),
+      })
+      created.push('página Notícias publicada')
+    }
   }
 
   // Globals: only while still empty.
