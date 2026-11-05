@@ -19,7 +19,7 @@
 | 10  | Performance                | Lighthouse CI (orçamento), tamanho de JS, k6 com 512 MB               | CI (k6, JS) + pós-deploy (Lighthouse) | sim                 |
 | 11  | Segurança                  | ZAP baseline, Trivy, `pnpm audit --prod`, gitleaks, CodeQL            | CI                                    | altas/críticas: sim |
 | 12  | Resiliência                | E2E com falhas injetadas                                              | CI                                    | sim                 |
-| 13  | **Usuários simulados**     | subagente `testador-persona` + Playwright MCP                         | S08, S11, S12                         | sim (P0/P1)         |
+| 13  | **Usuários simulados**     | teste por persona feito pelo agente da sessão + Playwright MCP                         | S08, S11, S12                         | sim (P0/P1)         |
 | 14  | Caos de interface          | gremlins.js injetado por 60 s em cada página                          | CI (semanal) + S11                    | sim (erro de JS)    |
 | 15  | Aceite humano              | dono e gestor no celular e no computador                              | S11                                   | sim                 |
 | 16  | Monitoramento              | smoke agendado, uptime, Sentry, Speed Insights                        | depois do ar                          | alerta              |
@@ -151,7 +151,7 @@ Também:
 
 ### 13. Usuários simulados — o QA que pega o que ninguém previu
 
-O subagente `testador-persona` recebe uma persona e um objetivo. Ele usa o site **pelo Playwright MCP**: lê a tela, decide, clica e preenche, pensando em voz alta. Devolve:
+O agente da sessão assume uma persona e um objetivo e usa o site **pelo Playwright MCP**: lê a tela, decide, clica e preenche, pensando em voz alta. Devolve:
 
 - se conseguiu e em quantos passos;
 - onde hesitou;

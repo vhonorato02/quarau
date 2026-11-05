@@ -44,16 +44,9 @@ O trabalho está dividido em **15 sessões** (S00–S14). Cada uma cabe numa jan
 
 Cada arquivo de sessão diz qual usar.
 
-### Subagentes: poucos, em série, para proteger o contexto
+### Verificação: feita pelo próprio agente
 
-Ficam em `.claude/agents/`. Rodam um de cada vez (nunca em paralelo) e devolvem um resumo curto:
-
-- `qa-visual`: roda as capturas, olha as folhas-resumo e devolve a lista de problemas;
-- `testador-persona`: usa o site como uma persona, pelo Playwright MCP, e devolve atritos;
-- `revisor-copy`: revisa textos contra o guia de voz e devolve correções linha a linha;
-- `auditor-seo`: confere títulos, descrições, JSON-LD, sitemap e OG de cada URL.
-
-O agente principal decide e corrige; os subagentes só verificam.
+Sem subagentes nem orquestração (decisão do dono em 2026-11-05). As verificações de capturas, uso por persona, copy e SEO são checklists que o agente da sessão executa com Playwright e Lighthouse antes de dar o item como pronto.
 
 ### Higiene de tokens (regras fixas)
 

@@ -20,12 +20,7 @@ O dono não é técnico. Ele quer o site **no ar, testado como usuário de verda
    - commit + push.
    - O hook `handoff-guard` bloqueia a parada se isso não for feito.
 4. **Modelo:** use o indicado no arquivo da sessão (`/model opus`, `sonnet` ou `opusplan`). `/compact` quando o contexto passar de ~60%.
-5. **Subagentes** (`.claude/agents/`), só para verificação, um de cada vez:
-   - `qa-visual`;
-   - `testador-persona`;
-   - `revisor-copy`;
-   - `auditor-seo`.
-   - Eles devolvem listas curtas; quem corrige é você.
+5. **Sem subagentes nem orquestração.** Um agente por vez faz e verifica o próprio trabalho (capturas, persona, copy e SEO pelos checklists de `docs/QA.md`, com Playwright e Lighthouse).
 
 ## Regras inegociáveis
 
@@ -94,7 +89,7 @@ content/legacy/scrape/             site antigo raspado (textos, mídias, SEO, ca
 content/social/                    posts das redes (exportações oficiais)
 infra/platform/                    plataforma da VPS (Traefik + comando `site`) · infra/vps/preflight.sh
 docs/                              PLANO, plano/, PROGRESSO, QA, RELATORIO-COMPLETO, decisions/, brand.md, vps-guia.md
-.claude/                           settings (permissões, hooks), agents/ (subagentes), hooks/
+.claude/                           settings (permissões, hooks), hooks/
 ```
 
 ## Armadilhas conhecidas
