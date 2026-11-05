@@ -360,7 +360,11 @@ export async function seed(payload: Payload): Promise<string[]> {
       data: {
         [field]: [
           ...links.slice(0, 3),
-          { type: 'internal', reference: { relationTo: 'pages', value: newsId }, label: 'Notícias' },
+          {
+            type: 'internal',
+            reference: { relationTo: 'pages', value: newsId },
+            label: 'Notícias',
+          },
           links[3],
         ],
       } as never,

@@ -26,8 +26,7 @@
   Lighthouse/TBT do CI; backup e restore; QA funcional final.
 - **Próximos três passos:** 1) rodar `pnpm format:check && pnpm lint && pnpm typecheck && pnpm test`
   no SHA exato e acompanhar Actions; 2) habilitar armazenamento compatível com Payload e executar
-  `pnpm --filter @quarau/web seed` em homologação, em ambiente com credenciais protegidas;
-  3) executar E2E, segurança, acessibilidade, mídia, contatos e restauração; corrigir até zero P0/P1.
+  `pnpm --filter @quarau/web seed` em homologação, em ambiente com credenciais protegidas; 3) executar E2E, segurança, acessibilidade, mídia, contatos e restauração; corrigir até zero P0/P1.
 - **Consulta de evidência:** `gh run list -L 10`, `git status`, dashboard Vercel do projeto Quarau.
   Nunca confiar em logs de SHA anterior para declarar estabilidade.
 

@@ -27,17 +27,17 @@
 
 ## Primeiros gates
 
-| Gate | Situação no baseline |
-| --- | --- |
-| G01–G04 build, tipo, testes, E2E | BLOQUEADO / NOVA EXECUÇÃO EM ANDAMENTO |
-| G05 CMS | NÃO VERIFICADO no banco novo |
-| G08 Conteúdo | CURADORIA COM FONTE; direitos de imagens seguem pendentes |
-| G11 SEO e sitemap | NÃO VERIFICADO após seed |
-| G14 Lighthouse/TBT | ANTERIORMENTE VERMELHO; requer novo trace |
-| G17 banco e migrações | Projeto Neon criado; migrações não comprovadas |
-| G18 Infra | Vercel estava ERROR por DATABASE_URL ausente; variável corrigida |
-| G19 pipeline | Não declarar verde até checar Actions para o SHA final |
-| G21 release | NÃO HÁ RELEASE STABLE |
+| Gate                             | Situação no baseline                                             |
+| -------------------------------- | ---------------------------------------------------------------- |
+| G01–G04 build, tipo, testes, E2E | BLOQUEADO / NOVA EXECUÇÃO EM ANDAMENTO                           |
+| G05 CMS                          | NÃO VERIFICADO no banco novo                                     |
+| G08 Conteúdo                     | CURADORIA COM FONTE; direitos de imagens seguem pendentes        |
+| G11 SEO e sitemap                | NÃO VERIFICADO após seed                                         |
+| G14 Lighthouse/TBT               | ANTERIORMENTE VERMELHO; requer novo trace                        |
+| G17 banco e migrações            | Projeto Neon criado; migrações não comprovadas                   |
+| G18 Infra                        | Vercel estava ERROR por DATABASE_URL ausente; variável corrigida |
+| G19 pipeline                     | Não declarar verde até checar Actions para o SHA final           |
+| G21 release                      | NÃO HÁ RELEASE STABLE                                            |
 
 ## Segurança de operação
 

@@ -1,10 +1,7 @@
 import { curatedNews } from '../../scripts/seed/news'
 import { expect, test } from './fixtures'
 
-test('published news are reachable from the site and the main menu', async ({
-  page,
-  isMobile,
-}) => {
+test('published news are reachable from the site and the main menu', async ({ page, isMobile }) => {
   await page.goto('/')
   if (isMobile) {
     await page.getByRole('button', { name: 'Menu', exact: true }).click()
