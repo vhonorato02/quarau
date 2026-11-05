@@ -33,11 +33,13 @@ export async function Footer() {
           <nav className="q-footer__nav" aria-labelledby="footer-nav">
             <h2 id="footer-nav">{t.footer.navTitle}</h2>
             <ul>
-              {footer.links.filter((link) => hasNews || resolveHref(link) !== '/noticias').map((link) => (
-                <li key={link.id}>
-                  <CMSLink link={link} variant="plain" />
-                </li>
-              ))}
+              {footer.links
+                .filter((link) => hasNews || resolveHref(link) !== '/noticias')
+                .map((link) => (
+                  <li key={link.id}>
+                    <CMSLink link={link} variant="plain" />
+                  </li>
+                ))}
             </ul>
           </nav>
         ) : null}
