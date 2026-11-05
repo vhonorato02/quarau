@@ -845,7 +845,7 @@ export const pages: Array<{
   {
     slug: 'noticias',
     title: 'Notícias',
-    status: 'draft',
+    status: 'published',
     meta: { description: 'Notícias dos projetos da Quarau.' },
     layout: [
       { blockType: 'pageIntro', heading: 'Notícias', lead: 'O que está acontecendo nos projetos.' },
