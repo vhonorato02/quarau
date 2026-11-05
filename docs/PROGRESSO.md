@@ -6,18 +6,35 @@
 
 ## Retomar em
 
-- **Fase:** 6 concluída em 2026-10-27, exceto o que depende do dono.
-- **Publicação:** demonstração temporária reclamável na Vercel, republicável a qualquer momento por
-  GitHub → Actions → _Temporary deployment (claimable)_ (publica + e2e + Lighthouse na URL nova). Cada execução
-  gera URL nova e vale 59 min se não for reclamada; o banco Neon reclamável vale até 2026-10-30.
-- **Próximo passo:** o dono reclama o deploy da Vercel e o banco Neon (links entregues no chat, nunca no git);
-  depois cria R2/Resend/Turnstile e segue [MIGRACAO-VPS.md](MIGRACAO-VPS.md).
-- **Credenciais locais (fora do git):** `.cache/neon/` (banco e segredos do deploy), `ACESSO-ADMIN.txt`
-  (admin), `.cache/leigo.pw` (editora de teste). Segredos no GitHub: `TEMP_DEPLOY_ENV`, `TEMP_DEPLOY_OUTPUT_KEY`,
-  `E2E_ADMIN_EMAIL`, `E2E_ADMIN_PASSWORD`.
-- **Comando para conferir o estado:** `git log --oneline -5 && gh run list -L 3`
+- **Sessão atual:** 04/11/2026, auditoria e curadoria pública de notícias (primeira etapa). O estado
+  comprovado está em [audit/BASELINE.md](audit/BASELINE.md), [audit/ACHADOS.md](audit/ACHADOS.md),
+  [audit/PLANO.md](audit/PLANO.md) e [content/social/EDITORIAL-SOURCES.md](../content/social/EDITORIAL-SOURCES.md).
+- **Base inicial:** `main` em `aefaa1678187115b143df2b7efaaa1b6cf546ce6`. Para o **HEAD atual**, executar
+  `git rev-parse HEAD`; cada edição subsequente tem commit próprio.
+- **Blog:** seis matérias autorais e referenciadas em `apps/web/scripts/seed/news.ts`, criação idempotente no
+  Payload, lista com ligação de projetos, página inicial e menus; teste unitário e Playwright acrescentados.
+  **Ainda não afirmar publicadas:** os dados precisam passar por seed real em banco e storage persistente.
+  Exportações integrais de Instagram/LinkedIn seguem pendentes e a curadoria pública é parcial.
+- **Banco:** projeto Neon de homologação `quarau-staging` (`misty-fog-46195118`, sa-east-1, PG17)
+  criado e `DATABASE_URL` adicionada à Vercel como variável `sensitive`. Nenhuma credencial exposta.
+- **Vercel:** o deploy anterior `dpl_5nxH7qpEe1SLw4pE4jz8kdW31LN7` falhava por ausência de banco;
+  após correção, `dpl_6RvT6jEkaoxCzhfz4Buq8pCd9edw` (commit `6c4239c`) atingiu `READY`.
+  Builds de commits posteriores ainda exigem verificação. O ambiente está com `SITE_NOINDEX=true`.
+  A produção `quarau.com.br` segue no WordPress original, sem troca de DNS.
+- **Bloqueios principais:** mídia não tem adaptador de armazenamento persistente na Vercel;
+  envio de e-mail sem adaptador; carga de dados/mídia não testada; direitos de fotografia;
+  Lighthouse/TBT do CI; backup e restore; QA funcional final.
+- **Próximos três passos:** 1) rodar `pnpm format:check && pnpm lint && pnpm typecheck && pnpm test`
+  no SHA exato e acompanhar Actions; 2) habilitar armazenamento compatível com Payload e executar
+  `pnpm --filter @quarau/web seed` em homologação, em ambiente com credenciais protegidas;
+  3) executar E2E, segurança, acessibilidade, mídia, contatos e restauração; corrigir até zero P0/P1.
+- **Consulta de evidência:** `gh run list -L 10`, `git status`, dashboard Vercel do projeto Quarau.
+  Nunca confiar em logs de SHA anterior para declarar estabilidade.
 
 ## Fases da missão
+
+> As marcações históricas abaixo se referem aos testes de outubro, **não** à versão modificada
+> em novembro. Os gates do commit atual permanecem em auditoria.
 
 - [x] **0 — Autocrítica** ([AUTOCRITICA.md](AUTOCRITICA.md), medidas em `qa/antes/`)
 - [x] **1 — Entender a Quarau** ([QUARAU.md](QUARAU.md), [CONTENT-TODO.md](CONTENT-TODO.md), ADR 0017)
@@ -58,3 +75,13 @@
 - 2026-10-27 · F6 · Salvamento automático desligado: em produção ele corria junto com a montagem do formulário e
   deixava blocos novos vazios (achado no teste leigo).
 - 2026-10-27 · F6 · Branch padrão do GitHub trocado para `main`.
+
+## 7 — Auditoria e arquivo editorial (04/11/2026)
+
+- [x] Inspecionados repositório, ambiente Vercel e erro de banco em build real.
+- [x] Criado Neon de homologação e configurada variável `DATABASE_URL` sensível.
+- [x] Adicionadas seis matérias de fontes públicas com vínculos aos projetos, criação idempotente e testes.
+- [x] Implementada descoberta de notícias na home, na navegação e no rodapé quando publicadas.
+- [ ] Prettier, tipos, testes de integração, E2E e Lighthouse verdes **no SHA final**.
+- [ ] Configuração persistente de mídia, SMTP/Resend, carga editorial e revisão de direitos concluídas.
+- [ ] Backup/restore e smoke da release candidata executados, sem P0/P1.
