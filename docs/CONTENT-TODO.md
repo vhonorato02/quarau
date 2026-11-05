@@ -45,8 +45,15 @@
 
 ## Redes sociais
 
-- [ ] 🔑 Exportações oficiais do Instagram e do LinkedIn (`content/social/README.md`) para virar notícias.
-      Até lá, a seção Notícias **não aparece** no menu nem no sitemap.
+- [x] Curadoria inicial de seis matérias a partir de publicações públicas e fontes oficiais, com
+      rastreabilidade em `content/social/EDITORIAL-SOURCES.md`. Seed versionado, mas **publicação no banco
+      e no site público ainda não comprovada**.
+- [ ] 🔑 Exportações oficiais do Instagram e do LinkedIn (`content/social/README.md`) para ampliar
+      o acervo, recuperar datas e mídias originais, evitar duplicatas e confirmar direitos de uso.
+- [ ] Capa específica autorizada para a notícia do Cortejo da Cavalaria de São Gonçalo e São Benedito.
+      Sem essa capa, não associar fotografia de outra manifestação cultural ao artigo.
+- [ ] Validar no ambiente conectado a carga de notícias, os links do menu, sitemap, licenças das
+      capas e o fluxo de publicação/despublicação por editor.
 
 ## Infra / go-live (não bloqueiam o site, bloqueiam a virada)
 
