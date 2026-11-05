@@ -74,7 +74,7 @@ export const curatedNews: CuratedNewsSeed[] = [
     title: 'Quipá: formação de jovens nas comunidades quilombolas do Piauí',
     summary:
       'Projeto Quipá articula formação, trabalho e saberes comunitários em Saco Curtume e Picos, no município de São João do Piauí.',
-    projectSlug: 'projeto-quipa-jovens-cultivando-saberes',
+    projectSlug: 'projeto-quipa',
     paragraphs: [
       'O Projeto Quipá: jovens cultivando saberes, realizado pelo Instituto Umbuzeiro em parceria com a Celeo, desenvolve atividades com as comunidades quilombolas de Saco Curtume e Picos, em São João do Piauí.',
       'Em janeiro de 2023, uma das atividades foi a oficina Trabalho, Igualdade de Gênero e Raça, voltada à formação de jovens para o mundo do trabalho.',
