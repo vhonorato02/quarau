@@ -1,16 +1,17 @@
 import { fill } from '@/cms/globals/site-texts'
-import { CMSLink } from '@/components/CMSLink'
-import { getGlobal, getTexts } from '@/server/queries'
+import { CMSLink, resolveHref } from '@/components/CMSLink'
+import { getGlobal, getTexts, hasPublishedNews } from '@/server/queries'
 
 import { CookiePreferencesButton } from './CookieConsent'
 import { phoneHref, whatsappHref } from './contact-links'
 
 export async function Footer() {
-  const [footer, contact, social, t] = await Promise.all([
+  const [footer, contact, social, t, hasNews] = await Promise.all([
     getGlobal('footer'),
     getGlobal('contact'),
     getGlobal('social'),
     getTexts(),
+    hasPublishedNews(),
   ])
   const place = [contact.address?.city, contact.address?.state].filter(Boolean).join(', ')
   const street = [contact.address?.street, contact.address?.district].filter(Boolean).join(', ')
@@ -32,7 +33,7 @@ export async function Footer() {
           <nav className="q-footer__nav" aria-labelledby="footer-nav">
             <h2 id="footer-nav">{t.footer.navTitle}</h2>
             <ul>
-              {footer.links.map((link) => (
+              {footer.links.filter((link) => hasNews || resolveHref(link) !== '/noticias').map((link) => (
                 <li key={link.id}>
                   <CMSLink link={link} variant="plain" />
                 </li>
