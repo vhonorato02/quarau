@@ -1,19 +1,22 @@
 import Link from 'next/link'
 
 import { resolveHref } from '@/components/CMSLink'
-import { getGlobal, getTexts } from '@/server/queries'
+import { getGlobal, getTexts, hasPublishedNews } from '@/server/queries'
 
 import { type NavItem, SiteNav } from './SiteNav'
 
 export async function Header() {
-  const [nav, t, contact] = await Promise.all([
+  const [nav, t, contact, hasNews] = await Promise.all([
     getGlobal('navigation'),
     getTexts(),
     getGlobal('contact'),
+    hasPublishedNews(),
   ])
   const items: NavItem[] = (nav.items ?? []).flatMap((item) => {
     const href = resolveHref(item)
-    return href && item.label ? [{ href, label: item.label }] : []
+    return href && item.label && (href !== '/noticias' || hasNews)
+      ? [{ href, label: item.label }]
+      : []
   })
   const ctaHref = resolveHref(nav.cta)
   const cta = ctaHref && nav.cta?.label ? { href: ctaHref, label: nav.cta.label } : null
