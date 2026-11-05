@@ -25,7 +25,7 @@ describe('arquivo editorial de publicações públicas', () => {
       const [block] = curatedNewsStory(item)
       expect(block?.blockType).toBe('richText')
       expect(block?.body.root.children).toHaveLength(item.paragraphs.length)
-      expect(block?.body.root.children[0]?.type).toBe('paragraph')
+      expect(block?.body.root.children[0]).toMatchObject({ type: 'paragraph' })
     }
   })
 })
