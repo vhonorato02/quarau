@@ -1,0 +1,54 @@
+name: One-shot editorial formatting
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/format-editorial-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Format only files from this editorial audit
+        run: |
+          pnpm exec prettier --write \
+            apps/web/scripts/seed/index.ts \
+            apps/web/scripts/seed/content.ts \
+            apps/web/scripts/seed/news.ts \
+            apps/web/src/components/site/Header.tsx \
+            apps/web/src/components/site/Footer.tsx \
+            apps/web/tests/unit/curated-news.test.ts \
+            apps/web/tests/e2e/news.spec.ts \
+            content/social/EDITORIAL-SOURCES.md \
+            docs/CONTENT-TODO.md \
+            docs/PROGRESSO.md \
+            docs/audit/ACHADOS.md \
+            docs/audit/BASELINE.md \
+            docs/audit/PLANO.md
+      - name: Commit formatter output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/web/scripts/seed apps/web/src/components/site/Header.tsx \
+            apps/web/src/components/site/Footer.tsx apps/web/tests/unit/curated-news.test.ts \
+            apps/web/tests/e2e/news.spec.ts content/social/EDITORIAL-SOURCES.md \
+            docs/CONTENT-TODO.md docs/PROGRESSO.md docs/audit/ACHADOS.md \
+            docs/audit/BASELINE.md docs/audit/PLANO.md
+          if ! git diff --cached --quiet; then
+            git commit -m "style: apply Prettier to editorial and audit changes"
+            git push origin HEAD:main
+          fi
