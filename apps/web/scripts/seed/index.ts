@@ -326,6 +326,51 @@ export async function seed(payload: Payload): Promise<string[]> {
   await fillGlobal('social', emptyArr('profiles'), globals.social)
   await fillGlobal('settings', (g) => !g.siteName, globals.settings)
 
+  // One-time, non-destructive upgrade for installations seeded before the editorial
+  // section existed. Update only the exact original four-item CMS menu/footer.
+  // Customized navigation and intentional editor changes remain untouched.
+  const upgradeDefaultLinks = async (slug: 'navigation' | 'footer', field: 'items' | 'links') => {
+    const global = (await payload.findGlobal({ slug, depth: 0 })) as unknown as Record<
+      string,
+      unknown
+    >
+    const links = global[field]
+    if (!Array.isArray(links) || links.length !== 4) return
+    const defaults = [
+      { slug: 'projetos', label: 'Projetos' },
+      { slug: 'atuacao', label: 'Atuação' },
+      { slug: 'sobre', label: 'Sobre' },
+      { slug: 'contato', label: 'Contato' },
+    ]
+    const isOriginal = defaults.every((expected, index) => {
+      const current = links[index] as Record<string, unknown>
+      const reference = current?.reference as { relationTo?: string; value?: number } | undefined
+      return (
+        current?.label === expected.label &&
+        current?.type === 'internal' &&
+        reference?.relationTo === 'pages' &&
+        reference.value === pageIds.get(expected.slug)
+      )
+    })
+    if (!isOriginal) return
+    const newsId = pageIds.get('noticias')
+    if (!newsId) return
+    await payload.updateGlobal({
+      slug,
+      data: {
+        [field]: [
+          ...links.slice(0, 3),
+          { type: 'internal', reference: { relationTo: 'pages', value: newsId }, label: 'Notícias' },
+          links[3],
+        ],
+      } as never,
+      context: ctx(),
+    })
+    created.push(`navegação editorial ${slug}`)
+  }
+  await upgradeDefaultLinks('navigation', 'items')
+  await upgradeDefaultLinks('footer', 'links')
+
   // Interface texts: saved once with the initial values so the editor sees them filled in.
   const texts = (await payload.findGlobal({ slug: 'site-texts', depth: 0 })) as unknown as Record<
     string,
