@@ -59,7 +59,7 @@ FROM node:${NODE_VERSION}-bookworm-slim AS runner
 ARG APP_VERSION=dev
 # Pending database migrations are applied by Payload when the server starts (prodMigrations).
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0 APP_VERSION=${APP_VERSION} \
-    MEDIA_DIR=/app/apps/web/media PAYLOAD_DB_PUSH=false
+    MEDIA_DIR=/app/media PAYLOAD_DB_PUSH=false
 # Security updates for the base image; npm/corepack are not needed at runtime (and bring their own CVEs).
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends curl ca-certificates tini \
     && rm -rf /var/lib/apt/lists/* \
@@ -72,7 +72,13 @@ COPY --from=build --chown=app:app /repo/apps/web/.next/static ./apps/web/.next/s
 COPY --from=build --chown=app:app /repo/apps/web/public ./apps/web/public
 # Barlow WOFF files are read at runtime by the OG image route.
 COPY --from=build --chown=app:app /repo/apps/web/src/fonts ./apps/web/src/fonts
-RUN mkdir -p /app/apps/web/.next/cache /app/apps/web/media && chown -R app:app /app/apps/web/.next/cache /app/apps/web/media
+# Same layout as the VPS platform (vps-platform templates/compose.app.yml): uploads in /app/media
+# (bind mount, backed up with the database) and the Next cache in /app/.next/cache (tmpfs when the
+# root filesystem is read-only). The monorepo standalone build keeps its cache under apps/web, so
+# that path is a link to the platform one.
+RUN mkdir -p /app/.next/cache /app/media \
+    && rm -rf /app/apps/web/.next/cache && ln -s /app/.next/cache /app/apps/web/.next/cache \
+    && chown -R app:app /app/.next /app/media
 USER app
 EXPOSE 3000
 HEALTHCHECK --interval=15s --timeout=5s --start-period=60s --retries=4 CMD curl -fsS http://127.0.0.1:3000/api/health || exit 1

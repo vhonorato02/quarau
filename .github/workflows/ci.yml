@@ -137,7 +137,7 @@ jobs:
           PAYLOAD_SECRET=$secret
           PAYLOAD_DB_PUSH=false
           PAYLOAD_JOBS_AUTORUN=false
-          MEDIA_DIR=/media
+          MEDIA_DIR=/app/media
           SEED_OFFLINE=true
           ADMIN_EMAIL=$E2E_ADMIN_EMAIL
           ADMIN_PASSWORD=$password
@@ -147,20 +147,20 @@ jobs:
       - name: Apply migrations and seed offline content and administrator
         run: |
           docker run --rm --network host --env-file "$RUNNER_TEMP/quarau-e2e.env" \
-            -v quarau-e2e-media:/media "quarau-tools:${{ github.sha }}" pnpm seed
+            -v quarau-e2e-media:/app/media "quarau-tools:${{ github.sha }}" pnpm seed
           docker run --rm --network host --env-file "$RUNNER_TEMP/quarau-e2e.env" \
-            -v quarau-e2e-media:/media "quarau-tools:${{ github.sha }}" pnpm seed:admin
-          docker run --rm -v quarau-e2e-media:/media "quarau-tools:${{ github.sha }}" \
-            chown -R 1001:1001 /media
+            -v quarau-e2e-media:/app/media "quarau-tools:${{ github.sha }}" pnpm seed:admin
+          docker run --rm -v quarau-e2e-media:/app/media "quarau-tools:${{ github.sha }}" \
+            chown -R 1001:1001 /app/media
 
       - name: Start non-root production container with read-only filesystem
         run: |
           docker run -d --name web --network host --read-only \
             --cap-drop ALL --security-opt no-new-privileges \
             --tmpfs /tmp:rw,nosuid,nodev,size=128m \
-            --tmpfs /app/apps/web/.next/cache:rw,nosuid,nodev,uid=1001,gid=1001,size=128m \
+            --tmpfs /app/.next/cache:rw,nosuid,nodev,uid=1001,gid=1001,size=128m \
             --env-file "$RUNNER_TEMP/quarau-e2e.env" \
-            -v quarau-e2e-media:/media "$IMAGE:${{ github.sha }}"
+            -v quarau-e2e-media:/app/media "$IMAGE:${{ github.sha }}"
           curl --fail --silent --show-error --retry 60 --retry-delay 2 \
             --retry-connrefused --retry-all-errors --max-time 10 \
             http://localhost:3000/api/health
