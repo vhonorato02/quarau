@@ -225,11 +225,12 @@ export async function seed(payload: Payload): Promise<string[]> {
         relatedProjects: [project.id],
         coverImage,
         sourceUrl: item.sourceUrl,
-        _status: 'published',
+        _status: item.status ?? 'published',
       } as never,
+      draft: item.status === 'draft',
       context: ctx(),
     })
-    created.push(`notícia ${item.title}`)
+    created.push(`notícia ${item.title}${item.status === 'draft' ? ' (rascunho)' : ''}`)
   }
 
   // Pages: first create every missing page (links between pages need their ids)…
@@ -274,7 +275,7 @@ export async function seed(payload: Payload): Promise<string[]> {
 
   // Earlier seeds intentionally kept Notícias in draft before the editorial archive existed.
   // Publish only the untouched two-block template, preserving any custom editorial draft.
-  if (curatedNews.length) {
+  if (curatedNews.some((item) => item.status !== 'draft')) {
     const listing = await payload.find({
       collection: 'pages',
       where: { slug: { equals: 'noticias' } },

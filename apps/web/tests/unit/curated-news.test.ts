@@ -28,4 +28,19 @@ describe('arquivo editorial de publicações públicas', () => {
       expect(block?.body.root.children[0]).toMatchObject({ type: 'paragraph' })
     }
   })
+
+  it('só publica o que tem fonte verificável e nunca cita perfil pessoal como fonte', () => {
+    for (const item of curatedNews) {
+      if (item.sourceUrl) expect(new URL(item.sourceUrl).pathname.startsWith('/in/')).toBe(false)
+      if (item.status !== 'draft') expect(item.verifiedBy.length).toBeGreaterThan(0)
+      else expect(item.pendingCheck?.trim().length ?? 0).toBeGreaterThan(20)
+    }
+  })
+
+  it('mantém em rascunho as matérias sem fonte verificável (mutirão e jornada formativa)', () => {
+    const bySlug = new Map(curatedNews.map((item) => [item.slug, item]))
+    expect(bySlug.get('ecomuseu-mutirao-rio-alambari')?.status).toBe('draft')
+    expect(bySlug.get('jornada-formativa-ecomuseu-quarta-edicao')?.status).toBe('draft')
+    expect(curatedNews.filter((item) => item.status !== 'draft').length).toBe(4)
+  })
 })

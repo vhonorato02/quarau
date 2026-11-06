@@ -21,11 +21,12 @@ async function count(
  * Admin-only text lives here (not in "Textos do site", which is the public site).
  */
 export async function Dashboard({ payload }: Props) {
-  const [newLeads, mediaToReview, draftPages, draftProjects] = await Promise.all([
+  const [newLeads, mediaToReview, draftPages, draftProjects, draftNews] = await Promise.all([
     count(payload, 'leads', { status: { equals: 'new' } }),
     count(payload, 'media', { needsReview: { equals: true } }),
     count(payload, 'pages', { _status: { equals: 'draft' } }),
     count(payload, 'projects', { _status: { equals: 'draft' } }),
+    count(payload, 'news', { _status: { equals: 'draft' } }),
   ])
   const cards = [
     {
@@ -36,7 +37,12 @@ export async function Dashboard({ payload }: Props) {
     {
       n: draftPages + draftProjects,
       label: 'páginas e projetos em rascunho',
-      href: '/admin/collections/projects?where[_status][equals]=draft',
+      href: `/admin/collections/${draftProjects || !draftPages ? 'projects' : 'pages'}?where[_status][equals]=draft`,
+    },
+    {
+      n: draftNews,
+      label: 'notícias em rascunho, aguardando revisão',
+      href: '/admin/collections/news?where[_status][equals]=draft',
     },
     {
       n: mediaToReview,
