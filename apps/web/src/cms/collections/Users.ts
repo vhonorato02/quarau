@@ -1,6 +1,6 @@
-import { type CollectionConfig, ValidationError } from 'payload'
+import { type CollectionConfig, Forbidden, ValidationError } from 'payload'
 
-import { adminsFieldLevel, adminsOrSelf, admins, ROLES } from '../access'
+import { adminsFieldLevel, adminsOrSelf, admins, firstUserSignupBlocked, ROLES } from '../access'
 
 const MIN_PASSWORD = 12
 
@@ -46,8 +46,9 @@ export const Users: CollectionConfig = {
       },
     ],
     beforeChange: [
-      // The very first account (created on the /admin "first register" screen) must be
-      // an administrator; the roles field is admin-only, so it would otherwise be an author.
+      // The very first account must be an administrator (the roles field is admin-only, so it
+      // would otherwise be an author). The public "first register" screen stays closed: see
+      // firstUserSignupBlocked; the first account comes from `pnpm seed:admin`.
       async ({ operation, data, req }) => {
         if (operation !== 'create') return data
         const { totalDocs } = await req.payload.count({
@@ -55,6 +56,9 @@ export const Users: CollectionConfig = {
           overrideAccess: true,
           req,
         })
+        if (firstUserSignupBlocked({ totalDocs, payloadAPI: req.payloadAPI, env: process.env })) {
+          throw new Forbidden(req.t)
+        }
         return totalDocs === 0 ? { ...data, roles: ['admin'] } : data
       },
     ],

@@ -50,3 +50,19 @@ export const adminsOrSelf: Access = ({ req }) => {
   if (!req.user) return false
   return { id: { equals: req.user.id } }
 }
+
+/**
+ * Payload opens a public "create first user" screen while the users table is empty, and whoever
+ * gets there first becomes administrator. A fresh deploy is reachable before anyone runs
+ * `pnpm seed:admin`, so that screen stays closed: the first account is created only by server
+ * scripts (Local API) or when ALLOW_FIRST_USER_SIGNUP=true is set on purpose.
+ */
+export function firstUserSignupBlocked(args: {
+  totalDocs: number
+  payloadAPI: string | undefined
+  env: Record<string, string | undefined>
+}): boolean {
+  if (args.totalDocs > 0) return false
+  if (args.payloadAPI === 'local') return false
+  return args.env.ALLOW_FIRST_USER_SIGNUP !== 'true'
+}
