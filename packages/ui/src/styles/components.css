@@ -55,7 +55,7 @@
   .q-lead {
     font-size: var(--text-lead);
     line-height: 1.5;
-    color: var(--color-ink-2);
+    color: var(--color-ink);
   }
   .q-muted {
     color: var(--color-ink-2);
