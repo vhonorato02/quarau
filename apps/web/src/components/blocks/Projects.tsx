@@ -25,15 +25,18 @@ export function ProjectRows({
   projects,
   t,
   headingLevel = 3,
+  leadImage = false,
 }: {
   projects: Project[]
   t: SiteTexts
   headingLevel?: 2 | 3
+  /** The first photo is above the fold (list right after the page opening): load it first. */
+  leadImage?: boolean
 }) {
   const H = headingLevel === 2 ? 'h2' : 'h3'
   return (
     <ul className="q-index">
-      {projects.map((p) => {
+      {projects.map((p, i) => {
         const period = projectPeriod(p, t)
         return (
           <li key={p.id}>
@@ -48,7 +51,11 @@ export function ProjectRows({
                 ) : null}
               </span>
               <span className="q-row__img">
-                <Img media={p.coverImage} sizes="(min-width: 56rem) 30vw, 100vw" />
+                <Img
+                  media={p.coverImage}
+                  sizes="(min-width: 56rem) 50vw, 100vw"
+                  priority={leadImage && i === 0}
+                />
               </span>
             </Link>
           </li>
@@ -82,7 +89,12 @@ export async function ProjectIndex({
         </div>
       ) : null}
       {projects.length ? (
-        <ProjectRows projects={projects} t={t} headingLevel={block.heading ? 3 : 2} />
+        <ProjectRows
+          projects={projects}
+          t={t}
+          headingLevel={block.heading ? 3 : 2}
+          leadImage={index <= 1}
+        />
       ) : (
         <p className="q-muted">{t.project.empty}</p>
       )}
