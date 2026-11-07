@@ -86,7 +86,6 @@ export const curatedNews: CuratedNewsSeed[] = [
     summary:
       'Em Atibaia, o Projeto Ecoe Verde transformou um terreno sem uso em horta comunitária agroecológica e ponto de cultura, com consultoria da Quarau no programa.',
     projectSlug: 'projeto-ecoe-verde',
-    sourceUrl: `${LEGACY}programa-celeo-na-comunidade-projeto-ecoe/`,
     verifiedBy: [`${LEGACY}programa-celeo-na-comunidade-projeto-ecoe/`, 'docs/QUARAU.md §2'],
     paragraphs: [
       'O Projeto Ecoe Verde é uma iniciativa da Celeo e do Espaço Crescer, realizada desde março de 2022 no Bairro Esmeralda, também conhecido como Tanque, uma região periférica de Atibaia (SP) por onde passa a linha de transmissão da Cantareira Transmissora de Energia.',
@@ -101,7 +100,6 @@ export const curatedNews: CuratedNewsSeed[] = [
     summary:
       'O Projeto Quipá, da Celeo e do Instituto Umbuzeiro, atua com as comunidades quilombolas de Saco Curtume e Picos, em São João do Piauí, com consultoria da Quarau no programa.',
     projectSlug: 'projeto-quipa',
-    sourceUrl: `${LEGACY}programa-celeo-na-comunidade-projeto-quipa/`,
     verifiedBy: [`${LEGACY}programa-celeo-na-comunidade-projeto-quipa/`, 'docs/QUARAU.md §2'],
     paragraphs: [
       'O Projeto Quipá: jovens cultivando saberes é uma iniciativa da Celeo e do Instituto Umbuzeiro, desenvolvida nas comunidades quilombolas de Saco Curtume e Picos, em São João do Piauí, região de abrangência da usina fotovoltaica da Celeo.',

@@ -71,13 +71,13 @@ E-mails em `packages/emails` (React Email).
 
 ## 6. Ambientes
 
-|           | Dev (Windows, sem Docker)              | CI                    | Homologação                  | Produção (após o aceite)       |
-| --------- | -------------------------------------- | --------------------- | ---------------------------- | ------------------------------ |
-| App       | `pnpm dev`                             | contêiner da imagem   | Vercel Hobby `gru1`          | contêiner GHCR na VPS (`site`) |
-| Banco     | `pnpm db:local` (Postgres 17 embutido) | serviço `postgres:17` | Neon Free                    | Postgres do compose do site    |
-| Mídia     | disco (`apps/web/media`)               | disco                 | Cloudflare R2                | Cloudflare R2 (mesmo bucket)   |
-| Indexação | `SITE_NOINDEX=true`                    | `true`                | `true`                       | `false`                        |
-| Tarefas   | processo local                         | —                     | GitHub Actions a cada 15 min | fila no próprio processo       |
+|           | Dev (Windows, sem Docker)              | CI                    | Homologação                                                       | Produção (após o aceite)         |
+| --------- | -------------------------------------- | --------------------- | ----------------------------------------------------------------- | -------------------------------- |
+| App       | `pnpm dev`                             | contêiner da imagem   | contêiner GHCR na VPS (`site`), `quarau.zewithane.vps.brz.dev.br` | o mesmo, com `quarau.com.br`     |
+| Banco     | `pnpm db:local` (Postgres 17 embutido) | serviço `postgres:17` | Postgres 17 da plataforma                                         | o mesmo                          |
+| Mídia     | disco (`apps/web/media`)               | volume `/app/media`   | `data/media` → `/app/media` (backup restic)                       | o mesmo (R2 opcional via `S3_*`) |
+| Indexação | `SITE_NOINDEX=true`                    | `true`                | `true`                                                            | `false`                          |
+| Tarefas   | processo local                         | —                     | fila no próprio processo                                          | fila no próprio processo         |
 
 ## 7. Pipeline (`.github/workflows/ci.yml`)
 

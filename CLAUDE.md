@@ -2,7 +2,7 @@
 
 Site institucional da **Quarau** (consultoria em projetos socioambientais, educativos e culturais): Next.js 16 + Payload CMS 3 no mesmo app.
 
-- **Homologação:** Vercel (`https://quarau.vercel.app`).
+- **Homologação:** VPS, endereço provisório `https://quarau.zewithane.vps.brz.dev.br` ([ADR 0022](docs/decisions/0022-homologacao-na-vps.md)). A Vercel (`quarau.vercel.app`) não é mais usada.
 - **Produção:** depois do aceite, na VPS do dono, com o domínio `quarau.com.br` ([ADR 0015](docs/decisions/0015-homologacao-vercel-producao-vps.md)).
 
 O dono não é técnico. Ele quer o site **no ar, testado como usuário de verdade, com cada texto impecável e editável**, sem semanas de depuração.
@@ -24,7 +24,7 @@ O dono não é técnico. Ele quer o site **no ar, testado como usuário de verda
 
 ## Regras inegociáveis
 
-- **Só a branch `main`.** Sem branches, PRs ou worktrees. Conventional Commits. Push na `main` = homologação atualizada. CI verde antes de seguir.
+- **Só a branch `main`.** Sem branches, PRs ou worktrees. Conventional Commits. Push na `main` = imagem nova no GHCR; publicar com `site deploy quarau <sha>`. CI verde antes de seguir.
 - **Fatos só das fontes:**
   - `content/legacy/scrape/` (site antigo);
   - `content/social/` (redes);
@@ -34,7 +34,7 @@ O dono não é técnico. Ele quer o site **no ar, testado como usuário de verda
 - **Todo texto visível vem do CMS** (S03). `react/jsx-no-literals` no lint garante.
 - **Domínio `quarau.com.br`, DNS e WordPress antigo: não tocar até a S13** (e só depois do "aprovado"). `SITE_NOINDEX=true` fora da produção.
 - **Segredos nunca no git, na conversa ou impressos no terminal:**
-  - variáveis ficam na Vercel, em `apps/web/.env.local` (dev) e no `site config` da VPS;
+  - variáveis ficam em `apps/web/.env.local` (dev) e no `app.env` do site na VPS (`site config quarau`);
   - use pipes e `--env-file`;
   - para conferir, só os nomes (`cut -d= -f1`);
   - credenciais do admin vão para `ACESSO-ADMIN.txt` (no `.gitignore`).
@@ -54,9 +54,8 @@ O dono não é técnico. Ele quer o site **no ar, testado como usuário de verda
 
 - **MCP** (`.mcp.json`):
   - `playwright`: navegar como gente; QA camadas 4/13;
-  - `vercel`: deploys, logs, variáveis; a CLI `vercel` é o plano B;
   - `context7`: documentação atual de Next.js 16, Payload 3 e Tailwind 4. **Consulte antes de usar uma API dessas bibliotecas**: são mais novas que o seu treinamento.
-- **CLIs:** `gh` (CI, PR), `vercel`, `ffmpeg`, `ssh quarau-vps` (S12+).
+- **CLIs:** `gh` (CI, secrets), `ffmpeg`, `ssh zewithane-vps` (comando `site`; skill `vps-zewithane`).
 - **Scripts do projeto:**
 
   | Comando                                                               | Para quê                                        |
@@ -73,7 +72,7 @@ O dono não é técnico. Ele quer o site **no ar, testado como usuário de verda
 
 ```
 apps/web/
-  src/payload.config.ts            banco, storage (Vercel Blob), e-mail, jobs, plugins
+  src/payload.config.ts            banco, storage (disco /app/media ou S3/R2), e-mail, jobs, plugins
   src/collections|globals|blocks   modelo de conteúdo do CMS
   src/app/(frontend)/[locale]      páginas do site (o [locale] sai na S02)
   src/app/(payload)                admin (custom.scss = estilo do admin)
@@ -87,8 +86,8 @@ apps/web/
 packages/ui/                       design system   ·   packages/emails/  e-mails (React Email)
 content/legacy/scrape/             site antigo raspado (textos, mídias, SEO, capturas)
 content/social/                    posts das redes (exportações oficiais)
-infra/platform/                    plataforma da VPS (Traefik + comando `site`) · infra/vps/preflight.sh
-docs/                              PLANO, plano/, PROGRESSO, QA, RELATORIO-COMPLETO, decisions/, brand.md, vps-guia.md
+infra/compose/                     Postgres de dev (opcional) · a plataforma da VPS vive no repo vps-platform
+docs/                              PLANO, plano/, PROGRESSO, QA, RELATORIO-COMPLETO, decisions/, brand.md, runbook.md, MIGRACAO-VPS.md
 .claude/                           settings (permissões, hooks), hooks/
 ```
 
@@ -98,7 +97,7 @@ docs/                              PLANO, plano/, PROGRESSO, QA, RELATORIO-COMPL
 - **Banco com migrações + `push`** = prompt interativo que trava o servidor. Sempre `PAYLOAD_DB_PUSH=false`.
 - **API do Payload com cookie** precisa do header `Origin` (CSRF).
 - **`robots`, `sitemap` e `X-Robots-Tag`** são resolvidos em runtime, não em `next.config`.
-- **Variáveis sensíveis da Vercel** vêm vazias no `vercel env pull`. Para scripts contra produção, só `DATABASE_URL` e `BLOB_READ_WRITE_TOKEN` importam; o resto se gera.
-- **Um processo só roda a fila de tarefas por banco:** Vercel até o corte, VPS depois (S13).
+- **Scripts contra o banco da VPS** (seed, admin): túnel `ssh -N -L 55432:<ip do contêiner postgres>:5432 zewithane-vps` e `DATABASE_URL` num arquivo fora do git; as fotos geradas em `MEDIA_DIR` local sobem para `/srv/sites/quarau/data/media` (dono 1001).
+- **Um processo só roda a fila de tarefas por banco:** o contêiner da VPS.
 - **`pkill -f <padrão>`** mata o próprio shell se o comando contém o padrão: mate pelo PID.
 - **Turbo:** veja @AGENTS.md (docs da versão instalada em `node_modules/turbo/docs`).

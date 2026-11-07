@@ -1,6 +1,6 @@
 # 0013 — Plataforma própria na VPS: Traefik + Postgres compartilhado + comando `site`, sem painel
 
-- **Status:** aceita (substitui a [0004](0004-hospedagem-coolify-traefik.md)) · **Data:** 2026-10-06
+- **Status:** substituída pela plataforma vps-platform 1.0 (VPS reinstalada em 06/11/2026; ver [0022](0022-homologacao-na-vps.md)). O código `infra/platform/` foi removido deste repositório. Originalmente substituía a [0004](0004-hospedagem-coolify-traefik.md) · **Data:** 2026-10-06
 
 ## Contexto
 

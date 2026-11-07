@@ -5,10 +5,6 @@
       "command": "cmd",
       "args": ["/c", "npx", "-y", "@playwright/mcp@latest", "--browser", "msedge"]
     },
-    "vercel": {
-      "type": "http",
-      "url": "https://mcp.vercel.com"
-    },
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp"

@@ -1,108 +1,101 @@
-# Migração para a VPS (menos de 1 hora)
+# VPS: homologação, operação e go-live
 
-> Da homologação gratuita (Vercel + Neon + R2) para a VPS `zewithane` com a plataforma
-> [`vhonorato02/vps-platform`](https://github.com/vhonorato02/vps-platform) (Caddy + `site`).
-> **Nada aqui foi executado na VPS** (fora do escopo da missão). Decisões: [ADR 0019](decisions/0019-free-tier-portavel.md).
+> A Quarau roda na VPS `zewithane` com a plataforma [`vhonorato02/vps-platform`](https://github.com/vhonorato02/vps-platform)
+> (Caddy + um `docker compose` por site + CLI `site`). Decisão: [ADR 0022](decisions/0022-homologacao-na-vps.md).
+> A homologação **já é** a máquina de produção: o go-live só troca o domínio e liga a indexação.
 
-## O que já está pronto
+## Como está montado
 
-- **Imagem:** `ghcr.io/vhonorato02/quarau:<sha>` publicada pelo CI a cada push na `main` (e `:vX.Y.Z` nas tags), depois
-  de passar por: build sem banco, subida com Postgres de serviço, migrações, seed, e2e Playwright (site e painel),
-  axe, Lighthouse e varredura de segurança. É a mesma imagem que vai para a VPS.
-- **Saúde:** `GET /api/health` → `{"status":"ok","db":"ok","storage":"ok"}` (200) ou 503. Usado pelo `HEALTHCHECK`
-  da imagem e pelo `site`.
-- **Migrações:** aplicadas automaticamente quando o contêiner sobe (`prodMigrations`). Nada de `push`.
-- **Mídia:** fica no **Cloudflare R2** (mesmo bucket da homologação). Nada a copiar.
-- **Tarefas agendadas:** na VPS o próprio processo roda a fila a cada minuto (`PAYLOAD_JOBS_AUTORUN` padrão).
+| Peça      | Onde                                                                                          |
+| --------- | --------------------------------------------------------------------------------------------- |
+| App       | `ghcr.io/vhonorato02/quarau:<sha>` (publicada pelo CI depois de todos os testes), 640 MB      |
+| Endereço  | `https://quarau.zewithane.vps.brz.dev.br` (provisório, `SITE_NOINDEX=true`)                   |
+| Banco     | Postgres 17 da plataforma, banco/usuário `quarau` (`DATABASE_URL` injetada pelo `site`)       |
+| Mídia     | `/srv/sites/quarau/data/media` → `/app/media` (dono uid 1001)                                 |
+| Variáveis | `/srv/sites/quarau/app.env` (root, 600), editar com `site config quarau`                      |
+| Tarefas   | fila do Payload no próprio processo, a cada minuto (publicação agendada)                      |
+| Backup    | `site backup` (restic diário: dump do banco + `data/media`); `site teste-restauracao` semanal |
+| Contêiner | raiz somente leitura; graváveis só `/tmp` e `/app/media`; cache de páginas em memória         |
+| Saúde     | `GET /api/health` → `{"status":"ok","db":"ok","storage":"ok"}` (200) ou 503                   |
+| Migrações | aplicadas quando o contêiner sobe (`prodMigrations`); nunca `push`                            |
 
-## Contas que o dono precisa ter (uma vez, antes da homologação)
+## Publicar uma versão nova
 
-| Serviço              | Para quê             | O que gerar                                                                                                                      | Onde colocar                                                                                              |
-| -------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Vercel (Hobby)       | homologação          | projeto `quarau`, raiz `apps/web`, região `gru1`                                                                                 | variáveis abaixo no painel da Vercel                                                                      |
-| Neon (Free)          | banco da homologação | projeto em São Paulo; copiar a _connection string_                                                                               | `DATABASE_URL`                                                                                            |
-| Cloudflare R2        | mídia                | bucket `quarau-media` com acesso público (domínio `r2.dev` ou `media.quarau.com.br` no go-live) e um token S3 de leitura/escrita | `S3_ENDPOINT`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_PUBLIC_URL`, `S3_REGION=auto` |
-| Resend               | e-mail do formulário | chave de API (domínio `quarau.com.br` só verificado no go-live)                                                                  | `RESEND_API_KEY`                                                                                          |
-| Cloudflare Turnstile | antispam             | site key + secret                                                                                                                | `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`                                                  |
-| Sentry (opcional)    | erros                | DSN do projeto                                                                                                                   | `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`                                                                    |
-
-Gerar segredos (nunca colar em chat): `openssl rand -hex 32` para `PAYLOAD_SECRET`, `REVALIDATE_SECRET` e `CRON_SECRET`.
-Lista completa e comentada: [`.env.example`](../.env.example).
-
-## Primeira carga de conteúdo (homologação)
+Automático: push na `main` → CI/CD verde → job **Deploy to the VPS** (chave SSH dedicada, sem downtime) →
+smoke test exige `/api/health` com o SHA novo. Manual, se preciso:
 
 ```bash
-# no computador do dono, com as variáveis de produção num arquivo fora do git (ex.: ~/quarau-prod.env)
-pnpm --filter @quarau/web exec tsx --env-file=$HOME/quarau-prod.env scripts/seed/index.ts
-ADMIN_EMAIL=gestor@quarau.com.br pnpm --filter @quarau/web exec tsx --env-file=$HOME/quarau-prod.env scripts/create-admin.ts
+ssh zewithane-vps 'site deploy quarau <sha-completo> && site saude'
+ssh zewithane-vps 'site rollback quarau'   # se algo der errado: volta para a versão anterior
 ```
 
-O seed é idempotente: rodar de novo não duplica nem sobrescreve nada editado no painel.
+## Reinstalação da VPS (06–07/11/2026)
 
-## Corte para a VPS (passo a passo, ~45 min)
+A VPS foi zerada em 06/11 à noite (Ubuntu 24.04 + vps-platform 1.0). O banco e a mídia do Quarau foram
+exportados antes para `/srv/backups/import/quarau/` e restaurados em 07/11: `site novo quarau ...`,
+`site config quarau --stdin` com o `app.env` antigo, `pg_restore` do `db.dump`, `media.tar.gz` em
+`data/` com `chown -R 1001:1001 data/media`, `site deploy`. Conferido: 61 mídias, administrador e conteúdo.
 
-**Pré-requisitos:** aceite do dono; DNS de `quarau.com.br` acessível; `df -h` na VPS com ≥ 3 GB livres.
+## Carga de conteúdo (feita em 06/11/2026; repetir só se o banco for recriado)
 
-1. **Criar o site na VPS** (5 min)
+O seed é idempotente: rodar de novo não duplica nem sobrescreve o que foi editado no painel.
 
-   ```bash
-   ssh zewithane-vps
-   site novo quarau --imagem ghcr.io/vhonorato02/quarau --porta 3000 --saude /api/health --memoria 768m --rw
-   ```
+```bash
+# 1) túnel até o Postgres da plataforma (IP do contêiner: docker inspect postgres)
+ssh -N -L 55432:<ip-do-postgres>:5432 zewithane-vps &
+# 2) arquivo fora do git com DATABASE_URL=postgres://quarau:<senha do /srv/sites/quarau/.env>@127.0.0.1:55432/quarau,
+#    PAYLOAD_DB_PUSH=false, PAYLOAD_JOBS_AUTORUN=false, MEDIA_DIR=<pasta local vazia>
+set -a; . ~/quarau-vps.env; set +a
+pnpm --filter @quarau/web exec payload migrate
+pnpm --filter @quarau/web exec tsx scripts/seed/index.ts
+ADMIN_EMAIL=<e-mail do dono> pnpm --filter @quarau/web exec tsx scripts/create-admin.ts   # senha → ACESSO-ADMIN.txt
+# 3) fotos geradas → pasta do site
+tar -C "$MEDIA_DIR" -cf - . | ssh zewithane-vps 'sudo tar -C /srv/sites/quarau/data/media -xf - && sudo chown -R 1001:1001 /srv/sites/quarau/data/media'
+```
 
-   `--rw`: no monorepo o cache do Next fica em `/app/apps/web/.next/cache`, fora do `tmpfs` que o template monta em
-   modo somente leitura. Sem `--rw` as páginas não entram em cache.
+A tela pública "criar primeiro usuário" do Payload fica fechada: o primeiro administrador só nasce pelo
+`create-admin.ts` (ou com `ALLOW_FIRST_USER_SIGNUP=true` de propósito).
 
-2. **Variáveis** (5 min): `site config quarau` e colar as mesmas variáveis da Vercel, **exceto** `DATABASE_URL`
-   (a plataforma injeta a do Postgres local). Trocar:
-   `SITE_URL=https://quarau.com.br`, `SITE_NOINDEX=false`. Remover `PAYLOAD_JOBS_AUTORUN` se existir.
+## Go-live em `quarau.com.br` (só com o "aprovado" do dono)
 
-3. **Congelar edições** (1 min): avisar a equipe para não editar no painel até o fim do corte.
+**Pré-requisitos:** aceite do dono; acesso ao painel da **Hostinger** (DNS em `ns1/ns2.dns-parking.com`, e-mail em
+`mx1/mx2.hostinger.com`); backup do WordPress antigo;
+`df -h` na VPS com ≥ 3 GB livres.
 
-4. **Banco: Neon → Postgres da VPS** (10 min)
-
-   ```bash
-   # no computador do dono (pg_dump 17); a URL do Neon fica numa variável, não no histórico
-   read -rs NEON_URL && pg_dump --format=custom --no-owner --no-acl "$NEON_URL" > quarau.dump
-   scp quarau.dump zewithane-vps:/tmp/
-   # na VPS
-   docker exec -i postgres pg_restore -U postgres -d quarau --no-owner --no-acl --role=quarau --clean --if-exists < /tmp/quarau.dump
-   rm /tmp/quarau.dump
-   ```
-
-5. **Publicar** (3 min): `site deploy quarau <sha-da-imagem-da-homologação>` e conferir `site logs quarau 100`.
-
-6. **Verificar antes do DNS** (5 min), pelo domínio provisório da plataforma
-   (`https://quarau.<BASE_DOMAIN>`): `/api/health` = ok; home, um projeto, contato; login no `/admin` e uma edição
-   de teste revertida.
-
-7. **DNS** (5–15 min): no Cloudflare, `quarau.com.br` e `www` → IP da VPS. Depois:
+1. **Inventário do DNS** (5 min): anotar todos os registros atuais (A, AAAA, CNAME, **MX**, TXT/SPF/DKIM/DMARC).
+   **Não mexer em MX nem nos TXT de e-mail**: o `contato@quarau.com.br` continua onde está.
+2. **Backup** (2 min): `ssh zewithane-vps 'site backup'`.
+3. **Domínio na plataforma** (2 min):
    `site dominio quarau quarau.com.br,www.quarau.com.br --redirecionar www.quarau.com.br --para quarau.com.br`.
-   **Não mexer nos registros MX** (o e-mail `contato@` continua onde está; [CONTENT-TODO.md](CONTENT-TODO.md)).
+4. **Variáveis** (2 min): `site config quarau` → `SITE_URL=https://quarau.com.br` e `SITE_NOINDEX=false`
+   (o `site config` republica sem queda).
+5. **DNS** (5–15 min): `A` de `quarau.com.br` e `www` → `177.107.94.44`. TTL curto antes, se possível.
+6. **Conferir** (5 min): HTTPS válido, `/api/health` = ok, home, um projeto, notícias, contato, `/admin`, um
+   endereço antigo do WordPress redirecionando (301), `robots.txt` liberando e `sitemap.xml` com `quarau.com.br`.
+7. **Depois:** Search Console com `https://quarau.com.br/sitemap.xml`; verificar o domínio no provedor de e-mail
+   (Resend/SMTP) se o formulário for mandar e-mail; pausar ou apagar o projeto antigo na Vercel.
 
-8. **Depois do DNS** (5 min):
-   - Vercel: pausar o projeto ou apontar a homologação para um branch novo do Neon (nunca deixar dois processos
-     rodando a fila do mesmo banco);
-   - GitHub: apagar a variável `JOBS_URL` (desliga o agendador da homologação);
-   - R2: se usar `media.quarau.com.br`, apontar o domínio para o bucket e trocar `S3_PUBLIC_URL`;
-   - Resend: verificar o domínio `quarau.com.br`;
-   - Search Console: enviar `https://quarau.com.br/sitemap.xml`.
+## Rollback
 
-## Rollback (2 min)
+- **Versão ruim:** `site rollback quarau`.
+- **Depois do DNS:** voltar os registros `A` anotados no passo 1 (o WordPress continua no servidor antigo até ser
+  desligado de propósito) e `SITE_NOINDEX=true`.
+- **Dados:** `site restaurar quarau [snapshot]` (pede confirmação; guarda o estado atual antes).
 
-- **Antes do DNS:** nada a desfazer; a homologação continua no ar.
-- **Depois do DNS:** apontar o DNS de volta para a Vercel (o projeto não foi apagado) e reativar `JOBS_URL`. Edições
-  feitas na VPS depois do corte precisam ir de volta ao Neon com o mesmo `pg_dump`/`pg_restore` invertido.
-- **Versão ruim na VPS:** `site rollback quarau`.
+## E-mail do formulário (pendente do dono)
 
-## Backup na VPS
+Sem SMTP o contato **fica salvo no painel** (Relacionamento → Contatos recebidos), mas ninguém é avisado por e-mail.
+O caminho sem custo é o SMTP da caixa `contato@quarau.com.br` na Hostinger:
 
-O `site backup` da plataforma (restic, diário) já inclui o dump do banco do site; `site teste-restauracao` valida
-semanalmente. A mídia está no R2 (versão de objetos desligada no plano gratuito): para cópia extra,
-`rclone sync r2:quarau-media /srv/backups/quarau-media` agendado no cron da VPS.
+```bash
+ssh zewithane-vps
+site config quarau   # acrescentar as linhas abaixo e salvar (republica sozinho)
+# SMTP_HOST=smtp.hostinger.com
+# SMTP_PORT=465
+# SMTP_SECURE=true
+# SMTP_USER=contato@quarau.com.br
+# SMTP_PASS=<senha da caixa>
+# EMAIL_FROM_ADDRESS=contato@quarau.com.br
+```
 
-## Ensaio já automatizado
-
-O job "Production container" do CI faz, a cada push, o caminho dos passos 1–6 com Postgres de serviço:
-sobe a imagem, aplica migrações, roda o seed offline e passa os e2e contra o contêiner. Se ele está verde, a imagem
-está pronta para a VPS.
+Depois, enviar um contato de teste pelo site e conferir a caixa. Não mexe em DNS nem em MX.

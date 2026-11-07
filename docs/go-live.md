@@ -10,7 +10,7 @@ O WordPress continua intocado até a virada do DNS.
 - [ ] Cloudflare Turnstile criado para `quarau.com.br`: variável `TURNSTILE_SITE_KEY` (GitHub) e
       `TURNSTILE_SECRET_KEY` (`site config quarau`).
 - [ ] Backup off-site configurado (`RESTIC_REPOSITORY_OFFSITE` em `/srv/platform/.env`) e um `site backup` executado com sucesso.
-- [ ] App ntfy assinando o tópico de `ALERT_URL` (ver [guia](vps-guia.md#alertas-no-celular)).
+- [ ] Alertas: painel Gatus da plataforma (`site paineis`, só pela Tailscale) acompanhando o domínio definitivo.
 - [ ] Reduzir o TTL dos registros DNS atuais para 300 s.
 
 ## 2. Registros DNS (no provedor do domínio)
