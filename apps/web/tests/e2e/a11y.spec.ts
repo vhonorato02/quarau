@@ -8,6 +8,7 @@ const PAGES = [
   '/contato',
   '/projetos',
   '/projetos/projeto-quipa',
+  '/noticias',
   '/atuacao',
   '/busca?q=patrimonio',
   '/pagina-inexistente',

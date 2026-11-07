@@ -52,9 +52,9 @@ export async function Areas({ block, index }: { block: BlockOf<'areas'>; index: 
         {services.map((s) => (
           <article key={s.id} className="q-area">
             {isMedia(s.coverImage) ? (
-              <Link className="q-area__img" href={docPath('services', s.slug)} tabIndex={-1}>
+              <span className="q-area__img">
                 <Img media={s.coverImage} sizes="(min-width: 56rem) 45vw, 100vw" alt="" />
-              </Link>
+              </span>
             ) : null}
             <h3>
               <Link href={docPath('services', s.slug)}>{s.title}</Link>

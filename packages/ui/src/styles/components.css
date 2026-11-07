@@ -775,7 +775,7 @@
     object-fit: cover;
     transition: transform var(--duration-media) var(--ease-out-soft);
   }
-  .q-area__img:hover img {
+  .q-area:hover .q-area__img img {
     transform: scale(1.03);
   }
   .q-area h3 {
