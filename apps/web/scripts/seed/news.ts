@@ -3,7 +3,8 @@
  *
  * Textos reescritos, sem cópia literal de posts; fonte e contexto em
  * content/social/EDITORIAL-SOURCES.md. Nenhuma foto de terceiros é baixada.
- * Cada notícia reutiliza a capa já cadastrada do projeto correspondente.
+ * A capa é a do projeto só quando a foto mostra o próprio assunto; senão a matéria sai sem capa
+ * (`noCover`), para nunca ilustrar um fato com a foto de outro evento ou de outro bem cultural.
  * A execução é idempotente; edições no CMS nunca são sobrescritas.
  *
  * Regra editorial: só vai ao ar (`published`) o que tem fonte conferível listada em `verifiedBy`.
@@ -38,6 +39,7 @@ export const curatedNews: CuratedNewsSeed[] = [
     summary:
       'A atividade de observação de aves em São José dos Campos aproxima biodiversidade, território e educação ambiental no Ecomuseu dos Campos de São José.',
     projectSlug: 'ecomuseu-dos-campos-de-sao-jose',
+    noCover: true,
     sourceUrl:
       'https://pt.linkedin.com/posts/quarau-91196b258_programapetrobrassocioambiental-educa%C3%A7%C3%A3oambiental-activity-7266902529056063489-Oc6B',
     verifiedBy: [
@@ -56,6 +58,7 @@ export const curatedNews: CuratedNewsSeed[] = [
     summary:
       'Jornada formativa reúne profissionais do Ecomuseu dos Campos de São José para ações culturais e socioambientais no território.',
     projectSlug: 'ecomuseu-dos-campos-de-sao-jose',
+    noCover: true,
     verifiedBy: [
       'Confirmado pelo dono (via Zé) em 07/11/2026: jornada formativa, frentes da 4ª edição e papel da Quarau',
       `${LEGACY}ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/`,
@@ -72,6 +75,7 @@ export const curatedNews: CuratedNewsSeed[] = [
     summary:
       'Um mutirão com voluntários, estudantes e equipe do Ecomuseu recolheu resíduos na área de preservação permanente do Rio Alambari.',
     projectSlug: 'ecomuseu-dos-campos-de-sao-jose',
+    noCover: true,
     verifiedBy: [
       'Confirmado pelo dono (via Zé) em 07/11/2026: data, participantes e 221 kg de resíduos',
     ],
@@ -114,6 +118,7 @@ export const curatedNews: CuratedNewsSeed[] = [
     summary:
       'O reconhecimento do Samba de Bumbo Paulista pelo IPHAN destaca a importância de pesquisas, registros e iniciativas de salvaguarda do patrimônio cultural.',
     projectSlug: 'inventario-cultural-e-dossie-de-registro',
+    noCover: true,
     sourceUrl:
       'https://bcr.iphan.gov.br/acoes-de-salvaguarda/registro-do-samba-de-bumbo-paulista-como-patrimonio-cultural-do-brasil/',
     verifiedBy: [

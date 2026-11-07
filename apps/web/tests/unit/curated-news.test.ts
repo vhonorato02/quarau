@@ -61,4 +61,17 @@ describe('arquivo editorial de publicações públicas', () => {
     expect(item?.verifiedBy.some((v) => v.includes('activity-7510477602730725377'))).toBe(true)
     expect(item?.paragraphs.join(' ')).toMatch(/22 de setembro de 2026/)
   })
+
+  it('não usa foto de outro assunto como capa (Congo no Samba de Bumbo, feira no mutirão)', () => {
+    const withoutCover = curatedNews.filter((n) => n.noCover).map((n) => n.slug)
+    expect(withoutCover.sort()).toEqual(
+      [
+        'cortejo-da-cavalaria-patrimonio-cultural',
+        'ecomuseu-mutirao-rio-alambari',
+        'educacao-ambiental-e-observacao-de-aves-no-ecomuseu',
+        'jornada-formativa-ecomuseu-quarta-edicao',
+        'samba-de-bumbo-paulista-patrimonio-cultural',
+      ].sort(),
+    )
+  })
 })

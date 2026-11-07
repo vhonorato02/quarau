@@ -100,6 +100,36 @@ async function findBy(payload: Payload, collection: Collection, field: string, v
   return res.docs[0] as { id: number } | undefined
 }
 
+/**
+ * Earlier seeds gave every story its project's cover. For a story marked `noCover`, remove that
+ * borrowed photo, but keep any other photo someone picked in the admin.
+ */
+async function dropBorrowedCover(
+  payload: Payload,
+  id: number,
+  item: { noCover?: boolean; projectSlug: string },
+) {
+  if (!item.noCover) return
+  const doc = (await payload.findByID({ collection: 'news', id, depth: 0, draft: true })) as {
+    coverImage?: number | { id: number } | null
+    _status?: 'draft' | 'published'
+  }
+  const current = typeof doc.coverImage === 'object' ? doc.coverImage?.id : doc.coverImage
+  if (!current) return
+  const project = (await findBy(payload, 'projects', 'slug', item.projectSlug)) as
+    { coverImage?: number | { id: number } | null } | undefined
+  const borrowed =
+    typeof project?.coverImage === 'object' ? project.coverImage?.id : project?.coverImage
+  if (current !== borrowed) return
+  await payload.update({
+    collection: 'news',
+    id,
+    data: { coverImage: null, _status: doc._status ?? 'published' } as never,
+    draft: doc._status === 'draft',
+    context: ctx(),
+  })
+}
+
 const isImg = (v: unknown): v is Img =>
   typeof v === 'object' && v !== null && 'file' in v && 'alt' in v
 
@@ -209,6 +239,7 @@ export async function seed(payload: Payload): Promise<string[]> {
         !existing.createdAt ||
         !existing.updatedAt ||
         Date.parse(existing.updatedAt) - Date.parse(existing.createdAt) < 60_000
+      await dropBorrowedCover(payload, existing.id, item)
       if (existing._status === 'draft' && item.status !== 'draft' && untouched) {
         await payload.update({
           collection: 'news',
