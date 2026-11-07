@@ -23,8 +23,8 @@
   com foto, ciclo e chamada no azul da marca, placas tipográficas para notícias sem foto, aberturas em tinta.
   Datas das notícias: data do fato quando verificada (aves 24/11/2024, mutirão 21/09/2024, Samba 09/05/2024,
   Cortejo 22/09/2026), aplicada também no banco da VPS em 07/11. Registro em [DESIGN.md](DESIGN.md) §3ª execução.
-  Commits `67dd4dc`, `a9ec620`, `601436b`. **Conferir:** CI/CD verde (`gh run list -L 3`), `/api/health` com o
-  SHA `601436b…` e home/notícias em 1440 e 390.
+  **No ar em `cb9bab3`** (CI/CD completo verde: E2E, axe com /noticias incluída, Lighthouse, Trivy e deploy;
+  home e notícias conferidas no site publicado em 1440 e 390). **Próximo passo:** aprovação visual do Zé.
 - **Notícias (07/11, tarde):** 7 publicadas. Mutirão e jornada do Ecomuseu publicadas após o "tá tudo
   autorizado" do Zé; nova matéria do Cortejo da Cavalaria (IPHAN, 22/09/2026). Capa passou a ser opcional:
   Samba de Bumbo (tinha foto de Congo) e as três do Ecomuseu (foto de feira) saem sem capa (Q-028).
