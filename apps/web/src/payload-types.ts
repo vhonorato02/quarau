@@ -1055,9 +1055,9 @@ export interface News {
    */
   summary: string;
   /**
-   * Foto real do projeto. Aparece nas listas e ao compartilhar o link.
+   * Foto real do assunto da notícia. Sem uma foto autorizada, deixe vazio: a notícia sai sem capa.
    */
-  coverImage: number | Media;
+  coverImage?: (number | null) | Media;
   story: (
     | {
         heading?: string | null;

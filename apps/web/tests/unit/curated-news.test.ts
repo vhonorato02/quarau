@@ -50,6 +50,15 @@ describe('arquivo editorial de publicações públicas', () => {
         /segundo o relato|anunciad|não como resultados/i,
       )
     }
-    expect(curatedNews.filter((item) => item.status !== 'draft').length).toBe(6)
+    expect(curatedNews.filter((item) => item.status !== 'draft').length).toBe(7)
+  })
+
+  it('publica o reconhecimento do Cortejo sem capa e com a nota oficial do IPHAN como fonte', () => {
+    const item = curatedNews.find((n) => n.slug === 'cortejo-da-cavalaria-patrimonio-cultural')
+    expect(item?.status ?? 'published').toBe('published')
+    expect(item?.noCover).toBe(true)
+    expect(item?.sourceUrl).toMatch(/^https:\/\/www\.gov\.br\/iphan\//)
+    expect(item?.verifiedBy.some((v) => v.includes('activity-7510477602730725377'))).toBe(true)
+    expect(item?.paragraphs.join(' ')).toMatch(/22 de setembro de 2026/)
   })
 })

@@ -23,11 +23,15 @@
 | `quipa-formacao-jovens-quilombolas-piaui`             | [Post da Quarau reproduzido em atividade pública de terceiro](https://br.linkedin.com/in/ana-cristina-campos-7a3a92209); portfólio legado                                                                                                                                | Janeiro de 2023 se refere à oficina, não à suposta data de início do projeto                                                                 |
 | `samba-de-bumbo-paulista-patrimonio-cultural`         | [Base oficial do IPHAN](https://bcr.iphan.gov.br/acoes-de-salvaguarda/registro-do-samba-de-bumbo-paulista-como-patrimonio-cultural-do-brasil/); [postagem de Fábio Bueno sobre a documentação audiovisual](https://br.linkedin.com/in/f%C3%A1biobueno); `docs/QUARAU.md` | O registro é do **bem cultural**, não prêmio concedido à Quarau                                                                              |
 
-## Candidato prioritário ainda não publicado
+## Cortejo da Cavalaria (publicado em 07/11/2026, sem capa)
 
-**Cortejo da Cavalaria de São Gonçalo e São Benedito (Guaratinguetá).** A Quarau publicou notícia de entrega relacionada ao dossiê do processo de registro, em parceria com o CECP e IPHAN. O IPHAN confirmou o reconhecimento em **22/09/2026**. Fontes: [publicação da Quarau](https://pt.linkedin.com/posts/quarau-91196b258_cortejo-da-cavalaria-de-sao-goncalo-e-sao-activity-7510477602730725377-41-g), [nota oficial](https://www.gov.br/iphan/pt-br/assuntos/noticias/cortejo-da-cavalaria-de-sao-goncalo-e-sao-benedito-de-guaratingueta-sp-e-reconhecido-como-patrimonio-cultural) e [processo do bem no IPHAN](https://bcr.iphan.gov.br/acoes-de-salvaguarda/registro-do-cortejo-da-cavalaria-de-sao-goncalo-e-sao-benedito-de-guaratingueta-sp-como-patrimonio-cultural-do-brasil/).
-
-**Pendência editorial:** falta capa autorizada e representativa do Cortejo no acervo CMS. Não substituir por fotografia de Congada ou outro bem cultural, o que sugeriria visualmente um registro falso. Para publicar, obter foto do evento com direito verificado ou adaptar o template da notícia a uma apresentação sem capa, com migração e testes correspondentes.
+`cortejo-da-cavalaria-patrimonio-cultural`: reconhecimento aprovado pelo IPHAN em **22/09/2026** (114ª reunião do
+Conselho Consultivo, Livro de Registro das Celebrações). Fontes: [nota oficial](https://www.gov.br/iphan/pt-br/assuntos/noticias/cortejo-da-cavalaria-de-sao-goncalo-e-sao-benedito-de-guaratingueta-sp-e-reconhecido-como-patrimonio-cultural),
+[publicação da Quarau](https://pt.linkedin.com/posts/quarau-91196b258_cortejo-da-cavalaria-de-sao-goncalo-e-sao-activity-7510477602730725377-41-g)
+(entrega do dossiê na parceria com CECP e IPHAN) e [processo no IPHAN](https://bcr.iphan.gov.br/acoes-de-salvaguarda/registro-do-cortejo-da-cavalaria-de-sao-goncalo-e-sao-benedito-de-guaratingueta-sp-como-patrimonio-cultural-do-brasil/).
+Sai **sem capa** (o campo passou a ser opcional nas notícias): não há foto autorizada do Cortejo no acervo, e
+foto de Congada ou de outro bem sugeriria um registro falso. Quando o dono enviar uma foto com direito de uso,
+basta escolhê-la no painel.
 
 ## Instagram e cobertura incompleta do LinkedIn
 

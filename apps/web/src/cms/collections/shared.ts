@@ -52,14 +52,18 @@ export const createdByField: Field = {
   access: { update: () => false },
 }
 
-export const coverImageField = (name = 'coverImage', required = false): Field => ({
+export const coverImageField = (
+  name = 'coverImage',
+  required = false,
+  description = 'Foto real do projeto. Aparece nas listas e ao compartilhar o link.',
+): Field => ({
   name,
   type: 'upload',
   relationTo: 'media',
   label: 'Imagem de capa',
   required,
   filterOptions: { mimeType: { contains: 'image' } },
-  admin: { description: 'Foto real do projeto. Aparece nas listas e ao compartilhar o link.' },
+  admin: { description },
 })
 
 export const summaryField: Field = {

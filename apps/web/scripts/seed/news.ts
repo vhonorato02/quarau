@@ -24,6 +24,8 @@ export type CuratedNewsSeed = {
   verifiedBy: string[]
   /** `draft`: fica no painel, fora do site, até alguém confirmar `pendingCheck`. */
   status?: 'published' | 'draft'
+  /** Sem foto autorizada do assunto: a matéria sai sem capa em vez de usar a foto de outro bem. */
+  noCover?: boolean
   pendingCheck?: string
 }
 
@@ -122,6 +124,26 @@ export const curatedNews: CuratedNewsSeed[] = [
       'Em 9 de maio de 2024, o Conselho Consultivo do Patrimônio Cultural aprovou o registro do Samba de Bumbo Paulista como Patrimônio Cultural do Brasil, no Livro de Registro das Formas de Expressão.',
       'Contratada pelo CECP, a Quarau coordenou a pesquisa e a elaboração do Dossiê do Samba de Bumbo Paulista, trabalho ligado ao processo de registro conduzido pelo IPHAN.',
       'O reconhecimento pertence à manifestação cultural e às comunidades que mantêm sua prática. O trabalho técnico de pesquisa contribui para documentar referências, histórias e modos de fazer, sem substituir o protagonismo dos grupos detentores.',
+    ],
+  },
+  {
+    slug: 'cortejo-da-cavalaria-patrimonio-cultural',
+    title: 'Cortejo da Cavalaria de Guaratinguetá é patrimônio cultural do Brasil',
+    summary:
+      'O IPHAN registrou o Cortejo da Cavalaria de São Gonçalo e São Benedito como patrimônio cultural do Brasil. A Quarau entregou o dossiê de registro, em parceria com o CECP e o IPHAN.',
+    projectSlug: 'inventario-cultural-e-dossie-de-registro',
+    noCover: true,
+    sourceUrl:
+      'https://www.gov.br/iphan/pt-br/assuntos/noticias/cortejo-da-cavalaria-de-sao-goncalo-e-sao-benedito-de-guaratingueta-sp-e-reconhecido-como-patrimonio-cultural',
+    verifiedBy: [
+      'Nota oficial do IPHAN de 22/09/2026 (114ª reunião do Conselho Consultivo, Livro de Registro das Celebrações), conferida em 07/11/2026',
+      'Post público da Quarau no LinkedIn (activity-7510477602730725377): entrega do dossiê na parceria com CECP e IPHAN, conferido em 07/11/2026',
+      'https://bcr.iphan.gov.br/acoes-de-salvaguarda/registro-do-cortejo-da-cavalaria-de-sao-goncalo-e-sao-benedito-de-guaratingueta-sp-como-patrimonio-cultural-do-brasil/',
+    ],
+    paragraphs: [
+      'Em 22 de setembro de 2026, o Conselho Consultivo do Patrimônio Cultural aprovou, em sua 114ª reunião, o registro do Cortejo da Cavalaria de São Gonçalo e São Benedito, de Guaratinguetá (SP), como patrimônio cultural do Brasil. A celebração será inscrita no Livro de Registro das Celebrações.',
+      'Todo Domingo de Páscoa, cerca de dois mil cavaleiros vestidos de branco percorrem aproximadamente 20 km em duas filas, com paradas nos cemitérios para homenagear os cavaleiros já falecidos. O cortejo reúne duas tradições: os saberes do caminho, ligados aos tropeiros do Vale do Paraíba, e os saberes do Rosário, de origem afro-brasileira e ligados à Irmandade de São Benedito.',
+      'A Quarau entregou o dossiê de registro do Cortejo no âmbito da parceria com o Centro de Estudos da Cultura Popular (CECP) e o IPHAN. O reconhecimento pertence aos cavaleiros, à Associação Cavalaria de São Gonçalo e São Benedito e às famílias que mantêm a celebração viva.',
     ],
   },
 ]

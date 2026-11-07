@@ -48,7 +48,11 @@ export const News: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', label: 'Título', required: true },
     summaryField,
-    coverImageField('coverImage', true),
+    coverImageField(
+      'coverImage',
+      false,
+      'Foto real do assunto da notícia. Sem uma foto autorizada, deixe vazio: a notícia sai sem capa.',
+    ),
     {
       name: 'story',
       type: 'blocks',

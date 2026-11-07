@@ -236,8 +236,10 @@ export async function seed(payload: Payload): Promise<string[]> {
     const project = related.docs[0]
     if (!project) throw new Error(`projeto não encontrado para notícia: ${item.projectSlug}`)
     const cover = project.coverImage
-    const coverImage = typeof cover === 'number' ? cover : cover?.id
-    if (!coverImage) throw new Error(`projeto sem imagem para notícia: ${item.projectSlug}`)
+    const coverImage = item.noCover ? undefined : typeof cover === 'number' ? cover : cover?.id
+    if (!coverImage && !item.noCover) {
+      throw new Error(`projeto sem imagem para notícia: ${item.projectSlug}`)
+    }
 
     await payload.create({
       collection: 'news',
