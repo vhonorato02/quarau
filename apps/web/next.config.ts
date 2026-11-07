@@ -62,6 +62,11 @@ const nextConfig: NextConfig = {
   transpilePackages: ['@quarau/ui', '@quarau/emails'],
   poweredByHeader: false,
   agentRules: false,
+  experimental: {
+    // The VPS container has a read-only root: ISR pages and fetch data stay in the in-memory cache
+    // (one replica; revalidateTag clears it) instead of being written under .next/server.
+    isrFlushToDisk: false,
+  },
   reactStrictMode: true,
   compress: true,
   async headers() {
