@@ -78,7 +78,9 @@ export async function PageIntro({
         {ctx.isHome ? null : (
           <Breadcrumbs items={[{ label: t.common.home, href: '/' }, { label: ctx.title }]} />
         )}
-        <h1>{block.heading}</h1>
+        <h1>
+          <DotHeading text={block.heading} />
+        </h1>
         {block.lead ? <p className="q-lead q-intro__lead">{block.lead}</p> : null}
       </div>
       {isMedia(block.image) ? (
