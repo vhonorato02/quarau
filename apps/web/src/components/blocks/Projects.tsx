@@ -20,7 +20,10 @@ export function projectPeriod(
   return p.startYear ? String(p.startYear) : p.endYear ? String(p.endYear) : null
 }
 
-/** The project index: territory first, then the name, who carries it out and the period. */
+/**
+ * The project index: a photograph and, beside it, the territory, the name, what the project is
+ * and who carries it out. Every row reads on its own; no title floats over empty space.
+ */
 export function ProjectRows({
   projects,
   t,
@@ -41,21 +44,22 @@ export function ProjectRows({
         return (
           <li key={p.id}>
             <Link className="q-row" href={docPath('projects', p.slug)}>
-              <span className="q-row__place">{p.territory}</span>
+              <span className="q-row__img">
+                <Img
+                  media={p.coverImage}
+                  sizes="(min-width: 56rem) 55vw, 100vw"
+                  priority={leadImage && i === 0}
+                />
+              </span>
               <span className="q-row__main">
+                <span className="q-row__place">{p.territory}</span>
                 <H>{p.title}</H>
+                {p.summary ? <span className="q-row__summary">{p.summary}</span> : null}
                 {p.carriedOutBy || period ? (
                   <span className="q-row__meta">
                     {[p.carriedOutBy, period].filter(Boolean).join(', ')}
                   </span>
                 ) : null}
-              </span>
-              <span className="q-row__img">
-                <Img
-                  media={p.coverImage}
-                  sizes="(min-width: 56rem) 50vw, 100vw"
-                  priority={leadImage && i === 0}
-                />
               </span>
             </Link>
           </li>

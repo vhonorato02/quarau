@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { CMSLink } from '@/components/CMSLink'
+import { Img, isMedia } from '@/components/Img'
 import { phoneHref, whatsappHref } from '@/components/site/contact-links'
 import { docPath } from '@/lib/urls'
 import { getGlobal, getTexts, listNews, listPartners, listServices } from '@/server/queries'
@@ -50,6 +51,11 @@ export async function Areas({ block, index }: { block: BlockOf<'areas'>; index: 
       <div className="q-areas">
         {services.map((s) => (
           <article key={s.id} className="q-area">
+            {isMedia(s.coverImage) ? (
+              <Link className="q-area__img" href={docPath('services', s.slug)} tabIndex={-1}>
+                <Img media={s.coverImage} sizes="(min-width: 56rem) 45vw, 100vw" alt="" />
+              </Link>
+            ) : null}
             <h3>
               <Link href={docPath('services', s.slug)}>{s.title}</Link>
             </h3>
@@ -128,17 +134,30 @@ export async function NewsList({ block, index }: { block: BlockOf<'newsList'>; i
         </h2>
       ) : null}
       <ul className="q-news">
-        {news.map((n) => (
-          <li key={n.id}>
-            <Link href={docPath('news', n.slug)}>
-              {n.publishedAt ? (
-                <time dateTime={n.publishedAt}>{fmt.format(new Date(n.publishedAt))}</time>
-              ) : null}
-              <strong>{n.title}</strong>
-              <span className="q-muted">{n.summary}</span>
-            </Link>
-          </li>
-        ))}
+        {news.map((n) => {
+          const project = (n.relatedProjects ?? []).find((p) => typeof p === 'object')
+          const place = typeof project === 'object' ? project.territory : null
+          return (
+            <li key={n.id}>
+              <Link href={docPath('news', n.slug)}>
+                <span className="q-news__img">
+                  {isMedia(n.coverImage) ? (
+                    <Img media={n.coverImage} sizes="(min-width: 56rem) 30vw, 100vw" alt="" />
+                  ) : (
+                    <span className="q-news__plate" aria-hidden="true">
+                      {place || n.title}
+                    </span>
+                  )}
+                </span>
+                {n.publishedAt ? (
+                  <time dateTime={n.publishedAt}>{fmt.format(new Date(n.publishedAt))}</time>
+                ) : null}
+                <strong>{n.title}</strong>
+                <span className="q-news__sum">{n.summary}</span>
+              </Link>
+            </li>
+          )
+        })}
       </ul>
     </section>
   )

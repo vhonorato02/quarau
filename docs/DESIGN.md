@@ -137,3 +137,22 @@ O que mudou (marca intacta: logo, `#0089CF`, `#39B54A`, família Barlow):
 - **Home:** hero dividido (texto à esquerda, foto de campo ocupando a metade direita até a borda da janela,
   legenda sobre a foto); índice de projetos com foto grande (metade da largura) e o símbolo da marca em
   petróleo quando falta foto; ciclo de 10 etapas em grade numerada (é sequência real); notícias em três colunas.
+
+## Revisão 07/11/2026 — 3ª execução: papel, foto e azul da marca
+
+O Zé reprovou de novo ("continua muito feio e incompleto"). Autocrítica no site publicado, em 1440 px e 390 px:
+o petróleo `#062C44` não é cor da marca e deixava o site pesado e frio; nos projetos o título flutuava ao lado
+de um vazio branco, sem resumo; as áreas eram listas de documento; as notícias sem foto viravam texto solto e
+todas mostravam a mesma data (a da carga), o que parecia conteúdo de teste.
+
+- **Superfície:** papel branco. Cor chapada só em duas faixas, no azul da marca para texto branco
+  (`--color-blue-700`, 5,5:1): o ciclo e a chamada final. Número de destaque em faixa `--color-mist`.
+  Petróleo fica só no rodapé.
+- **Home:** título grande no papel com o texto e as ações ao lado, depois a foto de campo na largura inteira da
+  janela; parceiros entre dois fios, separados pelo ponto verde do logo; projetos como sequência de histórias
+  (foto 7/12, território, nome, resumo, quem executa e período), com a foto trocando de lado a cada linha;
+  áreas com foto; ciclo como rota (ponto verde por etapa, numeração 01–10).
+- **Notícias:** cartão com foto; sem foto autorizada do assunto, uma placa tipográfica com o território, nas três
+  cores da marca alternadas (azul, tinta, verde). Nada de símbolo recortado: no canto ele parece uma lupa.
+- **Datas:** notícia sobre fato passado usa a data do fato quando ela está na fonte (`date` no seed); sem data
+  conferida vale a de publicação no site.

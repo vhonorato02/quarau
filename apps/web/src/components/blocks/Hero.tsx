@@ -18,27 +18,34 @@ export function DotHeading({ text }: { text: string }) {
   )
 }
 
-/** Home opening: headline on petrol and a field photograph running off the edge (docs/DESIGN.md). */
+/**
+ * Home opening: the headline set large on paper, the lead and the two actions beside it, then a
+ * field photograph across the full width of the window (docs/DESIGN.md §Revisão 07/11, 3ª execução).
+ */
 export function HeroLens({ block }: { block: BlockOf<'heroLens'> }) {
   const caption = block.caption || (isMedia(block.image) ? block.image.caption : null)
   return (
     <section className="q-hero">
       <div className="q-wrap q-hero__in">
-        <div className="q-hero__text">
-          <h1>
-            <DotHeading text={block.heading} />
-          </h1>
+        <h1>
+          <DotHeading text={block.heading} />
+        </h1>
+        <div className="q-hero__side">
           <p className="q-hero__lead">{block.lead}</p>
           <div className="q-hero__ctas">
             <CMSLink link={block.primary} variant="primary" />
             <CMSLink link={block.secondary} variant="ghost" />
           </div>
         </div>
-        <figure className="q-hero__photo">
-          <Img media={block.image} priority sizes="(min-width: 56rem) 50vw, 100vw" />
-          {caption ? <figcaption>{caption}</figcaption> : null}
-        </figure>
       </div>
+      <figure className="q-hero__photo">
+        <Img media={block.image} priority sizes="100vw" />
+        {caption ? (
+          <figcaption>
+            <span className="q-wrap">{caption}</span>
+          </figcaption>
+        ) : null}
+      </figure>
     </section>
   )
 }
