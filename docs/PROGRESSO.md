@@ -18,6 +18,13 @@
   Registro em [DESIGN.md](DESIGN.md) §Revisão 07/11. **No ar em `d1e58c9`** (CI completo verde, Lighthouse
   mobile ≥ 95 nas 5 rotas). Home, projeto, Sobre e Contato conferidos em 1440/390. Próximo passo: aprovação
   visual do Zé; depois, página de notícia e busca no mesmo padrão.
+- **3ª execução do visual (07/11, noite):** o Zé reprovou de novo ("continua muito feio e incompleto"). Papel
+  branco, foto de campo na largura inteira, projetos como histórias (foto grande, resumo, quem e quando), áreas
+  com foto, ciclo e chamada no azul da marca, placas tipográficas para notícias sem foto, aberturas em tinta.
+  Datas das notícias: data do fato quando verificada (aves 24/11/2024, mutirão 21/09/2024, Samba 09/05/2024,
+  Cortejo 22/09/2026), aplicada também no banco da VPS em 07/11. Registro em [DESIGN.md](DESIGN.md) §3ª execução.
+  Commits `67dd4dc`, `a9ec620`, `601436b`. **Conferir:** CI/CD verde (`gh run list -L 3`), `/api/health` com o
+  SHA `601436b…` e home/notícias em 1440 e 390.
 - **Notícias (07/11, tarde):** 7 publicadas. Mutirão e jornada do Ecomuseu publicadas após o "tá tudo
   autorizado" do Zé; nova matéria do Cortejo da Cavalaria (IPHAN, 22/09/2026). Capa passou a ser opcional:
   Samba de Bumbo (tinha foto de Congo) e as três do Ecomuseu (foto de feira) saem sem capa (Q-028).
