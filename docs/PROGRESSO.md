@@ -21,9 +21,11 @@
 - **Notícias (07/11, tarde):** 7 publicadas. Mutirão e jornada do Ecomuseu publicadas após o "tá tudo
   autorizado" do Zé; nova matéria do Cortejo da Cavalaria (IPHAN, 22/09/2026). Capa passou a ser opcional:
   Samba de Bumbo (tinha foto de Congo) e as três do Ecomuseu (foto de feira) saem sem capa (Q-028).
-  **Próximo passo exato:** quando o CI/CD de `9ba9642` ficar verde (`gh run list -L 3`), rodar o seed na VPS pelo
-  túnel (runbook §Scripts contra o banco da VPS) para criar o Cortejo e tirar as capas emprestadas; depois
-  `ssh zewithane-vps site reiniciar quarau` (o seed não revalida o cache) e conferir `/noticias` em 390/1440.
+  **No ar em `bcb363d`** (CI/CD completo verde; seed rodado na VPS em 07/11, segundo seed sem nada a criar; site
+  reiniciado; Cortejo e Samba conferidos em 390, imagem de compartilhamento gerada para as matérias sem capa).
+  **Próximo passo:** aprovação visual e de conteúdo do Zé na homologação; depois, go-live
+  ([go-live.md](go-live.md)). Ideia para o dono: citar o dossiê do Cortejo no projeto "Inventário Cultural e
+  Dossiê de Registro" (hoje ele fala só de Congado e Samba de Bumbo).
 - **Achados:** [audit/ACHADOS.md](audit/ACHADOS.md) (rodadas 1–3). Bloqueios do dono: senha SMTP da caixa
   `contato@` (Q-019, adiado pelo Zé), direitos de imagem (Q-005), exportações das redes (Q-008).
 - **Go-live:** não tocar DNS/WordPress até o "aprovado" do dono; roteiro em [MIGRACAO-VPS.md](MIGRACAO-VPS.md)
