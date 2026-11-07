@@ -202,8 +202,7 @@ export async function seed(payload: Payload): Promise<string[]> {
   // human edits. News are visible immediately after publication, via the existing CMS queries.
   for (const item of curatedNews) {
     const existing = (await findBy(payload, 'news', 'slug', item.slug)) as
-      | { id: number; _status?: string; createdAt?: string; updatedAt?: string }
-      | undefined
+      { id: number; _status?: string; createdAt?: string; updatedAt?: string } | undefined
     if (existing) {
       // A story seeded as a draft and confirmed later is published once, unless someone edited it.
       const untouched =

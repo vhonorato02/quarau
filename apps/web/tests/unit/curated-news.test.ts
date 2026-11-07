@@ -39,11 +39,16 @@ describe('arquivo editorial de publicações públicas', () => {
 
   it('publica o mutirão e a jornada formativa com a confirmação do dono como fonte', () => {
     const bySlug = new Map(curatedNews.map((item) => [item.slug, item]))
-    for (const slug of ['ecomuseu-mutirao-rio-alambari', 'jornada-formativa-ecomuseu-quarta-edicao']) {
+    for (const slug of [
+      'ecomuseu-mutirao-rio-alambari',
+      'jornada-formativa-ecomuseu-quarta-edicao',
+    ]) {
       const item = bySlug.get(slug)
       expect(item?.status ?? 'published').toBe('published')
       expect(item?.verifiedBy.some((v) => v.includes('Confirmado pelo dono'))).toBe(true)
-      expect(item?.paragraphs.join(' ')).not.toMatch(/segundo o relato|anunciad|não como resultados/i)
+      expect(item?.paragraphs.join(' ')).not.toMatch(
+        /segundo o relato|anunciad|não como resultados/i,
+      )
     }
     expect(curatedNews.filter((item) => item.status !== 'draft').length).toBe(6)
   })
