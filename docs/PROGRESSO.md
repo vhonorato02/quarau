@@ -6,29 +6,22 @@
 
 ## Retomar em
 
-- **Sessão atual:** 04/11/2026, auditoria e curadoria pública de notícias (primeira etapa). O estado
-  comprovado está em [audit/BASELINE.md](audit/BASELINE.md), [audit/ACHADOS.md](audit/ACHADOS.md),
-  [audit/PLANO.md](audit/PLANO.md) e [content/social/EDITORIAL-SOURCES.md](../content/social/EDITORIAL-SOURCES.md).
-- **Base inicial:** `main` em `aefaa1678187115b143df2b7efaaa1b6cf546ce6`. Para o **HEAD atual**, executar
-  `git rev-parse HEAD`; cada edição subsequente tem commit próprio.
-- **Blog:** seis matérias autorais e referenciadas em `apps/web/scripts/seed/news.ts`, criação idempotente no
-  Payload, lista com ligação de projetos, página inicial e menus; teste unitário e Playwright acrescentados.
-  **Ainda não afirmar publicadas:** os dados precisam passar por seed real em banco e storage persistente.
-  Exportações integrais de Instagram/LinkedIn seguem pendentes e a curadoria pública é parcial.
-- **Banco:** projeto Neon de homologação `quarau-staging` (`misty-fog-46195118`, sa-east-1, PG17)
-  criado e `DATABASE_URL` adicionada à Vercel como variável `sensitive`. Nenhuma credencial exposta.
-- **Vercel:** o deploy anterior `dpl_5nxH7qpEe1SLw4pE4jz8kdW31LN7` falhava por ausência de banco;
-  após correção, `dpl_6RvT6jEkaoxCzhfz4Buq8pCd9edw` (commit `6c4239c`) atingiu `READY`.
-  Builds de commits posteriores ainda exigem verificação. O ambiente está com `SITE_NOINDEX=true`.
-  A produção `quarau.com.br` segue no WordPress original, sem troca de DNS.
-- **Bloqueios principais:** mídia não tem adaptador de armazenamento persistente na Vercel;
-  envio de e-mail sem adaptador; carga de dados/mídia não testada; direitos de fotografia;
-  Lighthouse/TBT do CI; backup e restore; QA funcional final.
-- **Próximos três passos:** 1) rodar `pnpm format:check && pnpm lint && pnpm typecheck && pnpm test`
-  no SHA exato e acompanhar Actions; 2) habilitar armazenamento compatível com Payload e executar
-  `pnpm --filter @quarau/web seed` em homologação, em ambiente com credenciais protegidas; 3) executar E2E, segurança, acessibilidade, mídia, contatos e restauração; corrigir até zero P0/P1.
-- **Consulta de evidência:** `gh run list -L 10`, `git status`, dashboard Vercel do projeto Quarau.
-  Nunca confiar em logs de SHA anterior para declarar estabilidade.
+- **Sessão atual:** 07/11/2026. Homologação **no ar na VPS** (plataforma vps-platform 1.0):
+  `https://quarau.zewithane.vps.brz.dev.br`, `SITE_NOINDEX=true`. A VPS foi zerada em 06/11; banco, mídia
+  (61 itens) e administrador foram restaurados de `/srv/backups/import/quarau/` em 07/11.
+- **Deploy automático:** push na `main` → CI/CD completo → job "Deploy to the VPS" (chave dedicada
+  `DEPLOY_SSH_KEY`) → smoke test exige `/api/health` com o SHA novo. Para conferir:
+  `curl -s https://quarau.zewithane.vps.brz.dev.br/api/health` e `gh run list -L 3`.
+- **Redesenho (07/11):** o visual "Lente" foi reprovado pelo Zé ("um dos sites mais feios"). Nova execução
+  editorial na família da marca: Barlow Condensed nos títulos e territórios, hero dividido com foto de campo
+  até a borda, superfícies em petróleo `#062C44`, cantos retos, ponto verde do logo fechando títulos.
+  Registro em [DESIGN.md](DESIGN.md) §Revisão 07/11. Próximo passo de design: página "Sobre", lista de
+  notícias e formulário de contato no mesmo padrão, com capturas 1440/390.
+- **Achados:** [audit/ACHADOS.md](audit/ACHADOS.md) (rodadas 1–3). Bloqueios do dono: senha SMTP da caixa
+  `contato@` (Q-019), direitos de imagem (Q-005), exportações das redes (Q-008), confirmação das duas notícias
+  em rascunho (Q-014).
+- **Go-live:** não tocar DNS/WordPress até o "aprovado" do dono; roteiro em [MIGRACAO-VPS.md](MIGRACAO-VPS.md)
+  e [go-live.md](go-live.md).
 
 ## Fases da missão
 

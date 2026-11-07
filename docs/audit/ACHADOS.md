@@ -4,6 +4,17 @@
 > `927af1b`, com teste real na homologação. Evidências em [BASELINE.md](BASELINE.md).
 > Estados: **FECHADO** (comportamento reexecutado no commit indicado), **ABERTO**, **BLOQUEADO** (depende do dono).
 
+## Rodada 3 — 07/11/2026
+
+| ID    | Grav. | Evidência                                                                                                                                     | Correção                                                                                                               | Estado                              |
+| ----- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Q-022 | P0    | VPS zerada em 06/11 (plataforma 1.0): `site lista` sem o quarau, banco inexistente; só o export em `/srv/backups/import/quarau/`              | `site novo`, `app.env` antigo, `pg_restore`, mídia com dono 1001, `site deploy`; 61 mídias, admin e páginas conferidos | FECHADO `a039786` → `4fce400`       |
+| Q-023 | P1    | Log de produção: `EACCES mkdir .next/cache/fetch-cache` e `ENOENT .next/server/route-cache` (tmpfs da plataforma é root 755, raiz só leitura) | `isrFlushToDisk: false` (cache em memória); CI roda com as mesmas montagens e reprova se o log tiver erro de disco     | FECHADO `2ee35b6`/`18d6bc6`         |
+| Q-024 | P1    | Publicação dependia de `site deploy` manual                                                                                                   | Job de deploy no CI com chave dedicada e smoke test pelo SHA                                                           | FECHADO `18d6bc6`                   |
+| Q-025 | P2    | Restos da plataforma Traefik (`infra/platform`), deploy temporário da Vercel e guias que descreviam outra VPS                                 | Removidos; runbook e guia de migração reescritos sobre a plataforma real; ADR 0013 marcada como substituída            | FECHADO `4fce400`                   |
+| Q-026 | P2    | Dependabot: nodemailer < 10.1.4 (parser de endereço) e tmp < 0.2.6 no lockfile                                                                | Overrides: nodemailer 10.3.1, tmp 0.2.7. Vite 7.3.6 fica (só desenvolvimento, fora da imagem)                          | FECHADO `57f5cd2`                   |
+| Q-027 | P1    | Design reprovado pelo Zé: cara de template (pílulas, foto em círculo, miniaturas, caixas vazias, faixa azul chapada)                          | Redesenho editorial na família da marca (DESIGN.md §Revisão 07/11)                                                     | FECHADO `dbe3924` (home e projetos) |
+
 ## Rodada 2 — 06/11/2026
 
 | ID    | Grav. | Evidência                                                                                                                                                                                     | Correção                                                                                                                                                | Estado                                                 |

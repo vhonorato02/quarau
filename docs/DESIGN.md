@@ -118,3 +118,22 @@ Documentados em `/design-system` (rota interna, `noindex`, testada com axe) e em
 Cara de template SaaS; grade de cards iguais; gradientes e blobs; ícones genéricos no lugar de conteúdo; banco de
 imagens; texto centralizado em bloco longo; animação de entrada em cada seção; caixa-alta espaçada em rótulos;
 metadados com "·"; setas "→" grudadas em links; fonte mono para dados; palavra colorida dentro de título.
+
+## Revisão 07/11/2026 — execução editorial
+
+O Zé reprovou a direção "Lente" em produção ("um dos sites mais feios que já vi"). Autocrítica: a lupa virou
+foto recortada em círculo com anel azul e bolinha (clip-art), os botões-pílula e a faixa azul chapada com
+números sobrescritos davam cara de template, os projetos apareciam em miniaturas pequenas e um projeto sem foto
+mostrava caixa vazia.
+
+O que mudou (marca intacta: logo, `#0089CF`, `#39B54A`, família Barlow):
+
+- **Tipo:** Barlow Condensed 500/600 (mesma família da assinatura do logo) em títulos, territórios, parceiros e
+  etapas; Barlow segue no texto corrido.
+- **Cor:** petróleo `#062C44` como superfície das seções pesadas (hero, parceiros, ciclo, chamada) e `#041E2F`
+  no rodapé; `--color-sky` `#8CCFEF` para textos de apoio sobre petróleo. O verde só como ponto final de
+  títulos-chave, igual ao logo (`DotHeading`).
+- **Forma:** cantos retos (2 px nos botões, 0 nas fotos); sem pílulas, sem círculos.
+- **Home:** hero dividido (texto à esquerda, foto de campo ocupando a metade direita até a borda da janela,
+  legenda sobre a foto); índice de projetos com foto grande (metade da largura) e o símbolo da marca em
+  petróleo quando falta foto; ciclo de 10 etapas em grade numerada (é sequência real); notícias em três colunas.
