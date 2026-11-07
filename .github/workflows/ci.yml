@@ -236,6 +236,7 @@ jobs:
             web.log
             trivy.sarif
           retention-days: 7
+          include-hidden-files: true
       - name: Remove disposable environment
         if: always()
         run: |

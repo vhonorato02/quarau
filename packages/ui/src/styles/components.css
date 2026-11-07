@@ -518,7 +518,7 @@
   .q-partners li {
     font-family: var(--font-display);
     font-size: 1.5rem;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.3;
   }
   @media (min-width: 56rem) {
@@ -557,7 +557,7 @@
   .q-row__place {
     font-family: var(--font-display);
     font-size: 1.25rem;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.1;
     color: var(--color-blue-700);
   }
@@ -693,7 +693,7 @@
     border-top: 1px solid rgb(255 255 255 / 0.22);
     font-family: var(--font-display);
     font-size: clamp(1.625rem, 2.6vw, 2.5rem);
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.05;
   }
   .q-cycle li::before {

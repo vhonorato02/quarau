@@ -23,12 +23,10 @@ export const barlowItalic = localFont({
 
 /** Barlow Condensed (same family as the logo signature): display headings and territory names. */
 export const barlowCondensed = localFont({
-  src: [
-    { path: './barlow-condensed-latin-500-normal.woff2', weight: '500', style: 'normal' },
-    { path: './barlow-condensed-latin-600-normal.woff2', weight: '600', style: 'normal' },
-  ],
+  src: [{ path: './barlow-condensed-latin-600-normal.woff2', weight: '600', style: 'normal' }],
   variable: '--font-barlow-condensed',
   display: 'swap',
   fallback: ['Arial Narrow', 'system-ui', 'sans-serif'],
-  adjustFontFallback: false,
+  // Size-adjusted Arial while the file loads: no layout shift when the condensed face swaps in.
+  adjustFontFallback: 'Arial',
 })
