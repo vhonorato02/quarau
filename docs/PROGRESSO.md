@@ -15,8 +15,9 @@
 - **Redesenho (07/11):** o visual "Lente" foi reprovado pelo Zé ("um dos sites mais feios"). Nova execução
   editorial na família da marca: Barlow Condensed nos títulos e territórios, hero dividido com foto de campo
   até a borda, superfícies em petróleo `#062C44`, cantos retos, ponto verde do logo fechando títulos.
-  Registro em [DESIGN.md](DESIGN.md) §Revisão 07/11. Próximo passo de design: página "Sobre", lista de
-  notícias e formulário de contato no mesmo padrão, com capturas 1440/390.
+  Registro em [DESIGN.md](DESIGN.md) §Revisão 07/11. **No ar em `d1e58c9`** (CI completo verde, Lighthouse
+  mobile ≥ 95 nas 5 rotas). Home, projeto, Sobre e Contato conferidos em 1440/390. Próximo passo: aprovação
+  visual do Zé; depois, página de notícia e busca no mesmo padrão.
 - **Achados:** [audit/ACHADOS.md](audit/ACHADOS.md) (rodadas 1–3). Bloqueios do dono: senha SMTP da caixa
   `contato@` (Q-019), direitos de imagem (Q-005), exportações das redes (Q-008), confirmação das duas notícias
   em rascunho (Q-014).
