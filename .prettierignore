@@ -16,3 +16,4 @@ docs/brand-assets
 .preview
 tools/brand
 **/next-env.d.ts
+.playwright-mcp

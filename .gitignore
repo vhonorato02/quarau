@@ -24,3 +24,4 @@ apps/web/tests/e2e/.auth
 # exportações oficiais das redes (contêm dados privados)
 content/social/entrada/
 apps/web/public/media
+.playwright-mcp
