@@ -6,26 +6,39 @@ import { getTexts } from '@/server/queries'
 
 import type { BlockContext, BlockOf } from './types'
 
-/** Home opening: the Q ring of the brand becomes the window of a field photo (docs/DESIGN.md). */
+/** Ends a headline with the green dot of the logo when it closes with a period. */
+export function DotHeading({ text }: { text: string }) {
+  return text.endsWith('.') ? (
+    <>
+      {text.slice(0, -1)}
+      <span className="q-dot">{text.slice(-1)}</span>
+    </>
+  ) : (
+    <>{text}</>
+  )
+}
+
+/** Home opening: headline on petrol and a field photograph running off the edge (docs/DESIGN.md). */
 export function HeroLens({ block }: { block: BlockOf<'heroLens'> }) {
   const caption = block.caption || (isMedia(block.image) ? block.image.caption : null)
   return (
-    <section className="q-wrap q-hero">
-      <div className="q-hero__text">
-        <h1>{block.heading}</h1>
-        <p className="q-hero__lead">{block.lead}</p>
-        <div className="q-hero__ctas">
-          <CMSLink link={block.primary} variant="primary" />
-          <CMSLink link={block.secondary} variant="ghost" />
+    <section className="q-hero">
+      <div className="q-wrap q-hero__in">
+        <div className="q-hero__text">
+          <h1>
+            <DotHeading text={block.heading} />
+          </h1>
+          <p className="q-hero__lead">{block.lead}</p>
+          <div className="q-hero__ctas">
+            <CMSLink link={block.primary} variant="primary" />
+            <CMSLink link={block.secondary} variant="ghost" />
+          </div>
         </div>
+        <figure className="q-hero__photo">
+          <Img media={block.image} priority sizes="(min-width: 56rem) 50vw, 100vw" />
+          {caption ? <figcaption>{caption}</figcaption> : null}
+        </figure>
       </div>
-      <figure className="q-lens">
-        <div className="q-lens__ring">
-          <Img media={block.image} priority sizes="(min-width: 56rem) 40vw, 84vw" crop="square" />
-        </div>
-        <span className="q-lens__dot" aria-hidden="true" />
-        {caption ? <figcaption>{caption}</figcaption> : null}
-      </figure>
     </section>
   )
 }

@@ -43,13 +43,12 @@ export function ProjectRows({
                 <H>{p.title}</H>
                 {p.carriedOutBy || period ? (
                   <span className="q-row__meta">
-                    {p.carriedOutBy ? <span>{p.carriedOutBy}</span> : null}
-                    {period ? <span className="tabular-nums">{period}</span> : null}
+                    {[p.carriedOutBy, period].filter(Boolean).join(', ')}
                   </span>
                 ) : null}
               </span>
               <span className="q-row__img">
-                <Img media={p.coverImage} crop="thumbnail" />
+                <Img media={p.coverImage} sizes="(min-width: 56rem) 30vw, 100vw" />
               </span>
             </Link>
           </li>

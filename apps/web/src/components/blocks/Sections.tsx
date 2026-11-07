@@ -5,6 +5,7 @@ import { phoneHref, whatsappHref } from '@/components/site/contact-links'
 import { docPath } from '@/lib/urls'
 import { getGlobal, getTexts, listNews, listPartners, listServices } from '@/server/queries'
 
+import { DotHeading } from './Hero'
 import { type BlockOf, headingId } from './types'
 
 /** Names of clients and partners in plain type (logos only when the CMS has them, never invented). */
@@ -94,9 +95,11 @@ export async function ContactList() {
 export function CtaBand({ block, index }: { block: BlockOf<'ctaBand'>; index: number }) {
   const id = headingId(block, index)
   return (
-    <section className="q-cta q-section" aria-labelledby={id}>
+    <section className="q-cta q-section on-dark" aria-labelledby={id}>
       <div className="q-wrap q-cta__in">
-        <h2 id={id}>{block.heading}</h2>
+        <h2 id={id}>
+          <DotHeading text={block.heading} />
+        </h2>
         <div className="q-cta__side">
           {block.text ? <p>{block.text}</p> : null}
           <CMSLink link={block.link} variant="primary" />

@@ -23,6 +23,12 @@
     font-weight: 600;
     text-wrap: balance;
   }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.005em;
+  }
   p,
   li {
     text-wrap: pretty;
