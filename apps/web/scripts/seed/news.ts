@@ -28,6 +28,8 @@ export type CuratedNewsSeed = {
   /** Sem foto autorizada do assunto: a matéria sai sem capa em vez de usar a foto de outro bem. */
   noCover?: boolean
   pendingCheck?: string
+  /** Data do fato (AAAA-MM-DD), quando conferida na fonte; sem ela vale a data de publicação no site. */
+  date?: string
 }
 
 const LEGACY = 'https://quarau.com.br/portfolio-item/'
@@ -35,6 +37,7 @@ const LEGACY = 'https://quarau.com.br/portfolio-item/'
 export const curatedNews: CuratedNewsSeed[] = [
   {
     slug: 'educacao-ambiental-e-observacao-de-aves-no-ecomuseu',
+    date: '2024-11-24',
     title: 'Observação de aves e educação ambiental no Ecomuseu',
     summary:
       'A atividade de observação de aves em São José dos Campos aproxima biodiversidade, território e educação ambiental no Ecomuseu dos Campos de São José.',
@@ -71,6 +74,7 @@ export const curatedNews: CuratedNewsSeed[] = [
   },
   {
     slug: 'ecomuseu-mutirao-rio-alambari',
+    date: '2024-09-21',
     title: 'Educação ambiental e cuidado com o Rio Alambari',
     summary:
       'Um mutirão com voluntários, estudantes e equipe do Ecomuseu recolheu resíduos na área de preservação permanente do Rio Alambari.',
@@ -114,6 +118,7 @@ export const curatedNews: CuratedNewsSeed[] = [
   },
   {
     slug: 'samba-de-bumbo-paulista-patrimonio-cultural',
+    date: '2024-05-09',
     title: 'Samba de Bumbo Paulista: registro e documentação de uma tradição',
     summary:
       'O reconhecimento do Samba de Bumbo Paulista pelo IPHAN destaca a importância de pesquisas, registros e iniciativas de salvaguarda do patrimônio cultural.',
@@ -133,6 +138,7 @@ export const curatedNews: CuratedNewsSeed[] = [
   },
   {
     slug: 'cortejo-da-cavalaria-patrimonio-cultural',
+    date: '2026-09-22',
     title: 'Cortejo da Cavalaria de Guaratinguetá é patrimônio cultural do Brasil',
     summary:
       'O IPHAN registrou o Cortejo da Cavalaria de São Gonçalo e São Benedito como patrimônio cultural do Brasil. A Quarau entregou o dossiê de registro, em parceria com o CECP e o IPHAN.',

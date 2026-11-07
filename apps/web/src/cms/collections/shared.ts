@@ -38,7 +38,8 @@ export const publishedAtField: Field = {
   admin: {
     position: 'sidebar',
     date: { pickerAppearance: 'dayAndTime', displayFormat: 'dd/MM/yyyy HH:mm' },
-    description: 'Preenchida automaticamente na primeira publicação.',
+    description:
+      'Preenchida automaticamente na primeira publicação. Numa notícia sobre um fato passado, use a data do fato.',
   },
   hooks: { beforeChange: [populatePublishedAt] },
 }

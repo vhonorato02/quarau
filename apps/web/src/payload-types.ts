@@ -495,7 +495,7 @@ export interface Page {
    */
   slug: string;
   /**
-   * Preenchida automaticamente na primeira publicação.
+   * Preenchida automaticamente na primeira publicação. Numa notícia sobre um fato passado, use a data do fato.
    */
   publishedAt?: string | null;
   createdBy?: (number | null) | User;
@@ -810,7 +810,7 @@ export interface Project {
    */
   order?: number | null;
   /**
-   * Preenchida automaticamente na primeira publicação.
+   * Preenchida automaticamente na primeira publicação. Numa notícia sobre um fato passado, use a data do fato.
    */
   publishedAt?: string | null;
   createdBy?: (number | null) | User;
@@ -993,7 +993,7 @@ export interface Service {
    */
   order?: number | null;
   /**
-   * Preenchida automaticamente na primeira publicação.
+   * Preenchida automaticamente na primeira publicação. Numa notícia sobre um fato passado, use a data do fato.
    */
   publishedAt?: string | null;
   createdBy?: (number | null) | User;
@@ -1189,7 +1189,7 @@ export interface News {
    */
   slug: string;
   /**
-   * Preenchida automaticamente na primeira publicação.
+   * Preenchida automaticamente na primeira publicação. Numa notícia sobre um fato passado, use a data do fato.
    */
   publishedAt?: string | null;
   createdBy?: (number | null) | User;

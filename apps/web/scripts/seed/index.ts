@@ -282,6 +282,7 @@ export async function seed(payload: Payload): Promise<string[]> {
         relatedProjects: [project.id],
         coverImage,
         sourceUrl: item.sourceUrl,
+        publishedAt: item.date ? new Date(`${item.date}T12:00:00-03:00`).toISOString() : undefined,
         _status: item.status ?? 'published',
       } as never,
       draft: item.status === 'draft',
