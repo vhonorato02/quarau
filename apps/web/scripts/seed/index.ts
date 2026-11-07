@@ -201,7 +201,32 @@ export async function seed(payload: Payload): Promise<string[]> {
   // Reuse project media already in the CMS; never import third-party social assets or overwrite
   // human edits. News are visible immediately after publication, via the existing CMS queries.
   for (const item of curatedNews) {
-    if (await findBy(payload, 'news', 'slug', item.slug)) continue
+    const existing = (await findBy(payload, 'news', 'slug', item.slug)) as
+      | { id: number; _status?: string; createdAt?: string; updatedAt?: string }
+      | undefined
+    if (existing) {
+      // A story seeded as a draft and confirmed later is published once, unless someone edited it.
+      const untouched =
+        !existing.createdAt ||
+        !existing.updatedAt ||
+        Date.parse(existing.updatedAt) - Date.parse(existing.createdAt) < 60_000
+      if (existing._status === 'draft' && item.status !== 'draft' && untouched) {
+        await payload.update({
+          collection: 'news',
+          id: existing.id,
+          data: {
+            title: item.title,
+            summary: item.summary,
+            story: curatedNewsStory(item),
+            sourceUrl: item.sourceUrl,
+            _status: 'published',
+          } as never,
+          context: ctx(),
+        })
+        created.push(`notícia publicada ${item.title}`)
+      }
+      continue
+    }
 
     const related = await payload.find({
       collection: 'projects',

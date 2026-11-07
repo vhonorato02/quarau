@@ -54,14 +54,14 @@ export const curatedNews: CuratedNewsSeed[] = [
     summary:
       'Jornada formativa reúne profissionais do Ecomuseu dos Campos de São José para ações culturais e socioambientais no território.',
     projectSlug: 'ecomuseu-dos-campos-de-sao-jose',
-    status: 'draft',
-    verifiedBy: [],
-    pendingCheck:
-      'O post original da Quarau não foi recuperado (só aparecia no perfil pessoal de uma terceira pessoa). Confirme a jornada formativa, as frentes previstas da 4ª edição e o papel da Quarau antes de publicar.',
+    verifiedBy: [
+      'Confirmado pelo dono (via Zé) em 07/11/2026: jornada formativa, frentes da 4ª edição e papel da Quarau',
+      `${LEGACY}ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/`,
+    ],
     paragraphs: [
-      'O Ecomuseu dos Campos de São José realizou uma jornada formativa com profissionais contratados para sua quarta edição. A iniciativa é desenvolvida pelo CECP e atua na valorização do patrimônio cultural e ambiental das zonas leste e sudeste de São José dos Campos.',
-      'Entre as frentes previstas na edição anunciada estavam plantio de árvores, hortas urbanas, compostagem comunitária, pesquisa sobre o sagui-da-serra-escuro (Callithrix aurita), feiras de saberes e fazeres e atividades de educação ambiental e patrimonial.',
-      'Essas ações foram anunciadas como programação prevista, não como resultados já executados. A Quarau relatou atuação em gestão e coordenação de pesquisa na iniciativa, em parceria com o CECP.',
+      'O Ecomuseu dos Campos de São José realizou uma jornada formativa com os profissionais contratados para a sua quarta edição. A iniciativa é desenvolvida pelo CECP e valoriza o patrimônio cultural e ambiental das zonas leste e sudeste de São José dos Campos.',
+      'A edição prevê plantio de árvores, hortas urbanas, compostagem comunitária, pesquisa sobre o sagui-da-serra-escuro (Callithrix aurita), feiras de saberes e fazeres e atividades de educação ambiental e patrimonial.',
+      'A Quarau atua na gestão e na coordenação de pesquisa do Ecomuseu, em parceria com o CECP.',
     ],
   },
   {
@@ -70,14 +70,13 @@ export const curatedNews: CuratedNewsSeed[] = [
     summary:
       'Um mutirão com voluntários, estudantes e equipe do Ecomuseu recolheu resíduos na área de preservação permanente do Rio Alambari.',
     projectSlug: 'ecomuseu-dos-campos-de-sao-jose',
-    status: 'draft',
-    verifiedBy: [],
-    pendingCheck:
-      'O post original não foi recuperado: confirme a data (Dia Mundial da Limpeza de 2024), os participantes e a quantidade de 221 kg de resíduos antes de publicar.',
+    verifiedBy: [
+      'Confirmado pelo dono (via Zé) em 07/11/2026: data, participantes e 221 kg de resíduos',
+    ],
     paragraphs: [
-      'Em uma ação divulgada pela Quarau durante o Dia Mundial da Limpeza de 2024, voluntários da Petrobras, estudantes, professores do Colégio Emak e integrantes da equipe do Ecomuseu participaram da limpeza de uma área de preservação permanente do Rio Alambari, em São José dos Campos.',
-      'Segundo o relato publicado pela Quarau, foram recolhidos 221 kg de resíduos, em sua maior parte plásticos, da vegetação ciliar.',
-      'Além da retirada dos materiais, o encontro foi tratado como uma atividade de educação ambiental baseada na participação direta e na relação das pessoas com o território.',
+      'No Dia Mundial da Limpeza de 2024, voluntários da Petrobras, estudantes, professores do Colégio Emak e a equipe do Ecomuseu limparam uma área de preservação permanente do Rio Alambari, em São José dos Campos.',
+      'Foram recolhidos 221 kg de resíduos da vegetação ciliar, a maior parte plásticos.',
+      'Além da retirada dos resíduos, o mutirão foi uma atividade de educação ambiental, baseada na participação direta e na relação das pessoas com o território.',
     ],
   },
   {
