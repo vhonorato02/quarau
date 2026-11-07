@@ -157,8 +157,9 @@ jobs:
         run: |
           docker run -d --name web --network host --read-only \
             --cap-drop ALL --security-opt no-new-privileges \
-            --tmpfs /tmp:rw,nosuid,nodev,size=128m \
-            --tmpfs /app/.next/cache:rw,nosuid,nodev,uid=1001,gid=1001,size=128m \
+            --memory 512m \
+            --tmpfs /tmp \
+            --tmpfs /app/.next/cache \
             --env-file "$RUNNER_TEMP/quarau-e2e.env" \
             -v quarau-e2e-media:/app/media "$IMAGE:${{ github.sha }}"
           curl --fail --silent --show-error --retry 60 --retry-delay 2 \
@@ -182,6 +183,16 @@ jobs:
 
       - name: Load test (k6)
         run: docker run --rm --network host -v "$PWD/tests/k6:/scripts:ro" grafana/k6:latest run -e BASE_URL=http://localhost:3000 /scripts/smoke.js
+
+      - name: No filesystem errors in the container log
+        # Same mounts as the VPS platform (read-only root, root-owned tmpfs): any write the app
+        # attempts outside /app/media and /tmp shows up here after E2E, Lighthouse and k6.
+        run: |
+          docker logs web > web-check.log 2>&1
+          if grep -nE 'EACCES|EROFS|Failed to update prerender cache|ENOENT: no such file or directory, mkdir' web-check.log; then
+            echo "::error::the container tried to write outside its writable mounts"
+            exit 1
+          fi
 
       - name: Trivy (blocking critical vulnerabilities)
         run: |
@@ -231,3 +242,56 @@ jobs:
           docker rm -f web || true
           docker volume rm quarau-e2e-media || true
           rm -f "$RUNNER_TEMP/quarau-e2e.env"
+
+  deploy:
+    # Homologation on the VPS (ADR 0022): the image that passed every gate above goes live without
+    # downtime. The forced SSH command on the server only accepts "deploy <tag>" for this site.
+    name: Deploy to the VPS (homologation)
+    needs: [e2e]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: read
+    environment:
+      name: homologation
+      url: https://quarau.zewithane.vps.brz.dev.br
+    concurrency:
+      group: deploy-vps
+      cancel-in-progress: false
+    env:
+      DEPLOY_HOST: ssh.zewithane.vps.brz.dev.br
+      DEPLOY_PORT: '22322'
+      SITE_URL: https://quarau.zewithane.vps.brz.dev.br
+    steps:
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+      - name: Publish on the VPS (new replica, health check, then switch)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_ACTOR: ${{ github.actor }}
+        run: |
+          printf '%s:%s\n' "$GH_ACTOR" "$GH_TOKEN" |
+            ssh -i ~/.ssh/deploy_key -p "$DEPLOY_PORT" \
+              -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=20 \
+              "deploy@$DEPLOY_HOST" "deploy $GITHUB_SHA"
+      - name: Smoke test (health reports this commit)
+        run: |
+          for i in $(seq 1 20); do
+            body=$(curl -fsS --max-time 10 "$SITE_URL/api/health" || true)
+            case "$body" in *"\"version\":\"$GITHUB_SHA\""*) echo "$body"; exit 0;; esac
+            sleep 6
+          done
+          echo "::error::$SITE_URL/api/health does not report $GITHUB_SHA: $body"
+          exit 1
+      - name: Remove the key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
