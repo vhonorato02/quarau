@@ -44,3 +44,13 @@ O LinkedIn público via indexação não fornece todos os posts, permalinks ou m
 `apps/web/scripts/seed/news.ts` contém as matérias. `apps/web/scripts/seed/index.ts` consulta primeiro o slug, associa ao projeto e à capa existente e cria somente registros ausentes. Conteúdo editado por humanos não é atualizado pelo seed. A página `noticias` é publicada a partir do template canônico quando não foi personalizada; o menu/listagem continuam controlados pela existência de notícias publicadas.
 
 Verificação pendente: executar seed com Postgres real e armazenamento de mídia autorizado; testar criação, segundo seed sem duplicatas, publicação/despublicação, sitemap, listagem, URLs e acesso público com o commit exato.
+
+## Revisão de conteúdo de 07/11/2026
+
+- Duas matérias novas com fonte pública: `ecomuseu-completa-10-anos` (Prefeitura de São José dos Campos, 25/09/2025)
+  e `livro-congadas-e-mocambiques-vale-do-paraiba` (Prefeitura, 14/09/2023; capa do Congado da própria pesquisa).
+- Samba de Bumbo e Cortejo ampliados com a descrição oficial do IPHAN (bcr.iphan.gov.br e nota de 22/09/2026);
+  mutirão e jornada contextualizados pela ficha do Ecomuseu na Fundação Banco do Brasil e pela Prefeitura (2025).
+- `publishedAt` = data do fato quando ela está na fonte; a data aparece também no texto (teste unitário).
+- Mapas do acervo da Quarau entraram nos projetos. O mapa da horta do Ecoe Verde com nomes de moradores **não** é
+  publicado (dados pessoais).

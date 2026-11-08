@@ -116,3 +116,19 @@ esteja publicado. Na reescrita, frases mais curtas que as do site antigo (que te
    <https://www.sjc.sp.gov.br/noticias/2025/setembro/25/mic-recebe-celebracao-dos-10-anos-do-ecomuseu/>
 3. Anais do Congresso da ANPPOM 2025, artigo sobre a patrimonialização do samba de bumbo:
    <https://anppom.org.br/anais/anaiscongresso_anppom_2025/papers/484.pdf>
+4. Fundação Banco do Brasil — ficha completa do Ecomuseu (texto lido em 07/11/2026): início em março de 2015, com
+   patrocínio da Petrobras e apoio do Instituto Embraer; bairros Jardim Diamante, Jardim Americano e Campos de São
+   José, vizinhos à Revap (2015–2020); Núcleo de Ação; agrofloresta no córrego Alambari e hortas comunitárias desde
+   2018; 500 mudas, viveiro de 100, cerca de 9.000 m² cultivados (0,7 ha + 0,2 ha), cerca de 90 mutirões, 190
+   pessoas e cerca de 50 famílias diretamente; cerca de 3.000 moradores contatados em dois anos; livro _Ecomuseu dos
+   Campos de São José: entre memórias e perspectivas_ (CECP, agosto de 2020). Mesmo link da fonte 1.
+5. Prefeitura de São José dos Campos, "Museu lança 29º livro da coleção Cadernos de Folclore na Flim" (14/09/2023):
+   _Congadas e Moçambiques no Vale do Paraíba Paulista_, campo do CECP com o IPHAN em 2015–2017, 87 grupos, 39
+   municípios. <https://www.sjc.sp.gov.br/noticias/2023/setembro/14/museu-lan%C3%A7a-29%C2%BA-livro-da-cole%C3%A7%C3%A3o-cadernos-de-folclore-na-flim/>
+6. IPHAN, bens registrados: Samba de Bumbo Paulista (104ª reunião, 09/05/2024, pedido do FCPT em 2013) e Cortejo da
+   Cavalaria de São Gonçalo e São Benedito (114ª reunião, 22/09/2026, pedido da Associação em 2015), em
+   <https://bcr.iphan.gov.br/>; nota oficial do Cortejo em <https://www.gov.br/iphan/>.
+7. Prefeitura de São José dos Campos, "MIC recebe celebração dos 10 anos do Ecomuseu" (25/09/2025): 28 bairros das
+   zonas leste e sudeste e Jambeiro; cerca de 160 estudantes (fonte 2).
+8. Anais da ANPPOM 2025 (fonte 3), lido em 07/11/2026: o CECP foi selecionado em chamamento público do IPHAN em 2019
+   para elaborar o dossiê do Samba de Bumbo; comissão de acompanhamento dos grupos; entrevistas virtuais na pandemia.
