@@ -93,7 +93,11 @@ export async function PageIntro({
       </div>
       {isMedia(block.image) ? (
         <figure className="q-wrap q-bleed mt-10 md:mt-14">
-          <Img media={block.image} priority sizes="(min-width: 82rem) 82rem, 100vw" />
+          <Img
+            media={block.image}
+            priority
+            sizes="(min-width: 82rem) 82rem, (min-width: 40rem) 100vw, 360px"
+          />
           {caption ? <figcaption>{caption}</figcaption> : null}
         </figure>
       ) : null}
