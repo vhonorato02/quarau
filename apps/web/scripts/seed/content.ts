@@ -955,21 +955,32 @@ export const pages: Array<{
         body: doc(
           ul([
             [
-              '2015: começa o Ecomuseu dos Campos de São José, com a Quarau na elaboração dos projetos e na gestão das equipes. No mesmo ano, o inventário do Congado Paulista (até 2017) e o Programa de Educação Patrimonial da Fundação Cultural Cassiano Ricardo (até 2016).',
+              { text: '2015', bold: true },
+              ': começa o Ecomuseu dos Campos de São José, com a Quarau na elaboração dos projetos e na gestão das equipes. No mesmo ano, o inventário do Congado Paulista (até 2017) e o Programa de Educação Patrimonial da Fundação Cultural Cassiano Ricardo (até 2016).',
             ],
             [
-              '2019: começa a pesquisa do Dossiê de Registro do Samba de Bumbo Paulista, em parceria com o CECP e o IPHAN.',
+              { text: '2019', bold: true },
+              ': começa a pesquisa do Dossiê de Registro do Samba de Bumbo Paulista, em parceria com o CECP e o IPHAN.',
             ],
             [
-              '2020: pesquisa da memória institucional do Museu do Folclore de São José dos Campos, que vira livro.',
+              { text: '2020', bold: true },
+              ': pesquisa da memória institucional do Museu do Folclore de São José dos Campos, que vira livro.',
             ],
-            ['2021 a 2023: terceira edição do Ecomuseu, com cerca de 16 mil pessoas mobilizadas.'],
             [
-              '2022: Projeto Ecoe Verde, em Atibaia, dentro do Programa Celeo na Comunidade, em que a Quarau é consultora.',
+              { text: '2021 a 2023', bold: true },
+              ': terceira edição do Ecomuseu, com cerca de 16 mil pessoas mobilizadas.',
             ],
-            ['2024: o Samba de Bumbo Paulista é registrado como patrimônio cultural do Brasil.'],
             [
-              '2026: o Cortejo da Cavalaria de São Gonçalo e São Benedito, de Guaratinguetá, é registrado como patrimônio cultural do Brasil, com dossiê entregue pela Quarau.',
+              { text: '2022', bold: true },
+              ': Projeto Ecoe Verde, em Atibaia, dentro do Programa Celeo na Comunidade, em que a Quarau é consultora.',
+            ],
+            [
+              { text: '2024', bold: true },
+              ': o Samba de Bumbo Paulista é registrado como patrimônio cultural do Brasil.',
+            ],
+            [
+              { text: '2026', bold: true },
+              ': o Cortejo da Cavalaria de São Gonçalo e São Benedito, de Guaratinguetá, é registrado como patrimônio cultural do Brasil, com dossiê entregue pela Quarau.',
             ],
           ]),
         ),

@@ -18,8 +18,11 @@ import { pages, projects, services } from './content'
 import { resolve } from './index'
 import { curatedNews, curatedNewsStory } from './news'
 
-/** Documents last changed before this moment still hold the seeded text. */
-const REVISED_BEFORE = new Date('2026-11-08T00:00:00Z').getTime()
+/**
+ * Documents last changed before this moment still hold the seeded text. A later text fix can be
+ * applied with REVISE_BEFORE=<ISO date> after checking that nobody has edited in the panel since.
+ */
+const REVISED_BEFORE = new Date(process.env.REVISE_BEFORE ?? '2026-11-08T00:00:00Z').getTime()
 
 const ctx = () => ({ disableRevalidate: true, seeding: true })
 
