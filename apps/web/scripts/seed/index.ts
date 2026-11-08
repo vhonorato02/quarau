@@ -60,7 +60,7 @@ async function placeholder(rel: string): Promise<string> {
 
 const mediaIds = new Map<string, number>()
 
-async function media(payload: Payload, image: Img): Promise<number> {
+export async function media(payload: Payload, image: Img): Promise<number> {
   const legacyUrl = image.file.startsWith('video/')
     ? `${WP}2023/12/${path.basename(image.file)}`
     : `${WP}${image.file}`
@@ -134,7 +134,7 @@ const isImg = (v: unknown): v is Img =>
   typeof v === 'object' && v !== null && 'file' in v && 'alt' in v
 
 /** Replaces every Img in a block tree by the id of the uploaded media; resolves page links. */
-async function resolve(
+export async function resolve(
   payload: Payload,
   value: unknown,
   pageIds: Map<string, number>,

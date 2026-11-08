@@ -50,7 +50,7 @@ describe('arquivo editorial de publicações públicas', () => {
         /segundo o relato|anunciad|não como resultados/i,
       )
     }
-    expect(curatedNews.filter((item) => item.status !== 'draft').length).toBe(7)
+    expect(curatedNews.filter((item) => item.status !== 'draft').length).toBe(9)
   })
 
   it('publica o reconhecimento do Cortejo sem capa e com a nota oficial do IPHAN como fonte', () => {
@@ -67,11 +67,40 @@ describe('arquivo editorial de publicações públicas', () => {
     expect(withoutCover.sort()).toEqual(
       [
         'cortejo-da-cavalaria-patrimonio-cultural',
+        'ecomuseu-completa-10-anos',
         'ecomuseu-mutirao-rio-alambari',
         'educacao-ambiental-e-observacao-de-aves-no-ecomuseu',
         'jornada-formativa-ecomuseu-quarta-edicao',
         'samba-de-bumbo-paulista-patrimonio-cultural',
       ].sort(),
     )
+  })
+})
+
+describe('datas das matérias', () => {
+  const MONTHS = [
+    'janeiro',
+    'fevereiro',
+    'março',
+    'abril',
+    'maio',
+    'junho',
+    'julho',
+    'agosto',
+    'setembro',
+    'outubro',
+    'novembro',
+    'dezembro',
+  ]
+  it('a data do fato aparece no próprio texto da matéria', () => {
+    for (const item of curatedNews.filter((n) => n.date)) {
+      const [y, m, d] = item.date!.split('-').map(Number)
+      const text = item.paragraphs.join(' ')
+      const spelled = `${d} de ${MONTHS[m! - 1]} de ${y}`
+      const isCleanupDay = item.slug === 'ecomuseu-mutirao-rio-alambari'
+      expect(
+        isCleanupDay ? /Dia Mundial da Limpeza de 2024/.test(text) : text.includes(spelled),
+      ).toBe(true)
+    }
   })
 })

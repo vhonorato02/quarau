@@ -6,6 +6,10 @@
  */
 import { doc, h, p, ul } from '../lib/lexical'
 
+/** Ficha do Ecomuseu como Tecnologia Social na Fundação Banco do Brasil (fonte dos números do território). */
+export const FBB_ECOMUSEU =
+  'https://transforma.fbb.org.br/ecomuseu-patrimonio-como-instrumento-de-desenvolvimento-local/generate-pdf?id=60'
+
 /** Path under wp-content/uploads. */
 export type Img = { file: string; alt: string; caption?: string }
 
@@ -82,7 +86,7 @@ export const services = [
     ],
     body: doc(
       p(
-        'A Quarau aplicou o Inventário Nacional de Referências Culturais do Congado Paulista e coordenou a pesquisa do Dossiê de Registro do Samba de Bumbo Paulista como Patrimônio Cultural Imaterial Brasileiro, em parceria com o IPHAN.',
+        'A Quarau aplicou o Inventário Nacional de Referências Culturais do Congado Paulista e coordenou a pesquisa do Dossiê de Registro do Samba de Bumbo Paulista como Patrimônio Cultural Imaterial Brasileiro, em parceria com o IPHAN. Em 2026 entregou, com o CECP e o IPHAN, o dossiê do Cortejo da Cavalaria de São Gonçalo e São Benedito, de Guaratinguetá.',
       ),
       p(
         'Também faz pesquisa institucional, como a que reconstituiu a memória do Museu do Folclore de São José dos Campos a partir de documentos e fotografias.',
@@ -238,12 +242,75 @@ export const projects: ProjectSeed[] = [
           p(
             'O Ecomuseu é realizado pelo CECP em parceria com a Petrobras, por meio do Programa Petrobras Socioambiental. O projeto rendeu ao CECP a certificação de instituição desenvolvedora de Tecnologia Social, concedida pela Fundação Banco do Brasil.',
           ),
+          h('h2', 'Um museu feito com o bairro'),
+          p(
+            'Um ecomuseu não guarda o patrimônio num prédio: ele o reconhece no território, com quem vive ali. A implantação começou em março de 2015, com patrocínio da Petrobras e apoio do Instituto Embraer, nos bairros Jardim Diamante, Jardim Americano e Campos de São José, vizinhos à Refinaria Henrique Lage (Revap).',
+          ),
+          p(
+            'O trabalho começa pela aproximação: visitas às casas e às instituições do bairro, rodas de conversa semanais e um diagnóstico sociocultural que mapeia as referências culturais dos moradores. Desses encontros nasceu o Núcleo de Ação do Ecomuseu, formado pela equipe do projeto e por moradores, que aponta os problemas do bairro e desenha as soluções em conjunto.',
+          ),
+          p(
+            'Daí vieram feiras de saberes e fazeres, como a Trecos e Tarecos no Parque Alambari, rodas de bordado e de cantoria, oficinas de comunicação com jovens (fotografia, texto, vídeo, jornal comunitário), caminhadas de reconhecimento e mutirões. Nos dois primeiros anos, a equipe conversou pessoalmente com cerca de 3.000 moradores dos três bairros.',
+          ),
+        ),
+      },
+      {
+        blockType: 'mediaText',
+        heading: 'Área de abrangência',
+        body: doc(
+          p(
+            'Os bairros em que o Ecomuseu atua, nas zonas leste e sudeste de São José dos Campos, em torno da Revap. Em 2025, segundo a Prefeitura, o projeto chegava a 28 bairros e ao município de Jambeiro.',
+          ),
+        ),
+        image: img(
+          '2023/12/A0.png',
+          'Mapa de satélite com os bairros da área de abrangência do Ecomuseu delimitados em vermelho, em torno da refinaria',
+          'Área de abrangência do Ecomuseu. Mapa: CECP, com dados da Prefeitura de São José dos Campos.',
+        ),
+        imagePosition: 'left',
+      },
+      {
+        blockType: 'richText',
+        heading: 'Agrofloresta no Rio Alambari',
+        body: doc(
+          p(
+            'Logo nas primeiras reuniões do Núcleo de Ação, os moradores apontaram um problema: entulho descartado numa área de preservação permanente às margens do córrego Alambari. Com autorização da Secretaria de Meio Ambiente da Prefeitura, a comunidade plantou mudas nativas para recompor a mata ciliar e cultivou alimentos entre elas, numa agrofloresta urbana.',
+          ),
+          p(
+            'Em 2018, moradores de outra parte do bairro limparam um terreno público usado como depósito de entulho e começaram ali hortas comunitárias. Segundo a ficha do projeto na Fundação Banco do Brasil, foram plantadas 500 mudas de árvores nativas, com um viveiro de 100 mudas, e cultivados cerca de 9.000 m² entre agrofloresta (0,7 ha) e hortas (0,2 ha), em cerca de 90 mutirões. 190 pessoas foram diretamente envolvidas, entre elas cerca de 50 famílias.',
+          ),
         ),
       },
       {
         blockType: 'proofNumber',
         value: '16 mil',
         text: doc(p('pessoas mobilizadas na terceira edição do Ecomuseu, entre 2021 e 2023.')),
+      },
+      {
+        blockType: 'richText',
+        heading: 'Reconhecimento e memória',
+        body: doc(
+          p(
+            'O Ecomuseu está registrado como Tecnologia Social no banco Transforma, da Fundação Banco do Brasil, com o título Ecomuseu: patrimônio como instrumento de desenvolvimento local. Em agosto de 2020, o CECP publicou o livro Ecomuseu dos Campos de São José: entre memórias e perspectivas, com as narrativas dos moradores sobre a formação dos bairros.',
+          ),
+          p(
+            'Em setembro de 2025, os 10 anos do Ecomuseu foram celebrados no Museu Interativo de Ciências, em São José dos Campos, com estudantes, uma feira de saberes e atividades de reflorestamento.',
+          ),
+        ),
+      },
+      {
+        blockType: 'publications',
+        heading: 'Publicações',
+        items: [
+          {
+            title: 'Ecomuseu dos Campos de São José: entre memórias e perspectivas (CECP, 2020)',
+            url: 'https://transforma.fbb.org.br/storage/socialtecnologies/60/files/ECOMUSEU%20CSJ%202020_DIGITAL.pdf',
+          },
+          {
+            title: 'Ficha do Ecomuseu como Tecnologia Social (Fundação Banco do Brasil)',
+            url: FBB_ECOMUSEU,
+          },
+        ],
       },
       {
         blockType: 'video',
@@ -285,18 +352,18 @@ export const projects: ProjectSeed[] = [
     slug: 'inventario-cultural-e-dossie-de-registro',
     title: 'Inventário Cultural e Dossiê de Registro',
     summary:
-      'Aplicação do Inventário Nacional de Referências Culturais do Congado Paulista e coordenação da pesquisa do Dossiê de Registro do Samba de Bumbo Paulista, em parceria com o IPHAN.',
+      'Inventário do Congado Paulista e dossiês de registro do Samba de Bumbo Paulista e do Cortejo da Cavalaria de Guaratinguetá, dois bens reconhecidos como patrimônio cultural do Brasil, com o CECP e o IPHAN.',
     territory: 'Estado de São Paulo',
     carriedOutBy: 'CECP e IPHAN',
-    role: 'Aplicação do INRC do Congado Paulista (2015–2017); coordenação da pesquisa e elaboração do Dossiê de Registro do Samba de Bumbo Paulista (2019–2023).',
+    role: 'Aplicação do INRC do Congado Paulista (2015–2017); coordenação da pesquisa e elaboração do Dossiê de Registro do Samba de Bumbo Paulista (2019–2023); entrega do dossiê de registro do Cortejo da Cavalaria de São Gonçalo e São Benedito (2026).',
     startYear: 2015,
-    endYear: 2023,
+    endYear: 2026,
     partners: ['cecp', 'iphan'],
     services: ['patrimonio-cultural-e-pesquisa'],
     ods: [],
     featured: true,
     order: 40,
-    lead: 'Duas pesquisas sobre o patrimônio imaterial paulista: o Congado e o Samba de Bumbo, documentados para o registro nacional.',
+    lead: 'Pesquisas sobre o patrimônio imaterial paulista, do Congado ao Samba de Bumbo e ao Cortejo da Cavalaria, documentados para o registro nacional.',
     cover: img(
       '2023/11/2.0.1B-34-Terno-de-Congo-de-Sainhas-Irmaos-Paiva-scaled.jpg',
       'Terno de Congo de Sainhas Irmãos Paiva em apresentação',
@@ -309,7 +376,39 @@ export const projects: ProjectSeed[] = [
             'O CECP contratou a Quarau para aplicar o Inventário Nacional de Referências Culturais (INRC) do Congado Paulista, entre 2015 e 2017, e para coordenar a pesquisa e elaborar o Dossiê de Registro do Samba de Bumbo Paulista como Patrimônio Cultural Imaterial Brasileiro, entre 2019 e 2023.',
           ),
           p(
-            'As duas pesquisas foram feitas em parceria com o Instituto do Patrimônio Histórico e Artístico Nacional (IPHAN), conforme o Decreto nº 3.551, de agosto de 2000, que institui o registro de bens culturais de natureza imaterial.',
+            'As pesquisas foram feitas em parceria com o Instituto do Patrimônio Histórico e Artístico Nacional (IPHAN), conforme o Decreto nº 3.551, de agosto de 2000, que institui o registro de bens culturais de natureza imaterial.',
+          ),
+          h('h2', 'Congado Paulista'),
+          p(
+            'O inventário do Congado foi feito em campo entre 2015 e 2017 e mapeou grupos de congada e moçambique do Vale do Paraíba Paulista e do Litoral Norte. O resultado virou o livro Congadas e Moçambiques no Vale do Paraíba Paulista, 29º volume da coleção Cadernos de Folclore, lançado em setembro de 2023 na Festa Literomusical de São José dos Campos: 87 grupos, em 39 municípios.',
+          ),
+          h('h2', 'Samba de Bumbo Paulista'),
+          p(
+            'O pedido de registro foi feito em 2013 pelo Fórum para as Culturas Populares e Tradicionais. Em 2019, o CECP foi selecionado em chamamento público do IPHAN para elaborar o dossiê, e a Quarau coordenou a pesquisa. Os grupos acompanharam o trabalho por uma comissão própria, e o nome do bem, Samba de Bumbo Paulista, foi definido em conjunto entre sambadores, pesquisadores e o IPHAN. Na pandemia, as entrevistas passaram a ser virtuais.',
+          ),
+          p(
+            'O Samba de Bumbo Paulista é uma forma de expressão que une música, dança e poesia, mantida por grupos de base familiar e movida por festas que formam uma rede de visitas entre cidades. Nasceu nas fazendas de café do interior paulista no século XIX, com raízes afro-brasileiras. Em 9 de maio de 2024, na 104ª reunião do Conselho Consultivo do Patrimônio Cultural, foi inscrito no Livro de Registro das Formas de Expressão.',
+          ),
+        ),
+      },
+      {
+        blockType: 'figure',
+        image: img(
+          '2023/12/M01_Presencial_Virtual2.png',
+          'Mapa do estado de São Paulo com setas coloridas ligando cidades como Pirapora do Bom Jesus, Piracicaba, Campinas e Mauá, e um detalhe com ligações para Brasília e Serra Talhada',
+          'Mapa das redes presenciais e virtuais de visitação do Samba Paulista, elaborado para o dossiê de registro. CECP e IPHAN.',
+        ),
+        size: 'wide',
+      },
+      {
+        blockType: 'richText',
+        heading: 'Cortejo da Cavalaria de São Gonçalo e São Benedito',
+        body: doc(
+          p(
+            'Em parceria com o CECP e o IPHAN, a Quarau entregou o dossiê de registro do Cortejo da Cavalaria de São Gonçalo e São Benedito, de Guaratinguetá. O pedido de registro foi feito em 2015 pela associação da Cavalaria. Em 22 de setembro de 2026, na 114ª reunião do Conselho Consultivo, o Cortejo foi reconhecido como patrimônio cultural do Brasil, no Livro de Registro das Celebrações.',
+          ),
+          p(
+            'Todo Domingo de Páscoa, cerca de dois mil cavaleiros vestidos de branco percorrem aproximadamente 20 km pelas ruas da cidade, em duas filas, unindo a memória dos tropeiros do Vale do Paraíba e a devoção afro-brasileira a São Benedito.',
           ),
         ),
       },
@@ -379,7 +478,40 @@ export const projects: ProjectSeed[] = [
           p(
             'O bairro é um dos territórios atravessados pela linha de transmissão da Cantareira Transmissora de Energia. Com o projeto, um terreno inativo virou horta comunitária agroecológica e pedagógica e ponto de cultura para toda a comunidade.',
           ),
+          p(
+            'O Ecoe Verde faz parte do Programa Celeo na Comunidade, em que a Quarau atua como consultora. A execução no território é do Espaço Crescer.',
+          ),
         ),
+      },
+      {
+        blockType: 'mediaText',
+        heading: 'Como a horta se organiza',
+        body: doc(
+          p(
+            'O mapeamento feito para o projeto divide a Horta Comunitária Vila Esmeralda em setores: canteiro misto de hortaliças, canteiro de ervas, milho, feijão e abóbora, quiabo e mandioca, pomar e vasos de frutíferas, além de compostagem, captação de água e uma área de convivência.',
+          ),
+        ),
+        image: img(
+          '2023/12/3-Areas-produtivas-horta-Vila-Esmeralda.jpg',
+          'Foto de satélite do terreno da horta com os setores produtivos delimitados em verde: canteiros, pomar, compostagem, captação de água e área de convivência',
+          'Áreas produtivas da Horta Comunitária Vila Esmeralda. Mapa: Lucas Paixão, para Celeo, Ecoe Verde e Quarau.',
+        ),
+        imagePosition: 'right',
+      },
+      {
+        blockType: 'mediaText',
+        heading: 'Uma rede no bairro',
+        body: doc(
+          p(
+            'O projeto se apoia em instituições públicas próximas ao terreno: as escolas E.M. Walda Paolinetti Lozasso, EMEF Prefeito Gilberto Santana Anna e Professora Maria do Carmo, e o CRAS do Tanque.',
+          ),
+        ),
+        image: img(
+          '2023/12/3-Instituicoes-parceiras.jpg',
+          'Foto de satélite do Bairro Esmeralda com o terreno do projeto e as escolas e o CRAS parceiros marcados',
+          'Instituições parceiras do Projeto Ecoe Verde. Mapa: Lucas Paixão, para Celeo, Ecoe Verde e Quarau.',
+        ),
+        imagePosition: 'left',
       },
       {
         blockType: 'proofNumber',
@@ -541,7 +673,7 @@ export const projects: ProjectSeed[] = [
         blockType: 'richText',
         body: doc(
           p(
-            'A Quarau desenvolve pesquisas institucionais para o Museu do Folclore de São José dos Campos e para o CECP, organização que o administra.',
+            'A Quarau desenvolve pesquisas institucionais para o Museu do Folclore de São José dos Campos e para o CECP, organização responsável pela gestão do museu. O CECP atua no Museu do Folclore desde 1999, com destaque para o Programa Museu Vivo, que valoriza a cultura popular e seus saberes.',
           ),
           p(
             'Em 2020, a pesquisa sobre a memória institucional do museu reuniu fontes documentais e fotografias e resultou no livro O Museu do Folclore de São José dos Campos: Uma Breve História.',
@@ -814,6 +946,42 @@ export const pages: Array<{
             ['Gestão transparente e participativa.'],
             ['Valorização da equipe de trabalho.'],
           ]),
+        ),
+      },
+      {
+        blockType: 'richText',
+        layout: 'split',
+        heading: 'Trajetória',
+        body: doc(
+          ul([
+            [
+              '2015: começa o Ecomuseu dos Campos de São José, com a Quarau na elaboração dos projetos e na gestão das equipes. No mesmo ano, o inventário do Congado Paulista (até 2017) e o Programa de Educação Patrimonial da Fundação Cultural Cassiano Ricardo (até 2016).',
+            ],
+            [
+              '2019: começa a pesquisa do Dossiê de Registro do Samba de Bumbo Paulista, em parceria com o CECP e o IPHAN.',
+            ],
+            [
+              '2020: pesquisa da memória institucional do Museu do Folclore de São José dos Campos, que vira livro.',
+            ],
+            ['2021 a 2023: terceira edição do Ecomuseu, com cerca de 16 mil pessoas mobilizadas.'],
+            [
+              '2022: Projeto Ecoe Verde, em Atibaia, dentro do Programa Celeo na Comunidade, em que a Quarau é consultora.',
+            ],
+            ['2024: o Samba de Bumbo Paulista é registrado como patrimônio cultural do Brasil.'],
+            [
+              '2026: o Cortejo da Cavalaria de São Gonçalo e São Benedito, de Guaratinguetá, é registrado como patrimônio cultural do Brasil, com dossiê entregue pela Quarau.',
+            ],
+          ]),
+        ),
+      },
+      {
+        blockType: 'richText',
+        layout: 'split',
+        heading: 'Onde atuamos',
+        body: doc(
+          p(
+            'A base é São José dos Campos, no Vale do Paraíba. Os projetos já levaram a Quarau a bairros das zonas leste e sudeste da cidade, a dezenas de municípios do Vale do Paraíba e do Litoral Norte, ao centro-oeste paulista do Samba de Bumbo, a Guaratinguetá, a Atibaia e às comunidades quilombolas de São João do Piauí.',
+          ),
         ),
       },
       { blockType: 'partnersStrip', heading: 'Com quem já trabalhamos' },

@@ -70,6 +70,7 @@ export const curatedNews: CuratedNewsSeed[] = [
       'O Ecomuseu dos Campos de São José realizou uma jornada formativa com os profissionais contratados para a sua quarta edição. A iniciativa é desenvolvida pelo CECP e valoriza o patrimônio cultural e ambiental das zonas leste e sudeste de São José dos Campos.',
       'A edição prevê plantio de árvores, hortas urbanas, compostagem comunitária, pesquisa sobre o sagui-da-serra-escuro (Callithrix aurita), feiras de saberes e fazeres e atividades de educação ambiental e patrimonial.',
       'A Quarau atua na gestão e na coordenação de pesquisa do Ecomuseu, em parceria com o CECP.',
+      'Criado em 2015 nos bairros Jardim Diamante, Jardim Americano e Campos de São José, o Ecomuseu chegou em 2025 a 28 bairros das zonas leste e sudeste de São José dos Campos e ao município de Jambeiro, segundo a Prefeitura.',
     ],
   },
   {
@@ -87,6 +88,7 @@ export const curatedNews: CuratedNewsSeed[] = [
       'No Dia Mundial da Limpeza de 2024, voluntários da Petrobras, estudantes, professores do Colégio Emak e a equipe do Ecomuseu limparam uma área de preservação permanente do Rio Alambari, em São José dos Campos.',
       'Foram recolhidos 221 kg de resíduos da vegetação ciliar, a maior parte plásticos.',
       'Além da retirada dos resíduos, o mutirão foi uma atividade de educação ambiental, baseada na participação direta e na relação das pessoas com o território.',
+      'O Alambari é um dos rios que o Ecomuseu acompanha desde o início. Nas margens do córrego, onde havia entulho, moradores e equipe plantaram mudas nativas e criaram uma agrofloresta urbana. Segundo a ficha do projeto na Fundação Banco do Brasil, esse trabalho já somava cerca de 90 mutirões e 500 mudas de árvores nativas.',
     ],
   },
   {
@@ -132,7 +134,9 @@ export const curatedNews: CuratedNewsSeed[] = [
     ],
     paragraphs: [
       'Em 9 de maio de 2024, o Conselho Consultivo do Patrimônio Cultural aprovou o registro do Samba de Bumbo Paulista como Patrimônio Cultural do Brasil, no Livro de Registro das Formas de Expressão.',
-      'Contratada pelo CECP, a Quarau coordenou a pesquisa e a elaboração do Dossiê do Samba de Bumbo Paulista, trabalho ligado ao processo de registro conduzido pelo IPHAN.',
+      'O Samba de Bumbo Paulista é uma forma de expressão que articula música, dança e poesia. É mantido por grupos de base familiar, unidos por laços de parentesco, devoção e pertencimento, e movido por festas que formam uma rede de visitas entre cidades como Pirapora do Bom Jesus, Santana de Parnaíba, Piracicaba, Campinas, Vinhedo, Mauá e São Paulo.',
+      'Nasceu nas fazendas de café do interior paulista no século XIX, com raízes afro-brasileiras, e chegou à capital no começo do século XX. O registro reúne três modalidades: o samba de bumbo, dançado em roda num vai e vem; o samba de lenço, em fileiras, com as mulheres usando lenços; e o samba caipira, com modas que contam histórias.',
+      'O pedido de registro foi apresentado em 2013 pelo Fórum para as Culturas Populares e Tradicionais. Contratada pelo CECP, que o IPHAN selecionou em chamamento público para elaborar o dossiê, a Quarau coordenou a pesquisa. Os grupos acompanharam o trabalho por uma comissão própria, e o nome do bem foi definido em conjunto entre sambadores, pesquisadores e o IPHAN.',
       'O reconhecimento pertence à manifestação cultural e às comunidades que mantêm sua prática. O trabalho técnico de pesquisa contribui para documentar referências, histórias e modos de fazer, sem substituir o protagonismo dos grupos detentores.',
     ],
   },
@@ -154,7 +158,48 @@ export const curatedNews: CuratedNewsSeed[] = [
     paragraphs: [
       'Em 22 de setembro de 2026, o Conselho Consultivo do Patrimônio Cultural aprovou, em sua 114ª reunião, o registro do Cortejo da Cavalaria de São Gonçalo e São Benedito, de Guaratinguetá (SP), como patrimônio cultural do Brasil. A celebração será inscrita no Livro de Registro das Celebrações.',
       'Todo Domingo de Páscoa, cerca de dois mil cavaleiros vestidos de branco percorrem aproximadamente 20 km em duas filas, com paradas nos cemitérios para homenagear os cavaleiros já falecidos. O cortejo reúne duas tradições: os saberes do caminho, ligados aos tropeiros do Vale do Paraíba, e os saberes do Rosário, de origem afro-brasileira e ligados à Irmandade de São Benedito.',
-      'A Quarau entregou o dossiê de registro do Cortejo no âmbito da parceria com o Centro de Estudos da Cultura Popular (CECP) e o IPHAN. O reconhecimento pertence aos cavaleiros, à Associação Cavalaria de São Gonçalo e São Benedito e às famílias que mantêm a celebração viva.',
+      'A memória local liga o cortejo a uma capela construída em 1726 para São Gonçalo do Amarante, padroeiro dos viajantes. Em 1757, pessoas escravizadas colocaram na mesma capela a imagem de São Benedito. A data exata em que o cortejo começou não é conhecida, mas em 1948 ele já aparece documentado como celebração estabelecida. Nos anos 1970, as mulheres passaram a desfilar, e Vera Aparecida de Paiva França foi a primeira a cavalgar.',
+      'O rito central é a condução do mastro de São Benedito até a Igreja do Puríssimo Coração de Maria, escoltado pela cavalaria. Na Praça São Gonçalo, os cavaleiros fazem a meia-lua. Participam os mantenas, que organizam o desfile, a Irmandade de São Benedito, as Caixas de São Benedito, congadas, moçambiques e um casal de reis. Crianças de 8 a 13 anos desfilam como mantenas mirins. Ter cavalo próprio não é exigência: emprestar ou alugar a montaria também é um gesto de devoção.',
+      'O pedido de registro foi apresentado em 2015 pela Associação Cavalaria de São Gonçalo e São Benedito de Guaratinguetá, fundada em 1992. A Quarau entregou o dossiê de registro do Cortejo no âmbito da parceria com o Centro de Estudos da Cultura Popular (CECP) e o IPHAN. O reconhecimento pertence aos cavaleiros, à Associação e às famílias que mantêm a celebração viva.',
+    ],
+  },
+  {
+    slug: 'ecomuseu-completa-10-anos',
+    date: '2025-09-26',
+    title: 'Ecomuseu dos Campos de São José completa 10 anos',
+    summary:
+      'Com estudantes, feira de saberes e atividades de reflorestamento, o Ecomuseu celebrou uma década no Museu Interativo de Ciências, em São José dos Campos.',
+    projectSlug: 'ecomuseu-dos-campos-de-sao-jose',
+    noCover: true,
+    sourceUrl:
+      'https://www.sjc.sp.gov.br/noticias/2025/setembro/25/mic-recebe-celebracao-dos-10-anos-do-ecomuseu/',
+    verifiedBy: [
+      'Notícia da Prefeitura de São José dos Campos de 25/09/2025, conferida em 07/11/2026',
+      `${LEGACY}ecomuseu-dos-campos-de-sao-jose-cecp-petrobras-socioambiental/`,
+    ],
+    paragraphs: [
+      'Em 26 de setembro de 2025, o Ecomuseu dos Campos de São José celebrou seus 10 anos no Museu Interativo de Ciências (MIC), em São José dos Campos, com entrada gratuita.',
+      'Cerca de 160 estudantes da Fundhas Campos de São José e da Escola Emanuel Kant participaram da manhã: confecção coletiva de um varal de bandeirinhas de algodão cru, dinâmicas de conservação ambiental, reflorestamento com bolinhas de argila com sementes e uma feira de artesanato e saberes, com violas caipiras, manejo de abelhas nativas e artesanato com materiais reciclados. O encontro também encerrou a exposição Revap 45 anos, em cartaz no MIC desde março.',
+      'Criado em 2015 pelo Centro de Estudos da Cultura Popular (CECP), o Ecomuseu atua hoje em 28 bairros das zonas leste e sudeste de São José dos Campos e em Jambeiro. A Quarau está no projeto desde o começo, na elaboração dos projetos, na gestão das equipes, nas pesquisas e nos relatórios técnicos.',
+    ],
+  },
+  {
+    slug: 'livro-congadas-e-mocambiques-vale-do-paraiba',
+    date: '2023-09-16',
+    title: 'Livro reúne 87 grupos de congada e moçambique do Vale do Paraíba',
+    summary:
+      'Congadas e Moçambiques no Vale do Paraíba Paulista, 29º volume dos Cadernos de Folclore, nasceu do inventário do Congado feito em campo entre 2015 e 2017.',
+    projectSlug: 'inventario-cultural-e-dossie-de-registro',
+    sourceUrl:
+      'https://www.sjc.sp.gov.br/noticias/2023/setembro/14/museu-lan%C3%A7a-29%C2%BA-livro-da-cole%C3%A7%C3%A3o-cadernos-de-folclore-na-flim/',
+    verifiedBy: [
+      'Notícia da Prefeitura de São José dos Campos de 14/09/2023, conferida em 07/11/2026',
+      `${LEGACY}inventario-cultural-e-dossie-de-registro-cecp-iphan-instituto-do-patrimonio-historico-artistico-nacional/`,
+    ],
+    paragraphs: [
+      'O Museu do Folclore de São José dos Campos lançou em 16 de setembro de 2023, na 9ª Festa Literomusical (Flim), no Parque Vicentina Aranha, o livro Congadas e Moçambiques no Vale do Paraíba Paulista, 29º volume da coleção Cadernos de Folclore.',
+      'A obra reúne dados de 87 grupos do Congado Paulista em 39 municípios do Vale do Paraíba Paulista e do Litoral Norte. É assinada pelos historiadores Maria Siqueira Santos e Fábio Bueno.',
+      'O livro é resultado do trabalho de campo que o Centro de Estudos da Cultura Popular (CECP) fez entre 2015 e 2017, em parceria com o IPHAN, para inventariar as congadas e os moçambiques paulistas. Nesse inventário, a Quarau aplicou a metodologia do Inventário Nacional de Referências Culturais (INRC).',
     ],
   },
 ]
