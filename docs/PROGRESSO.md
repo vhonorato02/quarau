@@ -12,6 +12,14 @@
 - **Deploy automático:** push na `main` → CI/CD completo → job "Deploy to the VPS" (chave dedicada
   `DEPLOY_SSH_KEY`) → smoke test exige `/api/health` com o SHA novo. Para conferir:
   `curl -s https://quarau.zewithane.vps.brz.dev.br/api/health` e `gh run list -L 3`.
+- **5ª execução (08/11, tarde):** mapa "Onde atuamos" (bloco novo; malhas do IBGE; pontos pelos campos
+  latitude/longitude do projeto), índice compacto de projetos na home (foto segue o ponteiro), `/llms.txt`,
+  schema `Service`/`knowsAbout`/`areaServed`/`GeoCoordinates`, painel com "Editados por último". Redes: o
+  Instagram tem 1 post; o LinkedIn, 27 (repostagens já usadas). **No ar em `897f7f8`** (CI/CD verde); banco da
+  VPS atualizado com `scripts/seed/territories-2026-11.ts` (backup antes em
+  `/srv/backups/manual/quarau-pre-territories-20261108-1901.dump`), site reiniciado. Registro em
+  [DESIGN.md](DESIGN.md) §5ª execução. **Próximo passo:** aprovação do Zé; dados do dono em
+  [CONTENT-TODO.md](CONTENT-TODO.md) (equipe, fundação, CNPJ, vídeos do Ecoe e do Quipá).
 - **4ª execução do visual (08/11):** Newsreader leve nos títulos (Barlow no texto), papel frio `#f4f6f3`, home
   abrindo com a foto de campo em tela cheia e a apresentação como declaração grande; projetos em cartões
   sobre a foto; ciclo no papel; áreas em três colunas. Registro em [DESIGN.md](DESIGN.md) §4ª execução e

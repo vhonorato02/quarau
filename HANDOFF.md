@@ -11,6 +11,9 @@
 - **Design:** 4ª execução (08/11): títulos em Newsreader leve, texto em Barlow, papel `#f4f6f3`, home abrindo
   com a foto de campo em tela cheia. Registro em [docs/DESIGN.md](docs/DESIGN.md) §4ª execução.
   **No ar em `9939704`** (CI/CD verde, Lighthouse mobile ≥ 95; LCP 2,8–3,1 s ainda gera aviso).
+- **5ª execução (08/11, tarde):** mapa "Onde atuamos", índice de projetos na home, `/llms.txt`, schema mais rico,
+  painel do CMS com edições recentes. **No ar em `897f7f8`.** Scripts contra o banco da VPS: túnel + arquivo de
+  ambiente fora do git (runbook); apague o arquivo ao terminar.
 - **Ponto em aberto:** títulos com `display: optional` saem no fallback Times na primeira visita (sem cache).
   Trocar para `swap` deixa a fonte sempre visível, mas a repintura tinha virado o LCP (~3 s). Avaliar com o Zé.
 - **Domínio `quarau.com.br`, DNS/MX e WordPress antigo:** intocados. Só depois do "aprovado" do dono
