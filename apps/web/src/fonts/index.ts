@@ -21,15 +21,20 @@ export const barlowItalic = localFont({
   preload: false,
 })
 
-/** Barlow Condensed (same family as the logo signature): display headings and territory names. */
-export const barlowCondensed = localFont({
-  src: [{ path: './barlow-condensed-latin-600-normal.woff2', weight: '600', style: 'normal' }],
-  variable: '--font-barlow-condensed',
-  // Headlines are the LCP on phones. With "swap" they repaint when the face arrives, and that late
-  // repaint was the LCP (about 3 s on Lighthouse mobile). Preloaded and small, the face normally
-  // lands inside the short block period; on a very slow first visit the fallback stays.
+/**
+ * Newsreader (Production Type, OFL): the display face for headlines, set light and large
+ * (docs/DESIGN.md §4ª execução). Two static instances cut from the variable font with fonttools:
+ * 300 at optical size 56 for headlines, 400 at optical size 20 for small headings. Latin only.
+ */
+export const newsreader = localFont({
+  src: [
+    { path: './newsreader-latin-300-normal.woff2', weight: '300', style: 'normal' },
+    { path: './newsreader-latin-400-normal.woff2', weight: '400', style: 'normal' },
+  ],
+  variable: '--font-newsreader',
+  // Headlines are the LCP on phones: a late swap repaint became the LCP, so the preloaded face
+  // either lands inside the short block period or the size-adjusted fallback stays for that visit.
   display: 'optional',
-  fallback: ['Arial Narrow', 'system-ui', 'sans-serif'],
-  // Size-adjusted Arial while the file loads: no layout shift when the condensed face swaps in.
-  adjustFontFallback: 'Arial',
+  fallback: ['Georgia', 'Times New Roman', 'serif'],
+  adjustFontFallback: 'Times New Roman',
 })

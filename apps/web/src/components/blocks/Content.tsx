@@ -106,7 +106,7 @@ export function ProofNumber({ block }: { block: BlockOf<'proofNumber'> }) {
 export function Cycle({ block, index }: { block: BlockOf<'cycle'>; index: number }) {
   const id = headingId(block, index)
   return (
-    <section className="q-cycle q-section on-dark" aria-labelledby={id}>
+    <section className="q-cycle q-section" aria-labelledby={id}>
       <div className="q-wrap">
         <h2 id={id}>{block.heading}</h2>
         <ol>

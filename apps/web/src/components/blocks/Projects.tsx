@@ -21,8 +21,8 @@ export function projectPeriod(
 }
 
 /**
- * The project index: a photograph and, beside it, the territory, the name, what the project is
- * and who carries it out. Every row reads on its own; no title floats over empty space.
+ * The project index: one card per project (photograph, territory and period, name, summary, who
+ * carries it out). On wide screens the cards stack as the page scrolls (docs/DESIGN.md).
  */
 export function ProjectRows({
   projects,
@@ -45,21 +45,15 @@ export function ProjectRows({
           <li key={p.id}>
             <Link className="q-row" href={docPath('projects', p.slug)}>
               <span className="q-row__img">
-                <Img
-                  media={p.coverImage}
-                  sizes="(min-width: 56rem) 55vw, 100vw"
-                  priority={leadImage && i === 0}
-                />
+                <Img media={p.coverImage} sizes="100vw" priority={leadImage && i === 0} />
               </span>
               <span className="q-row__main">
-                <span className="q-row__place">{p.territory}</span>
+                <span className="q-row__place">
+                  {[p.territory, period].filter(Boolean).join(', ')}
+                </span>
                 <H>{p.title}</H>
                 {p.summary ? <span className="q-row__summary">{p.summary}</span> : null}
-                {p.carriedOutBy || period ? (
-                  <span className="q-row__meta">
-                    {[p.carriedOutBy, period].filter(Boolean).join(', ')}
-                  </span>
-                ) : null}
+                {p.carriedOutBy ? <span className="q-row__meta">{p.carriedOutBy}</span> : null}
               </span>
             </Link>
           </li>

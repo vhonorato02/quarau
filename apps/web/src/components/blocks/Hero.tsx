@@ -19,35 +19,42 @@ export function DotHeading({ text }: { text: string }) {
 }
 
 /**
- * Home opening: the headline set large on paper, the lead and the two actions beside it, then a
- * field photograph across the full width of the window (docs/DESIGN.md §Revisão 07/11, 3ª execução).
+ * Home opening (docs/DESIGN.md §4ª execução): a field photograph fills the screen with the headline,
+ * the actions and the photo record set on it; the lead follows as a large statement that lights up
+ * word by word as it is read.
  */
 export function HeroLens({ block }: { block: BlockOf<'heroLens'> }) {
   const caption = block.caption || (isMedia(block.image) ? block.image.caption : null)
   return (
-    <section className="q-hero">
-      <div className="q-wrap q-hero__in">
-        <h1>
-          <DotHeading text={block.heading} />
-        </h1>
-        <div className="q-hero__side">
-          <p className="q-hero__lead">{block.lead}</p>
-          <div className="q-hero__ctas">
-            <CMSLink link={block.primary} variant="primary" />
-            <CMSLink link={block.secondary} variant="ghost" />
+    <>
+      <section className="q-hero on-dark">
+        <figure className="q-hero__photo">
+          <Img media={block.image} priority sizes="100vw" />
+        </figure>
+        <div className="q-wrap q-hero__in">
+          <h1>
+            <DotHeading text={block.heading} />
+          </h1>
+          <div className="q-hero__side">
+            <div className="q-hero__ctas">
+              <CMSLink link={block.primary} variant="primary" />
+              <CMSLink link={block.secondary} variant="ghost" />
+            </div>
+            <span aria-hidden="true" />
+            {caption ? <p className="q-hero__rec">{caption}</p> : null}
           </div>
         </div>
-      </div>
-      <figure className="q-hero__photo">
-        {/* Phones at density up to 1.75 get the 640 px file, half the bytes of the 1024 one (LCP). */}
-        <Img media={block.image} priority sizes="(min-width: 40rem) 100vw, 360px" />
-        {caption ? (
-          <figcaption>
-            <span className="q-wrap">{caption}</span>
-          </figcaption>
-        ) : null}
-      </figure>
-    </section>
+      </section>
+      {block.lead ? (
+        <section className="q-wrap q-statement">
+          <p>
+            {block.lead.split(' ').map((word, i) => (
+              <span key={`${word}-${i}`}>{`${word} `}</span>
+            ))}
+          </p>
+        </section>
+      ) : null}
+    </>
   )
 }
 

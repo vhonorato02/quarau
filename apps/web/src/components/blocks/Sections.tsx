@@ -51,21 +51,23 @@ export async function Areas({ block, index }: { block: BlockOf<'areas'>; index: 
       <div className="q-areas">
         {services.map((s) => (
           <article key={s.id} className="q-area">
-            {isMedia(s.coverImage) ? (
-              <span className="q-area__img">
-                <Img media={s.coverImage} sizes="(min-width: 56rem) 45vw, 100vw" alt="" />
-              </span>
-            ) : null}
             <h3>
               <Link href={docPath('services', s.slug)}>{s.title}</Link>
             </h3>
-            <p>{s.summary}</p>
-            {s.deliverables?.length ? (
-              <ul>
-                {s.deliverables.map((d) => (
-                  <li key={d.id ?? d.item}>{d.item}</li>
-                ))}
-              </ul>
+            <div className="q-area__body">
+              <p>{s.summary}</p>
+              {s.deliverables?.length ? (
+                <ul>
+                  {s.deliverables.map((d) => (
+                    <li key={d.id ?? d.item}>{d.item}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+            {isMedia(s.coverImage) ? (
+              <span className="q-area__img">
+                <Img media={s.coverImage} sizes="(min-width: 56rem) 25vw, 100vw" alt="" />
+              </span>
             ) : null}
           </article>
         ))}

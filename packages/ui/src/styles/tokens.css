@@ -4,10 +4,11 @@
  * (docs/brand.md); the support colours exist only to pass WCAG 2.2 AA.
  */
 @theme {
-  --color-paper: #ffffff;
-  --color-ink: #0e1a24;
-  --color-ink-2: #4a5866;
-  --color-line: #d5e0e8;
+  --color-paper: #f4f6f3; /* cool paper with a trace of green (4ª execução) */
+  --color-paper-2: #e8ece7; /* plates, image placeholders */
+  --color-ink: #0f1c22;
+  --color-ink-2: #4b5a60; /* 6.6:1 on paper */
+  --color-line: #cfd6d2;
   --color-mist: #eaf4fa;
   --color-blue: #0089cf; /* brand: ring of the lens, big numbers, large text only (3.8:1) */
   --color-blue-700: #006fa8; /* links, buttons, the cycle band (5.5:1) */
@@ -21,17 +22,16 @@
   --color-danger: #b42318; /* form errors (6.5:1) */
 
   --font-sans: var(--font-barlow), 'Barlow', system-ui, sans-serif;
-  /* Same family as the logo signature, condensed: headings and territory names. */
-  --font-display:
-    var(--font-barlow-condensed), 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  /* Headlines: Newsreader set light and large; Barlow (the logo signature) stays in the text. */
+  --font-display: var(--font-newsreader), 'Newsreader', Georgia, serif;
 
   --text-xs: 0.875rem;
   --text-sm: 0.9375rem;
   --text-base: 1.125rem;
   --text-lead: 1.3125rem;
   --text-h3: clamp(1.75rem, 2.8vw, 2.5rem);
-  --text-h2: clamp(2.75rem, 5.6vw, 5rem);
-  --text-h1: clamp(3.25rem, 8vw, 7.5rem);
+  --text-h2: clamp(2.5rem, 5vw, 4.75rem);
+  --text-h1: clamp(3rem, 7.4vw, 7.25rem);
   --text-display: clamp(3.75rem, 10vw, 9.5rem);
 
   --radius-img: 0;

@@ -156,3 +156,22 @@ todas mostravam a mesma data (a da carga), o que parecia conteúdo de teste.
   cores da marca alternadas (azul, tinta, verde). Nada de símbolo recortado: no canto ele parece uma lupa.
 - **Datas:** notícia sobre fato passado usa a data do fato quando ela está na fonte (`date` no seed); sem data
   conferida vale a de publicação no site.
+
+## Revisão 08/11/2026 — 4ª execução: serifa editorial e foto de campo em tela cheia
+
+Autocrítica da 3ª execução: a Barlow Condensed em negrito nos títulos lia como cartaz de evento, não como
+consultoria que pesquisa e escreve; o título no papel empurrava a foto para baixo da dobra.
+
+- **Tipografia:** Newsreader (Production Type, OFL) leve e grande nos títulos (300, tamanho óptico 56) e nos
+  subtítulos pequenos (400, tamanho óptico 20), cortada em duas instâncias estáticas latinas com fonttools
+  (acentos do português conferidos: ç, ã, õ, é, ê, ó, í). A Barlow, da assinatura do logo, segue no texto e na
+  interface. `display: optional` com fallback Times ajustado: sem repintura do LCP.
+- **Papel:** `#f4f6f3`, frio com um traço de verde (nada do creme quente de modelo pronto); `#e8ece7` para placas.
+- **Home:** a foto de campo ocupa a primeira tela, com o título, as ações e o crédito da foto sobre ela; ao rolar,
+  a foto se aproxima devagar e o título sobe (o único movimento orquestrado; some com `prefers-reduced-motion`).
+  O parágrafo de apresentação vem a seguir como declaração grande, que passa do cinza secundário (6,6:1, nunca
+  abaixo de AA) para a tinta conforme é lido.
+- **Projetos:** foto na largura do conteúdo e o cartão de texto sobre a borda inferior; território e período na
+  mesma linha, quem executa embaixo. **Ciclo:** sai da faixa azul, vira frase no papel com as etapas numeradas
+  em sobrescrito (é uma sequência de fato). **Áreas:** título | texto e entregas | foto, em três colunas.
+- **Próximo projeto** (pé da página de projeto) passa para a serifa leve, como os demais títulos.
