@@ -13,6 +13,7 @@ import { Gallery } from './Gallery'
 import { HeroLens, PageIntro } from './Hero'
 import { ProjectIndex } from './Projects'
 import { Areas, CtaBand, NewsList, PartnersStrip } from './Sections'
+import { Territories } from './Territories'
 import type { AnyBlock, BlockContext } from './types'
 import { Video } from './Video'
 
@@ -22,6 +23,7 @@ const SELF_SPACED = new Set([
   'pageIntro',
   'partnersStrip',
   'projectIndex',
+  'territories',
   'cycle',
   'areas',
   'ctaBand',
@@ -39,6 +41,8 @@ function Block({ block, index, ctx }: { block: AnyBlock; index: number; ctx: Blo
       return <PartnersStrip block={block} index={index} />
     case 'projectIndex':
       return <ProjectIndex block={block} index={index} />
+    case 'territories':
+      return <Territories block={block} index={index} />
     case 'proofNumber':
       return <ProofNumber block={block} />
     case 'cycle':

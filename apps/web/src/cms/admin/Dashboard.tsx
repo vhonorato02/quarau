@@ -16,18 +16,70 @@ async function count(
   }
 }
 
+const KIND = { pages: 'Página', projects: 'Projeto', news: 'Notícia' } as const
+
+type Recent = {
+  collection: keyof typeof KIND
+  id: number
+  title: string
+  updatedAt: string
+  draft: boolean
+}
+
+/** The six documents changed most recently (pages, projects and news together). */
+async function recentEdits(payload: Payload): Promise<Recent[]> {
+  const lists = await Promise.all(
+    (Object.keys(KIND) as Array<keyof typeof KIND>).map(async (collection) => {
+      try {
+        const res = await payload.find({
+          collection,
+          sort: '-updatedAt',
+          limit: 6,
+          depth: 0,
+          draft: true,
+          overrideAccess: true,
+          select: { title: true, updatedAt: true, _status: true },
+        })
+        return res.docs.map((d) => ({
+          collection,
+          id: d.id as number,
+          title: String((d as { title?: string }).title ?? ''),
+          updatedAt: d.updatedAt,
+          draft: (d as { _status?: string })._status === 'draft',
+        }))
+      } catch {
+        return []
+      }
+    }),
+  )
+  return lists
+    .flat()
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+    .slice(0, 6)
+}
+
+const when = (iso: string) =>
+  new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+    timeZone: 'America/Sao_Paulo',
+  }).format(new Date(iso))
+
 /**
  * Panel home: what needs attention now, and the shortest path to the most common tasks.
  * Admin-only text lives here (not in "Textos do site", which is the public site).
  */
 export async function Dashboard({ payload }: Props) {
-  const [newLeads, mediaToReview, draftPages, draftProjects, draftNews] = await Promise.all([
-    count(payload, 'leads', { status: { equals: 'new' } }),
-    count(payload, 'media', { needsReview: { equals: true } }),
-    count(payload, 'pages', { _status: { equals: 'draft' } }),
-    count(payload, 'projects', { _status: { equals: 'draft' } }),
-    count(payload, 'news', { _status: { equals: 'draft' } }),
-  ])
+  const [newLeads, mediaToReview, draftPages, draftProjects, draftNews, offMap, recent] =
+    await Promise.all([
+      count(payload, 'leads', { status: { equals: 'new' } }),
+      count(payload, 'media', { needsReview: { equals: true } }),
+      count(payload, 'pages', { _status: { equals: 'draft' } }),
+      count(payload, 'projects', { _status: { equals: 'draft' } }),
+      count(payload, 'news', { _status: { equals: 'draft' } }),
+      count(payload, 'projects', { latitude: { exists: false } }),
+      recentEdits(payload),
+    ])
   const cards = [
     {
       n: newLeads,
@@ -48,6 +100,11 @@ export async function Dashboard({ payload }: Props) {
       n: mediaToReview,
       label: 'fotos com descrição para revisar',
       href: '/admin/collections/media?where[needsReview][equals]=true',
+    },
+    {
+      n: offMap,
+      label: 'projetos fora do mapa “Onde atuamos” (sem latitude e longitude)',
+      href: '/admin/collections/projects?where[latitude][exists]=false',
     },
   ]
   return (
@@ -88,7 +145,30 @@ export async function Dashboard({ payload }: Props) {
         >
           Textos do site
         </Link>
+        <a
+          className="btn btn--style-secondary btn--size-medium"
+          href="/"
+          target="_blank"
+          rel="noopener"
+        >
+          Abrir o site ↗
+        </a>
       </div>
+      {recent.length ? (
+        <div className="quarau-dash__recent">
+          <h3>Editados por último</h3>
+          <ul>
+            {recent.map((r) => (
+              <li key={`${r.collection}-${r.id}`}>
+                <Link href={`/admin/collections/${r.collection}/${r.id}`}>{r.title}</Link>
+                <span>
+                  {KIND[r.collection]} · {r.draft ? 'rascunho' : 'publicado'} · {when(r.updatedAt)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
       <details className="quarau-dash__help">
         <summary>Como funciona (2 minutos de leitura)</summary>
         <ol>

@@ -96,6 +96,36 @@ export const Projects: CollectionConfig = {
               ],
             },
             {
+              type: 'row',
+              fields: [
+                {
+                  name: 'latitude',
+                  type: 'number',
+                  label: 'Latitude (mapa)',
+                  min: -34,
+                  max: 6,
+                  admin: {
+                    width: '50%',
+                    step: 0.0001,
+                    description:
+                      'Coloca o projeto no mapa “Onde atuamos”. No Google Maps, clique com o botão direito no local: o 1º número é a latitude. Vazio = fora do mapa.',
+                  },
+                },
+                {
+                  name: 'longitude',
+                  type: 'number',
+                  label: 'Longitude (mapa)',
+                  min: -74,
+                  max: -34,
+                  admin: {
+                    width: '50%',
+                    step: 0.0001,
+                    description: 'O 2º número do Google Maps. Ex.: São José dos Campos = -45,8869.',
+                  },
+                },
+              ],
+            },
+            {
               name: 'program',
               type: 'text',
               label: 'Programa (opcional)',

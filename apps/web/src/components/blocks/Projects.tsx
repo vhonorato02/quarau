@@ -2,11 +2,12 @@ import Link from 'next/link'
 
 import { fill, type SiteTexts } from '@/cms/globals/site-texts'
 import { CMSLink } from '@/components/CMSLink'
-import { Img } from '@/components/Img'
+import { Img, mediaSrc } from '@/components/Img'
 import { docPath } from '@/lib/urls'
 import type { Project } from '@/payload-types'
 import { getTexts, listProjects } from '@/server/queries'
 
+import { ProjectIndexList } from './ProjectIndexList'
 import { type BlockOf, headingId } from './types'
 
 /** "2015–2023", "desde 2022", "2020" or null when no year is confirmed. */
@@ -86,7 +87,20 @@ export async function ProjectIndex({
           {block.intro ? <p>{block.intro}</p> : null}
         </div>
       ) : null}
-      {projects.length ? (
+      {projects.length && block.display === 'index' ? (
+        <ProjectIndexList
+          headingLevel={block.heading ? 3 : 2}
+          rows={projects.map((p) => ({
+            id: p.id,
+            href: docPath('projects', p.slug),
+            title: p.title,
+            place: [p.territory, projectPeriod(p, t)].filter(Boolean).join(', ') || null,
+            by: p.carriedOutBy ?? null,
+            photo: mediaSrc(p.coverImage, 'md'),
+            thumb: mediaSrc(p.coverImage, 'thumbnail'),
+          }))}
+        />
+      ) : projects.length ? (
         <ProjectRows
           projects={projects}
           t={t}

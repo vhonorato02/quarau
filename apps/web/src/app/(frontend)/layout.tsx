@@ -12,7 +12,7 @@ import { Footer } from '@/components/site/Footer'
 import { Header } from '@/components/site/Header'
 import { barlow, barlowItalic, newsreader, newsreaderText } from '@/fonts'
 import { siteUrl } from '@/lib/platform-env'
-import { getGlobal, getTexts } from '@/server/queries'
+import { getGlobal, getTexts, listProjects, listServices } from '@/server/queries'
 import { organizationJsonLd, websiteJsonLd } from '@/server/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,13 +37,18 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = { themeColor: '#0089CF', width: 'device-width', initialScale: 1 }
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const [settings, contact, social, t, { isEnabled: draft }] = await Promise.all([
-    getGlobal('settings'),
-    getGlobal('contact'),
-    getGlobal('social'),
-    getTexts(),
-    draftMode(),
-  ])
+  const [settings, contact, social, t, { isEnabled: draft }, services, projects] =
+    await Promise.all([
+      getGlobal('settings'),
+      getGlobal('contact'),
+      getGlobal('social'),
+      getTexts(),
+      draftMode(),
+      listServices(),
+      listProjects(),
+    ])
+  const knowsAbout = services.map((s) => s.title)
+  const areaServed = [...new Set(projects.map((p) => p.territory).filter(Boolean))]
   const privacyHref = await privacyPath()
   return (
     <html
@@ -59,7 +64,10 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         <CookieConsent texts={t.cookies} privacyHref={privacyHref} />
         {draft ? <LivePreviewListener serverURL={siteUrl()} /> : null}
         <JsonLd
-          data={[organizationJsonLd({ settings, contact, social }), websiteJsonLd(settings)]}
+          data={[
+            organizationJsonLd({ settings, contact, social, knowsAbout, areaServed }),
+            websiteJsonLd(settings),
+          ]}
         />
       </body>
     </html>

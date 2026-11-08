@@ -21,6 +21,9 @@ export type ProjectSeed = {
   summary: string
   territory: string
   territoryDetail?: string
+  /** Map pin (municipality seat, IBGE). Empty = not on the map. */
+  latitude?: number
+  longitude?: number
   program?: string
   carriedOutBy?: string
   role?: string
@@ -218,6 +221,8 @@ export const projects: ProjectSeed[] = [
     summary:
       'Desde 2015 a Quarau elabora os projetos, gere as equipes e faz as pesquisas e os relatórios técnicos do Ecomuseu, iniciativa do CECP com o Programa Petrobras Socioambiental.',
     territory: 'São José dos Campos, SP',
+    latitude: -23.1791,
+    longitude: -45.8872,
     carriedOutBy: 'CECP e Petrobras Socioambiental',
     role: 'Elaboração dos projetos, gerenciamento das equipes, articulação de parceiros, pesquisas e relatórios técnicos.',
     startYear: 2015,
@@ -453,6 +458,8 @@ export const projects: ProjectSeed[] = [
     summary:
       'Um terreno inativo no Bairro Esmeralda, em Atibaia, virou horta comunitária agroecológica e pedagógica e ponto de cultura. Em um ano, 1.913 pessoas foram beneficiadas diretamente.',
     territory: 'Atibaia, SP',
+    latitude: -23.1171,
+    longitude: -46.5563,
     territoryDetail: 'Bairro Esmeralda (Tanque), Atibaia, SP',
     program: 'Programa Celeo na Comunidade',
     carriedOutBy: 'Celeo e Espaço Crescer',
@@ -550,6 +557,8 @@ export const projects: ProjectSeed[] = [
     summary:
       'Iniciativa da Celeo e do Instituto Umbuzeiro nas comunidades quilombolas de Saco Curtume e Picos, em São João do Piauí. A Quarau foi consultora em todas as etapas do programa.',
     territory: 'São João do Piauí, PI',
+    latitude: -8.3581,
+    longitude: -42.2467,
     territoryDetail: 'Comunidades quilombolas de Saco Curtume e Picos, São João do Piauí, PI',
     program: 'Programa Celeo na Comunidade',
     carriedOutBy: 'Celeo e Instituto Umbuzeiro',
@@ -623,6 +632,8 @@ export const projects: ProjectSeed[] = [
     summary:
       'Entre 2015 e 2016, a Quarau coordenou e geriu, com o CECP, o Programa de Educação Patrimonial da Fundação Cultural Cassiano Ricardo, em São José dos Campos.',
     territory: 'São José dos Campos, SP',
+    latitude: -23.1791,
+    longitude: -45.8872,
     carriedOutBy: 'Fundação Cultural Cassiano Ricardo e CECP',
     role: 'Coordenação e gestão do programa.',
     startYear: 2015,
@@ -658,6 +669,8 @@ export const projects: ProjectSeed[] = [
     summary:
       'Pesquisa sobre a memória do Museu do Folclore de São José dos Campos e do CECP, sua gestora, que resultou no livro “O Museu do Folclore de São José dos Campos: Uma Breve História”.',
     territory: 'São José dos Campos, SP',
+    latitude: -23.1791,
+    longitude: -45.8872,
     carriedOutBy: 'CECP',
     role: 'Pesquisa institucional e publicação.',
     startYear: 2020,
@@ -770,6 +783,13 @@ export const pages: Array<{
         intro:
           'Seis projetos em que a Quarau esteve na concepção, na gestão ou na pesquisa, de São José dos Campos ao sertão do Piauí.',
         mode: 'all',
+        display: 'index',
+      },
+      {
+        blockType: 'territories',
+        heading: 'Onde atuamos',
+        intro:
+          'Do Vale do Paraíba ao sertão do Piauí. Cada ponto é um município onde a Quarau tem projeto; o estudo do patrimônio imaterial percorreu o estado de São Paulo.',
       },
       {
         blockType: 'proofNumber',

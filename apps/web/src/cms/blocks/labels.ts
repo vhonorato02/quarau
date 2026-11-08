@@ -4,6 +4,7 @@ export const BLOCK_LABELS = {
   pageIntro: 'Abertura de página',
   partnersStrip: 'Faixa de parceiros',
   projectIndex: 'Lista de projetos',
+  territories: 'Mapa “Onde atuamos”',
   proofNumber: 'Número em destaque',
   cycle: 'Etapas do ciclo',
   areas: 'Áreas de atuação',

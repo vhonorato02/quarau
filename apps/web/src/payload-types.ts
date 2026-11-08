@@ -247,6 +247,7 @@ export interface Page {
             heading?: string | null;
             intro?: string | null;
             mode?: ('all' | 'featured' | 'manual') | null;
+            display?: ('stories' | 'index') | null;
             projects?: (number | Project)[] | null;
             /**
              * Vazio = sem limite.
@@ -278,6 +279,13 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'projectIndex';
+          }
+        | {
+            heading: string;
+            intro?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'territories';
           }
         | {
             /**
@@ -633,6 +641,14 @@ export interface Project {
    * Opcional. Ex.: “Bairro Esmeralda (Tanque), Atibaia, SP”.
    */
   territoryDetail?: string | null;
+  /**
+   * Coloca o projeto no mapa “Onde atuamos”. No Google Maps, clique com o botão direito no local: o 1º número é a latitude. Vazio = fora do mapa.
+   */
+  latitude?: number | null;
+  /**
+   * O 2º número do Google Maps. Ex.: São José dos Campos = -45,8869.
+   */
+  longitude?: number | null;
   /**
    * Ex.: “Programa Celeo na Comunidade”.
    */
@@ -1518,6 +1534,7 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               intro?: T;
               mode?: T;
+              display?: T;
               projects?: T;
               limit?: T;
               link?:
@@ -1529,6 +1546,14 @@ export interface PagesSelect<T extends boolean = true> {
                     url?: T;
                     label?: T;
                   };
+              id?: T;
+              blockName?: T;
+            };
+        territories?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
               id?: T;
               blockName?: T;
             };
@@ -1698,6 +1723,8 @@ export interface ProjectsSelect<T extends boolean = true> {
   coverImage?: T;
   territory?: T;
   territoryDetail?: T;
+  latitude?: T;
+  longitude?: T;
   program?: T;
   carriedOutBy?: T;
   role?: T;

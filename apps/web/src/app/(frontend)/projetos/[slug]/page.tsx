@@ -157,6 +157,10 @@ export default async function ProjectPage({ params }: Props) {
             published: project.publishedAt,
             modified: project.updatedAt,
             place: project.territoryDetail || project.territory,
+            geo:
+              typeof project.latitude === 'number' && typeof project.longitude === 'number'
+                ? { latitude: project.latitude, longitude: project.longitude }
+                : null,
           }),
         ]}
       />

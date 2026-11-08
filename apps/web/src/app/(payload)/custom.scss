@@ -60,6 +60,24 @@ button:focus-visible {
   &__actions { display: flex; flex-wrap: wrap; gap: calc(var(--base) * 0.5); margin-bottom: var(--base); }
   &__actions .btn { margin: 0; }
 
+  &__recent {
+    max-width: 48rem;
+    margin: calc(var(--base) * 1.5) 0;
+
+    h3 { margin: 0 0 calc(var(--base) * 0.5); font-size: 1rem; font-weight: 600; }
+    ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--theme-elevation-150); }
+    li {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.25rem 1rem;
+      padding: calc(var(--base) * 0.5) 0;
+      border-bottom: 1px solid var(--theme-elevation-100);
+    }
+    a { font-weight: 500; text-decoration: none; &:hover { color: var(--quarau-blue-700); } }
+    span { color: var(--theme-elevation-500); font-size: 0.8125rem; }
+  }
+
   &__help {
     max-width: 48rem;
     summary { cursor: pointer; font-weight: 500; }

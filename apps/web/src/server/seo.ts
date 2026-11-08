@@ -77,10 +77,16 @@ export function organizationJsonLd({
   settings,
   contact,
   social,
+  knowsAbout = [],
+  areaServed = [],
 }: {
   settings: Setting
   contact: Contact
   social: Social
+  /** Areas of work (titles from the CMS), for search and answer engines. */
+  knowsAbout?: string[]
+  /** Places of the published projects ("Município, UF"). */
+  areaServed?: string[]
 }) {
   const url = absoluteUrl('/')
   const a = contact.address
@@ -111,7 +117,47 @@ export function organizationJsonLd({
           },
         }
       : {}),
+    ...(knowsAbout.length ? { knowsAbout } : {}),
+    ...(areaServed.length
+      ? { areaServed: areaServed.map((name) => ({ '@type': 'Place', name })) }
+      : {}),
     sameAs: (social.profiles ?? []).map((p) => p.url),
+  }
+}
+
+/** schema.org Service for an area of work, provided by the organization. */
+export function serviceJsonLd(s: {
+  title: string
+  description?: string | null
+  path: string
+  items?: string[]
+  places?: string[]
+}) {
+  const url = absoluteUrl('/')
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: s.title,
+    serviceType: s.title,
+    ...(s.description ? { description: s.description } : {}),
+    url: absoluteUrl(s.path),
+    provider: { '@id': `${url}#organization` },
+    ...(s.places?.length
+      ? { areaServed: s.places.map((name) => ({ '@type': 'Place', name })) }
+      : {}),
+    ...(s.items?.length
+      ? {
+          hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: s.title,
+            itemListElement: s.items.map((name) => ({
+              '@type': 'Offer',
+              itemOffered: { '@type': 'Service', name },
+            })),
+          },
+        }
+      : {}),
+    inLanguage: 'pt-BR',
   }
 }
 
@@ -155,6 +201,7 @@ export function articleJsonLd(a: {
   published?: string | null
   modified?: string | null
   place?: string | null
+  geo?: { latitude: number; longitude: number } | null
 }) {
   const url = absoluteUrl('/')
   return {
@@ -167,7 +214,15 @@ export function articleJsonLd(a: {
     ...(a.image ? { image: absoluteUrl(a.image) } : {}),
     ...(a.published ? { datePublished: a.published } : {}),
     ...(a.modified ? { dateModified: a.modified } : {}),
-    ...(a.place ? { spatialCoverage: { '@type': 'Place', name: a.place } } : {}),
+    ...(a.place
+      ? {
+          spatialCoverage: {
+            '@type': 'Place',
+            name: a.place,
+            ...(a.geo ? { geo: { '@type': 'GeoCoordinates', ...a.geo } } : {}),
+          },
+        }
+      : {}),
     inLanguage: 'pt-BR',
     author: { '@id': `${url}#organization` },
     publisher: { '@id': `${url}#organization` },

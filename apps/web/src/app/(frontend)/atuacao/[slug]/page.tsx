@@ -9,7 +9,7 @@ import { JsonLd } from '@/components/JsonLd'
 import { docPath } from '@/lib/urls'
 import { docMetadata, loadDoc, staticParams } from '@/server/page'
 import { getDocBySlug, getTexts, projectsForService } from '@/server/queries'
-import { breadcrumbJsonLd } from '@/server/seo'
+import { breadcrumbJsonLd, serviceJsonLd } from '@/server/seo'
 
 export const generateStaticParams = staticParams
 
@@ -91,11 +91,20 @@ export default async function ServicePage({ params }: Props) {
       ) : null}
 
       <JsonLd
-        data={breadcrumbJsonLd([
-          { name: t.common.home, path: '/' },
-          { name: listTitle, path: '/atuacao' },
-          { name: service.title, path },
-        ])}
+        data={[
+          breadcrumbJsonLd([
+            { name: t.common.home, path: '/' },
+            { name: listTitle, path: '/atuacao' },
+            { name: service.title, path },
+          ]),
+          serviceJsonLd({
+            title: service.title,
+            description: service.summary,
+            path,
+            items: (service.deliverables ?? []).map((d) => d.item).filter(Boolean),
+            places: [...new Set(projects.map((p) => p.territory).filter(Boolean))],
+          }),
+        ]}
       />
     </article>
   )

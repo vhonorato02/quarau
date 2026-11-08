@@ -175,3 +175,22 @@ consultoria que pesquisa e escreve; o título no papel empurrava a foto para bai
   mesma linha, quem executa embaixo. **Ciclo:** sai da faixa azul, vira frase no papel com as etapas numeradas
   em sobrescrito (é uma sequência de fato). **Áreas:** título | texto e entregas | foto, em três colunas.
 - **Próximo projeto** (pé da página de projeto) passa para a serifa leve, como os demais títulos.
+
+## Revisão 08/11/2026 (tarde) — 5ª execução: território no mapa, índice de projetos
+
+O Zé: "o design tá longe de 2026; falta coisa; SEO e CMS longe do ideal". Redes conferidas: o Instagram
+`@quarau.consultoria` tem 1 publicação e 34 seguidores; o LinkedIn tem 27 posts, quase todos repostagens de
+parceiros, já usados como fonte em `content/social/`. Base de conteúdo segue o site antigo e as fontes oficiais.
+
+- **Mapa "Onde atuamos"** (bloco novo no CMS): Brasil por estado, gerado das malhas do IBGE
+  (`tools/geo/gen-brazil-map.py` → `src/lib/brazil-map.ts`, SVG estático, 11 KB). Um ponto verde (o ponto
+  do logo) por município com projeto publicado; os estados com projeto em azul claro; uma rota tracejada liga
+  os pontos ("do Vale do Paraíba ao sertão do Piauí"). Ao lado, a lista dos lugares com os projetos; apontar
+  um lugar acende o ponto e vice-versa. Coordenadas: campos latitude/longitude na ficha do projeto.
+- **Índice de projetos** (formato novo do bloco "Lista de projetos"): uma linha por projeto, nome na serifa
+  grande, território e período, quem realiza. Com mouse, a foto do projeto acompanha o ponteiro; no celular,
+  uma miniatura abre a linha. A home passou de seis cartões enormes para o índice (a página encurtou ~30%);
+  /projetos mantém as histórias com foto grande.
+- **SEO/GEO:** `/llms.txt` gerado do CMS; `Service` com ofertas e lugares nas páginas de área; `knowsAbout` e
+  `areaServed` na organização; `GeoCoordinates` nos projetos com ponto no mapa.
+- **CMS:** painel com "Editados por último", contagem de projetos fora do mapa e botão "Abrir o site".

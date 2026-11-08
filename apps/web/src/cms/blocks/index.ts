@@ -109,6 +109,17 @@ export const ProjectIndex: Block = {
       admin: { layout: 'horizontal' },
     },
     {
+      name: 'display',
+      type: 'radio',
+      label: 'Formato',
+      defaultValue: 'stories',
+      options: [
+        { label: 'Histórias (foto grande e resumo)', value: 'stories' },
+        { label: 'Índice (lista compacta; a foto aparece ao passar o mouse)', value: 'index' },
+      ],
+      admin: { layout: 'horizontal' },
+    },
+    {
       name: 'projects',
       type: 'relationship',
       relationTo: 'projects',
@@ -125,6 +136,26 @@ export const ProjectIndex: Block = {
       admin: { condition: (_, s) => s?.mode !== 'manual', description: 'Vazio = sem limite.' },
     },
     linkGroup('link', { label: 'Link no fim da lista (opcional)', optional: true }),
+  ],
+}
+
+export const Territories: Block = {
+  slug: 'territories',
+  labels: label('territories'),
+  admin,
+  fields: [
+    heading({ required: true }),
+    intro,
+    {
+      name: 'note',
+      type: 'ui',
+      admin: {
+        components: { Field: '/cms/admin/Note#Note' },
+        custom: {
+          text: 'Os pontos vêm dos projetos publicados que têm latitude e longitude (aba “Ficha” do projeto). Projetos no mesmo município viram um ponto só.',
+        },
+      },
+    },
   ],
 }
 
@@ -411,6 +442,7 @@ export const pageBlocks: Block[] = [
   PageIntro,
   PartnersStrip,
   ProjectIndex,
+  Territories,
   ProofNumber,
   Cycle,
   Areas,
