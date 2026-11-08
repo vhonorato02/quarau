@@ -39,7 +39,8 @@ export function HeroLens({ block }: { block: BlockOf<'heroLens'> }) {
         </div>
       </div>
       <figure className="q-hero__photo">
-        <Img media={block.image} priority sizes="100vw" />
+        {/* Phones at density up to 1.75 get the 640 px file, half the bytes of the 1024 one (LCP). */}
+        <Img media={block.image} priority sizes="(min-width: 40rem) 100vw, 360px" />
         {caption ? (
           <figcaption>
             <span className="q-wrap">{caption}</span>
@@ -92,7 +93,7 @@ export async function PageIntro({
       </div>
       {isMedia(block.image) ? (
         <figure className="q-wrap q-bleed mt-10 md:mt-14">
-          <Img media={block.image} eager sizes="(min-width: 82rem) 82rem, 100vw" />
+          <Img media={block.image} priority sizes="(min-width: 82rem) 82rem, 100vw" />
           {caption ? <figcaption>{caption}</figcaption> : null}
         </figure>
       ) : null}
