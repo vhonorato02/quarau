@@ -12,6 +12,16 @@
 - **Deploy automático:** push na `main` → CI/CD completo → job "Deploy to the VPS" (chave dedicada
   `DEPLOY_SSH_KEY`) → smoke test exige `/api/health` com o SHA novo. Para conferir:
   `curl -s https://quarau.zewithane.vps.brz.dev.br/api/health` e `gh run list -L 3`.
+- **4ª execução do visual (08/11):** Newsreader leve nos títulos (Barlow no texto), papel frio `#f4f6f3`, home
+  abrindo com a foto de campo em tela cheia e a apresentação como declaração grande; projetos em cartões
+  sobre a foto; ciclo no papel; áreas em três colunas. Registro em [DESIGN.md](DESIGN.md) §4ª execução e
+  resumo em [HANDOFF.md](../HANDOFF.md). `f910e53` reprovou no Lighthouse mobile (home 0,92–0,94, projeto 0,92);
+  corrigido em `9939704`: recorte quadrado de 800 px no hero do celular, foto da galeria só carrega ao abrir (o
+  lightbox fechado pré-carregava 1600 px em toda página de projeto) e Newsreader 400 fora do preload. **No ar em
+  `9939704`** (CI/CD completo verde: E2E, axe, Lighthouse ≥ 95, Trivy, deploy; `/api/health` ok). LCP mobile
+  ainda 2,8–3,1 s (aviso, não erro). Na primeira visita o título pode sair no fallback Times (`display:
+optional`, escolha a favor do LCP); da segunda página em diante aparece a Newsreader.
+  **Próximo passo:** aprovação visual do Zé.
 - **Redesenho (07/11):** o visual "Lente" foi reprovado pelo Zé ("um dos sites mais feios"). Nova execução
   editorial na família da marca: Barlow Condensed nos títulos e territórios, hero dividido com foto de campo
   até a borda, superfícies em petróleo `#062C44`, cantos retos, ponto verde do logo fechando títulos.
