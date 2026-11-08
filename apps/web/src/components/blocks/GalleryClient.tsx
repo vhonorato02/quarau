@@ -28,11 +28,15 @@ const MOSAIC = 5
 export function GalleryClient({ images, labels }: { images: GalleryImage[]; labels: Labels }) {
   const dialog = useRef<HTMLDialogElement>(null)
   const [current, setCurrent] = useState(0)
+  // The full-size photo is requested only once the viewer opens: rendered in the closed dialog it
+  // was preloaded with every project page and competed with the opening photo (LCP).
+  const [shown, setShown] = useState(false)
   const touchX = useRef<number | null>(null)
   const n = images.length
 
   const open = (i: number) => {
     setCurrent(i)
+    setShown(true)
     dialog.current?.showModal()
   }
   const go = useCallback((delta: number) => setCurrent((c) => (c + delta + n) % n), [n])
@@ -109,8 +113,10 @@ export function GalleryClient({ images, labels }: { images: GalleryImage[]; labe
             </button>
           </div>
           <figure className="q-lightbox__stage">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={img.full} alt={img.alt} width={img.width} height={img.height} />
+            {shown ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={img.full} alt={img.alt} width={img.width} height={img.height} />
+            ) : null}
           </figure>
           {img.caption ? <p className="q-lightbox__cap">{img.caption}</p> : null}
           {n > 1 ? (

@@ -29,7 +29,7 @@ export function HeroLens({ block }: { block: BlockOf<'heroLens'> }) {
     <>
       <section className="q-hero on-dark">
         <figure className="q-hero__photo">
-          <Img media={block.image} priority sizes="100vw" />
+          <Img media={block.image} priority phoneCrop sizes="100vw" />
         </figure>
         <div className="q-wrap q-hero__in">
           <h1>

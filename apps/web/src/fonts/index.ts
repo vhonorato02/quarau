@@ -23,18 +23,25 @@ export const barlowItalic = localFont({
 
 /**
  * Newsreader (Production Type, OFL): the display face for headlines, set light and large
- * (docs/DESIGN.md §4ª execução). Two static instances cut from the variable font with fonttools:
- * 300 at optical size 56 for headlines, 400 at optical size 20 for small headings. Latin only.
+ * (docs/DESIGN.md §4ª execução). Static instances cut from the variable font with fonttools, latin only:
+ * 300 at optical size 56 for headlines (here) and 400 at optical size 20 for small headings (below).
  */
 export const newsreader = localFont({
-  src: [
-    { path: './newsreader-latin-300-normal.woff2', weight: '300', style: 'normal' },
-    { path: './newsreader-latin-400-normal.woff2', weight: '400', style: 'normal' },
-  ],
+  src: [{ path: './newsreader-latin-300-normal.woff2', weight: '300', style: 'normal' }],
   variable: '--font-newsreader',
   // Headlines are the LCP on phones: a late swap repaint became the LCP, so the preloaded face
   // either lands inside the short block period or the size-adjusted fallback stays for that visit.
   display: 'optional',
+  fallback: ['Georgia', 'Times New Roman', 'serif'],
+  adjustFontFallback: 'Times New Roman',
+})
+
+/** Newsreader 400 for small headings (news titles in lists): never the LCP, so not preloaded. */
+export const newsreaderText = localFont({
+  src: [{ path: './newsreader-latin-400-normal.woff2', weight: '400', style: 'normal' }],
+  variable: '--font-newsreader-text',
+  display: 'swap',
+  preload: false,
   fallback: ['Georgia', 'Times New Roman', 'serif'],
   adjustFontFallback: 'Times New Roman',
 })

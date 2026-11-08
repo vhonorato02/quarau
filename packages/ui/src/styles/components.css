@@ -385,6 +385,15 @@
     margin: 0;
     object-fit: cover;
   }
+  /* Phones show the square crop (already centred on the focal point); wide screens use the focal point. */
+  .q-hero__photo img {
+    object-position: 50% 50%;
+  }
+  @media (min-width: 40rem) {
+    .q-hero__photo img {
+      object-position: var(--q-focal, 50% 50%);
+    }
+  }
   /* Darkens only where the type sits: a little at the top, mostly in the lower half. */
   .q-hero__photo::after {
     content: '';
@@ -1631,7 +1640,7 @@
     color: var(--color-ink-2);
   }
   .q-news strong {
-    font-family: var(--font-display);
+    font-family: var(--font-display-text);
     font-size: clamp(1.5rem, 2vw, 1.875rem);
     font-weight: 400;
     line-height: 1.12;

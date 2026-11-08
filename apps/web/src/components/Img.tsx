@@ -36,6 +36,7 @@ export function Img({
   priority = false,
   eager = false,
   crop,
+  phoneCrop = false,
   className,
   alt,
 }: {
@@ -45,6 +46,11 @@ export function Img({
   /** Load early but without high fetch priority (wide covers that may sit below the fold on phones). */
   eager?: boolean
   crop?: 'square' | 'thumbnail'
+  /**
+   * Portrait phones get the 800 px square crop (focal point kept) instead of a wide file cropped by
+   * `object-fit: cover`: a full-screen photo on a phone shows only a narrow slice of a wide picture.
+   */
+  phoneCrop?: boolean
   className?: string
   alt?: string
 }) {
@@ -77,6 +83,23 @@ export function Img({
   if (media.width && !candidates.some((c) => c.endsWith(` ${media.width}w`)))
     candidates.push(`${rel(media.url)} ${media.width}w`)
   const fallback = rel(media.sizes?.lg?.url ?? media.url)!
+  const square = media.sizes?.square
+  if (phoneCrop && square?.url) {
+    return (
+      <picture>
+        <source media="(min-width: 40rem)" srcSet={candidates.join(', ')} sizes={sizes} />
+        <img
+          alt={altText}
+          src={rel(square.url)!}
+          width={square.width ?? 800}
+          height={square.height ?? 800}
+          {...common}
+          // The square is already cut around the focal point; wide screens read it from the variable.
+          style={{ '--q-focal': objectPosition } as React.CSSProperties}
+        />
+      </picture>
+    )
+  }
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
