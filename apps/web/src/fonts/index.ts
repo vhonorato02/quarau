@@ -25,7 +25,10 @@ export const barlowItalic = localFont({
 export const barlowCondensed = localFont({
   src: [{ path: './barlow-condensed-latin-600-normal.woff2', weight: '600', style: 'normal' }],
   variable: '--font-barlow-condensed',
-  display: 'swap',
+  // Headlines are the LCP on phones. With "swap" they repaint when the face arrives, and that late
+  // repaint was the LCP (about 3 s on Lighthouse mobile). Preloaded and small, the face normally
+  // lands inside the short block period; on a very slow first visit the fallback stays.
+  display: 'optional',
   fallback: ['Arial Narrow', 'system-ui', 'sans-serif'],
   // Size-adjusted Arial while the file loads: no layout shift when the condensed face swaps in.
   adjustFontFallback: 'Arial',
