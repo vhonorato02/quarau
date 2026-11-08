@@ -10,7 +10,7 @@ import { CookieConsent } from '@/components/site/CookieConsent'
 import { ErrorTextsProvider } from '@/components/site/ErrorTexts'
 import { Footer } from '@/components/site/Footer'
 import { Header } from '@/components/site/Header'
-import { barlow, barlowItalic, newsreader, newsreaderText } from '@/fonts'
+import { barlow, barlowCondensed, barlowItalic } from '@/fonts'
 import { siteUrl } from '@/lib/platform-env'
 import { getGlobal, getTexts, listProjects, listServices } from '@/server/queries'
 import { organizationJsonLd, websiteJsonLd } from '@/server/seo'
@@ -53,7 +53,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <html
       lang="pt-BR"
-      className={`${barlow.variable} ${newsreader.variable} ${newsreaderText.variable} ${barlowItalic.variable}`}
+      className={`${barlow.variable} ${barlowCondensed.variable} ${barlowItalic.variable}`}
     >
       <body>
         <Header />

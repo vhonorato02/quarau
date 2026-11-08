@@ -194,3 +194,28 @@ parceiros, já usados como fonte em `content/social/`. Base de conteúdo segue o
 - **SEO/GEO:** `/llms.txt` gerado do CMS; `Service` com ofertas e lugares nas páginas de área; `knowsAbout` e
   `areaServed` na organização; `GeoCoordinates` nos projetos com ponto no mapa.
 - **CMS:** painel com "Editados por último", contagem de projetos fora do mapa e botão "Abrir o site".
+
+## Revisão 08/11/2026 (noite) — 6ª execução: "Campo azul"
+
+O Zé: "design segue totalmente fora de 2026". Diagnóstico: as execuções 4 e 5 tinham caído no padrão
+"serifa leve sobre papel claro com filetes" — elegante, mas genérico, sem cor e com contraste baixo. A 6ª
+execução volta ao que é só da Quarau: o azul da marca como superfície, a família Barlow e a lupa do Q.
+
+- **Tipografia:** Newsreader saiu. Títulos em **Barlow Condensed 600** (mesma família e desenhista da Barlow
+  do logo), grandes e justos (entrelinha 0,86–0,94); texto em Barlow 400/500. A declaração de abertura e o
+  lead das histórias usam Barlow 500 grande, com tracking negativo. Arquivo: `src/fonts/barlow-condensed-latin-600-normal.woff2`
+  (Fontsource, latin, cobre todos os acentos do PT-BR).
+- **Cor:** papel branco puro; o azul `#0089CF` vira superfície inteira (declaração + parceiros, banda de
+  contato, cartão "Próximo projeto"), sempre com texto em tinta `#03141F` (4,9:1); branco sobre o azul só em
+  tamanho grande. Painel escuro `#03141F` para o mapa e o rodapé. Verde só no ponto.
+- **Momento único — a lupa abre:** na home, o título enorme fica ao lado da lente do logo (anel azul do Q com
+  o ponto verde, a foto de campo dentro). Ao rolar, a lente se abre até a foto ocupar a tela e engolir o
+  título (`animation-timeline: scroll()`; sem suporte ou com movimento reduzido, a lente fica parada).
+- **Forma:** cabeçalho em pílula branca flutuante; botões em pílula (o primário leva o ponto verde);
+  fotos e painéis com cantos grandes (`--radius-img` 1,25 rem, `--radius-panel` até 2,5 rem). Os filetes
+  saíram: separação por superfície e espaço.
+- **Seções:** índice de projetos em linhas que acendem em azul; mapa no painel escuro (estados com projeto
+  em azul, pontos verdes); "16 mil" em azul gigante; ciclo em 10 pílulas numeradas que ficam mais azuis ao
+  longo das etapas; áreas em painéis 2×2 com entregas em pílulas; rodapé fechando com o logotipo branco na
+  largura da página.
+- **Antes/depois:** capturas de 08/11 na pasta temporária da sessão; a homologação mostra o estado atual.

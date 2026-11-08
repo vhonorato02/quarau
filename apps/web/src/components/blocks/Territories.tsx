@@ -51,7 +51,7 @@ export async function Territories({
   const id = headingId(block, index)
 
   return (
-    <section className="q-section q-wrap q-terr" aria-labelledby={id}>
+    <section className="q-wrap q-terr on-dark" aria-labelledby={id}>
       <TerritoryMapClient
         places={places}
         width={BRAZIL_VIEWBOX.width}

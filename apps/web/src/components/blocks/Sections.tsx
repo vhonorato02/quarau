@@ -21,7 +21,7 @@ export async function PartnersStrip({
   if (!partners.length) return null
   const id = headingId(block, index)
   return (
-    <section className="q-partners" aria-labelledby={block.heading ? id : undefined}>
+    <section className="q-partners on-blue" aria-labelledby={block.heading ? id : undefined}>
       <div className="q-wrap q-partners__in">
         {block.heading ? <h2 id={id}>{block.heading}</h2> : null}
         <ul>
@@ -103,7 +103,7 @@ export async function ContactList() {
 export function CtaBand({ block, index }: { block: BlockOf<'ctaBand'>; index: number }) {
   const id = headingId(block, index)
   return (
-    <section className="q-cta q-section on-dark" aria-labelledby={id}>
+    <section className="q-cta q-section on-blue" aria-labelledby={id}>
       <div className="q-wrap q-cta__in">
         <h2 id={id}>
           <DotHeading text={block.heading} />

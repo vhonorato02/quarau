@@ -1,53 +1,53 @@
 /*
- * Quarau design tokens (docs/DESIGN.md §4). Tailwind 4 @theme: each token is a CSS variable
- * and a utility (bg-blue-700, text-ink-2, font-sans…). Brand colours are not negotiable
+ * Quarau design tokens (docs/DESIGN.md §6ª execução, "Campo azul"). Tailwind 4 @theme: each token is a
+ * CSS variable and a utility (bg-blue-700, text-ink-2, font-sans…). Brand colours are not negotiable
  * (docs/brand.md); the support colours exist only to pass WCAG 2.2 AA.
  */
 @theme {
-  --color-paper: #f4f6f3; /* cool paper with a trace of green (4ª execução) */
-  --color-paper-2: #e8ece7; /* plates, image placeholders */
-  --color-ink: #0f1c22;
-  --color-ink-2: #4b5a60; /* 6.6:1 on paper */
-  --color-line: #cfd6d2;
-  --color-mist: #eaf4fa;
-  --color-blue: #0089cf; /* brand: ring of the lens, big numbers, large text only (3.8:1) */
-  --color-blue-700: #006fa8; /* links, buttons, the cycle band (5.5:1) */
+  --color-paper: #ffffff;
+  --color-paper-2: #edf2f4; /* panels, image placeholders */
+  --color-ink: #03141f; /* text; also text on the brand blue (4.9:1) */
+  --color-ink-2: #45565e; /* 7.4:1 on paper, 6.6:1 on paper-2 */
+  --color-line: #d3dce0;
+  --color-mist: #e2f0f8;
+  --color-blue: #0089cf; /* brand: whole surfaces; white on it only at large sizes (3.8:1) */
+  --color-blue-700: #006fa8; /* links, primary buttons (5.5:1) */
   --color-blue-800: #005c8c; /* hover, pressed (7.2:1) */
-  --color-blue-950: #062c44; /* petrol: hero, cycle, call to action, footer */
-  --color-blue-990: #041e2f; /* footer, one step below the petrol */
-  --color-sky: #8ccfef; /* text accent on petrol (8.4:1) */
-  --color-on-dark: #d3e4ee; /* body text on petrol (11:1) */
+  --color-blue-950: #062c44;
+  --color-blue-990: #03141f; /* dark panels, footer */
+  --color-blue-soft: #33a1d9; /* map states on the dark panel */
+  --color-sky: #8ccfef; /* accent text on dark (9.6:1) */
+  --color-on-dark: #c9dbe5; /* body text on dark (12:1) */
   --color-green: #39b54a; /* brand: the dot only, never text */
   --color-green-700: #24792f; /* success text (5.4:1) */
   --color-danger: #b42318; /* form errors (6.5:1) */
 
   --font-sans: var(--font-barlow), 'Barlow', system-ui, sans-serif;
-  /* Headlines: Newsreader set light and large; Barlow (the logo signature) stays in the text. */
-  --font-display: var(--font-newsreader), 'Newsreader', Georgia, serif;
-  /* Small serif headings (400, optical size 20): its own face, loaded after the page. */
-  --font-display-text: var(--font-newsreader-text), 'Newsreader', Georgia, serif;
+  /* Headlines: Barlow Condensed 600, the brand family in its condensed cut, set big and tight. */
+  --font-display: var(--font-barlow-condensed), 'Barlow Condensed', 'Arial Narrow', sans-serif;
 
   --text-xs: 0.875rem;
   --text-sm: 0.9375rem;
   --text-base: 1.125rem;
-  --text-lead: 1.3125rem;
-  --text-h3: clamp(1.75rem, 2.8vw, 2.5rem);
-  --text-h2: clamp(2.5rem, 5vw, 4.75rem);
-  --text-h1: clamp(3rem, 7.4vw, 7.25rem);
-  --text-display: clamp(3.75rem, 10vw, 9.5rem);
+  --text-lead: 1.375rem;
+  --text-h3: clamp(1.75rem, 2.9vw, 2.75rem);
+  --text-h2: clamp(2.75rem, 6.4vw, 6.5rem);
+  --text-h1: clamp(3.5rem, 10vw, 10rem);
+  --text-display: clamp(4rem, 11.5vw, 12.5rem);
 
-  --radius-img: 0;
-  --radius-ui: 2px;
+  --radius-img: 1.25rem;
+  --radius-panel: clamp(1.5rem, 3vw, 2.5rem);
+  --radius-ui: 999px;
   --radius-pill: 999px;
 
-  --container-site: 82rem;
+  --container-site: 86rem;
   --container-read: 42rem;
 
   --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
-  --duration-ui: 160ms;
-  --duration-media: 600ms;
+  --duration-ui: 180ms;
+  --duration-media: 700ms;
 
-  --spacing-section: clamp(4rem, 9vw, 8rem);
+  --spacing-section: clamp(4.5rem, 10vw, 9rem);
   --spacing-gutter: 1.5rem;
-  --spacing-edge: 1.25rem;
+  --spacing-edge: 1rem;
 }

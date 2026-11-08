@@ -19,39 +19,41 @@ export function DotHeading({ text }: { text: string }) {
 }
 
 /**
- * Home opening (docs/DESIGN.md §4ª execução): a field photograph fills the screen with the headline,
- * the actions and the photo record set on it; the lead follows as a large statement that lights up
- * word by word as it is read.
+ * Home opening (docs/DESIGN.md §6ª execução): the headline set huge on white beside the lens of the
+ * logo (the ring of the Q with its green dot) framing a field photograph. As the page scrolls, the
+ * lens opens until the photograph fills the screen; the lead follows on the brand blue.
  */
 export function HeroLens({ block }: { block: BlockOf<'heroLens'> }) {
   const caption = block.caption || (isMedia(block.image) ? block.image.caption : null)
   return (
     <>
-      <section className="q-hero on-dark">
-        <figure className="q-hero__photo">
-          <Img media={block.image} priority phoneCrop sizes="100vw" />
-        </figure>
-        <div className="q-wrap q-hero__in">
-          <h1>
-            <DotHeading text={block.heading} />
-          </h1>
-          <div className="q-hero__side">
+      <section className="q-hero">
+        <div className="q-hero__stage">
+          <div className="q-wrap q-hero__in">
+            <h1>
+              <DotHeading text={block.heading} />
+            </h1>
             <div className="q-hero__ctas">
               <CMSLink link={block.primary} variant="primary" />
               <CMSLink link={block.secondary} variant="ghost" />
             </div>
-            <span aria-hidden="true" />
-            {caption ? <p className="q-hero__rec">{caption}</p> : null}
           </div>
+          <span className="q-hero__ring" aria-hidden="true" />
+          <figure className="q-hero__photo">
+            <Img media={block.image} priority phoneCrop sizes="100vw" />
+          </figure>
+          {caption ? <p className="q-hero__rec">{caption}</p> : null}
         </div>
       </section>
       {block.lead ? (
-        <section className="q-wrap q-statement">
-          <p>
-            {block.lead.split(' ').map((word, i) => (
-              <span key={`${word}-${i}`}>{`${word} `}</span>
-            ))}
-          </p>
+        <section className="q-statement on-blue">
+          <div className="q-wrap">
+            <p>
+              {block.lead.split(' ').map((word, i) => (
+                <span key={`${word}-${i}`}>{`${word} `}</span>
+              ))}
+            </p>
+          </div>
         </section>
       ) : null}
     </>

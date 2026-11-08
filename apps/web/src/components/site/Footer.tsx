@@ -18,17 +18,7 @@ export async function Footer() {
   return (
     <footer className="q-footer on-dark">
       <div className="q-wrap q-footer__in">
-        <div className="q-footer__brand">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/brand/quarau-logotipo-branco.svg"
-            alt={contact.name}
-            width={1295}
-            height={306}
-            loading="lazy"
-          />
-          {footer.tagline ? <p>{footer.tagline}</p> : null}
-        </div>
+        <div className="q-footer__brand">{footer.tagline ? <p>{footer.tagline}</p> : null}</div>
         {footer.links?.length ? (
           <nav className="q-footer__nav" aria-labelledby="footer-nav">
             <h2 id="footer-nav">{t.footer.navTitle}</h2>
@@ -95,6 +85,17 @@ export async function Footer() {
             </li>
           </ul>
         </div>
+      </div>
+      <div className="q-wrap">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="q-footer__mark"
+          src="/brand/quarau-logotipo-branco.svg"
+          alt={contact.name}
+          width={1295}
+          height={306}
+          loading="lazy"
+        />
       </div>
     </footer>
   )
