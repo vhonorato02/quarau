@@ -821,11 +821,16 @@
   .q-prose > * + * {
     margin-top: 1.1em;
   }
-  .q-prose h2 {
-    font-size: 2rem;
-    line-height: 1.1;
+  /* Subheads inside a story and the heading of a reading-column block share one size. */
+  .q-prose h2,
+  .q-narrow > .q-h2 {
+    font-size: clamp(2rem, 3.2vw, 2.625rem);
+    line-height: 1.05;
     letter-spacing: -0.02em;
     margin-top: 2em;
+  }
+  .q-narrow > .q-h2 {
+    margin-bottom: 1.25rem;
   }
   .q-prose h3 {
     font-size: 1.5rem;
@@ -919,10 +924,10 @@
     gap: 2rem;
     align-items: center;
   }
+  /* Shown whole: this block carries maps and diagrams, whose legends must not be cropped. */
   .q-mt__img img {
     width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
+    height: auto;
     border-radius: var(--radius-img);
   }
   .q-mt h2 {
