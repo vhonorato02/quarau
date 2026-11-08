@@ -31,6 +31,9 @@
 
 - [ ] `[CONFIRMAR]` Ano de fundação (não publicado; nenhuma frase do tipo "há X anos" aparece no site).
 - [ ] `[CONFIRMAR]` Equipe (nomes, cargos, fotos): a página Sobre não mostra equipe até haver dados.
+      Pista para o dono confirmar: Fábio Bueno (autor do WordPress antigo, coautor do livro do Congado e fotógrafo de
+      várias imagens) e Lucas Paixão (autor dos mapas do Ecoe Verde) aparecem nas fontes, mas nenhuma diz o cargo deles na
+      Quarau. Nada publicado.
 - [ ] `[CONFIRMAR]` Depoimentos de clientes: nenhum existe; a seção não aparece.
 - [ ] `[CONFIRMAR]` "Magano Design, Brand" aparecia na faixa de logos: cliente ou agência da marca? (não publicado).
 - [ ] `[CONFIRMAR]` Cores oficiais em Pantone/CMYK (o símbolo usa `#0080C8`/`#3AAA35`; o logotipo e o CSS,
@@ -57,5 +60,5 @@
 
 ## Infra / go-live (não bloqueiam o site, bloqueiam a virada)
 
-- [ ] `[CONFIRMAR]` Onde estão o DNS de `quarau.com.br` e o e-mail `contato@` (para não derrubar o MX na virada).
+- [x] DNS de `quarau.com.br` e e-mail `contato@` estão na Hostinger (`ns1/ns2.dns-parking.com`, MX `mx1/mx2.hostinger.com`), conferido em 06/11/2026.
 - [ ] `[CONFIRMAR]` Quando desligar o WordPress antigo.

@@ -18,6 +18,14 @@
   Registro em [DESIGN.md](DESIGN.md) §Revisão 07/11. **No ar em `d1e58c9`** (CI completo verde, Lighthouse
   mobile ≥ 95 nas 5 rotas). Home, projeto, Sobre e Contato conferidos em 1440/390. Próximo passo: aprovação
   visual do Zé; depois, página de notícia e busca no mesmo padrão.
+- **Revisão de conteúdo (07/11, noite):** o Zé: "tá faltando conteúdo, revisão total". Projetos ampliados com
+  fontes oficiais (ficha do Ecomuseu na Fundação Banco do Brasil, IPHAN, Prefeitura de SJC, ANPPOM): método,
+  território, agrofloresta do Alambari e números do Ecomuseu; Congado (87 grupos), processo do Samba de Bumbo e o
+  dossiê do Cortejo no projeto de patrimônio; mapas do acervo (área do Ecomuseu, redes do Samba, horta e parceiros do
+  Ecoe). Sobre com trajetória e territórios. Notícias: Samba e Cortejo ampliados, mutirão e jornada contextualizados,
+  2 novas (10 anos do Ecomuseu; livro do Congado), total 9. Banco da VPS atualizado em 07/11 com
+  `scripts/seed/revise-2026-11.ts` (só documentos intocados, backup antes) + seed; 28 arquivos de mídia novos.
+  Commits `344cb4b`, `cdc8179`. Pendências do dono em [CONTENT-TODO.md](CONTENT-TODO.md) (equipe, fundação, Quipá).
 - **3ª execução do visual (07/11, noite):** o Zé reprovou de novo ("continua muito feio e incompleto"). Papel
   branco, foto de campo na largura inteira, projetos como histórias (foto grande, resumo, quem e quando), áreas
   com foto, ciclo e chamada no azul da marca, placas tipográficas para notícias sem foto, aberturas em tinta.
