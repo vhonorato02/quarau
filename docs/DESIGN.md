@@ -218,4 +218,6 @@ execução volta ao que é só da Quarau: o azul da marca como superfície, a fa
   em azul, pontos verdes); "16 mil" em azul gigante; ciclo em 10 pílulas numeradas que ficam mais azuis ao
   longo das etapas; áreas em painéis 2×2 com entregas em pílulas; rodapé fechando com o logotipo branco na
   largura da página.
+- **Peso:** as cinco fontes foram recortadas para o alfabeto do PT-BR (Latin básico + Latin-1 + aspas, travessões e
+  reticências), sem hinting: 88 KB → 51 KB nas quatro pré-carregadas. Comando em `apps/web/src/fonts/README.md`.
 - **Antes/depois:** capturas de 08/11 na pasta temporária da sessão; a homologação mostra o estado atual.
