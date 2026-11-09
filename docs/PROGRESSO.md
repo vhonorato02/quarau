@@ -16,7 +16,9 @@
   títulos em Barlow Condensed 600; azul da marca como superfície (texto em tinta); lente do Q que se abre ao
   rolar na home; pílulas (cabeçalho, botões, parceiros, ciclo); mapa em painel escuro; rodapé com o logotipo
   grande. Validado local: lint, typecheck, 52 testes, axe/rotas/navegação E2E (desktop e celular).
-  Registro em [DESIGN.md](DESIGN.md) §6ª execução. **Próximo passo:** CI/CD verde e aprovação do Zé.
+  Fontes recortadas para o PT-BR (88 → 51 KB) para a home voltar a ≥ 0,95 no Lighthouse mobile. **No ar em
+  `e467f2e`** (CI/CD verde; o teste E2E do CMS falhou uma vez por tempo de cache e passou na nova tentativa).
+  Registro em [DESIGN.md](DESIGN.md) §6ª execução. **Próximo passo:** aprovação do Zé na homologação.
 - **5ª execução (08/11, tarde):** mapa "Onde atuamos" (bloco novo; malhas do IBGE; pontos pelos campos
   latitude/longitude do projeto), índice compacto de projetos na home (foto segue o ponteiro), `/llms.txt`,
   schema `Service`/`knowsAbout`/`areaServed`/`GeoCoordinates`, painel com "Editados por último". Redes: o

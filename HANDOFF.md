@@ -16,7 +16,7 @@
   ambiente fora do git (runbook); apague o arquivo ao terminar.
 - **6ª execução (08/11, noite) — "Campo azul":** títulos em Barlow Condensed (Newsreader removida), azul da
   marca como superfície, lente do Q que se abre ao rolar na home, cabeçalho e botões em pílula, mapa em
-  painel escuro, rodapé com o logotipo grande. Registro em [docs/DESIGN.md](docs/DESIGN.md) §6ª execução.
+  painel escuro, rodapé com o logotipo grande. Registro em [docs/DESIGN.md](docs/DESIGN.md) §6ª execução. **No ar em `e467f2e`** (CI/CD verde).
 - **Fonte dos títulos:** Barlow Condensed com `display: swap` (pré-carregada, 21 KB). Se o Lighthouse mobile
   reclamar do LCP, o caminho é `optional`, como antes.
 - **Domínio `quarau.com.br`, DNS/MX e WordPress antigo:** intocados. Só depois do "aprovado" do dono
