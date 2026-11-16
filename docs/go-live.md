@@ -1,6 +1,6 @@
 # Checklist de go-live (troca para quarau.com.br)
 
-Hoje o site responde em **https://quarau.zewithane.vps.brz.dev.br** com `noindex`.
+Hoje o site responde em **https://quarau.zehonorato.vps.brz.dev.br** com `noindex`.
 O WordPress continua intocado até a virada do DNS.
 
 ## 1. Antes da virada (D-2)

@@ -22,7 +22,7 @@
 | Tarefas agendadas   | cron diário da Vercel                                                                            | fila do Payload no próprio processo (a cada minuto)                      |
 | Imagem Docker       | gerada e testada no CI a cada push                                                               | a mesma imagem, já testada                                               |
 
-- **Ensaio geral antes do aceite:** a mesma imagem roda na VPS em `quarau.zewithane.vps.brz.dev.br` (DNS curinga já existe), com `noindex`, limite de 512 MB de memória e teste de carga.
+- **Ensaio geral antes do aceite:** a mesma imagem roda na VPS em `quarau.zehonorato.vps.brz.dev.br` (DNS curinga já existe), com `noindex`, limite de 512 MB de memória e teste de carga.
 - **Go-live (sessão 13):** DNS do domínio → VPS. Depois, a homologação na Vercel passa a apontar para um branch `homolog` do Neon, ou é pausada.
 
 ## Por quê

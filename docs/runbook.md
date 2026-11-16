@@ -1,8 +1,8 @@
 # Runbook — Quarau na VPS (deploy, rollback e incidentes)
 
-O site roda na plataforma **vps-platform 1.0** da VPS zewithane (Caddy de borda + Postgres 17 compartilhado +
+O site roda na plataforma **vps-platform 1.0** da VPS zehonorato (Caddy de borda + Postgres 17 compartilhado +
 comando `site`), descrita no repositório `Z:\Dev\projetos\vps-platform` (`docs/RUNBOOK.md`). Decisão:
-[ADR 0022](decisions/0022-homologacao-na-vps.md). Acesso: `ssh zewithane-vps` (porta 22322, usuário `zewithane`).
+[ADR 0022](decisions/0022-homologacao-na-vps.md). Acesso: `ssh zehonorato-vps` (porta 22322, usuário `zehonorato`).
 
 | Tarefa                   | Comando (na VPS)                                                          |
 | ------------------------ | ------------------------------------------------------------------------- |
@@ -46,7 +46,7 @@ As páginas ficam no cache em memória do Next (`isrFlushToDisk: false`; a raiz 
 leitura). Publicar no painel limpa as páginas afetadas. Limpar tudo à mão:
 
 ```bash
-ssh zewithane-vps 'docker exec $(docker ps -qf name=quarau-web) sh -c '\''curl -fsS -X POST -H "authorization: Bearer $REVALIDATE_SECRET" -H "content-type: application/json" -d "{\"all\":true}" http://127.0.0.1:3000/next/revalidate'\'''
+ssh zehonorato-vps 'docker exec $(docker ps -qf name=quarau-web) sh -c '\''curl -fsS -X POST -H "authorization: Bearer $REVALIDATE_SECRET" -H "content-type: application/json" -d "{\"all\":true}" http://127.0.0.1:3000/next/revalidate'\'''
 ```
 
 Um reinício (`site reiniciar quarau`) também esvazia o cache.
@@ -55,8 +55,8 @@ Um reinício (`site reiniciar quarau`) também esvazia o cache.
 
 Rodam no notebook, nunca na VPS (sem Node de build lá):
 
-1. Túnel: `ssh -N -L 55432:<ip do contêiner postgres>:5432 zewithane-vps`
-   (IP: `ssh zewithane-vps 'docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}" postgres'`).
+1. Túnel: `ssh -N -L 55432:<ip do contêiner postgres>:5432 zehonorato-vps`
+   (IP: `ssh zehonorato-vps 'docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}" postgres'`).
 2. Um arquivo fora do git com `DATABASE_URL=postgres://quarau:<senha>@127.0.0.1:55432/quarau`, `PAYLOAD_SECRET`
    igual ao do `app.env` e `MEDIA_DIR` local. A senha está em `/srv/sites/quarau/.env` (`DB_PASSWORD`).
 3. `set -a; . arquivo; set +a; pnpm --filter @quarau/web seed` (ou `seed:admin`, `migrate:wp`).

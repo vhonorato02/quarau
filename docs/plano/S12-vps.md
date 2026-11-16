@@ -12,7 +12,7 @@ A VPS está auditada e com a plataforma saudável. A **mesma imagem** testada no
 1. **Nunca** alterar `/etc/ssh/sshd_config` nem a porta **22322**. **Nunca** `ufw enable`, `ufw reset` ou `iptables` sem confirmar antes que `22322/tcp` está liberada.
 2. **Disco:** rodar `df -h` antes de baixar imagens; nunca chegar a 100%. Nada de build na VPS: a imagem vem pronta do GHCR.
 3. Não parar nem reiniciar contêineres de **outros sites**. Nada de `docker system prune -a`, `docker compose down` global ou reinício do Docker.
-4. **Menor privilégio:** usuário `zewithane`; `sudo` só no comando que precisa.
+4. **Menor privilégio:** usuário `zehonorato`; `sudo` só no comando que precisa.
 5. **Backup de qualquer arquivo de configuração antes de mudar** (`cp arquivo arquivo.bak-$(date +%F)`).
 6. A VPS hospeda outros sites: toda mudança deve ser reversível e afetar só o Quarau.
 
@@ -21,7 +21,7 @@ A VPS está auditada e com a plataforma saudável. A **mesma imagem** testada no
 1. 🔑 **SSH a partir do PC:**
    - o agente gera uma chave dedicada: `ssh-keygen -t ed25519 -f ~/.ssh/quarau_vps -N "" -C "pc-dono-quarau"`;
    - mostra **só a chave pública**;
-   - o dono entra no console do provedor como `zewithane` e roda a linha que o agente der:
+   - o dono entra no console do provedor como `zehonorato` e roda a linha que o agente der:
 
      ```bash
      mkdir -p ~/.ssh && echo '<PUB>' >> ~/.ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
@@ -31,9 +31,9 @@ A VPS está auditada e com a plataforma saudável. A **mesma imagem** testada no
 
      ```
      Host quarau-vps
-       HostName zewithane.vps.brz.dev.br   (IP 177.107.94.31)
+       HostName zehonorato.vps.brz.dev.br   (IP 177.107.94.31)
        Port 22322
-       User zewithane
+       User zehonorato
        IdentityFile ~/.ssh/quarau_vps
      ```
 
@@ -56,17 +56,17 @@ A VPS está auditada e com a plataforma saudável. A **mesma imagem** testada no
 4. **Variáveis de produção para a VPS** (nunca no git e nunca impressas):
    - montar `quarau.env` local a partir de `vercel env pull --environment production`, contendo `DATABASE_URL` e `BLOB_READ_WRITE_TOKEN`;
    - **novos** `PAYLOAD_SECRET`, `PREVIEW_SECRET`, `REVALIDATE_SECRET` e `CRON_SECRET` (o `PAYLOAD_SECRET` novo só desloga quem estiver logado);
-   - `SITE_URL=https://quarau.zewithane.vps.brz.dev.br`, `SITE_NOINDEX=true`, `PAYLOAD_JOBS_AUTORUN=false` (no ensaio a Vercel ainda é a dona da fila), e e-mail (Resend) se houver;
+   - `SITE_URL=https://quarau.zehonorato.vps.brz.dev.br`, `SITE_NOINDEX=true`, `PAYLOAD_JOBS_AUTORUN=false` (no ensaio a Vercel ainda é a dona da fila), e e-mail (Resend) se houver;
    - enviar: `scp quarau.env quarau-vps:/tmp/` → usar no `site config` → `shred -u` local e remoto.
 5. **Subir o ensaio:**
 
    ```bash
-   site novo quarau ghcr.io/vhonorato02/quarau --dominio quarau.zewithane.vps.brz.dev.br --porta 3000 --saude /next/health --memoria 512m --sem-banco
+   site novo quarau ghcr.io/vhonorato02/quarau --dominio quarau.zehonorato.vps.brz.dev.br --porta 3000 --saude /next/health --memoria 512m --sem-banco
    ```
 
    (ou o equivalente do cenário escolhido). Depois `site config quarau` com o env, `site deploy quarau` e `site lista` → no ar com HTTPS.
 
-6. **Ensaio geral** contra `https://quarau.zewithane.vps.brz.dev.br`:
+6. **Ensaio geral** contra `https://quarau.zehonorato.vps.brz.dev.br`:
    - `screens.mjs` + `qa-visual`;
    - smoke `@smoke`;
    - 2 personas;

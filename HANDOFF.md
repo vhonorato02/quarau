@@ -4,8 +4,8 @@
 
 ## Estado (08/11/2026)
 
-- **Homologação:** `https://quarau.zewithane.vps.brz.dev.br` (VPS, `SITE_NOINDEX=true`). Saúde:
-  `curl -s https://quarau.zewithane.vps.brz.dev.br/api/health` (o campo `version` é o SHA publicado).
+- **Homologação:** `https://quarau.zehonorato.vps.brz.dev.br` (VPS, `SITE_NOINDEX=true`). Saúde:
+  `curl -s https://quarau.zehonorato.vps.brz.dev.br/api/health` (o campo `version` é o SHA publicado).
 - **Deploy:** push na `main` → CI/CD (lint, testes, E2E, axe, Lighthouse, Trivy) → deploy automático na VPS.
   `gh run list -L 3`.
 - **Design:** 4ª execução (08/11): títulos em Newsreader leve, texto em Barlow, papel `#f4f6f3`, home abrindo

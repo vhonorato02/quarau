@@ -52,7 +52,7 @@ backups testados, monitor leve com alerta e operação simples para quem não é
 - **Monitor:** timer de 5 min que checa cada site por HTTPS, containers, Postgres, disco, memória e a idade do
   último backup. Alerta via ntfy (app no celular), uma vez quando quebra e outra quando normaliza.
 - **Host:** UFW com 22322/tcp, 80/tcp, 443/tcp e 443/udp; regras antigas do Coolify removidas. SSH: root só por
-  chave e `MaxAuthTries 5` (drop-in do provedor, com backup `.bak-20261006`); o usuário `zewithane` mantém
+  chave e `MaxAuthTries 5` (drop-in do provedor, com backup `.bak-20261006`); o usuário `zehonorato` mantém
   senha e chave; fail2ban na 22322. Docker com `live-restore`, rotação de logs e redes em 172.20.0.0/14.
 
 ## Consequências

@@ -2,7 +2,7 @@
 
 Site institucional da **Quarau** (consultoria em projetos socioambientais, educativos e culturais): Next.js 16 + Payload CMS 3 no mesmo app.
 
-- **Homologação:** VPS, endereço provisório `https://quarau.zewithane.vps.brz.dev.br` ([ADR 0022](docs/decisions/0022-homologacao-na-vps.md)). A Vercel (`quarau.vercel.app`) não é mais usada.
+- **Homologação:** VPS, endereço provisório `https://quarau.zehonorato.vps.brz.dev.br` ([ADR 0022](docs/decisions/0022-homologacao-na-vps.md)). A Vercel (`quarau.vercel.app`) não é mais usada.
 - **Produção:** depois do aceite, na VPS do dono, com o domínio `quarau.com.br` ([ADR 0015](docs/decisions/0015-homologacao-vercel-producao-vps.md)).
 
 O dono não é técnico. Ele quer o site **no ar, testado como usuário de verdade, com cada texto impecável e editável**, sem semanas de depuração.
@@ -55,7 +55,7 @@ O dono não é técnico. Ele quer o site **no ar, testado como usuário de verda
 - **MCP** (`.mcp.json`):
   - `playwright`: navegar como gente; QA camadas 4/13;
   - `context7`: documentação atual de Next.js 16, Payload 3 e Tailwind 4. **Consulte antes de usar uma API dessas bibliotecas**: são mais novas que o seu treinamento.
-- **CLIs:** `gh` (CI, secrets), `ffmpeg`, `ssh zewithane-vps` (comando `site`; skill `vps-zewithane`).
+- **CLIs:** `gh` (CI, secrets), `ffmpeg`, `ssh zehonorato-vps` (comando `site`; skill `vps-zehonorato`).
 - **Scripts do projeto:**
 
   | Comando                                                               | Para quê                                        |
@@ -97,7 +97,7 @@ docs/                              PLANO, plano/, PROGRESSO, QA, RELATORIO-COMPL
 - **Banco com migrações + `push`** = prompt interativo que trava o servidor. Sempre `PAYLOAD_DB_PUSH=false`.
 - **API do Payload com cookie** precisa do header `Origin` (CSRF).
 - **`robots`, `sitemap` e `X-Robots-Tag`** são resolvidos em runtime, não em `next.config`.
-- **Scripts contra o banco da VPS** (seed, admin): túnel `ssh -N -L 55432:<ip do contêiner postgres>:5432 zewithane-vps` e `DATABASE_URL` num arquivo fora do git; as fotos geradas em `MEDIA_DIR` local sobem para `/srv/sites/quarau/data/media` (dono 1001).
+- **Scripts contra o banco da VPS** (seed, admin): túnel `ssh -N -L 55432:<ip do contêiner postgres>:5432 zehonorato-vps` e `DATABASE_URL` num arquivo fora do git; as fotos geradas em `MEDIA_DIR` local sobem para `/srv/sites/quarau/data/media` (dono 1001).
 - **Um processo só roda a fila de tarefas por banco:** o contêiner da VPS.
 - **`pkill -f <padrão>`** mata o próprio shell se o comando contém o padrão: mate pelo PID.
 - **Turbo:** veja @AGENTS.md (docs da versão instalada em `node_modules/turbo/docs`).

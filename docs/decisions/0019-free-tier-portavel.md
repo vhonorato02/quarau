@@ -5,7 +5,7 @@
 
 ## Contexto
 
-O site precisa ir ao ar sem custo e, depois do aceite, migrar para a VPS `zewithane` (Caddy + um `docker compose`
+O site precisa ir ao ar sem custo e, depois do aceite, migrar para a VPS `zehonorato` (Caddy + um `docker compose`
 por site + CLI `site`, repo `vhonorato02/vps-platform`). A migração tem de levar menos de 1 hora.
 
 Limites conferidos nas páginas oficiais em 2026-10-26:

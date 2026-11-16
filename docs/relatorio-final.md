@@ -152,7 +152,7 @@ Resumo. O detalhado está em [go-live.md](go-live.md).
 
 1. **Gere uma chave dedicada** para o deploy (recomendado, já que a chave atual foi compartilhada em texto):
    `ssh-keygen -t ed25519 -f quarau-deploy -C quarau-deploy`, e adicione `quarau-deploy.pub` em
-   `~zewithane/.ssh/authorized_keys` na VPS.
+   `~zehonorato/.ssh/authorized_keys` na VPS.
 2. GitHub → Settings → Secrets and variables → Actions → **New secret** `VPS_SSH_KEY` com o conteúdo de
    `quarau-deploy` (privada). Opcional: `VPS_KNOWN_HOSTS` com `ssh-keyscan -p 22322 177.107.94.31`.
 3. Me avise. Eu disparo, em ordem: `audit` → `bootstrap` → deploy → `migrate-content` → `create-admin`, valido em

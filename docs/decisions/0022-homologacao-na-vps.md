@@ -14,13 +14,13 @@ Estado conferido em 06/11/2026:
   Vercel não é usado pelo adaptador S3 do código.
 - A Vercel Hobby é **não comercial** (0019); a Quarau é cliente. A regra geral do Zé é: sites de clientes vão para
   a VPS.
-- A VPS `zewithane` já roda um Payload em produção (CMDCA) com a plataforma `vps-platform`: Postgres 17 próprio,
+- A VPS `zehonorato` já roda um Payload em produção (CMDCA) com a plataforma `vps-platform`: Postgres 17 próprio,
   pasta `data/media` montada em `/app/media`, backup restic diário do banco **e** da mídia com teste semanal de
-  restauração, domínio provisório `<site>.zewithane.vps.brz.dev.br` com HTTPS.
+  restauração, domínio provisório `<site>.zehonorato.vps.brz.dev.br` com HTTPS.
 
 ## Decisão
 
-1. **Homologação passa a ser a VPS**, no endereço provisório `https://quarau.zewithane.vps.brz.dev.br`, com
+1. **Homologação passa a ser a VPS**, no endereço provisório `https://quarau.zehonorato.vps.brz.dev.br`, com
    `SITE_NOINDEX=true`. É a mesma máquina, imagem e banco que viram produção: o go-live é só
    `site dominio quarau quarau.com.br,www.quarau.com.br …` + DNS + `SITE_NOINDEX=false`.
 2. **Banco:** Postgres 17 da plataforma (banco/usuário `quarau`, injetado pelo `site`). Neon deixa de ser usado.
