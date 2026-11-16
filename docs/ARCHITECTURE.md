@@ -73,7 +73,7 @@ E-mails em `packages/emails` (React Email).
 
 |           | Dev (Windows, sem Docker)              | CI                    | Homologação                                                       | Produção (após o aceite)         |
 | --------- | -------------------------------------- | --------------------- | ----------------------------------------------------------------- | -------------------------------- |
-| App       | `pnpm dev`                             | contêiner da imagem   | contêiner GHCR na VPS (`site`), `quarau.zehonorato.vps.brz.dev.br` | o mesmo, com `quarau.com.br`     |
+| App       | `pnpm dev`                             | contêiner da imagem   | contêiner GHCR na VPS (`site`), `quarau.zewithane.vps.brz.dev.br` | o mesmo, com `quarau.com.br`     |
 | Banco     | `pnpm db:local` (Postgres 17 embutido) | serviço `postgres:17` | Postgres 17 da plataforma                                         | o mesmo                          |
 | Mídia     | disco (`apps/web/media`)               | volume `/app/media`   | `data/media` → `/app/media` (backup restic)                       | o mesmo (R2 opcional via `S3_*`) |
 | Indexação | `SITE_NOINDEX=true`                    | `true`                | `true`                                                            | `false`                          |

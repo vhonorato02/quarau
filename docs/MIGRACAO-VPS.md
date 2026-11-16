@@ -1,6 +1,6 @@
 # VPS: homologação, operação e go-live
 
-> A Quarau roda na VPS `zehonorato` com a plataforma [`vhonorato02/vps-platform`](https://github.com/vhonorato02/vps-platform)
+> A Quarau roda na VPS `zewithane` com a plataforma [`vhonorato02/vps-platform`](https://github.com/vhonorato02/vps-platform)
 > (Caddy + um `docker compose` por site + CLI `site`). Decisão: [ADR 0022](decisions/0022-homologacao-na-vps.md).
 > A homologação **já é** a máquina de produção: o go-live só troca o domínio e liga a indexação.
 
@@ -9,7 +9,7 @@
 | Peça      | Onde                                                                                          |
 | --------- | --------------------------------------------------------------------------------------------- |
 | App       | `ghcr.io/vhonorato02/quarau:<sha>` (publicada pelo CI depois de todos os testes), 640 MB      |
-| Endereço  | `https://quarau.zehonorato.vps.brz.dev.br` (provisório, `SITE_NOINDEX=true`)                   |
+| Endereço  | `https://quarau.zewithane.vps.brz.dev.br` (provisório, `SITE_NOINDEX=true`)                   |
 | Banco     | Postgres 17 da plataforma, banco/usuário `quarau` (`DATABASE_URL` injetada pelo `site`)       |
 | Mídia     | `/srv/sites/quarau/data/media` → `/app/media` (dono uid 1001)                                 |
 | Variáveis | `/srv/sites/quarau/app.env` (root, 600), editar com `site config quarau`                      |
@@ -25,8 +25,8 @@ Automático: push na `main` → CI/CD verde → job **Deploy to the VPS** (chave
 smoke test exige `/api/health` com o SHA novo. Manual, se preciso:
 
 ```bash
-ssh zehonorato-vps 'site deploy quarau <sha-completo> && site saude'
-ssh zehonorato-vps 'site rollback quarau'   # se algo der errado: volta para a versão anterior
+ssh zewithane-vps 'site deploy quarau <sha-completo> && site saude'
+ssh zewithane-vps 'site rollback quarau'   # se algo der errado: volta para a versão anterior
 ```
 
 ## Reinstalação da VPS (06–07/11/2026)
@@ -42,7 +42,7 @@ O seed é idempotente: rodar de novo não duplica nem sobrescreve o que foi edit
 
 ```bash
 # 1) túnel até o Postgres da plataforma (IP do contêiner: docker inspect postgres)
-ssh -N -L 55432:<ip-do-postgres>:5432 zehonorato-vps &
+ssh -N -L 55432:<ip-do-postgres>:5432 zewithane-vps &
 # 2) arquivo fora do git com DATABASE_URL=postgres://quarau:<senha do /srv/sites/quarau/.env>@127.0.0.1:55432/quarau,
 #    PAYLOAD_DB_PUSH=false, PAYLOAD_JOBS_AUTORUN=false, MEDIA_DIR=<pasta local vazia>
 set -a; . ~/quarau-vps.env; set +a
@@ -50,7 +50,7 @@ pnpm --filter @quarau/web exec payload migrate
 pnpm --filter @quarau/web exec tsx scripts/seed/index.ts
 ADMIN_EMAIL=<e-mail do dono> pnpm --filter @quarau/web exec tsx scripts/create-admin.ts   # senha → ACESSO-ADMIN.txt
 # 3) fotos geradas → pasta do site
-tar -C "$MEDIA_DIR" -cf - . | ssh zehonorato-vps 'sudo tar -C /srv/sites/quarau/data/media -xf - && sudo chown -R 1001:1001 /srv/sites/quarau/data/media'
+tar -C "$MEDIA_DIR" -cf - . | ssh zewithane-vps 'sudo tar -C /srv/sites/quarau/data/media -xf - && sudo chown -R 1001:1001 /srv/sites/quarau/data/media'
 ```
 
 A tela pública "criar primeiro usuário" do Payload fica fechada: o primeiro administrador só nasce pelo
@@ -64,7 +64,7 @@ A tela pública "criar primeiro usuário" do Payload fica fechada: o primeiro ad
 
 1. **Inventário do DNS** (5 min): anotar todos os registros atuais (A, AAAA, CNAME, **MX**, TXT/SPF/DKIM/DMARC).
    **Não mexer em MX nem nos TXT de e-mail**: o `contato@quarau.com.br` continua onde está.
-2. **Backup** (2 min): `ssh zehonorato-vps 'site backup'`.
+2. **Backup** (2 min): `ssh zewithane-vps 'site backup'`.
 3. **Domínio na plataforma** (2 min):
    `site dominio quarau quarau.com.br,www.quarau.com.br --redirecionar www.quarau.com.br --para quarau.com.br`.
 4. **Variáveis** (2 min): `site config quarau` → `SITE_URL=https://quarau.com.br` e `SITE_NOINDEX=false`
@@ -88,7 +88,7 @@ Sem SMTP o contato **fica salvo no painel** (Relacionamento → Contatos recebid
 O caminho sem custo é o SMTP da caixa `contato@quarau.com.br` na Hostinger:
 
 ```bash
-ssh zehonorato-vps
+ssh zewithane-vps
 site config quarau   # acrescentar as linhas abaixo e salvar (republica sozinho)
 # SMTP_HOST=smtp.hostinger.com
 # SMTP_PORT=465

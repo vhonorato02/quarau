@@ -7,11 +7,11 @@
 ## Retomar em
 
 - **Sessão atual:** 07/11/2026. Homologação **no ar na VPS** (plataforma vps-platform 1.0):
-  `https://quarau.zehonorato.vps.brz.dev.br`, `SITE_NOINDEX=true`. A VPS foi zerada em 06/11; banco, mídia
+  `https://quarau.zewithane.vps.brz.dev.br`, `SITE_NOINDEX=true`. A VPS foi zerada em 06/11; banco, mídia
   (61 itens) e administrador foram restaurados de `/srv/backups/import/quarau/` em 07/11.
 - **Deploy automático:** push na `main` → CI/CD completo → job "Deploy to the VPS" (chave dedicada
   `DEPLOY_SSH_KEY`) → smoke test exige `/api/health` com o SHA novo. Para conferir:
-  `curl -s https://quarau.zehonorato.vps.brz.dev.br/api/health` e `gh run list -L 3`.
+  `curl -s https://quarau.zewithane.vps.brz.dev.br/api/health` e `gh run list -L 3`.
 - **6ª execução (08/11, noite) — "Campo azul":** o Zé achou o visual "fora de 2026". Newsreader saiu;
   títulos em Barlow Condensed 600; azul da marca como superfície (texto em tinta); lente do Q que se abre ao
   rolar na home; pílulas (cabeçalho, botões, parceiros, ciclo); mapa em painel escuro; rodapé com o logotipo

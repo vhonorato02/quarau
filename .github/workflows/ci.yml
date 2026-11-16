@@ -257,14 +257,14 @@ jobs:
       packages: read
     environment:
       name: homologation
-      url: https://quarau.zehonorato.vps.brz.dev.br
+      url: https://quarau.zewithane.vps.brz.dev.br
     concurrency:
       group: deploy-vps
       cancel-in-progress: false
     env:
-      DEPLOY_HOST: ssh.zehonorato.vps.brz.dev.br
+      DEPLOY_HOST: ssh.zewithane.vps.brz.dev.br
       DEPLOY_PORT: '22322'
-      SITE_URL: https://quarau.zehonorato.vps.brz.dev.br
+      SITE_URL: https://quarau.zewithane.vps.brz.dev.br
     steps:
       - name: Configure SSH
         env:
