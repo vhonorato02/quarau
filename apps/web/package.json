@@ -40,7 +40,7 @@
     "@quarau/ui": "workspace:*",
     "@sentry/nextjs": "11.4.0",
     "graphql": "^16.11.0",
-    "next": "16.4.3",
+    "next": "16.4.5",
     "nodemailer": "^10.0.15",
     "payload": "3.90.2",
     "pino": "10.4.0",
